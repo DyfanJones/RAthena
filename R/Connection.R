@@ -233,7 +233,7 @@ setMethod(
 #' @inheritParams DBI::dbGetInfo
 #' @export
 setMethod(
-  "dbGetInfo", "KazamConnection",
+  "dbGetInfo", "AthenaConnection",
   function(dbObj, ...) {
     info <- dbObj@info
     RegionName <- con@ptr$region_name
