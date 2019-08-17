@@ -110,6 +110,21 @@ setMethod(
 )
 
 #' @rdname AthenaConnection
+#' @inheritParams DBI::dbExecute
+#' @export
+setMethod(
+  "dbExecute", c("AthenaConnection", "character"),
+  function(conn,
+           statement = NULL,
+           work_group = NULL,
+           s3_staging_dir = NULL){
+    res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
+    result <- waiter(res)
+    res
+  }
+)
+
+#' @rdname AthenaConnection
 #' @inheritParams DBI::dbDataType
 #' @export
 setMethod(
@@ -147,7 +162,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
   function(conn, name, value, overwrite = FALSE, append = FALSE, ...) {
     
-    
+    cat("currently not implemented")
     
   })
 
@@ -193,7 +208,7 @@ setMethod(
   function(conn, name, ...) {
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
-    on_connection_updated(conn, name)
+    cat("Only MetaData of table has been Removed.")
     invisible(TRUE)
   })
 
