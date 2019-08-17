@@ -10,7 +10,7 @@ NULL
 
 #' athena driver
 #'
-#' Driver for an ODBC database.
+#' Driver for an Athena database.
 #'
 #' @export
 #' @import methods DBI
