@@ -15,6 +15,8 @@
 #'
 #' @param ... other arguments passed to [reticulate::conda_install()] or
 #'   [reticulate::virtualenv_install()].
+#'   
+#' @note [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
 #'
 #' @export
 
@@ -27,7 +29,7 @@ install_boto <- function(method = c("auto", "virtualenv", "conda"),
   
   
   reticulate::py_install(
-    packages       = "boto3",
+    packages       = c("cython","boto3"),
     envname        = envname,
     method         = method,
     conda          = conda,
