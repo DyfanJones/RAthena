@@ -18,5 +18,6 @@ Collate:
     'Driver.R'
     'Connection.R'
     'Result.R'
+    'install.R'
     'util.R'
     'zzz.R'
