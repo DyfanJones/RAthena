@@ -119,7 +119,7 @@ setMethod(
     cat("not yet implemeneted")
   })
 
-#' @rdname DBI
+#' @rdname AthenaConnection
 #' @inheritParams DBI::dbQuoteString
 #' @export
 setMethod(
@@ -164,7 +164,7 @@ setMethod(
   }
 )
 
-#' @rdname DBI
+#' @rdname AthenaConnection
 #' @inheritParams DBI::dbExistsTable
 #' @export
 setMethod(
