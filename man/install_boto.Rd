@@ -28,3 +28,6 @@ environment. Python 3.6 is installed by default.}
 \description{
 Install Amazon SDK boto3 for Athena connection
 }
+\note{
+[reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
+}

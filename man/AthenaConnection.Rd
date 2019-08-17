@@ -19,6 +19,7 @@
 \alias{dbExistsTable,AthenaConnection,character-method}
 \alias{dbRemoveTable,AthenaConnection,character-method}
 \alias{dbGetQuery,AthenaConnection,character-method}
+\alias{dbGetInfo,KazamConnection-method}
 \title{Athena Connection Methods}
 \usage{
 \S4method{show}{AthenaConnection}(object)
@@ -53,6 +54,8 @@
 
 \S4method{dbGetQuery}{AthenaConnection,character}(conn, statement = NULL,
   df_type1 = NULL, work_group = NULL, s3_staging_dir = NULL, ...)
+
+\S4method{dbGetInfo}{KazamConnection}(dbObj, ...)
 }
 \arguments{
 \item{object}{Any R object}
