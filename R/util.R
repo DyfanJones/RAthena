@@ -33,7 +33,7 @@ waiter <- function(res){
              error = function(e) py_error(e))
     if (query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED")){
       return (query_execution)
-    } else {Sys.sleep(1)}
+    } else {Sys.sleep(0.5)}
   }
 }
 
