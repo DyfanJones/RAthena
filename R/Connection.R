@@ -240,4 +240,5 @@ setMethod(
     Boto <- as.character(boto_verison())
     rathena <- as.character(packageVersion("RAthena"))
     info <- c(info, region_name = RegionName, boto3 = Boto, RAthena = rathena)
+    info
   })
