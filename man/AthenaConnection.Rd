@@ -9,6 +9,7 @@
 \alias{dbDisconnect,AthenaConnection-method}
 \alias{dbSendQuery,AthenaConnection,character-method}
 \alias{dbSendStatement,AthenaConnection,character-method}
+\alias{dbExecute,AthenaConnection,character-method}
 \alias{dbDataType,AthenaConnection-method}
 \alias{dbQuoteString,AthenaConnection,character-method}
 \alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
@@ -31,6 +32,9 @@
 
 \S4method{dbSendStatement}{AthenaConnection,character}(conn,
   statement = NULL, work_group = NULL, s3_staging_dir = NULL)
+
+\S4method{dbExecute}{AthenaConnection,character}(conn, statement = NULL,
+  work_group = NULL, s3_staging_dir = NULL)
 
 \S4method{dbDataType}{AthenaConnection}(dbObj, obj, ...)
 

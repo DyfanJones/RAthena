@@ -16,21 +16,21 @@
 or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
-\item{aws_access_key_id}{The Data Source Name.}
+\item{aws_access_key_id}{AWS access key ID}
 
-\item{aws_secret_access_key}{The Data Source Name.}
+\item{aws_secret_access_key}{AWS secret access key}
 
-\item{aws_session_token}{The Data Source Name.}
+\item{aws_session_token}{AWS temporary session token}
 
-\item{database}{The Data Source Name.}
+\item{database}{The database to which the connection belongs}
 
-\item{s3_staging_dir}{The Data Source Name.}
+\item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 
-\item{region_name}{The Data Source Name.}
+\item{region_name}{Default region when creating new connections}
 
-\item{botocore_session}{The Data Source Name.}
+\item{botocore_session}{Use this Botocore session instead of creating a new default one.}
 
-\item{profile_name}{The Data Source Name.}
+\item{profile_name}{The name of a profile to use. If not given, then the default profile is used.}
 
 \item{...}{authentication arguments needed by the DBMS instance; these
 typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.

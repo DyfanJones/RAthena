@@ -6,11 +6,14 @@
 \alias{AthenaQuery-class}
 \alias{dbClearResult,AthenaQuery-method}
 \alias{dbFetch,AthenaQuery-method}
+\alias{dbHasCompleted,AthenaQuery-method}
 \title{Athena Result Methods}
 \usage{
 \S4method{dbClearResult}{AthenaQuery}(res, ...)
 
 \S4method{dbFetch}{AthenaQuery}(res, n = -1, ...)
+
+\S4method{dbHasCompleted}{AthenaQuery}(res, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}
