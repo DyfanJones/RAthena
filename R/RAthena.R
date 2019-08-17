@@ -1,5 +1,4 @@
 #' @aliases NULL
-#' @importFrom reticulate import
+#' @import reticulate
 #' @import DBI
-#' @useDynLib RAthena, .registration = TRUE
 "_PACKAGE"
