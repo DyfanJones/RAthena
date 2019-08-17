@@ -36,18 +36,17 @@ setMethod(
     cat("<AthenaDriver>\n")
   })
 
-
 #' Connect to Athena using python's sdk boto3
 #'
 #' @inheritParams DBI::dbConnect
-#' @param aws_access_key_id The Data Source Name.
-#' @param aws_secret_access_key The Data Source Name.
-#' @param aws_session_token The Data Source Name.
-#' @param database The Data Source Name.
-#' @param s3_staging_dir The Data Source Name.
-#' @param region_name The Data Source Name.
-#' @param botocore_session The Data Source Name.
-#' @param profile_name The Data Source Name.
+#' @param aws_access_key_id AWS access key ID
+#' @param aws_secret_access_key AWS secret access key
+#' @param aws_session_token AWS temporary session token
+#' @param database The database to which the connection belongs
+#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
+#' @param region_name Default region when creating new connections
+#' @param botocore_session Use this Botocore session instead of creating a new default one.
+#' @param profile_name The name of a profile to use. If not given, then the default profile is used.
 #' @aliases dbConnect
 #' @export
 setMethod(
@@ -69,7 +68,7 @@ setMethod(
                               s3_staging_dir = s3_staging_dir,
                               region_name = region_name,
                               botocore_session = botocore_session,
-                              profile_name = profile_name, ...)
-    )
+                              profile_name = profile_name, ...),
+      error = function(e) py_error(e))
     con
   })
