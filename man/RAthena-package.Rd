@@ -2,9 +2,9 @@
 % Please edit documentation in R/RAthena.R
 \docType{package}
 \name{RAthena-package}
-\title{RAthena: Boto3 Athena Driver for DBI Backend}
+\title{RAthena: Connect to Athena using Boto3 SDK (using the DBI interface)}
 \description{
-Utilises the python boto3 sdk into athena to create a DBI driver.
+A DBI-compatible interface to Athena using python boto3 sdk.
 }
 \author{
 \strong{Maintainer}: Dyfan Jones \email{dyfan.jones@shopdirect.com}
