@@ -17,11 +17,12 @@ AthenaResult <- function(conn,
   if(is.null(s3_staging_dir)) s3_staging_dir <- conn@info$s3_staging
   Athena <- client_athena(conn)
 
-  response <- Athena$start_query_execution(QueryString = statement,
-                                           QueryExecutionContext = list(Database = conn@info$database),
-                                           ResultConfiguration= list(OutputLocation = s3_staging_dir))
+  tryCatch(response <- Athena$start_query_execution(QueryString = statement,
+                                                    QueryExecutionContext = list(Database = conn@info$database),
+                                                    ResultConfiguration= list(OutputLocation = s3_staging_dir)),
+           error = function(e) py_error(e))
 
-  new("AthenaQuery", connection = con, info = response)
+  new("AthenaQuery", connection = conn, athena = Athena, info = response)
 }
 
 #' @rdname AthenaResult
@@ -31,6 +32,7 @@ setClass(
   contains = "DBIResult",
   slots = list(
     connection = "AthenaConnection",
+    athena = "ANY",
     info = "list"
   )
 )
@@ -41,16 +43,18 @@ setClass(
 setMethod(
   "dbClearResult", "AthenaQuery",
   function(res, ...){
-    s3 <- res@connection@ptr$resource("s3")
+    tryCatch(s3 <- res@connection@ptr$resource("s3"),
+             error = function(e) py_error(e))
     s3_info <- s3_split_uri(res@connection@info$s3_staging)
-
-    bucket <- s3$Bucket(s3_info$bucket_name)
+    
+    tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
+             error = function(e) py_error(e))
     output <- iterate(bucket$objects$all(), list)
     s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
     staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
-    invisible(sapply(staging_file, function(x) s3$Object(s3_info$bucket_name, x)$delete()))
-  }
-)
+    invisible(sapply(staging_file, function(x) tryCatch(s3$Object(s3_info$bucket_name, x)$delete(),
+                                                        error = function(e) py_error(e))))
+  })
 
 #' @rdname AthenaResult
 #' @inheritParams DBI::dbFetch
@@ -60,10 +64,10 @@ setMethod(
   function(res, n = -1, ...){
 
     # check status of query
-    Athena <- client_athena(res@connection)
     result <- waiter(res)
 
-    s3 <- res@connection@ptr$resource("s3")
+    tryCatch(s3 <- res@connection@ptr$resource("s3"),
+             error = function(e) py_error(e))
     s3_info <- s3_split_uri(res@connection@info$s3_staging)
     s3_stage_file <- res@info$QueryExecutionId
 
@@ -72,7 +76,8 @@ setMethod(
     }
     if(n > 0){
       n = as.integer(n)
-      result <- Athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n)
+      tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
+               error = function(e) py_error(e))
 
       for (i in 1:n){
         if(i == 1){
@@ -88,13 +93,15 @@ setMethod(
     file <- tempfile()
     on.exit(unlink(file))
 
-    bucket <- s3$Bucket(s3_info$bucket_name)
+    tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
+             error = function(e) py_error(e))
     output <- iterate(bucket$objects$all(), list)
     s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
     staging_file <- s3Objs[grepl(s3_stage_file,s3Objs)][1]
 
 
-    s3$Bucket(s3_info$bucket_name)$download_file(staging_file, file)
+    tryCatch(s3$Bucket(s3_info$bucket_name)$download_file(staging_file, file),
+             error = function(e) py_error(e))
 
     if (requireNamespace("data.table", quietly=TRUE)){
       if(grepl("\\.csv$",staging_file)){
@@ -107,3 +114,17 @@ setMethod(
 
     return(df)
   })
+
+#' @rdname AthenaResult
+#' @inheritParams DBI::dbHasCompleted
+#' @export
+setMethod(
+  "dbHasCompleted", "AthenaQuery",
+  function(res, ...) {
+    tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
+             error = function(e) py_error(e))
+    
+    if(query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED")) TRUE
+    else if (query_execution$QueryExecution$Status$State == "RUNNING") FALSE
+  })
+
