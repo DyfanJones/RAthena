@@ -20,14 +20,16 @@ AthenaConnection <-
     region_name = NULL,
     botocore_session = NULL,
     profile_name = NULL, ...){
-
-    ptr <- boto$Session(aws_access_key_id = aws_access_key_id,
-                        aws_secret_access_key = aws_secret_access_key,
-                        aws_session_token = aws_session_token,
-                        region_name = region_name,
-                        botocore_session = botocore_session,
-                        profile_name = profile_name,
-                        ...)
+    
+    tryCatch(
+      ptr <- boto$Session(aws_access_key_id = aws_access_key_id,
+                          aws_secret_access_key = aws_secret_access_key,
+                          aws_session_token = aws_session_token,
+                          region_name = region_name,
+                          botocore_session = botocore_session,
+                          profile_name = profile_name,
+                          ...),
+    error = function(e) py_error(e))
     quote <- "'"
 
     info <- list(s3_staging = s3_staging_dir, database = database)
@@ -62,7 +64,7 @@ setMethod(
 setMethod(
   "dbIsValid", "AthenaConnection",
   function(dbObj, ...){
-    cat("Not yet implemented: dbIsValid(Connection)")
+    !py_is_null_xptr(dbObj@ptr)
   }
 )
 
@@ -72,13 +74,11 @@ setMethod(
 setMethod(
   "dbDisconnect", "AthenaConnection",
   function(conn, ...) {
-    # TODO: Free resources
-    cat("Not yet implemeted")
-    # if (!dbIsValid(conn)) {
-    #   warning("Connection already closed.", call. = FALSE)
-    # }
-    # 
-    TRUE
+    if (!dbIsValid(conn)) {
+      warning("Connection already closed.", call. = FALSE)
+    } else {cat("Unable to disconnect athena connection.")}
+
+    invisible(NULL)
   })
 
 #' @rdname AthenaConnection
@@ -90,6 +90,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
+    stopifnot(!py_validate_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -104,6 +105,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
+    stopifnot(!py_validate_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -118,6 +120,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
+    stopifnot(!py_validate_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     result <- waiter(res)
     res
@@ -175,6 +178,7 @@ setMethod(
 setMethod(
   "dbListTables", "AthenaConnection",
   function(conn,...){
+    stopifnot(!py_validate_xptr(conn@ptr))
     dbGetQuery(con, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
   }
 )
@@ -185,6 +189,7 @@ setMethod(
 setMethod(
   "dbExistsTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
+    stopifnot(!py_validate_xptr(conn@ptr))
     
     if(grepl("\\.", name)){
       database <- gsub("\\..*", "" , name)
@@ -206,6 +211,8 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
+    stopifnot(!py_validate_xptr(conn@ptr))
+    
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
     cat("Only MetaData of table has been Removed.")
@@ -224,6 +231,7 @@ setMethod(
            df_type1 = NULL,
            work_group = NULL,
            s3_staging_dir = NULL, ...){
+    stopifnot(!py_validate_xptr(conn@ptr))
     rs <- dbSendQuery(con, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
@@ -235,6 +243,7 @@ setMethod(
 setMethod(
   "dbGetInfo", "AthenaConnection",
   function(dbObj, ...) {
+    stopifnot(py_validate_xptr(dbObj@ptr))
     info <- dbObj@info
     RegionName <- con@ptr$region_name
     Boto <- as.character(boto_verison())
