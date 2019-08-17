@@ -1,3 +1,10 @@
+# returns boto3 version
+boto_verison <- function(){
+  ver <- boto$`__version__`
+  ver <- regmatches(ver, regexec("^([0-9\\.]+).*$", ver))[[1]][[2]]
+  package_version(ver)
+}
+
 # split s3 uri
 s3_split_uri <- function(uri) {
   stopifnot(is.s3_uri(uri))
