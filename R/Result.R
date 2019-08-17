@@ -43,6 +43,9 @@ setClass(
 setMethod(
   "dbClearResult", "AthenaQuery",
   function(res, ...){
+    stopifnot(!py_validate_xptr(res@connection@ptr),
+              !py_validate_xptr(res@athena))
+    
     tryCatch(s3 <- res@connection@ptr$resource("s3"),
              error = function(e) py_error(e))
     s3_info <- s3_split_uri(res@connection@info$s3_staging)
@@ -62,7 +65,8 @@ setMethod(
 setMethod(
   "dbFetch", "AthenaQuery",
   function(res, n = -1, ...){
-
+    stopifnot(!py_validate_xptr(res@connection@ptr),
+              !py_validate_xptr(res@athena))
     # check status of query
     result <- waiter(res)
 
@@ -121,6 +125,8 @@ setMethod(
 setMethod(
   "dbHasCompleted", "AthenaQuery",
   function(res, ...) {
+    stopifnot(!py_validate_xptr(res@connection@ptr),
+              !py_validate_xptr(res@athena))
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
              error = function(e) py_error(e))
     
