@@ -229,3 +229,15 @@ setMethod(
     dbFetch(res = rs, n = -1, ...)
   })
 
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbGetInfo
+#' @export
+setMethod(
+  "dbGetInfo", "KazamConnection",
+  function(dbObj, ...) {
+    info <- dbObj@info
+    RegionName <- con@ptr$region_name
+    Boto <- as.character(boto_verison())
+    rathena <- as.character(packageVersion("RAthena"))
+    info <- c(info, region_name = RegionName, boto3 = Boto, RAthena = rathena)
+  })
