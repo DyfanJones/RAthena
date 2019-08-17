@@ -60,7 +60,6 @@ setMethod(
            region_name = NULL,
            botocore_session = NULL,
            profile_name = NULL, ...) {
-    tryCatch(
       con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                               aws_secret_access_key = aws_secret_access_key ,
                               aws_session_token = aws_session_token,
@@ -68,7 +67,6 @@ setMethod(
                               s3_staging_dir = s3_staging_dir,
                               region_name = region_name,
                               botocore_session = botocore_session,
-                              profile_name = profile_name, ...),
-      error = function(e) py_error(e))
+                              profile_name = profile_name, ...)
     con
   })
