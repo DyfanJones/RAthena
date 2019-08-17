@@ -10,10 +10,12 @@
 \alias{dbSendQuery,AthenaConnection,character-method}
 \alias{dbSendStatement,AthenaConnection,character-method}
 \alias{dbDataType,AthenaConnection-method}
+\alias{dbQuoteString,AthenaConnection,character-method}
 \alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
 \alias{dbWriteTable,AthenaConnection,character,data.frame-method}
 \alias{dbListTables,AthenaConnection-method}
 \alias{dbListTables}
+\alias{dbExistsTable,AthenaConnection,character-method}
 \alias{dbRemoveTable,AthenaConnection,character-method}
 \alias{dbGetQuery,AthenaConnection,character-method}
 \title{Athena Connection Methods}
@@ -32,12 +34,16 @@
 
 \S4method{dbDataType}{AthenaConnection}(dbObj, obj, ...)
 
+\S4method{dbQuoteString}{AthenaConnection,character}(conn, x, ...)
+
 \S4method{dbQuoteIdentifier}{AthenaConnection,SQL}(conn, x, ...)
 
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
   value, overwrite = FALSE, append = FALSE, ...)
 
 \S4method{dbListTables}{AthenaConnection}(conn, ...)
+
+\S4method{dbExistsTable}{AthenaConnection,character}(conn, name, ...)
 
 \S4method{dbRemoveTable}{AthenaConnection,character}(conn, name, ...)
 
@@ -60,7 +66,7 @@ or a \linkS4class{DBIResult}}
 
 \item{obj}{An R object whose SQL type we want to determine.}
 
-\item{x}{A character vector, \link{SQL} or \link{Id} object to quote as identifier.}
+\item{x}{A character vector to quote as string.}
 
 \item{name}{A character string specifying the unquoted DBMS table name,
 or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
