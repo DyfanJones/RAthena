@@ -90,7 +90,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -105,7 +105,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -120,7 +120,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     result <- waiter(res)
     res
@@ -178,7 +178,7 @@ setMethod(
 setMethod(
   "dbListTables", "AthenaConnection",
   function(conn,...){
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     dbGetQuery(con, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
   }
 )
@@ -189,7 +189,7 @@ setMethod(
 setMethod(
   "dbExistsTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     
     if(grepl("\\.", name)){
       database <- gsub("\\..*", "" , name)
@@ -211,7 +211,7 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
@@ -231,7 +231,7 @@ setMethod(
            df_type1 = NULL,
            work_group = NULL,
            s3_staging_dir = NULL, ...){
-    stopifnot(!py_validate_xptr(conn@ptr))
+    stopifnot(!py_is_null_xptr(conn@ptr))
     rs <- dbSendQuery(con, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
@@ -243,7 +243,7 @@ setMethod(
 setMethod(
   "dbGetInfo", "AthenaConnection",
   function(dbObj, ...) {
-    stopifnot(py_validate_xptr(dbObj@ptr))
+    stopifnot(!py_is_null_xptr(dbObj@ptr))
     info <- dbObj@info
     RegionName <- con@ptr$region_name
     Boto <- as.character(boto_verison())
