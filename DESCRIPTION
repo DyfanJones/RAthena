@@ -1,11 +1,11 @@
 Package: RAthena
 Type: Package
-Title: Boto3 Athena Driver for DBI Backend
+Title: Connect to Athena using Boto3 SDK (using the DBI interface)
 Version: 0.1.0
 Authors@R: person("Dyfan", "Jones", email="dyfan.jones@shopdirect.com", 
                   role= c("aut", "cre"))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: Utilises the python boto3 sdk into athena to create a DBI driver.
+Description: A DBI-compatible interface to Athena using python boto3 sdk.
 Imports: DBI (>= 0.7), reticulate (>= 1.13)
 Suggests: knitr
 Depends: R (>= 3.2.0)
