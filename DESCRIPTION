@@ -1,0 +1,22 @@
+Package: RAthena
+Type: Package
+Title: Boto3 Athena Driver for DBI Backend
+Version: 0.1.0
+Authors@R: person("Dyfan", "Jones", email="dyfan.jones@shopdirect.com", 
+                  role= c("aut", "cre"))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Utilises the python boto3 sdk into athena to create a DBI driver.
+Imports: DBI (>= 0.7), reticulate (>= 1.13)
+Suggests: knitr
+Depends: R (>= 3.2.0)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Collate: 
+    'RAthena.R'
+    'Driver.R'
+    'Connection.R'
+    'Result.R'
+    'util.R'
+    'zzz.R'
