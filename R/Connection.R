@@ -62,8 +62,7 @@ setMethod(
 setMethod(
   "dbIsValid", "AthenaConnection",
   function(dbObj, ...){
-    athena <- client_athena(dbObj@ptr)
-
+    cat("Not yet implemented: dbIsValid(Connection)")
   }
 )
 
@@ -73,7 +72,13 @@ setMethod(
 setMethod(
   "dbDisconnect", "AthenaConnection",
   function(conn, ...) {
-    cat("Disconnecting isn't required\n")
+    # TODO: Free resources
+    cat("Not yet implemeted")
+    # if (!dbIsValid(conn)) {
+    #   warning("Connection already closed.", call. = FALSE)
+    # }
+    # 
+    TRUE
   })
 
 #' @rdname AthenaConnection
@@ -111,8 +116,18 @@ setMethod(
   "dbDataType", "AthenaConnection",
   function(dbObj, obj, ...) {
     # Todo: check is data type map correctly
+    cat("not yet implemeneted")
   })
 
+#' @rdname DBI
+#' @inheritParams DBI::dbQuoteString
+#' @export
+setMethod(
+  "dbQuoteString", c("AthenaConnection", "character"),
+  function(conn, x, ...) {
+    # Optional
+    getMethod("dbQuoteString", c("DBIConnection", "character"), asNamespace("DBI"))(conn, x, ...)
+  })
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbQuoteIdentifier
@@ -121,7 +136,25 @@ setMethod(
   "dbQuoteIdentifier", c("AthenaConnection", "SQL"),
   getMethod("dbQuoteIdentifier", c("DBIConnection", "SQL"), asNamespace("DBI")))
 
-#' @inherit DBI::dbListTables
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbWriteTable
+#' @param overwrite Allow overwriting the destination table. Cannot be
+#'   `TRUE` if `append` is also `TRUE`.
+#' @param append Allow appending to the destination table. Cannot be
+#'   `TRUE` if `overwrite` is also `TRUE`.
+#' @export
+setMethod(
+  "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
+  function(conn, name, value, overwrite = FALSE, append = FALSE, ...) {
+    
+    
+    
+  })
+
+
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbListTables
 #' @aliases dbListTables
 #' @export
 setMethod(
@@ -131,6 +164,26 @@ setMethod(
   }
 )
 
+#' @rdname DBI
+#' @inheritParams DBI::dbExistsTable
+#' @export
+setMethod(
+  "dbExistsTable", c("AthenaConnection", "character"),
+  function(conn, name, ...) {
+    
+    if(grepl("\\.", name)){
+      database <- gsub("\\..*", "" , name)
+      Table <- gsub(".*\\.", "" , name)
+    } else {database <- conn@info$database
+            Table <- name}
+    
+    Query <- paste0("SELECT table_schema, table_name 
+                    FROM INFORMATION_SCHEMA.TABLES
+                    WHERE LOWER(table_schema) = '", tolower(database), "'",
+                    "AND LOWER(table_name) = '", tolower(Table),"'")
+    
+    if(nrow(dbGetQuery(conn, Query))> 0) TRUE else FALSE
+  })
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbRemoveTable
@@ -159,6 +212,5 @@ setMethod(
     rs <- dbSendQuery(con, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
-  }
-)
+  })
 
