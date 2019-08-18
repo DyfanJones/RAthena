@@ -43,24 +43,31 @@ setClass(
 setMethod(
   "dbClearResult", "AthenaQuery",
   function(res, ...){
+    if (!dbIsValid(res)) {
+      warning("Result already cleared", call. = FALSE)
+      } else {
     
-    stopifnot(!py_is_null_xptr(res@connection@ptr),
-              !py_is_null_xptr(res@athena))
-    
-    tryCatch(s3 <- res@connection@ptr$resource("s3"),
-             error = function(e) py_error(e))
-    s3_info <- s3_split_uri(res@connection@info$s3_staging)
-    
-    tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
-             error = function(e) py_error(e))
-    
-    output <- iterate(bucket$objects$all(), list)
-    s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
-    staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
-    tryCatch(s3$Object(s3_info$bucket_name, staging_file[1])$delete(),
-             error = function(e) warning("Don't have access to free remote resource", call. = F))
-    tryCatch(s3$Object(s3_info$bucket_name, staging_file[2])$delete(),
-             error = function(e) cat(""))
+      tryCatch(s3 <- res@connection@ptr$resource("s3"),
+               error = function(e) py_error(e))
+      s3_info <- s3_split_uri(res@connection@info$s3_staging)
+      
+      tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
+               error = function(e) py_error(e))
+      
+      # remove class pointers
+      eval.parent(substitute(res@connection@ptr <- NULL))
+      eval.parent(substitute(res@athena <- NULL))
+      
+      
+      output <- iterate(bucket$objects$all(), list)
+      s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
+      staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
+      tryCatch(s3$Object(s3_info$bucket_name, staging_file[1])$delete(),
+               error = function(e) warning("Don't have access to free remote resource", call. = F))
+      tryCatch(s3$Object(s3_info$bucket_name, staging_file[2])$delete(),
+               error = function(e) cat(""))
+      }
+    invisible(TRUE)
   })
 
 #' @rdname AthenaResult
@@ -69,8 +76,7 @@ setMethod(
 setMethod(
   "dbFetch", "AthenaQuery",
   function(res, n = -1, ...){
-    stopifnot(!py_is_null_xptr(res@connection@ptr),
-              !py_is_null_xptr(res@athena))
+    if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     # check status of query
     result <- waiter(res)
 
@@ -129,8 +135,7 @@ setMethod(
 setMethod(
   "dbHasCompleted", "AthenaQuery",
   function(res, ...) {
-    stopifnot(!py_is_null_xptr(res@connection@ptr),
-              !py_is_null_xptr(res@athena))
+    if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
              error = function(e) py_error(e))
     
@@ -138,13 +143,12 @@ setMethod(
     else if (query_execution$QueryExecution$Status$State == "RUNNING") FALSE
   })
 
-
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbIsValid
 #' @export
 setMethod(
   "dbIsValid", "AthenaQuery",
   function(dbObj, ...){
-    res_active(dbObj)
+    resource_active(dbObj)
   }
 )
