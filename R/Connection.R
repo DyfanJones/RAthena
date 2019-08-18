@@ -181,6 +181,26 @@ setMethod(
 )
 
 #' @rdname AthenaConnection
+#' @inheritParams DBI::dbListFields
+#' @aliases dbListFields
+#' @export
+setMethod(
+  "dbListFields", c("AthenaConnection","character") ,
+  function(conn, name,...){
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    
+    if(grepl("\\.", name)){
+      database <- gsub("\\..*", "" , name)
+      Table <- gsub(".*\\.", "" , name)
+    } else {database <- conn@info$database
+    Table <- name}
+    
+    dbGetQuery(conn, paste0("SHOW COLUMNS IN ",database,".",Table))[[1]]
+  }
+)
+
+
+#' @rdname AthenaConnection
 #' @inheritParams DBI::dbExistsTable
 #' @export
 setMethod(
@@ -247,3 +267,27 @@ setMethod(
     info <- c(info, region_name = RegionName, boto3 = Boto, RAthena = rathena)
     info
   })
+
+#' @rdname AthenaConnection
+#' @export
+setGeneric("dbGetPartition",
+           def = function(conn, name, ...) standardGeneric("dbGetPartition"),
+           valueClass = "data.frame")
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbExistsTable
+#' @export
+setMethod(
+  "dbGetPartition", "AthenaConnection",
+  function(conn, name, ...) {
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    
+    if(grepl("\\.", name)){
+      database <- gsub("\\..*", "" , name)
+      Table <- gsub(".*\\.", "" , name)
+    } else {database <- conn@info$database
+    Table <- name}
+    
+    dbGetQuery(conn, paste0("SHOW PARTITIONS ", database,".",Table))
+  })
+
