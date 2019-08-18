@@ -152,3 +152,13 @@ setMethod(
     resource_active(dbObj)
   }
 )
+
+#' @rdname AthenaResult
+#' @inheritParams DBI::dbGetInfo
+#' @export
+setMethod(
+  "dbGetInfo", "AthenaQuery",
+  function(dbObj, ...) {
+    info <- dbObj@info
+    info
+  })
