@@ -59,16 +59,6 @@ setMethod(
 )
 
 #' @rdname AthenaConnection
-#' @inheritParams DBI::dbIsValid
-#' @export
-setMethod(
-  "dbIsValid", "AthenaConnection",
-  function(dbObj, ...){
-    !py_is_null_xptr(dbObj@ptr)
-  }
-)
-
-#' @rdname AthenaConnection
 #' @inheritParams DBI::dbDisconnect
 #' @export
 setMethod(
@@ -76,10 +66,19 @@ setMethod(
   function(conn, ...) {
     if (!dbIsValid(conn)) {
       warning("Connection already closed.", call. = FALSE)
-    } else {cat("Unable to disconnect athena connection.")}
-
+    } else {eval.parent(substitute(conn@ptr <- NULL))}
     invisible(NULL)
   })
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbIsValid
+#' @export
+setMethod(
+  "dbIsValid", "AthenaConnection",
+  function(dbObj, ...){
+    resource_active(dbObj)
+  }
+)
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbSendQuery
@@ -90,7 +89,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_is_null_xptr(conn@ptr))
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -105,7 +104,7 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_is_null_xptr(conn@ptr))
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -120,9 +119,9 @@ setMethod(
            statement = NULL,
            work_group = NULL,
            s3_staging_dir = NULL){
-    stopifnot(!py_is_null_xptr(conn@ptr))
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
-    result <- waiter(res)
+    waiter(res)
     res
   }
 )
@@ -164,12 +163,10 @@ setMethod(
 setMethod(
   "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
   function(conn, name, value, overwrite = FALSE, append = FALSE, ...) {
-    
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     cat("currently not implemented")
     
   })
-
-
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbListTables
@@ -178,8 +175,8 @@ setMethod(
 setMethod(
   "dbListTables", "AthenaConnection",
   function(conn,...){
-    stopifnot(!py_is_null_xptr(conn@ptr))
-    dbGetQuery(con, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    dbGetQuery(conn, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
   }
 )
 
@@ -189,7 +186,7 @@ setMethod(
 setMethod(
   "dbExistsTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
-    stopifnot(!py_is_null_xptr(conn@ptr))
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
     if(grepl("\\.", name)){
       database <- gsub("\\..*", "" , name)
@@ -211,14 +208,13 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
-    stopifnot(!py_is_null_xptr(conn@ptr))
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
     cat("Only MetaData of table has been Removed.")
     invisible(TRUE)
   })
-
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbGetQuery
@@ -231,8 +227,8 @@ setMethod(
            df_type1 = NULL,
            work_group = NULL,
            s3_staging_dir = NULL, ...){
-    stopifnot(!py_is_null_xptr(conn@ptr))
-    rs <- dbSendQuery(con, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    rs <- dbSendQuery(conn, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
   })
@@ -243,9 +239,9 @@ setMethod(
 setMethod(
   "dbGetInfo", "AthenaConnection",
   function(dbObj, ...) {
-    stopifnot(!py_is_null_xptr(dbObj@ptr))
+    if (!dbIsValid(dbObj)) {stop("Connection already closed.", call. = FALSE)}
     info <- dbObj@info
-    RegionName <- con@ptr$region_name
+    RegionName <- dbObj@ptr$region_name
     Boto <- as.character(boto_verison())
     rathena <- as.character(packageVersion("RAthena"))
     info <- c(info, region_name = RegionName, boto3 = Boto, RAthena = rathena)
