@@ -60,13 +60,14 @@ setMethod(
            region_name = NULL,
            botocore_session = NULL,
            profile_name = NULL, ...) {
-      con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
-                              aws_secret_access_key = aws_secret_access_key ,
-                              aws_session_token = aws_session_token,
-                              database = database,
-                              s3_staging_dir = s3_staging_dir,
-                              region_name = region_name,
-                              botocore_session = botocore_session,
-                              profile_name = profile_name, ...)
+    stopifnot(is.s3_uri(s3_staging_dir))
+    con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
+                            aws_secret_access_key = aws_secret_access_key ,
+                            aws_session_token = aws_session_token,
+                            database = database,
+                            s3_staging_dir = s3_staging_dir,
+                            region_name = region_name,
+                            botocore_session = botocore_session,
+                            profile_name = profile_name, ...)
     con
   })
