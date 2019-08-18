@@ -45,4 +45,21 @@ py_error <- function(e){
   if (!is.null(pe)) {e$message <- paste0('Python `', pe$type, '`: ', pe$value)}
   stop(e)}
 
+# checks if resource is active
+resource_active <- function(dbObj){
+  UseMethod("resource_active")
+}
 
+resource_active.AthenaConnection <- function(dbObj){
+  if(!is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) return(TRUE) 
+  else if(is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) {return(FALSE)}
+  if(!py_is_null_xptr(dbObj@ptr)) TRUE else FALSE
+}
+
+resource_active.AthenaQuery <- function(dbObj){
+  if(!is.null(dbObj@connection@ptr) && !is.null(dbObj@athena) &&
+     !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(TRUE)
+  else if(is.null(dbObj@connection@ptr) && is.null(dbObj@athena) &&
+          !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(FALSE)
+  if(!py_is_null_xptr(dbObj@connection@ptr) && !py_is_null_xptr(dbObj@athena)) TRUE else FALSE
+}
