@@ -7,6 +7,7 @@
 \alias{dbClearResult,AthenaQuery-method}
 \alias{dbFetch,AthenaQuery-method}
 \alias{dbHasCompleted,AthenaQuery-method}
+\alias{dbGetInfo,AthenaQuery-method}
 \title{Athena Result Methods}
 \usage{
 \S4method{dbClearResult}{AthenaQuery}(res, ...)
@@ -14,6 +15,8 @@
 \S4method{dbFetch}{AthenaQuery}(res, n = -1, ...)
 
 \S4method{dbHasCompleted}{AthenaQuery}(res, ...)
+
+\S4method{dbGetInfo}{AthenaQuery}(dbObj, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}
@@ -24,6 +27,10 @@
 or \code{n = Inf}
 to retrieve all pending records.  Some implementations may recognize other
 special values.}
+
+\item{dbObj}{An object inheriting from \linkS4class{DBIObject},
+i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
+or a \linkS4class{DBIResult}}
 }
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
