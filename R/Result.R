@@ -43,6 +43,7 @@ setClass(
 setMethod(
   "dbClearResult", "AthenaQuery",
   function(res, ...){
+    
     stopifnot(!py_is_null_xptr(res@connection@ptr),
               !py_is_null_xptr(res@athena))
     
@@ -52,11 +53,14 @@ setMethod(
     
     tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
              error = function(e) py_error(e))
+    
     output <- iterate(bucket$objects$all(), list)
     s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
     staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
-    invisible(sapply(staging_file, function(x) tryCatch(s3$Object(s3_info$bucket_name, x)$delete(),
-                                                        error = function(e) py_error(e))))
+    tryCatch(s3$Object(s3_info$bucket_name, staging_file[1])$delete(),
+             error = function(e) warning("Don't have access to free remote resource", call. = F))
+    tryCatch(s3$Object(s3_info$bucket_name, staging_file[2])$delete(),
+             error = function(e) cat(""))
   })
 
 #' @rdname AthenaResult
@@ -134,3 +138,13 @@ setMethod(
     else if (query_execution$QueryExecution$Status$State == "RUNNING") FALSE
   })
 
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbIsValid
+#' @export
+setMethod(
+  "dbIsValid", "AthenaQuery",
+  function(dbObj, ...){
+    res_active(dbObj)
+  }
+)
