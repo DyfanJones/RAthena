@@ -4,7 +4,6 @@ Title: Connect to Athena using Boto3 SDK (using the DBI interface)
 Version: 0.3.0
 Authors@R: person("Dyfan", "Jones", email="dyfan.jones@shopdirect.com", 
                   role= c("aut", "cre"))
-Maintainer: The package maintainer: dyfan.jones@shopdirect.com
 Description: A DBI-compatible interface to Athena using python boto3 sdk.
 Imports: methods, DBI (>= 0.7), reticulate (>= 1.13)
 Suggests: knitr, testthat
