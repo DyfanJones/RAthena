@@ -43,6 +43,46 @@ To retrieve query in 1 step.
 dbGetQuery(con, "SELECT * FROM one_row")
 ```
 
+### Intermediate Usage
+
+To create a tables in athena, `dbExecute` will send the query to athena
+and wait until query has been executed. This makes it and idea method to
+create tables within athena.
+
+``` r
+query <- 
+  "CREATE EXTERNAL TABLE impressions (
+      requestBeginTime string,
+      adId string,
+      impressionId string,
+      referrer string,
+      userAgent string,
+      userCookie string,
+      ip string,
+      number string,
+      processId string,
+      browserCookie string,
+      requestEndTime string,
+      timers struct<modelLookup:string, requestTime:string>,
+      threadId string,
+      hostname string,
+      sessionId string)
+  PARTITIONED BY (dt string)
+  ROW FORMAT  serde 'org.apache.hive.hcatalog.data.JsonSerDe'
+      with serdeproperties ( 'paths'='requestBeginTime, adId, impressionId, referrer, userAgent, userCookie, ip' )
+  LOCATION 's3://elasticmapreduce/samples/hive-ads/tables/impressions/' ;"
+  
+dbExecute(con, query)
+```
+
+To find out how the table has been partitioned simply call the
+`dbGetParitiions` on the table you wish to find out. The result will be
+returned in a dataframe.
+
+``` r
+RAthena::dbGetPartition(con, "impressions")
+```
+
 ### Tidyverse Usage
 
 ``` r
