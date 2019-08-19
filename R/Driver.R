@@ -10,7 +10,7 @@ NULL
 
 #' athena driver
 #'
-#' Driver for an Athena database.
+#' Driver for an Athena Boto3 connection.
 #'
 #' @export
 #' @import methods DBI
@@ -42,7 +42,7 @@ setMethod(
 #' @param aws_access_key_id AWS access key ID
 #' @param aws_secret_access_key AWS secret access key
 #' @param aws_session_token AWS temporary session token
-#' @param database The database to which the connection belongs
+#' @param schema_name The schema_name to which the connection belongs
 #' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @param region_name Default region when creating new connections
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
@@ -55,7 +55,7 @@ setMethod(
            aws_access_key_id = NULL,
            aws_secret_access_key = NULL ,
            aws_session_token = NULL,
-           database = "default",
+           schema_name = "default",
            s3_staging_dir = NULL,
            region_name = NULL,
            botocore_session = NULL,
@@ -64,7 +64,7 @@ setMethod(
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,
                             aws_session_token = aws_session_token,
-                            database = database,
+                            schema_name = schema_name,
                             s3_staging_dir = s3_staging_dir,
                             region_name = region_name,
                             botocore_session = botocore_session,
