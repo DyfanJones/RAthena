@@ -18,7 +18,7 @@ AthenaResult <- function(conn,
   Athena <- client_athena(conn)
 
   tryCatch(response <- Athena$start_query_execution(QueryString = statement,
-                                                    QueryExecutionContext = list(Database = conn@info$database),
+                                                    QueryExecutionContext = list(Database = conn@info$dbms.name),
                                                     ResultConfiguration= list(OutputLocation = s3_staging_dir)),
            error = function(e) py_error(e))
 
