@@ -15,7 +15,7 @@ AthenaConnection <-
     aws_access_key_id = NULL,
     aws_secret_access_key = NULL ,
     aws_session_token = NULL,
-    database = NULL,
+    schema_name = NULL,
     s3_staging_dir = NULL,
     region_name = NULL,
     botocore_session = NULL,
@@ -32,7 +32,7 @@ AthenaConnection <-
     error = function(e) py_error(e))
     quote <- "'"
 
-    info <- list(s3_staging = s3_staging_dir, database = database)
+    info <- list(s3_staging = s3_staging_dir, dbms.name = schema_name)
 
     res <- new("AthenaConnection",  ptr = ptr, info = info, quote = quote)
   }
@@ -190,12 +190,12 @@ setMethod(
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
     if(grepl("\\.", name)){
-      database <- gsub("\\..*", "" , name)
+      dbms.name <- gsub("\\..*", "" , name)
       Table <- gsub(".*\\.", "" , name)
-    } else {database <- conn@info$database
+    } else {dbms.name <- conn@info$dbms.name
     Table <- name}
     
-    dbGetQuery(conn, paste0("SHOW COLUMNS IN ",database,".",Table))[[1]]
+    dbGetQuery(conn, paste0("SHOW COLUMNS IN ",dbms.name,".",Table))[[1]]
   }
 )
 
@@ -209,14 +209,14 @@ setMethod(
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
     if(grepl("\\.", name)){
-      database <- gsub("\\..*", "" , name)
+      dbms.name <- gsub("\\..*", "" , name)
       Table <- gsub(".*\\.", "" , name)
-    } else {database <- conn@info$database
+    } else {dbms.name <- conn@info$dbms.name
             Table <- name}
     
     Query <- paste0("SELECT table_schema, table_name 
                     FROM INFORMATION_SCHEMA.TABLES
-                    WHERE LOWER(table_schema) = '", tolower(database), "'",
+                    WHERE LOWER(table_schema) = '", tolower(dbms.name), "'",
                     "AND LOWER(table_name) = '", tolower(Table),"'")
     
     if(nrow(dbGetQuery(conn, Query))> 0) TRUE else FALSE
@@ -283,11 +283,11 @@ setMethod(
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
     if(grepl("\\.", name)){
-      database <- gsub("\\..*", "" , name)
+      dbms.name <- gsub("\\..*", "" , name)
       Table <- gsub(".*\\.", "" , name)
-    } else {database <- conn@info$database
+    } else {dbms.name <- conn@info$dbms.name
     Table <- name}
     
-    dbGetQuery(conn, paste0("SHOW PARTITIONS ", database,".",Table))
+    dbGetQuery(conn, paste0("SHOW PARTITIONS ", dbms.name,".",Table))
   })
 
