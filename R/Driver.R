@@ -36,6 +36,22 @@ setMethod(
     cat("<AthenaDriver>\n")
   })
 
+#' @rdname AthenaDriver
+#' @inheritParams DBI::dbDataType
+#' @export
+setMethod("dbDataType", "AthenaDriver", function(dbObj, obj,...) {
+  AthenaDataType(obj)
+})
+
+#' @rdname AthenaDriver
+#' @inheritParams DBI::dbDataType
+#' @export
+setMethod(
+  "dbDataType", c("AthenaDriver", "list"),
+  function(dbObj, obj, ...) {
+    AthenaDataType(dbObj, obj, ...)
+  })
+
 #' Connect to Athena using python's sdk boto3
 #'
 #' @inheritParams DBI::dbConnect
