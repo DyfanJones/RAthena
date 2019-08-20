@@ -49,7 +49,7 @@ setMethod("dbDataType", "AthenaDriver", function(dbObj, obj,...) {
 setMethod(
   "dbDataType", c("AthenaDriver", "list"),
   function(dbObj, obj, ...) {
-    AthenaDataType(dbObj, obj, ...)
+    AthenaDataType(obj)
   })
 
 #' Connect to Athena using python's sdk boto3
