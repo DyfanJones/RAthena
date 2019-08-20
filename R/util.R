@@ -17,6 +17,7 @@ s3_split_uri <- function(uri) {
 
 # validation check of s3 uri
 is.s3_uri <- function(x) {
+  if(is.null(x)) return(FALSE)
   regex <- '^s3://[a-z0-9][a-z0-9\\.-]+[a-z0-9](/(.*)?)?$'
   grepl(regex, x)
 }
