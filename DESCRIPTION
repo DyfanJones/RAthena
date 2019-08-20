@@ -1,7 +1,7 @@
 Package: RAthena
 Type: Package
 Title: Connect to Athena using Boto3 SDK (using the DBI interface)
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: person("Dyfan", "Jones", email="dyfan.jones@shopdirect.com", 
                   role= c("aut", "cre"))
 Description: A DBI-compatible interface to Athena using python boto3 sdk.
