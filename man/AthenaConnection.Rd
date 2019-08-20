@@ -10,7 +10,8 @@
 \alias{dbSendQuery,AthenaConnection,character-method}
 \alias{dbSendStatement,AthenaConnection,character-method}
 \alias{dbExecute,AthenaConnection,character-method}
-\alias{dbDataType,AthenaConnection-method}
+\alias{dbDataType,AthenaConnection,ANY-method}
+\alias{dbDataType,AthenaConnection,data.frame-method}
 \alias{dbQuoteString,AthenaConnection,character-method}
 \alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
 \alias{dbWriteTable,AthenaConnection,character,data.frame-method}
@@ -42,7 +43,9 @@
 \S4method{dbExecute}{AthenaConnection,character}(conn, statement = NULL,
   work_group = NULL, s3_staging_dir = NULL)
 
-\S4method{dbDataType}{AthenaConnection}(dbObj, obj, ...)
+\S4method{dbDataType}{AthenaConnection,ANY}(dbObj, obj, ...)
+
+\S4method{dbDataType}{AthenaConnection,data.frame}(dbObj, obj, ...)
 
 \S4method{dbQuoteString}{AthenaConnection,character}(conn, x, ...)
 

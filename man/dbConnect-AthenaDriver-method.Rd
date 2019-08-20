@@ -8,7 +8,7 @@
 \usage{
 \S4method{dbConnect}{AthenaDriver}(drv, aws_access_key_id = NULL,
   aws_secret_access_key = NULL, aws_session_token = NULL,
-  database = "default", s3_staging_dir = NULL, region_name = NULL,
+  schema_name = "default", s3_staging_dir = NULL, region_name = NULL,
   botocore_session = NULL, profile_name = NULL, ...)
 }
 \arguments{
@@ -22,7 +22,7 @@ object (in order to clone an existing connection).}
 
 \item{aws_session_token}{AWS temporary session token}
 
-\item{database}{The database to which the connection belongs}
+\item{schema_name}{The schema_name to which the connection belongs}
 
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 

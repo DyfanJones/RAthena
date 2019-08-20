@@ -7,7 +7,7 @@
 athena()
 }
 \description{
-Driver for an Athena database.
+Driver for an Athena Boto3 connection.
 }
 \examples{
 \dontrun{
