@@ -129,12 +129,17 @@ setMethod(
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbDataType
 #' @export
-setMethod(
-  "dbDataType", "AthenaConnection",
-  function(dbObj, obj, ...) {
-    # Todo: check is data type map correctly
-    cat("not yet implemeneted")
-  })
+setMethod("dbDataType", "AthenaConnection", function(dbObj, obj, ...) {
+  dbDataType(athena(), obj, ...)
+})
+
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbDataType
+#' @export
+setMethod("dbDataType", c("AthenaConnection", "data.frame"), function(dbObj, obj, ...) {
+  vapply(obj, AthenaDataType, FUN.VALUE = character(1), USE.NAMES = TRUE)
+})
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbQuoteString
