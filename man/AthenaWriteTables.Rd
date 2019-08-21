@@ -66,7 +66,7 @@ Convenience functions for reading/writing DBMS tables
 library(DBI)
 con <- dbConnect(RAthena::Athena(),s3_staging_dir = "s3://mybucket/athena_query/")
 dbListTables(con)
-dbWriteTable(con, "mtcars", mtcars, partition=c("TIMESTAMP" = format(Sys.Date() + 1, "\%Y\%m\%d")), s3.location = "s3://mybucket/data/")
+dbWriteTable(con, "mtcars", mtcars, partition=c("TIMESTAMP" = format(Sys.Date(), "\%Y\%m\%d")), s3.location = "s3://mybucket/data/")
 dbReadTable(con, "mtcars")
 
 dbListTables(con)
