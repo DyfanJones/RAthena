@@ -235,9 +235,10 @@ setMethod(
   function(conn, name, ...) {
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
-    name <- dbQuoteIdentifier(conn, name)
-    dbExecute(conn, paste("DROP TABLE ", name))
-    cat("Only MetaData of table has been Removed.")
+    if(!grepl("\\.", name)) name <- paste(conn@info$dbms.name, name, sep = ".")
+    
+    dbExecute(conn, paste("DROP TABLE ", name, ";"))
+    warning("Only MetaData of table has been Removed.", call. = FALSE)
     invisible(TRUE)
   })
 
