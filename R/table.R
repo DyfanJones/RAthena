@@ -108,11 +108,15 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   partition <- unlist(partition)
   partition <- paste(names(partition), unname(partition), sep = "=", collapse = "/")
   
-  name <- paste0(name, ".", file.type)
+  Name <- paste0(name, ".", file.type)
+  if(grepl(name, s3.location)){s3.location <- gsub(paste0("/", name,"/$"), "", s3.location)}
+  
   uri_parts <- s3_split_uri(s3.location)
   uri_parts$key <- gsub("/$", "", uri_parts$key)
-  if(partition == ""){s3_key <- paste(uri_parts$key, name, sep = "/")}
-  else{s3_key <- paste(uri_parts$key, partition, name, sep = "/")}
+  
+  
+  if(partition == ""){s3_key <- paste(uri_parts$key,name, Name, sep = "/")}
+  else{s3_key <- paste(uri_parts$key, name, partition, Name, sep = "/")}
   
   tryCatch(s3 <- con@ptr$resource("s3"),
            error = function(e) py_error(e))
