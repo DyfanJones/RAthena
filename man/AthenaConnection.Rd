@@ -52,7 +52,9 @@
 \S4method{dbQuoteIdentifier}{AthenaConnection,SQL}(conn, x, ...)
 
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
-  value, overwrite = FALSE, append = FALSE, ...)
+  value, overwrite = FALSE, append = FALSE, row.names = NA,
+  field.types = NULL, partition = NULL, s3.location,
+  file.type = c("csv", "tsv", "parquet"), ...)
 
 \S4method{dbListTables}{AthenaConnection}(conn, ...)
 
