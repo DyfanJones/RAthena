@@ -83,6 +83,30 @@ returned in a dataframe.
 RAthena::dbGetPartition(con, "impressions")
 ```
 
+### Advanced Usage
+
+#### Sending data to Athena
+
+RAthena has created a method to send data.frame from R to Athena.
+
+``` r
+# Check existing tables
+dbListTables(con)
+# Upload mtcars to Athena
+dbWriteTable(con, "mtcars", mtcars, 
+             partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
+             s3.location = "s3://mybucket/data/")
+
+# Read in mtcars from Athena
+dbReadTable(con, "mtcars")
+
+# Check new existing tables in Athena
+dbListTables(con)
+
+# Check if mtcars exists in Athena
+dbExistsTable(con, "mtcars")
+```
+
 ### Tidyverse Usage
 
 ``` r
