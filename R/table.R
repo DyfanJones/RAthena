@@ -17,9 +17,9 @@
 #' @examples
 #' \dontrun{
 #' library(DBI)
-#' con <- dbConnect(RAthena::Athena())
+#' con <- dbConnect(RAthena::Athena(),s3_staging_dir = "s3://mybucket/athena_query/")
 #' dbListTables(con)
-#' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' dbWriteTable(con, "mtcars", mtcars, partition=c("TIMESTAMP" = format(Sys.Date() + 1, "%Y%m%d")), s3.location = "s3://mybucket/data/")
 #' dbReadTable(con, "mtcars")
 #'
 #' dbListTables(con)
