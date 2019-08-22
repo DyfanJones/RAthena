@@ -29,7 +29,7 @@
 #' }
 #' @name AthenaWriteTables
 NULL
-# con, table, fields, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), ...
+
 Athena_write_table <-
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
@@ -50,8 +50,7 @@ Athena_write_table <-
     # made everything lower case due to aws athena issue: https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/
     name <- tolower(name)
     s3.location <- tolower(s3.location)
-    names(partition) <- tolower(names(partition))
-    
+    if(!is.null(partition)) {names(partition) <- tolower(names(partition))}
     if(!is.null(partition) && names(partition) == "") stop("partition parameter requires to be a named vector or list", call. = FALSE)
     
     if(!grepl("\\.", name)) Name <- paste(conn@info$dbms.name, name, sep = ".") 
@@ -101,13 +100,15 @@ Athena_write_table <-
     # send data over to s3 bucket
     upload_data(conn, t, name, partition, s3.location, file.type)
     
-    if (!append && !is.null(partition)) {
-      sql <- sqlCreateTable(conn, Name, value, field.types = field.types,partition = names(partition), s3.location = s3.location, file.type = file.type)
+    if (!append) {
+      sql <- sqlCreateTable(conn, Name, value, field.types = field.types, partition = names(partition), s3.location = s3.location, file.type = file.type)
       # create athena table
-      dbExecute(conn, sql)}
+      res <- dbExecute(conn, sql)
+      dbClearResult(res)}
     
     # Repair table
-    dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
+    res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
+    dbClearResult(res)
 
     invisible(TRUE)
   }
@@ -118,13 +119,13 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   partition <- paste(names(partition), unname(partition), sep = "=", collapse = "/")
   
   Name <- paste0(name, ".", file.type)
-  
   uri_parts <- s3_split_uri(s3.location)
   uri_parts$key <- gsub("/$", "", uri_parts$key)
   if(grepl(name, uri_parts$key)){uri_parts$key  <- gsub(name, "", uri_parts$key)}
   
-  if(partition == ""){s3_key <- paste(uri_parts$key,name, Name, sep = "/")}
-  else if (uri_parts$key == "") {s3_key <- paste(name, partition, Name, sep = "/")}
+  if(uri_parts$key != "" && partition == ""){s3_key <- paste(uri_parts$key,name, Name, sep = "/")}
+  else if (uri_parts$key == "" && partition != "") {s3_key <- paste(name, partition, Name, sep = "/")}
+  else if (uri_parts$key == "" && partition == "") {s3_key <- paste(name,Name, sep = "/")}
   else {s3_key <- paste(uri_parts$key, name, partition, Name, sep = "/")}
   
   tryCatch(s3 <- con@ptr$resource("s3"),
@@ -177,7 +178,7 @@ setMethod(
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects
-#' @name AthenaTables
+#' @rdname AthenaWriteTables
 #' @inheritParams DBI::dbReadTable
 #' @export
 setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ...) {
@@ -191,7 +192,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 })
 
 
-#' @rdname AthenaTables
+#' @rdname AthenaWriteTables
 #' @inheritParams DBI::sqlCreateTable
 #' @param field.types Additional field types used to override derived types.
 #' @export
