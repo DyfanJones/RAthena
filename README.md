@@ -20,10 +20,8 @@ RAthena::install_boto()
 To install RAthena (currently not on cran):
 
 ``` r
-# The development version from Bitbucket
-remotes::install_bitbucket("shopdirect/rathena",
-                           auth_user = "<bitbucket_username>",
-                           password = "<bitbucket_password>")
+# The development version from Github
+remotes::install_github("dyfanjones/rathena")
 ```
 
 ## Usage
@@ -153,4 +151,5 @@ tbl(con, sql("SELECT * FROM one_row"))
 
   - Implement unit tests
   - Upload package to cran
+  - Add a logo (as everyone loves a logo)
   - Improve dbFetch method
