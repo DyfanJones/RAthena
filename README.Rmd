@@ -99,6 +99,18 @@ RAthena::dbGetPartition(con, "impressions")
 
 ### Advanced Usage
 
+#### Setting up AWS CLI
+RAthena is compatible with AWS CLI. This allows your aws creditentials to be stored and not be hard coded in your connection.
+
+To install AWS CLI please refer to: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html, to configure AWS CLI please refer to: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
+
+Once AWS CLI has been set up you will be able to connect to Athena by only putting the `s3_staging_dir`.
+```{r, eval = F}
+library(RAthena)
+con <- dbConnect(RAthena::athena(),
+                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+```
+
 #### Sending data to Athena
 RAthena has created a method to send data.frame from R to Athena.
 
