@@ -6,6 +6,8 @@
 \alias{dbWriteTable,AthenaConnection,character,data.frame-method}
 \alias{dbWriteTable,AthenaConnection,Id,data.frame-method}
 \alias{dbWriteTable,AthenaConnection,SQL,data.frame-method}
+\alias{sqlData,AthenaConnection-method}
+\alias{sqlCreateTable,AthenaConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
@@ -22,6 +24,12 @@
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location,
   file.type = c("csv", "tsv", "parquet"), ...)
+
+\S4method{sqlData}{AthenaConnection}(con, value, row.names = NA, ...)
+
+\S4method{sqlCreateTable}{AthenaConnection}(con, table = NULL,
+  fields = NULL, field.types = NULL, partition = NULL,
+  s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{AthenaConnection}} object, produced by
@@ -50,6 +58,8 @@ default name.
 
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
+\item{field.types}{Additional field types used to override derived types.}
+
 \item{partition}{partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
 
 \item{s3.location}{s3 bucket to store athena table}
@@ -57,9 +67,24 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 \item{file.type}{What file type to be stored on s3 currently on support ["csv", "tsv", "parquet"]}
 
 \item{...}{Other arguments used by individual methods.}
+
+\item{con}{A database connection.}
+
+\item{table}{Name of the table. Escaped with
+\code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
+
+\item{fields}{Either a character vector or a data frame.
+
+A named character vector: Names are column names, values are types.
+Names are escaped with \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.
+Field types are unescaped.
+
+A data frame: field types are generated using
+\code{\link[=dbDataType]{dbDataType()}}.}
 }
 \description{
-Convenience functions for reading/writing DBMS tables
+Implementations of pure virtual functions defined in the `DBI` package
+for AthenaConnection objects
 }
 \examples{
 \dontrun{

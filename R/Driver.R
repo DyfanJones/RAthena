@@ -63,6 +63,8 @@ setMethod(
 #' @param region_name Default region when creating new connections
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
 #' @param profile_name The name of a profile to use. If not given, then the default profile is used.
+#' @param ... any other parameter for boto3 session: 
+#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
 #' @aliases dbConnect
 #' @export
 setMethod(

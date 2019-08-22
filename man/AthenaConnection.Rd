@@ -65,7 +65,7 @@
 \S4method{dbRemoveTable}{AthenaConnection,character}(conn, name, ...)
 
 \S4method{dbGetQuery}{AthenaConnection,character}(conn, statement = NULL,
-  df_type1 = NULL, work_group = NULL, s3_staging_dir = NULL, ...)
+  s3_staging_dir = NULL, ...)
 
 \S4method{dbGetInfo}{AthenaConnection}(dbObj, ...)
 
@@ -81,13 +81,16 @@ dbGetPartition(conn, name, ...)
 \item{conn}{A \linkS4class{DBIConnection} object, as returned by
 \code{\link[=dbConnect]{dbConnect()}}.}
 
-\item{...}{Other parameters passed on to methods.}
+\item{...}{any other parameter for boto3 session: 
+\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}}
 
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},
 i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
 or a \linkS4class{DBIResult}}
 
 \item{statement}{a character string containing SQL.}
+
+\item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 
 \item{obj}{An R object whose SQL type we want to determine.}
 
@@ -103,6 +106,22 @@ or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}
 
 \item{append}{Allow appending to the destination table. Cannot be
 `TRUE` if `overwrite` is also `TRUE`.}
+
+\item{aws_access_key_id}{AWS access key ID}
+
+\item{aws_secret_access_key}{AWS secret access key}
+
+\item{aws_session_token}{AWS temporary session token}
+
+\item{schema_name}{The schema_name to which the connection belongs}
+
+\item{region_name}{Default region when creating new connections}
+
+\item{botocore_session}{Use this Botocore session instead of creating a new default one.}
+
+\item{profile_name}{The name of a profile to use. If not given, then the default profile is used.}
+
+\item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 }
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
