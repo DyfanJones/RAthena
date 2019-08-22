@@ -47,9 +47,16 @@ Athena_write_table <-
     
     file.type = match.arg(file.type)
     
+    # made everything lower case due to aws athena issue: https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/
+    name <- tolower(name)
+    s3.location <- tolower(s3.location)
+    names(partition) <- tolower(names(partition))
+    
     if(!is.null(partition) && names(partition) == "") stop("partition parameter requires to be a named vector or list", call. = FALSE)
     
-    if(!grepl("\\.", name)) Name <- paste(conn@info$dbms.name, name, sep = ".")
+    if(!grepl("\\.", name)) Name <- paste(conn@info$dbms.name, name, sep = ".") 
+    else{Name <- name
+         name <- gsub(".*\\.", "", name)}
     
     if (overwrite && append) stop("overwrite and append cannot both be TRUE", call. = FALSE)
 
@@ -77,18 +84,18 @@ Athena_write_table <-
              "csv" = write.table(value, t, sep = ",", row.names = FALSE),
              "tsv" = write.table(value, t, sep = "\t", row.names = FALSE))}
 
-    found <- dbExistsTable(conn, name)
+    found <- dbExistsTable(conn, Name)
     if (found && !overwrite && !append) {
-      stop("Table ", name, " exists in database, and both overwrite and",
+      stop("Table ", Name, " exists in database, and both overwrite and",
            " append are FALSE", call. = FALSE)
     }
     
     if(!found && append){
-      stop("Table ", name, " does not exist in database and append is set to TRUE", call. = T)
+      stop("Table ", Name, " does not exist in database and append is set to TRUE", call. = T)
     }
 
     if (found && overwrite) {
-      suppressWarnings(dbRemoveTable(conn, name))
+      suppressWarnings(dbRemoveTable(conn, Name))
     }
 
     # send data over to s3 bucket
@@ -112,13 +119,13 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   
   Name <- paste0(name, ".", file.type)
   
-  
   uri_parts <- s3_split_uri(s3.location)
   uri_parts$key <- gsub("/$", "", uri_parts$key)
   if(grepl(name, uri_parts$key)){uri_parts$key  <- gsub(name, "", uri_parts$key)}
   
   if(partition == ""){s3_key <- paste(uri_parts$key,name, Name, sep = "/")}
-  else{s3_key <- paste(uri_parts$key, name, partition, Name, sep = "/")}
+  else if (uri_parts$key == "") {s3_key <- paste(name, partition, Name, sep = "/")}
+  else {s3_key <- paste(uri_parts$key, name, partition, Name, sep = "/")}
   
   tryCatch(s3 <- con@ptr$resource("s3"),
            error = function(e) py_error(e))
@@ -194,9 +201,9 @@ setMethod("sqlCreateTable", "AthenaConnection",
     file.type <- match.arg(file.type)
     if(!is.s3_uri(s3.location))stop("s3.location need to be in correct format.", call. = F)
     table1 <- gsub(".*\\.", "", table)
-    if(grepl(table1, s3.location)){
-      s3.location <- gsub(paste0("/", table1,"/$"), "", s3.location)} 
-    else {s3.location <- gsub("/$", "",s3.location) }
+    
+    s3.location <- gsub("/$", "", s3.location)
+    if(grepl(table1, s3.location)){s3.location <- gsub(paste0("/", table1,"$"), "", s3.location)}
     s3.location <- paste0("'",s3.location,"/", table1,"/'")
     SQL(paste0(
       "CREATE EXTERNAL TABLE ", table, " (\n",
