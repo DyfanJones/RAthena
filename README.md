@@ -5,6 +5,9 @@ The goal of the RAthena package is to provide a DBI-compliant interface
 to Athena using Boto3 SDK. This allows for an efficient, easy setup
 connection to Athena using the Boto3 SDK as a driver.
 
+**NOTE:** *Before using RAthena you must have an aws account or have
+access to aws account with permissions allowing you to use Athena.*
+
 ## Installation:
 
 Before installing RAthena ensure that Python 3+ is installed onto your
