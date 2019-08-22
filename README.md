@@ -152,6 +152,5 @@ tbl(con, sql("SELECT * FROM one_row"))
 # To Do list:
 
   - Implement unit tests
-  - Move package to github for public use
   - Upload package to cran
   - Improve dbFetch method
