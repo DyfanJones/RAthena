@@ -47,6 +47,8 @@ Athena_write_table <-
     
     file.type = match.arg(file.type)
     
+    if(!is.null(partition) && names(partition) == "") stop("partition parameter requires to be a named vector or list", call. = FALSE)
+    
     if(!grepl("\\.", name)) Name <- paste(conn@info$dbms.name, name, sep = ".")
     
     if (overwrite && append) stop("overwrite and append cannot both be TRUE", call. = FALSE)
