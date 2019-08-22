@@ -20,5 +20,6 @@ Collate:
     'Result.R'
     'install.R'
     'table.R'
+    'test-class.R'
     'util.R'
     'zzz.R'

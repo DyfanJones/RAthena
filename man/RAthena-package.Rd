@@ -7,6 +7,6 @@
 A DBI-compatible interface to Athena using python boto3 sdk.
 }
 \author{
-\strong{Maintainer}: Dyfan Jones \email{dyfan.jones@shopdirect.com}
+\strong{Maintainer}: Dyfan Jones \email{dyfan.r.jones@gmail.com}
 
 }
