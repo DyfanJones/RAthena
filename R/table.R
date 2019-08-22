@@ -19,7 +19,9 @@
 #' library(DBI)
 #' con <- dbConnect(RAthena::Athena(),s3_staging_dir = "s3://mybucket/athena_query/")
 #' dbListTables(con)
-#' dbWriteTable(con, "mtcars", mtcars, partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")), s3.location = "s3://mybucket/data/")
+#' dbWriteTable(con, "mtcars", mtcars,
+#'              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://mybucket/data/")
 #' dbReadTable(con, "mtcars")
 #'
 #' dbListTables(con)
@@ -101,7 +103,9 @@ Athena_write_table <-
     upload_data(conn, t, name, partition, s3.location, file.type)
     
     if (!append) {
-      sql <- sqlCreateTable(conn, Name, value, field.types = field.types, partition = names(partition), s3.location = s3.location, file.type = file.type)
+      sql <- sqlCreateTable(conn, Name, value, field.types = field.types, 
+                            partition = names(partition),
+                            s3.location = s3.location, file.type = file.type)
       # create athena table
       res <- dbExecute(conn, sql)
       dbClearResult(res)}
