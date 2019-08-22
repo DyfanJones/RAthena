@@ -2,16 +2,25 @@
 # RAthena
 
 The goal of the RAthena package is to provide a DBI-compliant interface
-to Athena without the requirement of using odbc and jdbc drivers. This
-will allow the connection to be athena to be straight forward and only
-require the installation of python and the AWS SDK boto3.
-
-With the development of AWS sagemaker RAthena will make the connection
-to AWS Athena simpler.
+to Athena using Boto3 SDK. This allows for an efficient, easy setup
+connection to Athena using the Boto3 SDK as a driver.
 
 ## Installation:
 
+Before installing RAthena ensure that Python 3+ is installed onto your
+machine: <https://www.python.org/downloads/>. To install Boto3 either it
+can installed the pip command or using RAthena installation funtion:
+
+    pip install boto3
+
 ``` r
+RAthena::install_boto()
+```
+
+To install RAthena (currently not on cran):
+
+``` r
+# The development version from Bitbucket
 remotes::install_bitbucket("shopdirect/rathena",
                            auth_user = "<bitbucket_username>",
                            password = "<bitbucket_password>")
