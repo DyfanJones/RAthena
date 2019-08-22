@@ -5,6 +5,16 @@ NULL
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects.
+#' @param aws_access_key_id AWS access key ID
+#' @param aws_secret_access_key AWS secret access key
+#' @param aws_session_token AWS temporary session token
+#' @param schema_name The schema_name to which the connection belongs
+#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
+#' @param region_name Default region when creating new connections
+#' @param botocore_session Use this Botocore session instead of creating a new default one.
+#' @param profile_name The name of a profile to use. If not given, then the default profile is used.
+#' @param ... any other parameter for boto3 session: 
+#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
 #' @name AthenaConnection
 NULL
 
@@ -237,7 +247,8 @@ setMethod(
     
     if(!grepl("\\.", name)) name <- paste(conn@info$dbms.name, name, sep = ".")
     
-    dbExecute(conn, paste("DROP TABLE ", name, ";"))
+    res <- dbExecute(conn, paste("DROP TABLE ", name, ";"))
+    dbClearResult(res)
     warning("Only MetaData of table has been Removed.", call. = FALSE)
     invisible(TRUE)
   })
@@ -245,13 +256,12 @@ setMethod(
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbGetQuery
 #' @inheritParams DBI::dbFetch
+#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @export
 setMethod(
   "dbGetQuery", c("AthenaConnection", "character"),
   function(conn,
            statement = NULL,
-           df_type1 = NULL,
-           work_group = NULL,
            s3_staging_dir = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     rs <- dbSendQuery(conn, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
