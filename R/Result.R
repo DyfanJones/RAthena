@@ -88,7 +88,7 @@ setMethod(
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
-    if(n > 0){
+    if(n > 0 && n !=Inf){
       n = as.integer(n)
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
                error = function(e) py_error(e))
