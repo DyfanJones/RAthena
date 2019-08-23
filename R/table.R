@@ -1,8 +1,8 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
-#' @param conn a \code{\linkS4class{AthenaConnection}} object, produced by
+#' @param conn An \code{\linkS4class{AthenaConnection}} object, produced by
 #'   [DBI::dbConnect()]
-#' @param name a character string specifying a table name. Names will be
+#' @param name A character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
@@ -10,9 +10,9 @@
 #'   `TRUE` if `append` is also `TRUE`.
 #' @param append Allow appending to the destination table. Cannot be
 #'   `TRUE` if `overwrite` is also `TRUE`.
-#' @param partition partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
+#' @param partition Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
 #' @param s3.location s3 bucket to store athena table
-#' @param file.type What file type to be stored on s3 currently on support ["csv", "tsv", "parquet"]
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @inheritParams DBI::sqlCreateTable
 #' @examples
 #' \dontrun{

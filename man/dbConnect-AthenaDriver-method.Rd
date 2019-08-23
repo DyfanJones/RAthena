@@ -32,7 +32,7 @@ object (in order to clone an existing connection).}
 
 \item{profile_name}{The name of a profile to use. If not given, then the default profile is used.}
 
-\item{...}{any other parameter for boto3 session: 
+\item{...}{Any other parameter for boto3 session: 
 \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}}
 }
 \description{

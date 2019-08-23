@@ -32,10 +32,10 @@
   s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...)
 }
 \arguments{
-\item{conn}{a \code{\linkS4class{AthenaConnection}} object, produced by
+\item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by
 [DBI::dbConnect()]}
 
-\item{name}{a character string specifying a table name. Names will be
+\item{name}{A character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.}
 
@@ -60,11 +60,11 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
 \item{field.types}{Additional field types used to override derived types.}
 
-\item{partition}{partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
+\item{partition}{Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
 
 \item{s3.location}{s3 bucket to store athena table}
 
-\item{file.type}{What file type to be stored on s3 currently on support ["csv", "tsv", "parquet"]}
+\item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
 
 \item{...}{Other arguments used by individual methods.}
 
