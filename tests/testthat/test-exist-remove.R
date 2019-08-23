@@ -4,6 +4,7 @@ s3.location <- "s3://test-rathena/removeable_table/"
 
 test_that("Check a table exist and remove table",{
   skip_if_no_boto()
+  # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
                    profile_name = "rathena",
                    s3_staging_dir = "s3://test-rathena/athena-query-results/")
