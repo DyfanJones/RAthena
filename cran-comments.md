@@ -45,12 +45,13 @@ checking CRAN incoming feasibility ... NOTE
   Possibly mis-spelled words in DESCRIPTION:
   
 
-* Author Notes: 
-** `Boto` is refering to python package `Boto3` this is not a spelling error
-** `SDK` is refering to software development kit abbreviation
+**Author Notes:**
+
+* `Boto` is refering to python package `Boto3` this is not a spelling error
+* `SDK` is refering to software development kit abbreviation
 
 # unit tests (using testthat) results
-OK:       19
-Failed:   0
-Warnings: 0
-Skipped:  0
+* OK:       19
+* Failed:   0
+* Warnings: 0
+* Skipped:  0
