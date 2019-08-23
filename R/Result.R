@@ -143,7 +143,7 @@ setMethod(
     else if (query_execution$QueryExecution$Status$State == "RUNNING") FALSE
   })
 
-#' @rdname AthenaConnection
+#' @rdname AthenaResult
 #' @inheritParams DBI::dbIsValid
 #' @export
 setMethod(
