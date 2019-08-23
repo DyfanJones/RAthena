@@ -5,8 +5,15 @@ Version: 1.0.0
 Authors@R: person("Dyfan", "Jones", email="dyfan.r.jones@gmail.com", 
                   role= c("aut", "cre"))
 Description: A DBI-compatible interface to Athena using python boto3 sdk.
-Imports: methods, DBI (>= 0.7), reticulate (>= 1.13)
-Suggests: knitr, testthat, data.table, arrow
+Imports: 
+    DBI (>= 0.7),
+    methods,
+    reticulate (>= 1.13)
+Suggests: 
+    arrow,
+    data.table,
+    knitr,
+    testthat
 Depends: R (>= 3.2.0)
 License: MIT
 Encoding: UTF-8
