@@ -7,6 +7,7 @@
 \alias{dbClearResult,AthenaQuery-method}
 \alias{dbFetch,AthenaQuery-method}
 \alias{dbHasCompleted,AthenaQuery-method}
+\alias{dbIsValid,AthenaQuery-method}
 \alias{dbGetInfo,AthenaQuery-method}
 \title{Athena Result Methods}
 \usage{
@@ -15,6 +16,8 @@
 \S4method{dbFetch}{AthenaQuery}(res, n = -1, ...)
 
 \S4method{dbHasCompleted}{AthenaQuery}(res, ...)
+
+\S4method{dbIsValid}{AthenaQuery}(dbObj, ...)
 
 \S4method{dbGetInfo}{AthenaQuery}(dbObj, ...)
 }
