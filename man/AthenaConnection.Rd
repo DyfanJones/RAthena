@@ -24,6 +24,8 @@
 \alias{dbGetInfo,AthenaConnection-method}
 \alias{dbGetPartition}
 \alias{dbGetPartition,AthenaConnection-method}
+\alias{dbShow}
+\alias{dbShow,AthenaConnection-method}
 \title{Athena Connection Methods}
 \usage{
 \S4method{show}{AthenaConnection}(object)
@@ -65,6 +67,10 @@
 dbGetPartition(conn, name, ...)
 
 \S4method{dbGetPartition}{AthenaConnection}(conn, name, ...)
+
+dbShow(conn, name, ...)
+
+\S4method{dbShow}{AthenaConnection}(conn, name, ...)
 }
 \arguments{
 \item{object}{Any R object}

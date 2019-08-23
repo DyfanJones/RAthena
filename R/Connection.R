@@ -280,3 +280,25 @@ setMethod(
     dbGetQuery(conn, paste0("SHOW PARTITIONS ", dbms.name,".",Table))
   })
 
+#' @rdname AthenaConnection
+#' @export
+setGeneric("dbShow",
+           def = function(conn, name, ...) standardGeneric("dbShow"),
+           valueClass = "character")
+
+#' @rdname AthenaConnection
+#' @inheritParams DBI::dbExistsTable
+#' @export
+setMethod(
+  "dbShow", "AthenaConnection",
+  function(conn, name, ...) {
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    
+    if(grepl("\\.", name)){
+      dbms.name <- gsub("\\..*", "" , name)
+      Table <- gsub(".*\\.", "" , name)
+    } else {dbms.name <- conn@info$dbms.name
+    Table <- name}
+    
+    SQL(dbGetQuery(conn, paste0("SHOW CREATE TABLE ", dbms.name,".",Table))[[1]])
+  })
