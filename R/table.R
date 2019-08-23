@@ -81,8 +81,8 @@ Athena_write_table <-
              "tsv" = data.table::fwrite(value, t, sep = "\t"))
     } else {
       switch(file.type,
-             "csv" = write.table(value, t, sep = ",", row.names = FALSE),
-             "tsv" = write.table(value, t, sep = "\t", row.names = FALSE))}
+             "csv" = write.table(value, t, sep = ",", row.names = FALSE, quote=FALSE),
+             "tsv" = write.table(value, t, sep = "\t", row.names = FALSE, quote=FALSE))}
 
     found <- dbExistsTable(conn, Name)
     if (found && !overwrite && !append) {
