@@ -85,12 +85,21 @@ query <-
 dbExecute(con, query)
 ```
 
-To find out how the table has been partitioned simply call the
-`dbGetParitiions` on the table you wish to find out. The result will be
-returned in a dataframe.
+RAthena has 2 extra function to return extra information around Athena
+tables: `dbGetParitiions` and `dbShow`
+
+`dbGetPartitions` will return all the partitions (returns them as a
+data.frame):
 
 ``` r
 RAthena::dbGetPartition(con, "impressions")
+```
+
+`dbShow` will return the table’s ddl, so you will able to see how the
+table was constructed in Athena (returns SQL character):
+
+``` r
+RAthena::dbShow(con, "impressions")
 ```
 
 ### Advanced Usage
