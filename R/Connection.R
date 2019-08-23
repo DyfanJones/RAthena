@@ -5,14 +5,6 @@ NULL
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects.
-#' @param aws_access_key_id AWS access key ID
-#' @param aws_secret_access_key AWS secret access key
-#' @param aws_session_token AWS temporary session token
-#' @param schema_name The schema_name to which the connection belongs
-#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
-#' @param region_name Default region when creating new connections
-#' @param botocore_session Use this Botocore session instead of creating a new default one.
-#' @param profile_name The name of a profile to use. If not given, then the default profile is used.
 #' @param ... any other parameter for boto3 session: 
 #'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
 #' @name AthenaConnection
@@ -96,10 +88,9 @@ setMethod(
 setMethod(
   "dbSendQuery", c("AthenaConnection", "character"),
   function(conn,
-           statement = NULL,
-           work_group = NULL,
-           s3_staging_dir = NULL){
+           statement = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    s3_staging_dir <- conn@info$s3_staging
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -111,10 +102,9 @@ setMethod(
 setMethod(
   "dbSendStatement", c("AthenaConnection", "character"),
   function(conn,
-           statement = NULL,
-           work_group = NULL,
-           s3_staging_dir = NULL){
+           statement = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    s3_staging_dir <- conn@info$s3_staging
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     res
   }
@@ -126,10 +116,9 @@ setMethod(
 setMethod(
   "dbExecute", c("AthenaConnection", "character"),
   function(conn,
-           statement = NULL,
-           work_group = NULL,
-           s3_staging_dir = NULL){
+           statement = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    s3_staging_dir <- conn@info$s3_staging
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     waiter(res)
     res
@@ -167,21 +156,6 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier", c("AthenaConnection", "SQL"),
   getMethod("dbQuoteIdentifier", c("DBIConnection", "SQL"), asNamespace("DBI")))
-
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbWriteTable
-#' @param overwrite Allow overwriting the destination table. Cannot be
-#'   `TRUE` if `append` is also `TRUE`.
-#' @param append Allow appending to the destination table. Cannot be
-#'   `TRUE` if `overwrite` is also `TRUE`.
-#' @export
-setMethod(
-  "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
-  function(conn, name, value, overwrite = FALSE, append = FALSE, ...) {
-    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-    cat("currently not implemented")
-    
-  })
 
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbListTables
@@ -256,15 +230,14 @@ setMethod(
 #' @rdname AthenaConnection
 #' @inheritParams DBI::dbGetQuery
 #' @inheritParams DBI::dbFetch
-#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @export
 setMethod(
   "dbGetQuery", c("AthenaConnection", "character"),
   function(conn,
-           statement = NULL,
-           s3_staging_dir = NULL, ...){
+           statement = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-    rs <- dbSendQuery(conn, statement = statement, work_group = work_group, s3_staging_dir = s3_staging_dir)
+    s3_staging_dir <- conn@info$s3_staging
+    rs <- dbSendQuery(conn, statement = statement, s3_staging_dir = s3_staging_dir)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
   })
