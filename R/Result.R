@@ -104,8 +104,8 @@ setMethod(
 
 
     #create temp file
-    file <- tempfile()
-    on.exit(unlink(file))
+    File <- tempfile()
+    on.exit(unlink(File))
 
     tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
              error = function(e) py_error(e))
@@ -114,19 +114,22 @@ setMethod(
     staging_file <- s3Objs[grepl(s3_stage_file,s3Objs)][1]
 
 
-    tryCatch(s3$Bucket(s3_info$bucket_name)$download_file(staging_file, file),
+    tryCatch(s3$Bucket(s3_info$bucket_name)$download_file(staging_file, File),
              error = function(e) py_error(e))
-
-    if (requireNamespace("data.table", quietly=TRUE)){
-      if(grepl("\\.csv$",staging_file)){
-        df <- data.table::fread(file)
-      } else {df <- data.table::fread(file, header = FALSE)}
-
-    } else if(grepl("\\.csv$",staging_file)){
-      df <- suppressWarnings(read.csv(file, stringsAsFactors = F))
-    } else {df <- suppressWarnings(read.table(file, stringsAsFactors = F))}
-
-    return(df)
+    
+    if(grepl("\\.csv$",staging_file)){
+      if (requireNamespace("data.table", quietly=TRUE)){output <- data.table::fread(File)}
+      else {output <- suppressWarnings(read.csv(File, stringsAsFactors = F))}
+    } else{
+      file_con <- file(File)
+      output <- suppressWarnings(readLines(file_con))
+      close(file_con)
+      if(any(grepl("create|table", output, ignore.case = T))){
+        output <-data.frame("TABLE_DDL" = paste0(output, collapse = "\n"), stringsAsFactors = FALSE)
+      } else (output <- data.frame(var1 = trimws(output), stringsAsFactors = FALSE))
+    }
+    
+    return(output)
   })
 
 #' @rdname AthenaResult
