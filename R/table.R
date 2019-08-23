@@ -36,14 +36,13 @@ Athena_write_table <-
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...) {
-    
     # variable checks
     stopifnot(is.character(name),
               is.data.frame(value),
               is.logical(overwrite),
               is.logical(append),
               is.s3_uri(s3.location))
-  
+
     sapply(tolower(names(partition)), function(x){if(x %in% tolower(names(value))){
       stop("partition ", x, " is a variable in data.frame ", deparse(substitute(value)), call. = FALSE)}})
     
@@ -107,8 +106,8 @@ Athena_write_table <-
                             partition = names(partition),
                             s3.location = s3.location, file.type = file.type)
       # create athena table
-      res <- dbExecute(conn, sql)
-      dbClearResult(res)}
+      rs <- dbExecute(conn, sql)
+      dbClearResult(rs)}
     
     # Repair table
     res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
@@ -148,6 +147,7 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
                       partition, s3.location, file.type)
@@ -160,6 +160,7 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
                       partition, s3.location, file.type)
@@ -172,6 +173,7 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
                       partition, s3.location, file.type)
@@ -202,6 +204,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @export
 setMethod("sqlCreateTable", "AthenaConnection",
   function(con, table = NULL, fields = NULL, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), ...){
+    if (!dbIsValid(con)) {stop("Connection already closed.", call. = FALSE)}
     field <- createFields(con, fields, field_types = field.types)
     file.type <- match.arg(file.type)
     if(!is.s3_uri(s3.location))stop("s3.location need to be in correct format.", call. = F)
