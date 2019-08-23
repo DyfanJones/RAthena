@@ -88,8 +88,7 @@ dbExecute(con, query)
 RAthena has 2 extra function to return extra information around Athena
 tables: `dbGetParitiions` and `dbShow`
 
-`dbGetPartitions` will return all the partitions (returns them as a
-data.frame):
+`dbGetPartitions` will return all the partitions (returns data.frame):
 
 ``` r
 RAthena::dbGetPartition(con, "impressions")
