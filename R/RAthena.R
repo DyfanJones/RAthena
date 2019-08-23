@@ -1,6 +1,6 @@
 #' RAthena: a DBI interface into Athena using Boto3 SDK
 #' 
-#' RAthena provides a seemless DBI interface into Athena using the python package 
+#' RAthena provides a seamless DBI interface into Athena using the python package 
 #' \href{https://boto3.amazonaws.com/v1/documentation/api/latest/index.html}{Boto3}
 #' 
 #' It has one key main goal:
