@@ -78,7 +78,7 @@ setMethod(
   function(res, n = -1, ...){
     if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     # check status of query
-    result <- waiter(res)
+    result <- poll(res)
 
     tryCatch(s3 <- res@connection@ptr$resource("s3"),
              error = function(e) py_error(e))

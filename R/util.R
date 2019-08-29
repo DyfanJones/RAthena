@@ -28,7 +28,7 @@ client_athena <- function(botosession){
 }
 
 # holds functions until athena query competed
-waiter <- function(res){
+poll <- function(res){
   while (TRUE){
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
              error = function(e) py_error(e))
@@ -51,6 +51,7 @@ resource_active <- function(dbObj){
   UseMethod("resource_active")
 }
 
+# checks is dbObj is active
 resource_active.AthenaConnection <- function(dbObj){
   if(!is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) return(TRUE) 
   else if(is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) {return(FALSE)}
