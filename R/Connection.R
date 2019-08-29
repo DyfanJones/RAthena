@@ -5,8 +5,8 @@ NULL
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects.
-#' @param ... any other parameter for boto3 session: 
-#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
+#' @param ... any other parameter for \code{Boto3} session: 
+#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @name AthenaConnection
 NULL
 
