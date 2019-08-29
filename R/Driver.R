@@ -79,7 +79,7 @@ setMethod(
 #'  dbDisconnect(con)
 #' }
 #' \donttest{
-#' # Connect to athena using profile name after
+#' # Connect to Athena using profile name
 #'  con <- DBI::dbConnect(RAthena::athena(),
 #'                        profile_name = "rathena",
 #'                        s3_staging_dir = "s3://test-rathena/athena-query-results/")
