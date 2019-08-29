@@ -63,9 +63,28 @@ setMethod(
 #' @param region_name Default region when creating new connections
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
 #' @param profile_name The name of a profile to use. If not given, then the default profile is used.
-#' @param ... Any other parameter for boto3 session: 
-#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
+#'                     To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
+#'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
+#' @param ... Any other parameter for boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{boto3 session documentation}
 #' @aliases dbConnect
+#' @examples
+#' \dontrun{
+#' # Connect to Athena using back access keys
+#'  library(DBI)
+#'  con <- dbConnect(RAthena:athena(),
+#'                   aws_access_key_id='YOUR_ACCESS_KEY_ID',
+#'                   aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
+#'                   s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+#'                   region_name='us-west-2')
+#'  dbDisconnect(con)
+#' }
+#' \donttest{
+#' # Connect to athena using profile name after
+#'  con <- DBI::dbConnect(RAthena::athena(),
+#'                        profile_name = "rathena",
+#'                        s3_staging_dir = "s3://test-rathena/athena-query-results/")
+#'  dbDisconnect(con)
+#' }
 #' @export
 setMethod(
   "dbConnect", "AthenaDriver",
