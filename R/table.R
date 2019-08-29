@@ -205,7 +205,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 setMethod("sqlCreateTable", "AthenaConnection",
   function(con, table = NULL, fields = NULL, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), ...){
     if (!dbIsValid(con)) {stop("Connection already closed.", call. = FALSE)}
-    field <- createFields(con, fields, field_types = field.types)
+    field <- createFields(con, fields, field.types = field.types)
     file.type <- match.arg(file.type)
     if(!is.s3_uri(s3.location))stop("s3.location need to be in correct format.", call. = F)
     table1 <- gsub(".*\\.", "", table)
@@ -217,7 +217,7 @@ setMethod("sqlCreateTable", "AthenaConnection",
       "CREATE EXTERNAL TABLE ", table, " (\n",
       "  ", paste(field, collapse = ",\n  "), "\n)\n",
       partitioned(partition),
-      file_type(file.type), "\n",
+      FileType(file.type), "\n",
       "LOCATION ",s3.location, "\n",
       header(file.type)
     ))
@@ -225,17 +225,17 @@ setMethod("sqlCreateTable", "AthenaConnection",
 )
 
 # Helper functions: fields
-createFields <- function(con, fields, field_types) {
+createFields <- function(con, fields, field.types) {
   if (is.data.frame(fields)) {
     fields <- vapply(fields, function(x) DBI::dbDataType(con, x), character(1))
   }
-  if (!is.null(field_types)) {
-    fields[names(field_types)] <- field_types
+  if (!is.null(field.types)) {
+    fields[names(field.types)] <- field.types
   }
   
   field_names <- names(fields)
-  field_types <- unname(fields)
-  paste0(field_names, " ", field_types)
+  field.types <- unname(fields)
+  paste0(field_names, " ", field.types)
 }
 
 # Helper function partition
@@ -245,7 +245,7 @@ partitioned <- function(obj = NULL){
     paste0("PARTITIONED BY (", obj, ")\n") }
 }
 
-file_type <- function(obj){
+FileType <- function(obj){
   switch(obj,
          csv = gsub("_","","ROW FORMAT DELIMITED\n\tFIELDS TERMINATED BY ','\n\tESCAPED BY '\\\\'\n\tLINES TERMINATED BY '\\_n'"),
          tsv = gsub("_","","ROW FORMAT DELIMITED\n\tFIELDS TERMINATED BY '\t'\n\tESCAPED BY '\\\\'\n\tLINES TERMINATED BY '\\_n'"),
