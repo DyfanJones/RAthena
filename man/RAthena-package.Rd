@@ -30,6 +30,14 @@ This allows AWS profile names to be set up so that RAthena can connect to differ
 without needing hard code any credentials.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/DyfanJones/RAthena}
+  \item Report bugs at \url{https://github.com/DyfanJones/RAthena/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Dyfan Jones \email{dyfan.r.jones@gmail.com}
 
