@@ -2,8 +2,9 @@
 # RAthena
 
 The goal of the RAthena package is to provide a DBI-compliant interface
-to Athena using Boto3 SDK. This allows for an efficient, easy setup
-connection to Athena using the Boto3 SDK as a driver.
+to Amazon’s Athena (<https://aws.amazon.com/athena/>) using Boto3 SDK.
+This allows for an efficient, easy setup connection to Athena using the
+Boto3 SDK as a driver.
 
 **NOTE:** *Before using RAthena you must have an aws account or have
 access to aws account with permissions allowing you to use Athena.*
@@ -157,6 +158,30 @@ con <- dbConnect(RAthena::athena(),
                 region_name='us-west-2')
 tbl(con, sql("SELECT * FROM one_row"))
 ```
+
+# Similar Projects
+
+## Python:
+
+  - `pyAthena` - A python wrapper of the python package `Boto3` using
+    the sqlAlchemy framework:
+    <https://github.com/laughingman7743/PyAthena>
+  - `pyAthenaJDBC` - A python interface into AWS Athena’s JDBC drivers:
+    <https://github.com/laughingman7743/PyAthenaJDBC>
+
+## R:
+
+  - `AWR.Athena` - A R wrapper of RJDBC for the AWS Athena’s JDBC
+    drivers: <https://github.com/nfultz/AWR.Athena>
+
+## Comparison:
+
+The reason why `RAthena` stands slightly apart from `AWR.Athena` is that
+`AWR.Athena` uses the Athena JDBC drivers and `RAthena` uses the Python
+AWS SDK `Boto3`. The ultimate goal is to provide an extra method for R
+users to interface with AWS Athena. As `pyAthena` is the most similar
+project, this project has used an appropriate name to reflect this …
+`RAthena`.
 
 # To Do list:
 
