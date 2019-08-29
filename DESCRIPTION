@@ -4,7 +4,7 @@ Title: Connect to Amazon Web Service Athena using 'Boto3' SDK (using the 'DBI' I
 Version: 1.0.1
 Authors@R: person("Dyfan", "Jones", email="dyfan.r.jones@gmail.com", 
                   role= c("aut", "cre"))
-Description: A 'DBI'-compatible interface to Amazon Web Service (AWS) Athena 
+Description: A 'DBI' compatible interface to Amazon Web Service (AWS) Athena 
     <https://aws.amazon.com/athena/>, using 'Python' 'Boto3' Software Development Kit (SDK) package.
 Imports: 
     DBI (>= 0.7),
