@@ -1,14 +1,6 @@
 #' @include Connection.R
 NULL
 
-#' Athena Result Methods
-#'
-#' Implementations of pure virtual functions defined in the `DBI` package
-#' for AthenaResult objects.
-#' @name AthenaResult
-#' @docType methods
-NULL
-
 AthenaResult <- function(conn,
                          statement = NULL,
                          s3_staging_dir = NULL){
@@ -25,7 +17,7 @@ AthenaResult <- function(conn,
   new("AthenaQuery", connection = conn, athena = Athena, info = response)
 }
 
-#' @rdname AthenaResult
+#' @rdname AthenaConnection
 #' @export
 setClass(
   "AthenaQuery",
@@ -37,8 +29,33 @@ setClass(
   )
 )
 
-#' @rdname AthenaResult
+#' Clear Results
+#' 
+#' Frees all resoucres (local and Athena) associated with result set. It does this by removing s3 query output result on Amazon,
+#' and removed the connection resource locally.
+#' @name dbClearResult
 #' @inheritParams DBI::dbClearResult
+#' @return \code{dbClearResult()} returns \code{TRUE}, invisibly.
+#' @seealso \code{\link[DBI]{dbIsValid}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' res <- dbSendQuery(con, "show databases")
+#' dbClearResult(res)
+#' 
+#' # Check if connection if valid after closing connection
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbClearResult
 #' @export
 setMethod(
   "dbClearResult", "AthenaQuery",
@@ -70,8 +87,32 @@ setMethod(
     invisible(TRUE)
   })
 
-#' @rdname AthenaResult
+#' Fetch records from previously executed query
+#' 
+#' Currently returns the top n elements (rows) from result set or returns entire table from Athena.
+#' @name dbFetch
 #' @inheritParams DBI::dbFetch
+#' @return \code{dbFetch()} returns a data frame.
+#' @seealso \code{\link[DBI]{dbFetch}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' res <- dbSendQuery(con, "show databases")
+#' dbFetch(res)
+#' 
+#' # Check if connection if valid after closing connection
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbFetch
 #' @export
 setMethod(
   "dbFetch", "AthenaQuery",
@@ -132,8 +173,33 @@ setMethod(
     return(output)
   })
 
-#' @rdname AthenaResult
+#' Completion status
+#' 
+#' This method returns if the query has completed. 
+#' @name dbHasCompleted
 #' @inheritParams DBI::dbHasCompleted
+#' @return \code{dbHasCompleted()} returns a logical scalar. \code{TRUE} if the query has completed, \code{FALSE} otherwise.
+#' @seealso \code{\link[DBI]{dbHasCompleted}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Check if query has completed
+#' res <- dbSendQuery(con, "show databases")
+#' dbHasCompleted(res)
+#' 
+#' # Check if connection if valid after closing connection
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbHasCompleted
 #' @export
 setMethod(
   "dbHasCompleted", "AthenaQuery",
@@ -146,8 +212,7 @@ setMethod(
     else if (query_execution$QueryExecution$Status$State == "RUNNING") FALSE
   })
 
-#' @rdname AthenaResult
-#' @inheritParams DBI::dbIsValid
+#' @rdname dbIsValid
 #' @export
 setMethod(
   "dbIsValid", "AthenaQuery",
@@ -156,7 +221,7 @@ setMethod(
   }
 )
 
-#' @rdname AthenaResult
+#' @rdname dbGetInfo
 #' @inheritParams DBI::dbGetInfo
 #' @export
 setMethod(

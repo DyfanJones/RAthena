@@ -10,23 +10,40 @@
 #'   `TRUE` if `append` is also `TRUE`.
 #' @param append Allow appending to the destination table. Cannot be
 #'   `TRUE` if `overwrite` is also `TRUE`.
+#' @param field.types Additional field types used to override derived types.
 #' @param partition Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
 #' @param s3.location s3 bucket to store athena table
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @inheritParams DBI::sqlCreateTable
+#' @return \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
+#'         arguments are unset, or append = TRUE and the data frame with the new data has different column names,
+#'         an error is raised; the remote table remains unchanged.
+#' @seealso \code{\link[DBI]{dbWriteTable}}
 #' @examples
 #' \dontrun{
 #' library(DBI)
-#' con <- dbConnect(RAthena::Athena(),s3_staging_dir = "s3://mybucket/athena_query/")
+#' 
+#' # Connect to athena using default profile name
+#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#' 
+#' # List existing tables in Athena
 #' dbListTables(con)
+#' 
+#' # Write data.frame to Athena table
 #' dbWriteTable(con, "mtcars", mtcars,
 #'              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
 #'              s3.location = "s3://mybucket/data/")
+#'              
+#' # Read entire table from Athena
 #' dbReadTable(con, "mtcars")
 #'
+#' # List all tables in Athena after uploading new table to Athena
 #' dbListTables(con)
+#' 
+#' # Checking if uploaded table exists in Athena
 #' dbExistsTable(con, "mtcars")
 #'
+#' # Disconnect from Athena
 #' dbDisconnect(con)
 #' }
 #' @name AthenaWriteTables
@@ -180,12 +197,17 @@ setMethod(
   })
 
 
-#' Athena Tables Methods
+#' Converts data frame into suitbale format to be uploaded to Athena
 #'
-#' Implementations of pure virtual functions defined in the `DBI` package
-#' for AthenaConnection objects
-#' @rdname AthenaWriteTables
-#' @inheritParams DBI::dbReadTable
+#' This method converts data.frame columns into the correct format so that it can be uploaded Athena.
+#' @name sqlData
+#' @inheritParams DBI::sqlData
+#' @return \code{sqlData} returns a dataframe formatted for Athena. Currently converts \code{list} variable types into \code{character}
+#'         split by \code{'|'}, similar to how \code{data.table} writes out to files.
+#' @seealso \code{\link[DBI]{sqlData}}
+NULL
+
+#' @rdname sqlData
 #' @export
 setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ...) {
   value <- sqlRownamesToColumn(value, row.names)
@@ -198,9 +220,45 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 })
 
 
-#' @rdname AthenaWriteTables
+#' Creates query to create a simple Athena table
+#' Creates an interface to compose \code{CREATE EXTERNAL TABLE}.
+#' @name sqlCreateTable
 #' @inheritParams DBI::sqlCreateTable
 #' @param field.types Additional field types used to override derived types.
+#' @param partition Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
+#' @param s3.location s3 bucket to store athena table
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
+#' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
+#' @seealso \code{\link[DBI]{sqlCreateTable}}
+#' @examples 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#'                  
+#' # Create DDL for iris data.frame
+#' sqlCreateTable(con, "iris", iris, s3.location = "s3://path/to/athena/table")
+#' 
+#' # Create DDL for iris data.frame with partition
+#' sqlCreateTable(con, "iris", iris, 
+#'                partition = c("timestamp" = format(Sys.Date(), "%Y%m%d")),
+#'                s3.location = "s3://path/to/athena/table")
+#'                
+#' # Create DDL for iris data.frame with partition and file.type parquet
+#' sqlCreateTable(con, "iris", iris, 
+#'                partition = c("timestamp" = format(Sys.Date(), "%Y%m%d")),
+#'                s3.location = "s3://path/to/athena/table",
+#'                file.type = "parquet")
+#' 
+#' # Disconnect from Athena
+#' dbDisconnect(con)
+#' }
+NULL
+
+#' @rdname sqlCreateTable
 #' @export
 setMethod("sqlCreateTable", "AthenaConnection",
   function(con, table = NULL, fields = NULL, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), ...){
@@ -233,7 +291,7 @@ createFields <- function(con, fields, field.types) {
     fields[names(field.types)] <- field.types
   }
   
-  field_names <- names(fields)
+  field_names <- gsub("\\.", "_", make.names(names(fields), unique = TRUE))
   field.types <- unname(fields)
   paste0(field_names, " ", field.types)
 }

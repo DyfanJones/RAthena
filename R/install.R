@@ -17,6 +17,7 @@
 #'   [reticulate::virtualenv_install()].
 #'   
 #' @note [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
+#' @return Returns \code{NULL} after installing \code{Python} \code{Boto3}.
 #'
 #' @export
 

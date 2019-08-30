@@ -5,9 +5,8 @@ NULL
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects.
-#' @param ... any other parameter for \code{Boto3} session: 
-#'            \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @name AthenaConnection
+#' @inheritParams methods::show
 NULL
 
 class_cache <- new.env(parent = emptyenv())
@@ -51,7 +50,6 @@ setClass(
 )
 
 #' @rdname AthenaConnection
-#' @inheritParams methods::show
 #' @export
 setMethod(
   "show", "AthenaConnection",
@@ -60,8 +58,29 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
+#' Disconnect (close) an Athena connection
+#' 
+#' This closes the connection to Athena.
+#' @name dbDisconnect
 #' @inheritParams DBI::dbDisconnect
+#' @return \code{dbDisconnect()} returns \code{TRUE}, invisibly.
+#' @seealso \code{\link[DBI]{dbDisconnect}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbDisconnect
 #' @export
 setMethod(
   "dbDisconnect", "AthenaConnection",
@@ -72,8 +91,41 @@ setMethod(
     invisible(NULL)
   })
 
-#' @rdname AthenaConnection
+#' Is this DBMS object still valid?
+#' 
+#' This method tests whether the \code{dbObj} is still valid.
+#' @name dbIsValid
 #' @inheritParams DBI::dbIsValid
+#' @return \code{dbIsValid()} returns logical scalar, \code{TRUE} if the object (\code{dbObj}) is valid, \code{FALSE} otherwise.
+#' @seealso \code{\link[DBI]{dbIsValid}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#'
+#' # Check is connection is valid
+#' dbIsValid(con)
+#' 
+#' # Check is query is valid
+#' res <- dbSendQuery(con, "show databases")
+#' dbIsValid(res)
+#' 
+#' # Check if query is valid after clearing result
+#' dbClearResult(res)
+#' dbIsValid(res)
+#' 
+#' # Check if connection if valid after closing connection
+#' dbDisconnect(con)
+#' dbIsValid(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbIsValid
 #' @export
 setMethod(
   "dbIsValid", "AthenaConnection",
@@ -82,8 +134,37 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
+
+#' Execute a query on Athena
+#' 
+#' @description The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to Athena but does not wait for query to execute. 
+#'              \code{\link{dbHasCompleted}} method will need to ran to check if query has been completed or not.
+#'              The \code{dbExecute()} method submits a query to Athena and waits for the query to be executed.
+#' @name Query
 #' @inheritParams DBI::dbSendQuery
+#' @return Returns \code{AthenaQuery} s4 class.
+#' @seealso \code{\link[DBI]{dbSendQuery}}, \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Sending Queries to Athena
+#' res1 <- dbSendQuery(con, "show databases")
+#' res2 <- dbSendStatement(con, "show databases")
+#' res3 <- dbExecute(con, "show databases")
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname Query
 #' @export
 setMethod(
   "dbSendQuery", c("AthenaConnection", "character"),
@@ -96,8 +177,7 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbSendStatement
+#' @rdname Query
 #' @export
 setMethod(
   "dbSendStatement", c("AthenaConnection", "character"),
@@ -110,8 +190,7 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbExecute
+#' @rdname Query
 #' @export
 setMethod(
   "dbExecute", c("AthenaConnection", "character"),
@@ -125,23 +204,68 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
+#' Determine SQL data type of object
+#' 
+#' Returns a character string that describes the Athena SQL data type for the \code{obj} object.
+#' @name dbDataType
 #' @inheritParams DBI::dbDataType
+#' @return \code{dbDataType} returns the Athena type that correspond to the obj argument as an non-empty character string.
+#' @seealso \code{\link[DBI]{dbDataType}}
+#' @examples
+#' library(RAthena)
+#' dbDataType(athena(), 1:5)
+#' dbDataType(athena(), 1)
+#' dbDataType(athena(), TRUE)
+#' dbDataType(athena(), Sys.Date())
+#' dbDataType(athena(), Sys.time())
+#' dbDataType(athena(), c("x", "abc"))
+#' dbDataType(athena(), list(raw(10), raw(20)))
+#' 
+#' vapply(iris, function(x) dbDataType(RAthena::athena(), x),
+#'        FUN.VALUE = character(1), USE.NAMES = TRUE)
+#' 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Sending Queries to Athena
+#' dbDataType(con, iris)
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbDataType
 #' @export
 setMethod("dbDataType", "AthenaConnection", function(dbObj, obj, ...) {
   dbDataType(athena(), obj, ...)
 })
 
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbDataType
+#' @rdname dbDataType
 #' @export
 setMethod("dbDataType", c("AthenaConnection", "data.frame"), function(dbObj, obj, ...) {
   vapply(obj, AthenaDataType, FUN.VALUE = character(1), USE.NAMES = TRUE)
 })
 
-#' @rdname AthenaConnection
+
+#' Quote Identifiers
+#' 
+#' Call this method to generate string that is suitable for use in a query as a column or table name.
+#' @name dbQuote
 #' @inheritParams DBI::dbQuoteString
+#' @return Returns a character object, for more information please check out: \code{\link[DBI]{dbQuoteString}}, \code{\link[DBI]{dbQuoteIdentifier}}
+#' @seealso \code{\link[DBI]{dbQuoteString}}, \code{\link[DBI]{dbQuoteIdentifier}}
+#' @docType methods
+NULL
+
+#' @rdname dbQuote
 #' @export
 setMethod(
   "dbQuoteString", c("AthenaConnection", "character"),
@@ -150,16 +274,37 @@ setMethod(
     getMethod("dbQuoteString", c("DBIConnection", "character"), asNamespace("DBI"))(conn, x, ...)
   })
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbQuoteIdentifier
+#' @rdname dbQuote
 #' @export
 setMethod(
   "dbQuoteIdentifier", c("AthenaConnection", "SQL"),
   getMethod("dbQuoteIdentifier", c("DBIConnection", "SQL"), asNamespace("DBI")))
 
-#' @rdname AthenaConnection
+
+#' List Athena Tables
+#'
+#' Returns the unquoted names of Athena tables accessible through this connection.
+#' @name dbListTables
 #' @inheritParams DBI::dbListTables
 #' @aliases dbListTables
+#' @return \code{dbListTables()} returns a character vector with all the tables from Athena.
+#' @seealso \code{\link[DBI]{dbListTables}}
+#' @examples 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Connect to athena using default profile name
+#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#'              
+#' # Return list of tables in Athena
+#' dbListTables(con)
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+NULL
+
+#' @rdname dbListTables
 #' @export
 setMethod(
   "dbListTables", "AthenaConnection",
@@ -169,9 +314,36 @@ setMethod(
   }
 )
 
-#' @rdname AthenaConnection
+
+#' List Field names of Athena table
+#'
+#' @name dbListFields
 #' @inheritParams DBI::dbListFields
+#' @return \code{dbListFields()} returns a character vector with all the fields from an Athena table.
+#' @seealso \code{\link[DBI]{dbListFields}}
 #' @aliases dbListFields
+#' @examples 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Connect to athena using default profile name
+#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#' 
+#' # Write data.frame to Athena table
+#' dbWriteTable(con, "mtcars", mtcars,
+#'              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://mybucket/data/")
+#'              
+#' # Return list of fields in table
+#' dbListFields(con, "mtcars")
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbListFields
 #' @export
 setMethod(
   "dbListFields", c("AthenaConnection","character") ,
@@ -188,9 +360,35 @@ setMethod(
   }
 )
 
-
-#' @rdname AthenaConnection
+#' Does Athena table exist?
+#' 
+#' Returns logical scalar if the table exists or not. \code{TRUE} if the table exists, \code{FALSE} otherwise.
+#' @name dbExistsTable
 #' @inheritParams DBI::dbExistsTable
+#' @return \code{dbExistsTable()} returns logical scalar. \code{TRUE} if the table exists, \code{FALSE} otherwise.
+#' @seealso \code{\link[DBI]{dbExistsTable}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Connect to athena using default profile name
+#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#' 
+#' # Write data.frame to Athena table
+#' dbWriteTable(con, "mtcars", mtcars,
+#'              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://mybucket/data/")
+#'              
+#' # Check if table exists from Athena
+#' dbExistsTable(con, "mtcars")
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbExistsTable
 #' @export
 setMethod(
   "dbExistsTable", c("AthenaConnection", "character"),
@@ -211,8 +409,36 @@ setMethod(
     if(nrow(dbGetQuery(conn, Query))> 0) TRUE else FALSE
   })
 
-#' @rdname AthenaConnection
+
+#' Remove table from Athena
+#' 
+#' Removes Athena table but does not remove the data from Amazon S3 bucket.
+#' @name dbRemoveTable
+#' @return \code{dbRemoveTable()} returns \code{TRUE}, invisibly.
 #' @inheritParams DBI::dbRemoveTable
+#' @seealso \code{\link[DBI]{dbRemoveTable}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Connect to athena using default profile name
+#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#' 
+#' # Write data.frame to Athena table
+#' dbWriteTable(con, "mtcars", mtcars,
+#'              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://mybucket/data/")
+#'              
+#' # Remove Table from Athena
+#' dbRemoveTable(con, "mtcars")
+#' 
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbRemoveTable
 #' @export
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
@@ -227,9 +453,31 @@ setMethod(
     invisible(TRUE)
   })
 
-#' @rdname AthenaConnection
+#' Send query, retrieve results and then clear result set
+#'
+#' @name dbGetQuery
 #' @inheritParams DBI::dbGetQuery
-#' @inheritParams DBI::dbFetch
+#' @return \code{dbGetQuery()} returns a dataframe.
+#' @seealso \code{\link[DBI]{dbGetQuery}}
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Sending Queries to Athena
+#' dbGetQuery(con, "show databases")
+#'
+#' # Disconnect conenction
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbGetQuery
 #' @export
 setMethod(
   "dbGetQuery", c("AthenaConnection", "character"),
@@ -242,8 +490,36 @@ setMethod(
     dbFetch(res = rs, n = -1, ...)
   })
 
-#' @rdname AthenaConnection
+
+#' Get DBMS metadata
+#' 
 #' @inheritParams DBI::dbGetInfo
+#' @name dbGetInfo
+#' @return a named list
+#' @seealso \code{\link[DBI]{dbGetInfo}}
+#' @examples 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#'                  
+#' # Returns metadata from connnection object
+#' dbGetInfo(con)
+#' 
+#' # Return metadata from Athena query object
+#' res <- dbSendQuery(con, "show databases")
+#' dbGetInfo(res)
+#' 
+#' # disconnect from Athena
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbGetInfo
 #' @export
 setMethod(
   "dbGetInfo", "AthenaConnection",
@@ -257,14 +533,44 @@ setMethod(
     info
   })
 
-#' @rdname AthenaConnection
+#' Athena table partitions
+#' 
+#' This method returns all partitions from Athena table.
+#' @inheritParams DBI::dbExistsTable
+#' @return data.frame that returns all partitions in table, if no partitions in Athena table then
+#'         function will return error from Athena.
+#' @name dbGetPartition
+#' @examples
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#'                  
+#' # write iris table to athena                  
+#' dbWriteTable(con, "iris",
+#'              iris,
+#'              partition = c("timestamp" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://path/to/store/athena/table/")
+#' 
+#' # return table partitions
+#' RAthena::dbGetPartition(con, "iris")
+#' 
+#' # disconnect from athena
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbGetPartition
 #' @export
 setGeneric("dbGetPartition",
            def = function(conn, name, ...) standardGeneric("dbGetPartition"),
            valueClass = "data.frame")
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbExistsTable
+#' @rdname dbGetPartition
 #' @export
 setMethod(
   "dbGetPartition", "AthenaConnection",
@@ -280,14 +586,43 @@ setMethod(
     dbGetQuery(conn, paste0("SHOW PARTITIONS ", dbms.name,".",Table))
   })
 
-#' @rdname AthenaConnection
+#' Show Athena table's DDL
+#' 
+#' @description Executes a statement to return the data description language (DDL) of the Athena table.
+#' @inheritParams DBI::dbExistsTable
+#' @name dbShow
+#' @return \code{dbShow()} returns \code{\link[DBI]{SQL}} characters of the Athena table DDL.
+#' @examples 
+#' \dontrun{
+#' library(DBI)
+#' 
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#'                  
+#' # write iris table to athena                  
+#' dbWriteTable(con, "iris",
+#'              iris,
+#'              partition = c("timestamp" = format(Sys.Date(), "%Y%m%d")),
+#'              s3.location = "s3://path/to/store/athena/table/")
+#' 
+#' # return table ddl
+#' RAthena::dbShow(con, "iris")
+#' 
+#' # disconnect from athena
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbShow
 #' @export
 setGeneric("dbShow",
            def = function(conn, name, ...) standardGeneric("dbShow"),
            valueClass = "character")
 
-#' @rdname AthenaConnection
-#' @inheritParams DBI::dbExistsTable
+#' @rdname dbShow
 #' @export
 setMethod(
   "dbShow", "AthenaConnection",
