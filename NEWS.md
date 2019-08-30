@@ -11,7 +11,7 @@
 * Fixes to description file due to cran submission feedback
   * Added link to AWS Athena
   * Added description of aliases "AWS", and "SDK" to description section
-  * Removed generated MIT licence from github
+  * Removed generated MIT license from github
   * Formatted LICENSE file
 * changed helper function `waiter` to `poll`, to align with python's polling
 
