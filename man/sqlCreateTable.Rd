@@ -4,8 +4,7 @@
 \name{sqlCreateTable}
 \alias{sqlCreateTable}
 \alias{sqlCreateTable,AthenaConnection-method}
-\title{Creates query to create a simple Athena table
-Creates an interface to compose \code{CREATE EXTERNAL TABLE}.}
+\title{Creates query to create a simple Athena table}
 \usage{
 \S4method{sqlCreateTable}{AthenaConnection}(con, table = NULL,
   fields = NULL, field.types = NULL, partition = NULL,
@@ -40,7 +39,6 @@ A data frame: field types are generated using
 \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 }
 \description{
-Creates query to create a simple Athena table
 Creates an interface to compose \code{CREATE EXTERNAL TABLE}.
 }
 \examples{

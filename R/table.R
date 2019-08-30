@@ -227,6 +227,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 
 
 #' Creates query to create a simple Athena table
+#' 
 #' Creates an interface to compose \code{CREATE EXTERNAL TABLE}.
 #' @name sqlCreateTable
 #' @inheritParams DBI::sqlCreateTable
