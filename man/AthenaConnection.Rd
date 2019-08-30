@@ -21,11 +21,6 @@
 \alias{dbExistsTable,AthenaConnection,character-method}
 \alias{dbRemoveTable,AthenaConnection,character-method}
 \alias{dbGetQuery,AthenaConnection,character-method}
-\alias{dbGetInfo,AthenaConnection-method}
-\alias{dbGetPartition}
-\alias{dbGetPartition,AthenaConnection-method}
-\alias{dbShow}
-\alias{dbShow,AthenaConnection-method}
 \title{Athena Connection Methods}
 \usage{
 \S4method{show}{AthenaConnection}(object)
@@ -61,16 +56,6 @@
 
 \S4method{dbGetQuery}{AthenaConnection,character}(conn, statement = NULL,
   ...)
-
-\S4method{dbGetInfo}{AthenaConnection}(dbObj, ...)
-
-dbGetPartition(conn, name, ...)
-
-\S4method{dbGetPartition}{AthenaConnection}(conn, name, ...)
-
-dbShow(conn, name, ...)
-
-\S4method{dbShow}{AthenaConnection}(conn, name, ...)
 }
 \arguments{
 \item{object}{Any R object}
@@ -96,4 +81,10 @@ or a \linkS4class{DBIResult}}
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaConnection objects.
+}
+\seealso{
+\code{\link[DBI]{dbDisconnect}}, \code{\link[DBI]{dbIsValid}}, \code{\link[DBI]{dbSendQuery}},
+         \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}, \code{\link[DBI]{dbDataType}}, \code{\link[DBI]{dbQuoteString}},
+         \code{\link[DBI]{dbQuoteIdentifier}}, \code{\link[DBI]{dbListTables}}, \code{\link[DBI]{dbListFields}}, \code{\link[DBI]{dbExistsTable}},
+         \code{\link[DBI]{dbRemoveTable}}, \code{\link[DBI]{dbGetQuery}}
 }
