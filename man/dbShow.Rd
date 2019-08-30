@@ -26,6 +26,10 @@ Executes a statement to return the data description language (DDL) of the Athena
 }
 \examples{
 \dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
 library(DBI)
 
 # Demo connection to athena using profile name 

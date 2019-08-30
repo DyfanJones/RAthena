@@ -39,6 +39,10 @@ setClass(
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
 #' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
 #' library(DBI)
 #' 
 #' # Demo connection to athena using profile name 
@@ -96,6 +100,10 @@ setMethod(
 #' @seealso \code{\link[DBI]{dbFetch}}
 #' @examples
 #' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
 #' library(DBI)
 #' 
 #' # Demo connection to athena using profile name 
@@ -182,6 +190,10 @@ setMethod(
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
 #' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
 #' library(DBI)
 #' 
 #' # Demo connection to athena using profile name 

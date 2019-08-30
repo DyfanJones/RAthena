@@ -24,10 +24,16 @@ Removes Athena table but does not remove the data from Amazon S3 bucket.
 }
 \examples{
 \dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
 library(DBI)
 
-# Connect to athena using default profile name
-con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+# Demo connection to athena using profile name 
+con <- dbConnect(RAthena::athena(),
+                 profile_name = "YOUR_PROFILE_NAME",
+                 s3_staging_dir = "s3://path/to/query/bucket/")
 
 # Write data.frame to Athena table
 dbWriteTable(con, "mtcars", mtcars,

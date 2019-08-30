@@ -27,6 +27,10 @@ This method returns all partitions from Athena table.
 }
 \examples{
 \dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
 library(DBI)
 
 # Demo connection to athena using profile name 

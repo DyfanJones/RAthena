@@ -21,10 +21,16 @@
 #' @seealso \code{\link[DBI]{dbWriteTable}}
 #' @examples
 #' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
 #' library(DBI)
 #' 
-#' # Connect to athena using default profile name
-#' con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+#' # Demo connection to athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
 #' 
 #' # List existing tables in Athena
 #' dbListTables(con)
@@ -232,6 +238,10 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
 #' @examples 
 #' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
 #' library(DBI)
 #' 
 #' # Demo connection to athena using profile name 

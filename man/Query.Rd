@@ -35,6 +35,10 @@ The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to 
 }
 \examples{
 \dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
 library(DBI)
 
 # Demo connection to athena using profile name 
