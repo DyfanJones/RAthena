@@ -32,12 +32,12 @@ Executes a statement to return the data description language (DDL) of the Athena
 
 library(DBI)
 
-# Demo connection to athena using profile name 
+# Demo connection to Athena using profile name 
 con <- dbConnect(RAthena::athena(),
                  profile_name = "YOUR_PROFILE_NAME",
                  s3_staging_dir = "s3://path/to/query/bucket/")
                  
-# write iris table to athena                  
+# write iris table to Athena                  
 dbWriteTable(con, "iris",
              iris,
              partition = c("timestamp" = format(Sys.Date(), "\%Y\%m\%d")),
@@ -46,7 +46,7 @@ dbWriteTable(con, "iris",
 # return table ddl
 RAthena::dbShow(con, "iris")
 
-# disconnect from athena
+# disconnect from Athena
 dbDisconnect(con)
 }
 }

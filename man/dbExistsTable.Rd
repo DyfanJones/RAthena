@@ -30,7 +30,7 @@ Returns logical scalar if the table exists or not. \code{TRUE} if the table exis
 
 library(DBI)
 
-# Demo connection to athena using profile name 
+# Demo connection to Athena using profile name 
 con <- dbConnect(RAthena::athena(),
                  profile_name = "YOUR_PROFILE_NAME",
                  s3_staging_dir = "s3://path/to/query/bucket/")

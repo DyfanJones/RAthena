@@ -8,13 +8,13 @@ NULL
 #' @name AthenaDriver
 NULL
 
-#' athena driver
+#' Athena Driver
 #'
 #' Driver for an Athena Boto3 connection.
 #'
 #' @export
 #' @import methods DBI
-#' @return \code{athena()} returns a s4 class. This class is used active athena method for \code{\link[DBI]{dbConnect}}
+#' @return \code{athena()} returns a s4 class. This class is used active Athena method for \code{\link[DBI]{dbConnect}}
 #' @examples
 #' RAthena::athena()
 #' @seealso \code{\link{dbConnect}}
@@ -65,7 +65,7 @@ setMethod(
 #'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
 #' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @aliases dbConnect
-#' @return \code{dbConnect()} returns a s4 class. This object is used to communitcate with AWS Athena.
+#' @return \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 #' @examples
 #' \dontrun{
 #' # Connect to Athena using your aws access keys

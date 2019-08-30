@@ -11,8 +11,8 @@
 #' @param append Allow appending to the destination table. Cannot be
 #'   `TRUE` if `overwrite` is also `TRUE`.
 #' @param field.types Additional field types used to override derived types.
-#' @param partition Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
-#' @param s3.location s3 bucket to store athena table
+#' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
+#' @param s3.location s3 bucket to store Athena table
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @inheritParams DBI::sqlCreateTable
 #' @return \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
@@ -27,7 +27,7 @@
 #' 
 #' library(DBI)
 #' 
-#' # Demo connection to athena using profile name 
+#' # Demo connection to Athena using profile name 
 #' con <- dbConnect(RAthena::athena(),
 #'                  profile_name = "YOUR_PROFILE_NAME",
 #'                  s3_staging_dir = "s3://path/to/query/bucket/")
@@ -71,7 +71,7 @@ Athena_write_table <-
     
     file.type = match.arg(file.type)
     
-    # made everything lower case due to aws athena issue: https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/
+    # made everything lower case due to aws Athena issue: https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/
     name <- tolower(name)
     s3.location <- tolower(s3.location)
     if(!is.null(partition)) {names(partition) <- tolower(names(partition))}
@@ -128,7 +128,7 @@ Athena_write_table <-
       sql <- sqlCreateTable(conn, Name, value, field.types = field.types, 
                             partition = names(partition),
                             s3.location = s3.location, file.type = file.type)
-      # create athena table
+      # create Athena table
       rs <- dbExecute(conn, sql)
       dbClearResult(rs)}
     
@@ -203,7 +203,7 @@ setMethod(
   })
 
 
-#' Converts data frame into suitbale format to be uploaded to Athena
+#' Converts data frame into suitable format to be uploaded to Athena
 #'
 #' This method converts data.frame columns into the correct format so that it can be uploaded Athena.
 #' @name sqlData
@@ -232,8 +232,8 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @name sqlCreateTable
 #' @inheritParams DBI::sqlCreateTable
 #' @param field.types Additional field types used to override derived types.
-#' @param partition Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}
-#' @param s3.location s3 bucket to store athena table
+#' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
+#' @param s3.location s3 bucket to store Athena table
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
@@ -245,7 +245,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' 
 #' library(DBI)
 #' 
-#' # Demo connection to athena using profile name 
+#' # Demo connection to Athena using profile name 
 #' con <- dbConnect(RAthena::athena(),
 #'                  profile_name = "YOUR_PROFILE_NAME",
 #'                  s3_staging_dir = "s3://path/to/query/bucket/")

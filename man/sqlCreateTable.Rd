@@ -27,9 +27,9 @@ A data frame: field types are generated using
 
 \item{field.types}{Additional field types used to override derived types.}
 
-\item{partition}{Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
+\item{partition}{Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}}
 
-\item{s3.location}{s3 bucket to store athena table}
+\item{s3.location}{s3 bucket to store Athena table}
 
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
 
@@ -49,7 +49,7 @@ Creates an interface to compose \code{CREATE EXTERNAL TABLE}.
 
 library(DBI)
 
-# Demo connection to athena using profile name 
+# Demo connection to Athena using profile name 
 con <- dbConnect(RAthena::athena(),
                  profile_name = "YOUR_PROFILE_NAME",
                  s3_staging_dir = "s3://path/to/query/bucket/")

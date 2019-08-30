@@ -33,12 +33,12 @@ This method returns all partitions from Athena table.
 
 library(DBI)
 
-# Demo connection to athena using profile name 
+# Demo connection to Athena using profile name 
 con <- dbConnect(RAthena::athena(),
                  profile_name = "YOUR_PROFILE_NAME",
                  s3_staging_dir = "s3://path/to/query/bucket/")
                  
-# write iris table to athena                  
+# write iris table to Athena                  
 dbWriteTable(con, "iris",
              iris,
              partition = c("timestamp" = format(Sys.Date(), "\%Y\%m\%d")),
@@ -47,7 +47,7 @@ dbWriteTable(con, "iris",
 # return table partitions
 RAthena::dbGetPartition(con, "iris")
 
-# disconnect from athena
+# disconnect from Athena
 dbDisconnect(con)
 }
 }

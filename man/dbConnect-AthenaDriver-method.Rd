@@ -37,7 +37,7 @@ To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/late
 \item{...}{Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}}
 }
 \value{
-\code{dbConnect()} returns a s4 class. This object is used to communitcate with AWS Athena.
+\code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 }
 \description{
 Connect to Athena using python's sdk boto3

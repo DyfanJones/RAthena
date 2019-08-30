@@ -106,8 +106,8 @@ RAthena::dbShow(con, "impressions")
 
 #### Setting up AWS CLI
 
-RAthena is compatible with AWS CLI. This allows your aws creditentials
-to be stored and not be hard coded in your connection.
+RAthena is compatible with AWS CLI. This allows your aws credentials to
+be stored and not be hard coded in your connection.
 
 To install AWS CLI please refer to:
 <https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html>,
