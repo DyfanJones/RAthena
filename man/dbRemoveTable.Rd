@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbRemoveTable}
 \alias{dbRemoveTable}
+\alias{dbRemoveTable,AthenaConnection,character-method}
 \title{Remove table from Athena}
 \usage{
 \S4method{dbRemoveTable}{AthenaConnection,character}(conn, name, ...)

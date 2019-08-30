@@ -3,6 +3,7 @@
 \docType{methods}
 \name{sqlCreateTable}
 \alias{sqlCreateTable}
+\alias{sqlCreateTable,AthenaConnection-method}
 \title{Creates query to create a simple Athena table
 Creates an interface to compose \code{CREATE EXTERNAL TABLE}.}
 \usage{

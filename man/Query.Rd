@@ -3,6 +3,7 @@
 \docType{methods}
 \name{Query}
 \alias{Query}
+\alias{dbSendQuery,AthenaConnection,character-method}
 \alias{dbSendStatement,AthenaConnection,character-method}
 \alias{dbExecute,AthenaConnection,character-method}
 \title{Execute a query on Athena}
@@ -29,7 +30,7 @@ Returns \code{AthenaQuery} s4 class.
 }
 \description{
 The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to Athena but does not wait for query to execute. 
-             \code{\link{dbHasComplete()}} method will need to ran to check if query has been completed or not.
+             \code{\link{dbHasCompleted}} method will need to ran to check if query has been completed or not.
              The \code{dbExecute()} method submits a query to Athena and waits for the query to be executed.
 }
 \examples{

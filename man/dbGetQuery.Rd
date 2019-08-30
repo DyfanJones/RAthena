@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbGetQuery}
 \alias{dbGetQuery}
+\alias{dbGetQuery,AthenaConnection,character-method}
 \title{Send query, retrieve results and then clear result set}
 \usage{
 \S4method{dbGetQuery}{AthenaConnection,character}(conn, statement = NULL,

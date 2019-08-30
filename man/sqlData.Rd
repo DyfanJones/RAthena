@@ -3,6 +3,7 @@
 \docType{methods}
 \name{sqlData}
 \alias{sqlData}
+\alias{sqlData,AthenaConnection-method}
 \title{Converts data frame into suitbale format to be uploaded to Athena}
 \usage{
 \S4method{sqlData}{AthenaConnection}(con, value, row.names = NA, ...)

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbListFields}
 \alias{dbListFields}
+\alias{dbListFields,AthenaConnection,character-method}
 \title{List Field names of Athena table}
 \usage{
 \S4method{dbListFields}{AthenaConnection,character}(conn, name, ...)

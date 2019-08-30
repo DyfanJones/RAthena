@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbExistsTable}
 \alias{dbExistsTable}
+\alias{dbExistsTable,AthenaConnection,character-method}
 \title{Does Athena table exist?}
 \usage{
 \S4method{dbExistsTable}{AthenaConnection,character}(conn, name, ...)

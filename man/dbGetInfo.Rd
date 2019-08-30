@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbGetInfo}
 \alias{dbGetInfo}
+\alias{dbGetInfo,AthenaConnection-method}
 \alias{dbGetInfo,AthenaQuery-method}
 \title{Get DBMS metadata}
 \usage{

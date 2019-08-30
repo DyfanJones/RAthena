@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbDisconnect}
 \alias{dbDisconnect}
+\alias{dbDisconnect,AthenaConnection-method}
 \title{Disconnect (close) an Athena connection}
 \usage{
 \S4method{dbDisconnect}{AthenaConnection}(conn, ...)

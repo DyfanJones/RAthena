@@ -50,6 +50,8 @@ default name.
 
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
+\item{field.types}{Additional field types used to override derived types.}
+
 \item{partition}{Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
 
 \item{s3.location}{s3 bucket to store athena table}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbIsValid}
 \alias{dbIsValid}
+\alias{dbIsValid,AthenaConnection-method}
 \alias{dbIsValid,AthenaQuery-method}
 \title{Is this DBMS object still valid?}
 \usage{

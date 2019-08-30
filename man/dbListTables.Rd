@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbListTables}
 \alias{dbListTables}
+\alias{dbListTables,AthenaConnection-method}
 \title{List Athena Tables}
 \usage{
 \S4method{dbListTables}{AthenaConnection}(conn, ...)

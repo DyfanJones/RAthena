@@ -5,6 +5,7 @@
 \alias{dbDataType,AthenaDriver,ANY-method}
 \alias{dbDataType,AthenaDriver,list-method}
 \alias{dbDataType}
+\alias{dbDataType,AthenaConnection,ANY-method}
 \alias{dbDataType,AthenaConnection,data.frame-method}
 \title{Determine SQL data type of object}
 \usage{
@@ -39,9 +40,9 @@ dbDataType(athena(), Sys.Date())
 dbDataType(athena(), Sys.time())
 dbDataType(athena(), c("x", "abc"))
 dbDataType(athena(), list(raw(10), raw(20)))
-dbDataType(athena(), I(3))
 
-vapply(iris, function(x) dbDataType(RAthena::athena(), x), FUN.VALUE = character(1), USE.NAMES = TRUE)
+vapply(iris, function(x) dbDataType(RAthena::athena(), x),
+       FUN.VALUE = character(1), USE.NAMES = TRUE)
 
 \dontrun{
 library(DBI)

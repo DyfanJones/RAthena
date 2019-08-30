@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dbQuote}
 \alias{dbQuote}
+\alias{dbQuoteString,AthenaConnection,character-method}
 \alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
 \title{Quote Identifiers}
 \usage{
