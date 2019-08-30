@@ -29,3 +29,6 @@ or \linkS4class{DBIConnection}}
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaDriver objects.
 }
+\seealso{
+\code{\link[DBI]{dbDataType}}
+}
