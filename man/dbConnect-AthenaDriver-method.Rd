@@ -36,25 +36,31 @@ To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/late
 
 \item{...}{Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}}
 }
+\value{
+\code{dbConnect()} returns a s4 class. This object is used to communitcate with AWS Athena.
+}
 \description{
 Connect to Athena using python's sdk boto3
 }
 \examples{
 \dontrun{
-# Connect to Athena using back access keys
+# Connect to Athena using your aws access keys
  library(DBI)
  con <- dbConnect(RAthena:athena(),
-                  aws_access_key_id='YOUR_ACCESS_KEY_ID',
+                  aws_access_key_id='YOUR_ACCESS_KEY_ID', # 
                   aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
                   s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
                   region_name='us-west-2')
  dbDisconnect(con)
-}
-\donttest{
-# Connect to Athena using profile name
- con <- DBI::dbConnect(RAthena::athena(),
-                       profile_name = "rathena",
-                       s3_staging_dir = "s3://test-rathena/athena-query-results/")
+ 
+# Connect to Athena using your profile name
+# Profile name can be created by using AWS CLI
+ con <- dbConnect(RAthena::athena(),
+                  profile_name = "YOUR_PROFILE_NAME",
+                  s3_staging_dir = "s3://path/to/query/bucket/")
  dbDisconnect(con)
 }
+}
+\seealso{
+\code{\link[DBI]{dbConnect}}
 }
