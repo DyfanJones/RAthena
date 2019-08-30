@@ -31,7 +31,7 @@ setClass(
 
 #' Clear Results
 #' 
-#' Frees all resoucres (local and Athena) associated with result set. It does this by removing s3 query output result on Amazon,
+#' Frees all resources (local and Athena) associated with result set. It does this by removing s3 query output result on Amazon,
 #' and removed the connection resource locally.
 #' @name dbClearResult
 #' @inheritParams DBI::dbClearResult
