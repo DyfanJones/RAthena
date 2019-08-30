@@ -25,6 +25,9 @@ environment. Python 3.6 is installed by default.}
 \item{...}{other arguments passed to [reticulate::conda_install()] or
 [reticulate::virtualenv_install()].}
 }
+\value{
+Returns \code{NULL} after installing \code{Python} \code{Boto3}.
+}
 \description{
 Install Amazon SDK boto3 for Athena connection
 }
