@@ -6,8 +6,6 @@
 \alias{dbWriteTable,AthenaConnection,character,data.frame-method}
 \alias{dbWriteTable,AthenaConnection,Id,data.frame-method}
 \alias{dbWriteTable,AthenaConnection,SQL,data.frame-method}
-\alias{sqlData,AthenaConnection-method}
-\alias{sqlCreateTable,AthenaConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
@@ -24,12 +22,6 @@
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location,
   file.type = c("csv", "tsv", "parquet"), ...)
-
-\S4method{sqlData}{AthenaConnection}(con, value, row.names = NA, ...)
-
-\S4method{sqlCreateTable}{AthenaConnection}(con, table = NULL,
-  fields = NULL, field.types = NULL, partition = NULL,
-  s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...)
 }
 \arguments{
 \item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by
@@ -58,8 +50,6 @@ default name.
 
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
-\item{field.types}{Additional field types used to override derived types.}
-
 \item{partition}{Partition Athena table (needs to be a named list or vector) for exmaple: \code{c(var1 = "2019-20-13")}}
 
 \item{s3.location}{s3 bucket to store athena table}
@@ -67,38 +57,43 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
 
 \item{...}{Other arguments used by individual methods.}
-
-\item{con}{A database connection.}
-
-\item{table}{Name of the table. Escaped with
-\code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
-
-\item{fields}{Either a character vector or a data frame.
-
-A named character vector: Names are column names, values are types.
-Names are escaped with \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.
-Field types are unescaped.
-
-A data frame: field types are generated using
-\code{\link[=dbDataType]{dbDataType()}}.}
+}
+\value{
+\code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
+        arguments are unset, or append = TRUE and the data frame with the new data has different column names,
+        an error is raised; the remote table remains unchanged.
 }
 \description{
-Implementations of pure virtual functions defined in the `DBI` package
-for AthenaConnection objects
+Convenience functions for reading/writing DBMS tables
 }
 \examples{
 \dontrun{
 library(DBI)
-con <- dbConnect(RAthena::Athena(),s3_staging_dir = "s3://mybucket/athena_query/")
+
+# Connect to athena using default profile name
+con <- dbConnect(RAthena::Athena(), s3_staging_dir = "s3://mybucket/athena_query/")
+
+# List existing tables in Athena
 dbListTables(con)
+
+# Write data.frame to Athena table
 dbWriteTable(con, "mtcars", mtcars,
              partition=c("TIMESTAMP" = format(Sys.Date(), "\%Y\%m\%d")),
              s3.location = "s3://mybucket/data/")
+             
+# Read entire table from Athena
 dbReadTable(con, "mtcars")
 
+# List all tables in Athena after uploading new table to Athena
 dbListTables(con)
+
+# Checking if uploaded table exists in Athena
 dbExistsTable(con, "mtcars")
 
+# Disconnect from Athena
 dbDisconnect(con)
 }
+}
+\seealso{
+\code{\link[DBI]{dbWriteTable}}
 }

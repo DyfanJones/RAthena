@@ -8,7 +8,6 @@
 \alias{dbFetch,AthenaQuery-method}
 \alias{dbHasCompleted,AthenaQuery-method}
 \alias{dbIsValid,AthenaQuery-method}
-\alias{dbGetInfo,AthenaQuery-method}
 \title{Athena Result Methods}
 \usage{
 \S4method{dbClearResult}{AthenaQuery}(res, ...)
@@ -18,8 +17,6 @@
 \S4method{dbHasCompleted}{AthenaQuery}(res, ...)
 
 \S4method{dbIsValid}{AthenaQuery}(dbObj, ...)
-
-\S4method{dbGetInfo}{AthenaQuery}(dbObj, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}
@@ -38,4 +35,8 @@ or a \linkS4class{DBIResult}}
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaResult objects.
+}
+\seealso{
+\code{\link[DBI]{dbClearResult}}, \code{\link[DBI]{dbFetch}}, \code{\link[DBI]{dbHasCompleted}},
+         \code{\link[DBI]{dbIsValid}}
 }

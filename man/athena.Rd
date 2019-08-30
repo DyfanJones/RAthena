@@ -6,12 +6,15 @@
 \usage{
 athena()
 }
+\value{
+\code{athena()} returns a s4 class. This class is used active athena method for \code{\link[DBI]{dbConnect}}
+}
 \description{
 Driver for an Athena Boto3 connection.
 }
 \examples{
-\dontrun{
-#' library(DBI)
 RAthena::athena()
 }
+\seealso{
+\code{\link{dbConnect}}
 }
