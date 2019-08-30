@@ -1,3 +1,10 @@
+# RAthena 1.0.2
+* Added explanation to DBI alais (Database Interface) to description file due to cran feedback
+* split functions out of overall r documentation
+  * Added extra examples to each function
+  * Added return values
+* fixed bug with field names containing ".", replace with "_" for Athena tables.
+
 # RAthena 1.0.1 
 * Fixes to description file due to cran submittion feedback
   * Added link to AWS Athena
