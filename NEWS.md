@@ -1,5 +1,5 @@
 # RAthena 1.0.2
-* Added explanation to DBI alais (Database Interface) to description file due to cran feedback
+* Added explanation to DBI alias (Database Interface) to description file due to cran feedback
 * split functions out of overall r documentation
   * Added extra examples to each function
   * Added return values
