@@ -13,7 +13,7 @@ access to aws account with permissions allowing you to use Athena.*
 
 Before installing RAthena ensure that Python 3+ is installed onto your
 machine: <https://www.python.org/downloads/>. To install Boto3 either it
-can installed the pip command or using RAthena installation funtion:
+can installed the pip command or using RAthena installation function:
 
     pip install boto3
 

@@ -20,7 +20,7 @@ The goal of the RAthena package is to provide a DBI-compliant interface to Amazo
 
 ## Installation:
 
-Before installing RAthena ensure that Python 3+ is installed onto your machine: https://www.python.org/downloads/. To install Boto3 either it can installed the pip command or using RAthena installation funtion:
+Before installing RAthena ensure that Python 3+ is installed onto your machine: https://www.python.org/downloads/. To install Boto3 either it can installed the pip command or using RAthena installation function:
 
 ```
 pip install boto3
