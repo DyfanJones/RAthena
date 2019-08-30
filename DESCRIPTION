@@ -4,7 +4,7 @@ Title: Connect to 'AWS Athena' using 'Boto3' ('DBI' Interface)
 Version: 1.0.2
 Authors@R: person("Dyfan", "Jones", email="dyfan.r.jones@gmail.com", 
                   role= c("aut", "cre"))
-Description: This package has been design to be compatible with the R package Database Inferace
+Description: This package has been design to be compatible with the R package Database Interface
     'DBI' when connecting to Amazon Web Service ('AWS') Athena <https://aws.amazon.com/athena/>.
     To do this it uses 'Python' 'Boto3' Software Development Kit ('SDK')
     <https://boto3.amazonaws.com/v1/documentation/api/latest/index.html> as a driver for the connection.
