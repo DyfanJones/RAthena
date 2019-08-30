@@ -5,13 +5,6 @@
 \alias{AthenaConnection}
 \alias{AthenaConnection-class}
 \alias{show,AthenaConnection-method}
-\alias{dbDisconnect,AthenaConnection-method}
-\alias{dbIsValid,AthenaConnection-method}
-\alias{dbSendQuery,AthenaConnection,character-method}
-\alias{dbSendStatement,AthenaConnection,character-method}
-\alias{dbExecute,AthenaConnection,character-method}
-\alias{dbDataType,AthenaConnection,ANY-method}
-\alias{dbDataType,AthenaConnection,data.frame-method}
 \alias{dbQuoteString,AthenaConnection,character-method}
 \alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
 \alias{dbListTables,AthenaConnection-method}
@@ -24,23 +17,6 @@
 \title{Athena Connection Methods}
 \usage{
 \S4method{show}{AthenaConnection}(object)
-
-\S4method{dbDisconnect}{AthenaConnection}(conn, ...)
-
-\S4method{dbIsValid}{AthenaConnection}(dbObj, ...)
-
-\S4method{dbSendQuery}{AthenaConnection,character}(conn,
-  statement = NULL, ...)
-
-\S4method{dbSendStatement}{AthenaConnection,character}(conn,
-  statement = NULL, ...)
-
-\S4method{dbExecute}{AthenaConnection,character}(conn, statement = NULL,
-  ...)
-
-\S4method{dbDataType}{AthenaConnection,ANY}(dbObj, obj, ...)
-
-\S4method{dbDataType}{AthenaConnection,data.frame}(dbObj, obj, ...)
 
 \S4method{dbQuoteString}{AthenaConnection,character}(conn, x, ...)
 
@@ -60,31 +36,24 @@
 \arguments{
 \item{object}{Any R object}
 
-\item{conn}{A \linkS4class{DBIConnection} object, as returned by
-\code{\link[=dbConnect]{dbConnect()}}.}
+\item{conn}{A subclass of \linkS4class{DBIConnection}, representing
+an active connection to an DBMS.}
+
+\item{x}{A character vector to quote as string.}
 
 \item{...}{any other parameter for \code{Boto3} session: 
 \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}}
 
-\item{dbObj}{An object inheriting from \linkS4class{DBIObject},
-i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
-or a \linkS4class{DBIResult}}
+\item{name}{a character string with the name of the remote table.}
 
 \item{statement}{a character string containing SQL.}
-
-\item{obj}{An R object whose SQL type we want to determine.}
-
-\item{x}{A character vector to quote as string.}
-
-\item{name}{a character string with the name of the remote table.}
 }
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaConnection objects.
 }
 \seealso{
-\code{\link[DBI]{dbDisconnect}}, \code{\link[DBI]{dbIsValid}}, \code{\link[DBI]{dbSendQuery}},
-         \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}, \code{\link[DBI]{dbDataType}}, \code{\link[DBI]{dbQuoteString}},
-         \code{\link[DBI]{dbQuoteIdentifier}}, \code{\link[DBI]{dbListTables}}, \code{\link[DBI]{dbListFields}}, \code{\link[DBI]{dbExistsTable}},
-         \code{\link[DBI]{dbRemoveTable}}, \code{\link[DBI]{dbGetQuery}}
+\code{\link[DBI]{dbQuoteString}}, \code{\link[DBI]{dbQuoteIdentifier}}, \code{\link[DBI]{dbListTables}},
+         \code{\link[DBI]{dbListFields}}, \code{\link[DBI]{dbExistsTable}}, \code{\link[DBI]{dbRemoveTable}},
+         \code{\link[DBI]{dbGetQuery}}
 }

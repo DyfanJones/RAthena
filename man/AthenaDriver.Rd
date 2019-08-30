@@ -5,30 +5,14 @@
 \alias{AthenaDriver}
 \alias{AthenaDriver-class}
 \alias{show,AthenaDriver-method}
-\alias{dbDataType,AthenaDriver,ANY-method}
-\alias{dbDataType,AthenaDriver,list-method}
 \title{Athena Driver Methods}
 \usage{
 \S4method{show}{AthenaDriver}(object)
-
-\S4method{dbDataType}{AthenaDriver,ANY}(dbObj, obj, ...)
-
-\S4method{dbDataType}{AthenaDriver,list}(dbObj, obj, ...)
 }
 \arguments{
 \item{object}{Any R object}
-
-\item{dbObj}{A object inheriting from \linkS4class{DBIDriver}
-or \linkS4class{DBIConnection}}
-
-\item{obj}{An R object whose SQL type we want to determine.}
-
-\item{...}{Other arguments passed on to methods.}
 }
 \description{
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaDriver objects.
-}
-\seealso{
-\code{\link[DBI]{dbDataType}}
 }
