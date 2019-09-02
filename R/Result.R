@@ -67,7 +67,17 @@ setMethod(
     if (!dbIsValid(res)) {
       warning("Result already cleared", call. = FALSE)
       } else {
-    
+        
+      # checks status of query
+      tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
+               error = function(e) py_error(e))
+      
+      # stops resource if query is still running
+      if (!(query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED"))){
+        tryCatch(res@athena$stop_query_execution(QueryExecutionId = res@info$QueryExecutionId),
+                 error = function(e) py_error(e))}
+      
+      # clear s3 athena output
       tryCatch(s3 <- res@connection@ptr$resource("s3"),
                error = function(e) py_error(e))
       s3_info <- s3_split_uri(res@connection@info$s3_staging)
