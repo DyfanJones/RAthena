@@ -223,8 +223,21 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
       value[[i]] <- sapply(value[[i]], paste, collapse = "|")
     }
   }
-  value
+  
+  log_char(value)
 })
+
+# helper function to convert logical values to character
+log_char <- function(value){
+  col_want <- sapply(value, inherits, what = "logical")
+  for (i in seq_along(which(col_want))) {
+    want = which(value[[which(col_want)[i]]] == TRUE)
+    output = rep("false", times = nrow(value))
+    output[want] = "true"
+    value[[which(col_want)[i]]] <- output
+  }
+  value
+}
 
 
 #' Creates query to create a simple Athena table
