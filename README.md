@@ -188,6 +188,13 @@ project, this project has used an appropriate name to reflect this …
   - Upload package to cran
   - Add a logo (as everyone loves a logo)
   - Improve dbFetch method
-  - Streamline existing function and create performance testing
-  - Add full support for KMS key for athena connection.
-  - Add support for number of work groups
+      - Implement `next_token` in `get_result` for more looping methods.
+      - Possibly retrieve metadata from `get_result` for variable
+        conversion (when `n != -1, Inf`)
+  - Streamline existing functions:
+      - Increase current performance (performance testing will need to
+        be added)
+      - Better maintance
+  - Add full support for KMS key for athena connection
+    (<https://aws.amazon.com/kms/>)
+  - Add support for number of athena work groups
