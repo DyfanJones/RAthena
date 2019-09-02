@@ -188,3 +188,6 @@ project, this project has used an appropriate name to reflect this …
   - Upload package to cran
   - Add a logo (as everyone loves a logo)
   - Improve dbFetch method
+  - Streamline existing function and create performance testing
+  - Add full support for KMS key for athena connection.
+  - Add support for number of work groups
