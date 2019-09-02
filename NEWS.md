@@ -1,3 +1,7 @@
+# RAthena 1.0.3
+* Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures
+* Added logical variable type in data transfer unit test
+
 # RAthena 1.0.2
 * Added explanation to DBI alias (Database Interface) to description file due to cran feedback
 * split functions out of overall r documentation
