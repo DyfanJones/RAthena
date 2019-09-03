@@ -57,6 +57,13 @@ setMethod(
 #' @param aws_secret_access_key AWS secret access key
 #' @param aws_session_token AWS temporary session token
 #' @param schema_name The schema_name to which the connection belongs
+#' @param work_group The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to `NULL`
+#' @param poll_interval Amount of time took when checking query execution status. Default set to `1`.
+#' @param encryption_option Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
+#'                          Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
+#'                          usually changing this option is not required.
+#' @param kms_key \href{AWS Key Management Service}{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}, 
+#'                please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.
 #' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @param region_name Default region when creating new connections
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
@@ -93,6 +100,10 @@ setMethod(
            aws_secret_access_key = NULL ,
            aws_session_token = NULL,
            schema_name = "default",
+           work_group = NULL,
+           poll_interval = 1L,
+           encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
+           kms_key = NULL,
            s3_staging_dir = NULL,
            region_name = NULL,
            botocore_session = NULL,
@@ -102,10 +113,19 @@ setMethod(
       stop("Boto3 is not detected please install boto3 using either: `pip install boto3` in terminal or `install_boto()`.
             Alternatively `reticulate::use_python` or `reticulate::use_condaenv` will have to be used if boto3 is in another environment.",
            call. = FALSE)}
+    
+    encryption_option <- switch(encryption_option[1],
+                                "NULL" = NULL,
+                                match.arg(encryption_option))
+    
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,
                             aws_session_token = aws_session_token,
                             schema_name = schema_name,
+                            work_group = work_group,
+                            poll_interval =poll_interval,
+                            encryption_option = encryption_option,
+                            kms_key = kms_key,
                             s3_staging_dir = s3_staging_dir,
                             region_name = region_name,
                             botocore_session = botocore_session,
