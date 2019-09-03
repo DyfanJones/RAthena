@@ -194,7 +194,3 @@ project, this project has used an appropriate name to reflect this …
   - Streamline existing functions:
       - Increase current performance (performance testing will need to
         be added)
-      - Better maintance
-  - Add full support for KMS key for athena connection
-    (<https://aws.amazon.com/kms/>)
-  - Add support for number of athena work groups
