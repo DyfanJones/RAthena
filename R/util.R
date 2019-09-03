@@ -29,12 +29,13 @@ client_athena <- function(botosession){
 
 # holds functions until athena query competed
 poll <- function(res){
+  poll_interval <- res@connection@info$poll_interval
   while (TRUE){
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
              error = function(e) py_error(e))
     if (query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED")){
       return (query_execution)
-    } else {Sys.sleep(1)}
+    } else {Sys.sleep(poll_interval)}
   }
 }
 
@@ -65,3 +66,22 @@ resource_active.AthenaQuery <- function(dbObj){
           !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(FALSE)
   if(!py_is_null_xptr(dbObj@connection@ptr) && !py_is_null_xptr(dbObj@athena)) TRUE else FALSE
 }
+
+# set up athena request call
+request <- function(conn, statement){
+  request = list(QueryString = statement,
+                 QueryExecutionContext = list(Database = conn@info$dbms.name),
+                 ResultConfiguration= list(OutputLocation = conn@info$s3_staging))
+  
+  # adding work group
+  request["WorkGroup"] = conn@info$work_group
+  
+  # adding encryption options
+  if(!is.null(conn@info$encryption_option)){
+    EncryptionConfiguration = list("EncryptionOption" = conn@info$encryption_option)
+    EncryptionConfiguration["KmsKey"] = conn@info$kms_key
+    request["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+  }
+  request
+}
+
