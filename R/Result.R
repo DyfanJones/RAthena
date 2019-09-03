@@ -6,10 +6,8 @@ AthenaResult <- function(conn,
                          s3_staging_dir = NULL){
 
   stopifnot(is.character(statement))
-  # if(is.null(s3_staging_dir)) s3_staging_dir <- conn@info$s3_staging
   Athena <- client_athena(conn)
-  
-  Request <- request(con, statement)
+  Request <- request(conn, statement)
   
   tryCatch(response <- do.call(Athena$start_query_execution, Request, quote = T),
            error = function(e) py_error(e))
