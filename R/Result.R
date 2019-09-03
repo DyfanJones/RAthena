@@ -6,12 +6,12 @@ AthenaResult <- function(conn,
                          s3_staging_dir = NULL){
 
   stopifnot(is.character(statement))
-  if(is.null(s3_staging_dir)) s3_staging_dir <- conn@info$s3_staging
+  # if(is.null(s3_staging_dir)) s3_staging_dir <- conn@info$s3_staging
   Athena <- client_athena(conn)
-
-  tryCatch(response <- Athena$start_query_execution(QueryString = statement,
-                                                    QueryExecutionContext = list(Database = conn@info$dbms.name),
-                                                    ResultConfiguration= list(OutputLocation = s3_staging_dir)),
+  
+  Request <- request(con, statement)
+  
+  tryCatch(response <- do.call(Athena$start_query_execution, Request, quote = T),
            error = function(e) py_error(e))
 
   new("AthenaQuery", connection = conn, athena = Athena, info = response)
@@ -89,8 +89,8 @@ setMethod(
       eval.parent(substitute(res@connection@ptr <- NULL))
       eval.parent(substitute(res@athena <- NULL))
       
-      
-      output <- iterate(bucket$objects$all(), list)
+      tryCatch(output <- iterate(bucket$objects$all(), list),
+               error = function(e) py_error(e))
       s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
       staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
       tryCatch(s3$Object(s3_info$bucket_name, staging_file[1])$delete(),
