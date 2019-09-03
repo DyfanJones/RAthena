@@ -26,15 +26,15 @@ object (in order to clone an existing connection).}
 
 \item{schema_name}{The schema_name to which the connection belongs}
 
-\item{work_group}{The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to `NULL`}
+\item{work_group}{The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to \code{NULL}.}
 
-\item{poll_interval}{Amount of time took when checking query execution status. Default set to `1`.}
+\item{poll_interval}{Amount of time took when checking query execution status. Default set to \code{1L}.}
 
 \item{encryption_option}{Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
 Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
 usually changing this option is not required.}
 
-\item{kms_key}{\href{AWS Key Management Service}{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}, 
+\item{kms_key}{\href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service}, 
 please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.}
 
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}

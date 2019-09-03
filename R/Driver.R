@@ -57,12 +57,12 @@ setMethod(
 #' @param aws_secret_access_key AWS secret access key
 #' @param aws_session_token AWS temporary session token
 #' @param schema_name The schema_name to which the connection belongs
-#' @param work_group The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to `NULL`
-#' @param poll_interval Amount of time took when checking query execution status. Default set to `1`.
+#' @param work_group The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to \code{NULL}.
+#' @param poll_interval Amount of time took when checking query execution status. Default set to \code{1L}.
 #' @param encryption_option Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
 #'                          Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
 #'                          usually changing this option is not required.
-#' @param kms_key \href{AWS Key Management Service}{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}, 
+#' @param kms_key \href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service}, 
 #'                please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.
 #' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @param region_name Default region when creating new connections
