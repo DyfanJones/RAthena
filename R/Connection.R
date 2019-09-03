@@ -17,6 +17,10 @@ AthenaConnection <-
     aws_secret_access_key = NULL ,
     aws_session_token = NULL,
     schema_name = NULL,
+    work_group = NULL,
+    poll_interval = NULL,
+    encryption_option = NULL,
+    kms_key = NULL,
     s3_staging_dir = NULL,
     region_name = NULL,
     botocore_session = NULL,
@@ -33,7 +37,9 @@ AthenaConnection <-
     error = function(e) py_error(e))
     quote <- "'"
 
-    info <- list(s3_staging = s3_staging_dir, dbms.name = schema_name)
+    info <- list(s3_staging = s3_staging_dir, dbms.name = schema_name,
+                 work_group = work_group, poll_interval = poll_interval,
+                 encryption_option = encryption_option, kms_key = kms_key)
 
     res <- new("AthenaConnection",  ptr = ptr, info = info, quote = quote)
   }
