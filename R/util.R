@@ -69,19 +69,25 @@ resource_active.AthenaQuery <- function(dbObj){
 
 # set up athena request call
 request <- function(conn, statement){
+  # creating QueryString and QueryExecutionContext
   request = list(QueryString = statement,
-                 QueryExecutionContext = list(Database = conn@info$dbms.name),
-                 ResultConfiguration= list(OutputLocation = conn@info$s3_staging))
+                 QueryExecutionContext = list(Database = conn@info$dbms.name))
   
-  # adding work group
-  request["WorkGroup"] = conn@info$work_group
+  # creating ResultConfiguration 
+  ResultConfiguration = list(OutputLocation = conn@info$s3_staging)
   
-  # adding encryption options
+  # adding EncryptionConfiguration to ResultConfiguration
   if(!is.null(conn@info$encryption_option)){
     EncryptionConfiguration = list("EncryptionOption" = conn@info$encryption_option)
     EncryptionConfiguration["KmsKey"] = conn@info$kms_key
-    request["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+    ResultConfiguration["EncryptionConfiguration"] <- list(EncryptionConfiguration)
   }
+  
+  # adding ResultConfiguration
+  request["ResultConfiguration"] <- list(ResultConfiguration)
+  
+  # adding WorkGroup
+  request["WorkGroup"] = conn@info$work_group
+  
   request
 }
-
