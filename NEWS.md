@@ -1,3 +1,10 @@
+# RAthena 1.1.0
+* Added new features in `AthenaConnection`:
+  * poll_interval: Amount of time took when checking query execution state.
+  * work_group: allows users to assign work groups to athena resource
+  * encryption_option: Athena encryption at rest
+  * kms_key:AWS Key Management Service
+
 # RAthena 1.0.3
 * Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using `dbWriteTable`)
 * Added logical variable type in data transfer unit test
