@@ -40,3 +40,28 @@ tbl4 =
 PARTITIONED BY (timestamp STRING)
 STORED AS PARQUET
 LOCATION 's3://test-rathena/removeable_table/test_df/'\n;"))
+
+
+# static Athena Query Request Tests
+athena_test_req1 <-
+  list(QueryString = "select * from test_query",
+       QueryExecutionContext = list(Database = "default"),
+       ResultConfiguration = list(OutputLocation = "s3://test-rathena/athena-query/",
+                                  EncryptionConfiguration = list(EncryptionOption = "SSE_S3",
+                                                                 KmsKey = "test_key")),
+       WorkGroup = "test_group")
+athena_test_req2 <-
+  list(QueryString = "select * from test_query",
+       QueryExecutionContext = list(Database = "default"),
+       ResultConfiguration = list(OutputLocation = "s3://test-rathena/athena-query/",
+                                  EncryptionConfiguration = list(EncryptionOption = "SSE_S3")),
+       WorkGroup = "test_group")
+athena_test_req3 <-
+  list(QueryString = "select * from test_query",
+       QueryExecutionContext = list(Database = "default"),
+       ResultConfiguration = list(OutputLocation = "s3://test-rathena/athena-query/"),
+       WorkGroup = "test_group")
+athena_test_req4 <-
+  list(QueryString = "select * from test_query",
+       QueryExecutionContext = list(Database = "default"),
+       ResultConfiguration = list(OutputLocation = "s3://test-rathena/athena-query/"))
