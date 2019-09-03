@@ -1,7 +1,5 @@
 context("Athena Request")
 
-s3.location <- "s3://test-rathena/removeable_table/"
-
 test_that("Check if Athena Request created correctly",{
   skip_if_no_boto()
   # Test connection is using AWS CLI to set profile_name 
