@@ -204,7 +204,8 @@ tbl(con, "iris")
 
 Querying Athena with `profile_name` instead of hard coding
 `aws_access_key_id` and `aws_secret_access_key`. By using `profile_name`
-extra Meta Data is returned in query to give users extra information.
+extra Meta Data is returned in the query to give users extra
+information.
 
 ``` r
 con <- dbConnect(RAthena::athena(),
