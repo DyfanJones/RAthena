@@ -16,6 +16,7 @@ Imports:
 Suggests: 
     arrow,
     data.table,
+    dplyr,
     knitr,
     testthat
 Depends: R (>= 3.2.0)
@@ -31,6 +32,7 @@ Collate:
     'Connection.R'
     'DataTypes.R'
     'Result.R'
+    'dplyr_integration.R'
     'install.R'
     'table.R'
     'util.R'
