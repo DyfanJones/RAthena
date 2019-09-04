@@ -37,9 +37,10 @@ AthenaConnection <-
     error = function(e) py_error(e))
     quote <- "'"
 
-    info <- list(s3_staging = s3_staging_dir, dbms.name = schema_name,
-                 work_group = work_group, poll_interval = poll_interval,
-                 encryption_option = encryption_option, kms_key = kms_key)
+    info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
+                 dbms.name = schema_name, work_group = work_group,
+                 poll_interval = poll_interval, encryption_option = encryption_option,
+                 kms_key = kms_key)
 
     res <- new("AthenaConnection",  ptr = ptr, info = info, quote = quote)
   }
