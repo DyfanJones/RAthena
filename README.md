@@ -155,9 +155,49 @@ con <- dbConnect(RAthena::athena(),
                 aws_access_key_id='YOUR_ACCESS_KEY_ID',
                 aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
                 s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
-                region_name='us-west-2')
-tbl(con, sql("SELECT * FROM one_row"))
+                region_name='eu-west-1')
+tbl(con, sql("SELECT * FROM iris"))
 ```
+
+    # Source:   SQL [?? x 5]
+    # Database: Athena 1.9.210 [eu-west-1/default]
+       sepal_length sepal_width petal_length petal_width species
+              <dbl>       <dbl>        <dbl>       <dbl> <chr>  
+     1          5.1         3.5          1.4         0.2 setosa 
+     2          4.9         3            1.4         0.2 setosa 
+     3          4.7         3.2          1.3         0.2 setosa 
+     4          4.6         3.1          1.5         0.2 setosa 
+     5          5           3.6          1.4         0.2 setosa 
+     6          5.4         3.9          1.7         0.4 setosa 
+     7          4.6         3.4          1.4         0.3 setosa 
+     8          5           3.4          1.5         0.2 setosa 
+     9          4.4         2.9          1.4         0.2 setosa 
+    10          4.9         3.1          1.5         0.1 setosa 
+    # … with more rows
+
+``` r
+con <- dbConnect(RAthena::athena(),
+                profile_name = "your_profile",
+                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/')
+tbl(con, sql("SELECT * FROM iris")) %>% 
+  filter(petal_length < 1.3)
+```
+
+    # Source:   lazy query [?? x 5]
+    # Database: Athena 1.9.210 [your_profile@eu-west-1/default]
+       sepal_length sepal_width petal_length petal_width species
+              <dbl>       <dbl>        <dbl>       <dbl> <chr>  
+     1          4.7         3.2          1.3         0.2 setosa 
+     2          4.3         3            1.1         0.1 setosa 
+     3          5.8         4            1.2         0.2 setosa 
+     4          5.4         3.9          1.3         0.4 setosa 
+     5          4.6         3.6          1           0.2 setosa 
+     6          5           3.2          1.2         0.2 setosa 
+     7          5.5         3.5          1.3         0.2 setosa 
+     8          4.4         3            1.3         0.2 setosa 
+     9          5           3.5          1.3         0.3 setosa 
+    10          4.5         2.3          1.3         0.3 setosa 
+    # … with more rows
 
 # Similar Projects
 
