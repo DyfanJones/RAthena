@@ -6,6 +6,7 @@
   * kms_key:AWS Key Management Service
 * New helper function `request` build athena query request
 * Added Athena Request Test
+* Created s3 method for function `db_desc`
 
 # RAthena 1.0.3
 * Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using `dbWriteTable`)
