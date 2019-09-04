@@ -41,7 +41,7 @@ con <- dbConnect(RAthena::athena(),
                 aws_access_key_id='YOUR_ACCESS_KEY_ID',
                 aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
                 s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
-                region_name='us-west-2')
+                region_name='eu-west-1')
 
 res <- dbExecute(con, "SELECT * FROM one_row")
 dbFetch(res)
@@ -130,22 +130,25 @@ RAthena has created a method to send data.frame from R to Athena.
 ``` r
 # Check existing tables
 dbListTables(con)
-# Upload mtcars to Athena
-dbWriteTable(con, "mtcars", mtcars, 
+# Upload iris to Athena
+dbWriteTable(con, "iris", iris, 
              partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
              s3.location = "s3://mybucket/data/")
 
-# Read in mtcars from Athena
-dbReadTable(con, "mtcars")
+# Read in iris from Athena
+dbReadTable(con, "iris")
 
 # Check new existing tables in Athena
 dbListTables(con)
 
-# Check if mtcars exists in Athena
-dbExistsTable(con, "mtcars")
+# Check if iris exists in Athena
+dbExistsTable(con, "iris")
 ```
 
 ### Tidyverse Usage
+
+Creating a connection to Athena and query and already existing table
+`iris` that was created in previous example.
 
 ``` r
 library(DBI)
@@ -175,11 +178,39 @@ tbl(con, sql("SELECT * FROM iris"))
     10          4.9         3.1          1.5         0.1 setosa 
     # … with more rows
 
+dplyr provides lazy querying with allows to short hand `tbl(con,
+sql("SELECT * FROM iris"))` to `tbl(con, "iris")`. For more information
+please look at <https://db.rstudio.com/dplyr/>.
+
+``` r
+tbl(con, "iris")
+```
+
+    # Source:   table<iris> [?? x 5]
+    # Database: Athena 1.9.210 [eu-west-1/default]
+       sepal_length sepal_width petal_length petal_width species
+              <dbl>       <dbl>        <dbl>       <dbl> <chr>  
+     1          5.1         3.5          1.4         0.2 setosa 
+     2          4.9         3            1.4         0.2 setosa 
+     3          4.7         3.2          1.3         0.2 setosa 
+     4          4.6         3.1          1.5         0.2 setosa 
+     5          5           3.6          1.4         0.2 setosa 
+     6          5.4         3.9          1.7         0.4 setosa 
+     7          4.6         3.4          1.4         0.3 setosa 
+     8          5           3.4          1.5         0.2 setosa 
+     9          4.4         2.9          1.4         0.2 setosa 
+    10          4.9         3.1          1.5         0.1 setosa 
+    # … with more rows
+
+Querying Athena with `profile_name` instead of hard coding
+`aws_access_key_id` and `aws_secret_access_key`. By using `profile_name`
+extra Meta Data is returned in query to give users extra information.
+
 ``` r
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
                 s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/')
-tbl(con, sql("SELECT * FROM iris")) %>% 
+tbl(con, "iris")) %>% 
   filter(petal_length < 1.3)
 ```
 
@@ -197,6 +228,27 @@ tbl(con, sql("SELECT * FROM iris")) %>%
      8          4.4         3            1.3         0.2 setosa 
      9          5           3.5          1.3         0.3 setosa 
     10          4.5         2.3          1.3         0.3 setosa 
+    # … with more rows
+
+``` r
+tbl(con, "iris") %>% 
+  select(contains("sepal"), contains("petal"))
+```
+
+    # Source:   lazy query [?? x 4]
+    # Database: Athena 1.9.210 [your_profile@eu-west-1/default]
+       sepal_length sepal_width petal_length petal_width
+              <dbl>       <dbl>        <dbl>       <dbl>
+     1          5.1         3.5          1.4         0.2
+     2          4.9         3            1.4         0.2
+     3          4.7         3.2          1.3         0.2
+     4          4.6         3.1          1.5         0.2
+     5          5           3.6          1.4         0.2
+     6          5.4         3.9          1.7         0.4
+     7          4.6         3.4          1.4         0.3
+     8          5           3.4          1.5         0.2
+     9          4.4         2.9          1.4         0.2
+    10          4.9         3.1          1.5         0.1
     # … with more rows
 
 # Similar Projects
