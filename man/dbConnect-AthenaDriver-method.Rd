@@ -8,7 +8,7 @@
 \usage{
 \S4method{dbConnect}{AthenaDriver}(drv, aws_access_key_id = NULL,
   aws_secret_access_key = NULL, aws_session_token = NULL,
-  schema_name = "default", work_group = NULL, poll_interval = 1L,
+  schema_name = "default", work_group = NULL, poll_interval = NULL,
   encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
   kms_key = NULL, s3_staging_dir = NULL, region_name = NULL,
   botocore_session = NULL, profile_name = NULL, ...)
@@ -28,7 +28,7 @@ object (in order to clone an existing connection).}
 
 \item{work_group}{The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to \code{NULL}.}
 
-\item{poll_interval}{Amount of time took when checking query execution status. Default set to \code{1L}.}
+\item{poll_interval}{Amount of time took when checking query execution status. Default set to a random interval between 0.5 - 1 seconds.}
 
 \item{encryption_option}{Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
 Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
