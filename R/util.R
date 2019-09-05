@@ -29,8 +29,9 @@ client_athena <- function(botosession){
 
 # holds functions until athena query competed
 poll <- function(res){
-  poll_interval <- res@connection@info$poll_interval
+  class_poll <- res@connection@info$poll_interval
   while (TRUE){
+    poll_interval <- class_poll %||% rand_poll()
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
              error = function(e) py_error(e))
     if (query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED")){
@@ -38,6 +39,9 @@ poll <- function(res){
     } else {Sys.sleep(poll_interval)}
   }
 }
+
+# added a random poll wait time
+rand_poll <- function() {runif(n = 1, min = 50, max = 100) / 100}
 
 # python error handler
 py_error <- function(e){
@@ -91,3 +95,5 @@ request <- function(conn, statement){
   
   request
 }
+
+`%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
