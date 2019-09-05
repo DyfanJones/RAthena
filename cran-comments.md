@@ -9,7 +9,6 @@ Initial release of RAthena package
 
 # R devtools::check_rhub() results
   Maintainer: 'Dyfan Jones <dyfan.r.jones@gmail.com>'
-  
   New submission
 
 0 errors ✔ | 0 warnings ✔ | 1 note ✖
