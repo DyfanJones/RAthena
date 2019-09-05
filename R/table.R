@@ -65,6 +65,7 @@ Athena_write_table <-
               is.logical(overwrite),
               is.logical(append),
               is.s3_uri(s3.location))
+    stopifnot(is.null(partition) || is.character(partition) || is.list(partition))
 
     sapply(tolower(names(partition)), function(x){if(x %in% tolower(names(value))){
       stop("partition ", x, " is a variable in data.frame ", deparse(substitute(value)), call. = FALSE)}})
@@ -217,13 +218,13 @@ NULL
 #' @rdname sqlData
 #' @export
 setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ...) {
+  stopifnot(is.data.frame(value))
   value <- sqlRownamesToColumn(value, row.names)
   for(i in seq_along(value)){
     if(is.list(value[[i]])){
       value[[i]] <- sapply(value[[i]], paste, collapse = "|")
     }
   }
-  
   value
 })
 
@@ -275,6 +276,13 @@ NULL
 setMethod("sqlCreateTable", "AthenaConnection",
   function(con, table = NULL, fields = NULL, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), ...){
     if (!dbIsValid(con)) {stop("Connection already closed.", call. = FALSE)}
+    stopifnot(is.character(table),
+              is.data.frame(fields),
+              is.null(field.types) || is.character(field.types),
+              is.null(partition) || is.character(partition) || is.list(partition),
+              is.null(field.types) || is.character(field.types),
+              is.s3_uri(s3.location))
+    
     field <- createFields(con, fields, field.types = field.types)
     file.type <- match.arg(file.type)
     if(!is.s3_uri(s3.location))stop("s3.location need to be in correct format.", call. = F)
