@@ -12,6 +12,7 @@ Imports:
     DBI (>= 0.7),
     methods,
     reticulate (>= 1.13),
+    stats,
     utils
 Suggests: 
     arrow,
