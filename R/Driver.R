@@ -58,7 +58,7 @@ setMethod(
 #' @param aws_session_token AWS temporary session token
 #' @param schema_name The schema_name to which the connection belongs
 #' @param work_group The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to \code{NULL}.
-#' @param poll_interval Amount of time took when checking query execution status. Default set to \code{1L}.
+#' @param poll_interval Amount of time took when checking query execution status. Default set to a random interval between 0.5 - 1 seconds.
 #' @param encryption_option Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
 #'                          Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
 #'                          usually changing this option is not required.
@@ -101,7 +101,7 @@ setMethod(
            aws_session_token = NULL,
            schema_name = "default",
            work_group = NULL,
-           poll_interval = 1L,
+           poll_interval = NULL,
            encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
            kms_key = NULL,
            s3_staging_dir = NULL,
@@ -114,10 +114,22 @@ setMethod(
             Alternatively `reticulate::use_python` or `reticulate::use_condaenv` will have to be used if boto3 is in another environment.",
            call. = FALSE)}
     
+    # assert checks on parameters
+    stopifnot(is.null(aws_access_key_id) || is.character(aws_access_key_id),
+              is.null(aws_secret_access_key) || is.character(aws_secret_access_key),
+              is.null(aws_session_token) || is.character(aws_session_token),
+              is.character(schema_name),
+              is.null(work_group) || is.character(work_group),
+              is.null(poll_interval) || is.numeric(poll_interval),
+              is.null(kms_key) || is.character(kms_key),
+              is.null(s3_staging_dir) || is.s3_uri(s3_staging_dir),
+              is.null(region_name) || is.character(region_name),
+              is.null(profile_name) || is.character(profile_name))
+    
     encryption_option <- switch(encryption_option[1],
                                 "NULL" = NULL,
                                 match.arg(encryption_option))
-    
+  
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,
                             aws_session_token = aws_session_token,
