@@ -7,6 +7,8 @@
 * New helper function `request` build athena query request
 * Added Athena Request Test
 * Created s3 method for function `db_desc`
+* Changed to default polling value from 1 to be random interval between 0 - 1
+* Added parameter validation on `dbConnect`
 
 # RAthena 1.0.3
 * Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using `dbWriteTable`)
