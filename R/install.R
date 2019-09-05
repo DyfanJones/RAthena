@@ -27,7 +27,7 @@ install_boto <- function(method = c("auto", "virtualenv", "conda"),
                          conda_python_version = "3.6",
                          ...) {
   method <- match.arg(method)
-  
+  stopifnot(is.character(envname))
   
   reticulate::py_install(
     packages       = c("cython","boto3"),
