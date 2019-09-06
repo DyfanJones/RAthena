@@ -266,6 +266,39 @@ create_work_group(con, "demo_work_group", description = "This is a demo work gro
                   tags = tag_options(key= "demo_work_group", value = "demo_01"))
 ```
 
+List work groups:
+
+``` r
+list_work_groups(con)
+```
+
+    [[1]]
+    [[1]]$Name
+    [1] "demo_work_group"
+    
+    [[1]]$State
+    [1] "ENABLED"
+    
+    [[1]]$Description
+    [1] "This is a demo work group"
+    
+    [[1]]$CreationTime
+    2019-09-06 18:51:28.902000+01:00
+    
+    
+    [[2]]
+    [[2]]$Name
+    [1] "primary"
+    
+    [[2]]$State
+    [1] "ENABLED"
+    
+    [[2]]$Description
+    [1] ""
+    
+    [[2]]$CreationTime
+    2019-08-22 16:14:47.902000+01:00
+
 Update work group:
 
 ``` r
