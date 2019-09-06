@@ -9,6 +9,9 @@
 #' \item{delete_work_group}{Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.}
 #' \item{list_work_group}{Lists available workgroups for the account.}
 #' \item{get_work_group}{Returns information about the workgroup with the specified name}
+#' \item{create_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+#'                          The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
+#' \item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed.}
 #' }
 #'  
 #' @param conn A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
@@ -34,6 +37,10 @@
 #' @param value A tag value. The tag value length is from 0 to 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: \code{"+ - = . _ : / @"}. 
 #'           Tag values are case-sensitive.
 #' @param recursive_delete_option The option to delete the workgroup and its contents even if the workgroup contains any named queries
+#' @param remove_output_location If set to \code{TRUE}, indicates that the previously-specified query results location (also known as a client-side setting) for queries in this workgroup should be ignored and set to null.
+#'           If set to \code{FALSE} the out put location in the workgroup's result configuration will be updated with the new value.
+#'           For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html}{Workgroup Settings Override Client-Side Settings}.
+#' @param state The workgroup state that will be updated for the given workgroup.
 #' 
 #' @return 
 #' \describe{
@@ -42,6 +49,7 @@
 #' \item{delete_work_group}{Returns \code{NULL} but invisible}
 #' \item{list_work_group}{Returns list of aviable work groups}
 #' \item{get_work_group}{Returns list of work group meta data}
+#' \item{update_work_group}{Returns \code{NULL} but invisible}
 #' }
 #' 
 #' @examples 
@@ -62,6 +70,15 @@
 #'  
 #' # List work groups to see new work group
 #' list_work_group(con)
+#' 
+#' # get meta data from work group
+#' get_work_group(con, "demo_work_group")
+#' 
+#' # Update work group
+#' update_work_group(con, "demo_work_group", description = "This is a demo work group update")
+#' 
+#' # get updated meta data from work group
+#' get_work_group(con, "demo_work_group")                  
 #' 
 #' # Delete work group
 #' delete_work_group(con, "demo_work_group")
@@ -145,4 +162,41 @@ get_work_group <- function(conn, work_group = NULL){
   tryCatch(response <- Athena$get_work_group(WorkGroup = work_group),
            error = function(e) py_error(e))
   response[["WorkGroup"]]
+}
+
+#' @rdname work_group
+#' @export
+update_work_group <- function(conn, 
+                              work_group = NULL,
+                              remove_output_location = FALSE,
+                              enforce_work_group_config = FALSE,
+                              publish_cloud_watch_metrics = FALSE,
+                              bytes_scanned_cut_off = 10000000L,
+                              requester_pays = FALSE,
+                              description = NULL,
+                              state = c("ENABLED", "DISABLED")){
+  if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+  stopifnot(is.character(work_group),
+            is.logical(remove_output_location),
+            is.logical(enforce_work_group_config),
+            is.logical(publish_cloud_watch_metrics),
+            is.integer(bytes_scanned_cut_off) || is.infinite(bytes_scanned_cut_off),
+            is.logical(requester_pays),
+            is.character(description))
+  
+  state <- match.arg(state)
+  request <- list(WorkGroup = work_group,
+                  Description = description,
+                  State = state)
+  request["ConfigurationUpdates"] <- list(work_group_config_update(conn,
+                                                            RemoveOutputLocation = remove_output_location,
+                                                            EnforceWorkGroupConfiguration = enforce_work_group_config,
+                                                            PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
+                                                            BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
+                                                            RequesterPaysEnabled = requester_pays))
+  
+  Athena <- client_athena(conn)
+  tryCatch(do.call(Athena$update_work_group, request, quote = T),
+           error = function(e) py_error(e))
+  invisible(NULL)
 }
