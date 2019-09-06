@@ -16,12 +16,21 @@ test_that("Create and Delete Athena Work Groups",{
   output2 <- list_work_groups(con)
   work_groups2 <- sapply(output2, function(x) x$Name)
   
+  
+  meta_data1 <- get_work_group(con, "demo_work_group")$Description
+  update_work_group(con, "demo_work_group", description = "This is a demo work group update")
+  meta_data2 <- get_work_group(con, "demo_work_group")$Description
+  
   delete_work_group(con, "demo_work_group")
   
   output3 <- list_work_groups(con)
   work_groups3 <- sapply(output3, function(x) x$Name)
   
+  dbDisconnect(con)
+  
   expect_equal(any(grepl("demo_work_group", output1)), FALSE)
   expect_equal(any(grepl("demo_work_group", output2)), TRUE)
   expect_equal(any(grepl("demo_work_group", output3)), FALSE)
+  expect_equal(meta_data1, "This is a demo work group")
+  expect_equal(meta_data2, "This is a demo work group update")
 })
