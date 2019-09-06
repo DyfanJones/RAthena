@@ -36,6 +36,12 @@ AthenaConnection <-
                           ...),
     error = function(e) py_error(e))
     quote <- "'"
+    
+    if(is.null(s3_staging_dir) && is.null(work_group)) {stop("s3_staging_dir or work_group is require for Athena output location", call. = F)}
+    if(is.null(s3_staging_dir) && !is.null(work_group)){
+      Athena <- ptr$client("athena")
+      s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation
+    }
 
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group,
