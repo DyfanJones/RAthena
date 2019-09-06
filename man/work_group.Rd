@@ -12,7 +12,7 @@
 create_work_group(conn, work_group = NULL,
   enforce_work_group_config = FALSE,
   publish_cloud_watch_metrics = FALSE,
-  bytes_scanned_cutoff = 10000000L, requester_pays = FALSE,
+  bytes_scanned_cut_off = 10000000L, requester_pays = FALSE,
   description = NULL, tags = tag_options(key = NULL, value = NULL))
 
 tag_options(key = NULL, value = NULL)
@@ -35,7 +35,7 @@ If set to \code{FALSE}, client-side settings are used. For more information, see
 
 \item{publish_cloud_watch_metrics}{Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.}
 
-\item{bytes_scanned_cutoff}{The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.}
+\item{bytes_scanned_cut_off}{The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.}
 
 \item{requester_pays}{If set to \code{TRUE}, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 If set to \code{FALSE}, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data 
