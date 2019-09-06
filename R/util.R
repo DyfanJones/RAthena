@@ -103,7 +103,7 @@ work_group_config <- function(conn,
                               BytesScannedCutoffPerQuery = 123L,
                               RequesterPaysEnabled = FALSE){
   config <- list()
-  ResultConfiguration <- list(OutputLocation = con@info$s3_staging)
+  ResultConfiguration <- list(OutputLocation = conn@info$s3_staging)
   if(!is.null(conn@info$encryption_option)){
     EncryptionConfiguration = list("EncryptionOption" = conn@info$encryption_option)
     EncryptionConfiguration["KmsKey"] = conn@info$kms_key
