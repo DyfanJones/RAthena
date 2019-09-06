@@ -100,7 +100,7 @@ request <- function(conn, statement){
 work_group_config <- function(conn,
                               EnforceWorkGroupConfiguration = FALSE,
                               PublishCloudWatchMetricsEnabled = FALSE,
-                              BytesScannedCutoffPerQuery = 123L,
+                              BytesScannedCutoffPerQuery = 10000000L,
                               RequesterPaysEnabled = FALSE){
   config <- list()
   ResultConfiguration <- list(OutputLocation = conn@info$s3_staging)
@@ -116,5 +116,32 @@ work_group_config <- function(conn,
   config["RequesterPaysEnabled"] <- RequesterPaysEnabled
   config
 }
+
+# set up work group configuration update
+work_group_config_update <- 
+  function(conn,
+           RemoveOutputLocation = FALSE,
+           EnforceWorkGroupConfiguration = FALSE,
+           PublishCloudWatchMetricsEnabled = FALSE,
+           BytesScannedCutoffPerQuery = 10000000L,
+           RequesterPaysEnabled = FALSE){
+
+    ConfigurationUpdates <- list()
+    ResultConfigurationUpdates <- list(OutputLocation = conn@info$s3_staging,
+                                       RemoveOutputLocation = RemoveOutputLocation)
+    if(!is.null(conn@info$encryption_option)){
+      EncryptionConfiguration = list("EncryptionOption" = conn@info$encryption_option)
+      EncryptionConfiguration["KmsKey"] = conn@info$kms_key
+      ResultConfigurationUpdates["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+    }
+    
+    ConfigurationUpdates["EnforceWorkGroupConfiguration"] <- EnforceWorkGroupConfiguration
+    ConfigurationUpdates["ResultConfigurationUpdates"] <- list(ResultConfigurationUpdates)
+    ConfigurationUpdates["PublishCloudWatchMetricsEnabled"] <- PublishCloudWatchMetricsEnabled
+    ConfigurationUpdates["BytesScannedCutoffPerQuery"] <- BytesScannedCutoffPerQuery
+    ConfigurationUpdates["RequesterPaysEnabled"] <- RequesterPaysEnabled
+    
+    ConfigurationUpdates
+  }
 
 `%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
