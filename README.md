@@ -252,6 +252,82 @@ tbl(con, "iris") %>%
     10          4.9         3.1          1.5         0.1
     # … with more rows
 
+## Work Groups
+
+Creating work group:
+
+``` r
+con <- dbConnect(RAthena::athena(),
+                profile_name = "your_profile",
+                encryption_option = "SSE_S3",
+                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/')
+
+create_work_group(con, "demo_work_group", description = "This is a demo work group",
+                  tags = tag_options(key= "demo_work_group", value = "demo_01"))
+```
+
+Update work group:
+
+``` r
+update_work_group(con, "demo_work_group", description = "This is a demo work group update")
+```
+
+Return work group meta data:
+
+``` r
+get_work_group(con, "demo_work_group")
+```
+
+    $Name
+    [1] "demo_work_group"
+    
+    $State
+    [1] "ENABLED"
+    
+    $Configuration
+    $Configuration$ResultConfiguration
+    $Configuration$ResultConfiguration$OutputLocation
+    [1] "s3://YOUR_S3_BUCKET/path/to/"
+    
+    $Configuration$ResultConfiguration$EncryptionConfiguration
+    $Configuration$ResultConfiguration$EncryptionConfiguration$EncryptionOption
+    [1] "SSE_S3"
+    
+    
+    
+    $Configuration$EnforceWorkGroupConfiguration
+    [1] FALSE
+    
+    $Configuration$PublishCloudWatchMetricsEnabled
+    [1] FALSE
+    
+    $Configuration$BytesScannedCutoffPerQuery
+    [1] 10000000
+    
+    $Configuration$RequesterPaysEnabled
+    [1] FALSE
+    
+    
+    $Description
+    [1] "This is a demo work group update"
+    
+    $CreationTime
+    2019-09-06 18:51:28.902000+01:00
+
+Delete work group:
+
+``` r
+delete_work_group(con, "demo_work_group")
+```
+
+Connect to Athena using work group:
+
+``` r
+con <- dbConnect(RAthena::athena(),
+                profile_name = "your_profile",
+                work_group "demo_work_group")
+```
+
 # Similar Projects
 
 ## Python:
@@ -284,6 +360,3 @@ project, this project has used an appropriate name to reflect this …
       - Implement `next_token` in `get_result` for more looping methods.
       - Possibly retrieve metadata from `get_result` for variable
         conversion (when `n != -1, Inf`)
-  - Streamline existing functions:
-      - Increase current performance (performance testing will need to
-        be added)
