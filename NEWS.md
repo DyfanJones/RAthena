@@ -1,3 +1,14 @@
+# RAthena 1.2.0
+* Added new lower level api to work with Athena work groups:
+  * `create_work_group`: Creates a workgroup with the specified name.
+  * `delete_work_group`: Deletes the workgroup with the specified name.
+  * `list_work_group`: Lists available workgroups for the account.
+  * `get_work_group`: Returns information about the workgroup with the specified name.
+* Created a helper function `tag_options` to create tag options for `create_work_group`
+* Created a backend helper function `work_group_config` to create config of work group
+* Added extra feature to get work group output location in connection function `AthenaConnection`
+* Removed old s3_staging_dir validation check from `dbConnect` method
+
 # RAthena 1.1.0
 * Added new features in `AthenaConnection`:
   * poll_interval: Amount of time took when checking query execution state.
