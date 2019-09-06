@@ -9,9 +9,8 @@
 #' \item{delete_work_group}{Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.}
 #' \item{list_work_group}{Lists available workgroups for the account.}
 #' \item{get_work_group}{Returns information about the workgroup with the specified name}
-#' \item{create_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+#' \item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
 #'                          The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
-#' \item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed.}
 #' }
 #'  
 #' @param conn A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}

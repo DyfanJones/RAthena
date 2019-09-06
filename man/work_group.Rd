@@ -67,7 +67,7 @@ Tag values are case-sensitive.}
 \item{recursive_delete_option}{The option to delete the workgroup and its contents even if the workgroup contains any named queries}
 
 \item{remove_output_location}{If set to \code{TRUE}, indicates that the previously-specified query results location (also known as a client-side setting) for queries in this workgroup should be ignored and set to null.
-If set to \code{FALSE} or not set, and a value is present in the OutputLocation in ResultConfigurationUpdates (the client-side setting), the OutputLocation in the workgroup's ResultConfiguration will be updated with the new value.
+If set to \code{FALSE} the out put location in the workgroup's result configuration will be updated with the new value.
 For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html}{Workgroup Settings Override Client-Side Settings}.}
 
 \item{state}{The workgroup state that will be updated for the given workgroup.}
@@ -91,9 +91,8 @@ Lower level API access, allows user to create and delete Athena Work Groups.
 \item{delete_work_group}{Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.}
 \item{list_work_group}{Lists available workgroups for the account.}
 \item{get_work_group}{Returns information about the workgroup with the specified name}
-\item{create_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+\item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
                          The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
-\item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed.}
 }
 }
 \examples{
