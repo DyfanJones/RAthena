@@ -325,7 +325,7 @@ Connect to Athena using work group:
 ``` r
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
-                work_group "demo_work_group")
+                work_group = "demo_work_group")
 ```
 
 # Similar Projects
