@@ -17,7 +17,7 @@
 #'           If set to \code{FALSE}, client-side settings are used. For more information, see 
 #'           \href{https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html}{Workgroup Settings Override Client-Side Settings}.
 #' @param publish_cloud_watch_metrics Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
-#' @param bytes_scanned_cutoff The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.
+#' @param bytes_scanned_cut_off The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.
 #' @param requester_pays If set to \code{TRUE}, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 #'           If set to \code{FALSE}, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data 
 #'           from Requester Pays buckets cause an error. The default is false. For more information about Requester Pays buckets, 
@@ -79,7 +79,7 @@ create_work_group <- function(conn,
                               work_group = NULL,
                               enforce_work_group_config = FALSE,
                               publish_cloud_watch_metrics = FALSE,
-                              bytes_scanned_cutoff = 10000000L,
+                              bytes_scanned_cut_off = 10000000L,
                               requester_pays = FALSE,
                               description = NULL,
                               tags = tag_options(key = NULL, value = NULL)){
@@ -87,7 +87,7 @@ create_work_group <- function(conn,
   stopifnot(is.character(work_group),
             is.logical(enforce_work_group_config),
             is.logical(publish_cloud_watch_metrics),
-            is.integer(bytes_scanned_cutoff) || is.infinite(bytes_scanned_cutoff),
+            is.integer(bytes_scanned_cut_off) || is.infinite(bytes_scanned_cut_off),
             is.logical(requester_pays),
             is.character(description))
   
@@ -95,7 +95,7 @@ create_work_group <- function(conn,
   request["Configuration"] <- list(work_group_config(conn,
                                                      EnforceWorkGroupConfiguration = enforce_work_group_config,
                                                      PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
-                                                     BytesScannedCutoffPerQuery = bytes_scanned_cutoff,
+                                                     BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
                                                      RequesterPaysEnabled = requester_pays))
   request["Description"] <- list(description)
   request["Tags"] <- tags
