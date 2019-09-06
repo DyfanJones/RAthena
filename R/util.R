@@ -96,4 +96,25 @@ request <- function(conn, statement){
   request
 }
 
+# set up work group configuration
+work_group_config <- function(conn,
+                              EnforceWorkGroupConfiguration = FALSE,
+                              PublishCloudWatchMetricsEnabled = FALSE,
+                              BytesScannedCutoffPerQuery = 123L,
+                              RequesterPaysEnabled = FALSE){
+  config <- list()
+  ResultConfiguration <- list(OutputLocation = con@info$s3_staging)
+  if(!is.null(conn@info$encryption_option)){
+    EncryptionConfiguration = list("EncryptionOption" = conn@info$encryption_option)
+    EncryptionConfiguration["KmsKey"] = conn@info$kms_key
+    ResultConfiguration["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+  }
+  config["ResultConfiguration"] <- list(ResultConfiguration)
+  config["EnforceWorkGroupConfiguration"] <- EnforceWorkGroupConfiguration
+  config["PublishCloudWatchMetricsEnabled"] <- PublishCloudWatchMetricsEnabled
+  config["BytesScannedCutoffPerQuery"] <- BytesScannedCutoffPerQuery
+  config["RequesterPaysEnabled"] <- RequesterPaysEnabled
+  config
+}
+
 `%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
