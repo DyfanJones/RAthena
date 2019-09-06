@@ -7,6 +7,7 @@
 \alias{delete_work_group}
 \alias{list_work_groups}
 \alias{get_work_group}
+\alias{update_work_group}
 \title{Athena Work Groups}
 \usage{
 create_work_group(conn, work_group = NULL,
@@ -23,6 +24,12 @@ delete_work_group(conn, work_group = NULL,
 list_work_groups(conn)
 
 get_work_group(conn, work_group = NULL)
+
+update_work_group(conn, work_group = NULL,
+  remove_output_location = FALSE, enforce_work_group_config = FALSE,
+  publish_cloud_watch_metrics = FALSE,
+  bytes_scanned_cut_off = 10000000L, requester_pays = FALSE,
+  description = NULL, state = c("ENABLED", "DISABLED"))
 }
 \arguments{
 \item{conn}{A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}}
@@ -58,6 +65,12 @@ Tag keys are case-sensitive and must be unique per resource.}
 Tag values are case-sensitive.}
 
 \item{recursive_delete_option}{The option to delete the workgroup and its contents even if the workgroup contains any named queries}
+
+\item{remove_output_location}{If set to \code{TRUE}, indicates that the previously-specified query results location (also known as a client-side setting) for queries in this workgroup should be ignored and set to null.
+If set to \code{FALSE} or not set, and a value is present in the OutputLocation in ResultConfigurationUpdates (the client-side setting), the OutputLocation in the workgroup's ResultConfiguration will be updated with the new value.
+For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html}{Workgroup Settings Override Client-Side Settings}.}
+
+\item{state}{The workgroup state that will be updated for the given workgroup.}
 }
 \value{
 \describe{
@@ -66,6 +79,7 @@ Tag values are case-sensitive.}
 \item{delete_work_group}{Returns \code{NULL} but invisible}
 \item{list_work_group}{Returns list of aviable work groups}
 \item{get_work_group}{Returns list of work group meta data}
+\item{update_work_group}{Returns \code{NULL} but invisible}
 }
 }
 \description{
@@ -77,6 +91,9 @@ Lower level API access, allows user to create and delete Athena Work Groups.
 \item{delete_work_group}{Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.}
 \item{list_work_group}{Lists available workgroups for the account.}
 \item{get_work_group}{Returns information about the workgroup with the specified name}
+\item{create_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+                         The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
+\item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed.}
 }
 }
 \examples{
@@ -97,6 +114,15 @@ create_work_group(con, "demo_work_group", description = "This is a demo work gro
  
 # List work groups to see new work group
 list_work_group(con)
+
+# get meta data from work group
+get_work_group(con, "demo_work_group")
+
+# Update work group
+update_work_group(con, "demo_work_group", description = "This is a demo work group update")
+
+# get updated meta data from work group
+get_work_group(con, "demo_work_group")                  
 
 # Delete work group
 delete_work_group(con, "demo_work_group")
