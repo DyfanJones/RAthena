@@ -108,7 +108,6 @@ setMethod(
            region_name = NULL,
            botocore_session = NULL,
            profile_name = NULL, ...) {
-    stopifnot(is.s3_uri(s3_staging_dir))
     if(!py_module_available("boto3")){
       stop("Boto3 is not detected please install boto3 using either: `pip install boto3` in terminal or `install_boto()`.
             Alternatively `reticulate::use_python` or `reticulate::use_condaenv` will have to be used if boto3 is in another environment.",
