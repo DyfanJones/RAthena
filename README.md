@@ -393,3 +393,5 @@ project, this project has used an appropriate name to reflect this …
       - Implement `next_token` in `get_result` for more looping methods.
       - Possibly retrieve metadata from `get_result` for variable
         conversion (when `n != -1, Inf`)
+  - Add support for Assumming ARN Role:
+    <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role>
