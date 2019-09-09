@@ -36,14 +36,18 @@ AthenaConnection <-
                           ...),
       error = function(e) py_error(e))
     quote <- "'"
-    
-    if(is.null(s3_staging_dir) && is.null(work_group)) {stop("s3_staging_dir or work_group is require for Athena output location", call. = F)}
+  
     if(is.null(s3_staging_dir) && !is.null(work_group)){
       Athena <- ptr$client("athena")
       tryCatch(s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
                error = function(e) py_error(e))
     }
-
+    
+    s3_staging_dir <- s3_staging_dir %||% Sys.getenv("AWS_ATHENA_S3_STAGING_DIR")
+    
+    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`
+                                      or when work_group is defined in `create_work_group()`", call. = F)}
+    
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group,
                  poll_interval = poll_interval, encryption_option = encryption_option,
