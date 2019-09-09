@@ -78,9 +78,9 @@ setMethod(
       # clear s3 athena output
       tryCatch(s3 <- res@connection@ptr$resource("s3"),
                error = function(e) py_error(e))
-      s3_info <- s3_split_uri(res@connection@info$s3_staging)
+      s3_info <- split_s3_uri(res@connection@info$s3_staging)
       
-      tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
+      tryCatch(bucket <- s3$Bucket(s3_info$bucket),
                error = function(e) py_error(e))
       
       # remove class pointers
@@ -91,9 +91,9 @@ setMethod(
                error = function(e) py_error(e))
       s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
       staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
-      tryCatch(s3$Object(s3_info$bucket_name, staging_file[1])$delete(),
+      tryCatch(s3$Object(s3_info$bucket, staging_file[1])$delete(),
                error = function(e) warning("Don't have access to free remote resource", call. = F))
-      tryCatch(s3$Object(s3_info$bucket_name, staging_file[2])$delete(),
+      tryCatch(s3$Object(s3_info$bucket, staging_file[2])$delete(),
                error = function(e) cat(""))
       }
     invisible(TRUE)
@@ -143,7 +143,7 @@ setMethod(
 
     tryCatch(s3 <- res@connection@ptr$resource("s3"),
              error = function(e) py_error(e))
-    s3_info <- s3_split_uri(res@connection@info$s3_staging)
+    s3_info <- split_s3_uri(res@connection@info$s3_staging)
     s3_stage_file <- res@info$QueryExecutionId
 
     if(result$QueryExecution$Status$State == "FAILED") {
@@ -167,14 +167,14 @@ setMethod(
     File <- tempfile()
     on.exit(unlink(File))
 
-    tryCatch(bucket <- s3$Bucket(s3_info$bucket_name),
+    tryCatch(bucket <- s3$Bucket(s3_info$bucket),
              error = function(e) py_error(e))
     output <- iterate(bucket$objects$all(), list)
     s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
     staging_file <- s3Objs[grepl(s3_stage_file,s3Objs)][1]
 
 
-    tryCatch(s3$Bucket(s3_info$bucket_name)$download_file(staging_file, File),
+    tryCatch(s3$Bucket(s3_info$bucket)$download_file(staging_file, File),
              error = function(e) py_error(e))
     
     if(grepl("\\.csv$",staging_file)){

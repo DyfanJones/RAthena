@@ -146,19 +146,19 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   partition <- paste(names(partition), unname(partition), sep = "=", collapse = "/")
   
   Name <- paste0(name, ".", file.type)
-  uri_parts <- s3_split_uri(s3.location)
-  uri_parts$key <- gsub("/$", "", uri_parts$key)
-  if(grepl(name, uri_parts$key)){uri_parts$key <- gsub(name, "", uri_parts$key)
-  uri_parts$key <- gsub( "|/$", "", uri_parts$key)}
+  s3_info <- split_s3_uri(s3.location)
+  s3_info$key <- gsub("/$", "", s3_info$key)
+  if(grepl(name, s3_info$key)){s3_info$key <- gsub(name, "", s3_info$key)
+  s3_info$key <- gsub( "|/$", "", s3_info$key)}
   
-  if(uri_parts$key != "" && partition == ""){s3_key <- paste(uri_parts$key,name, Name, sep = "/")}
-  else if (uri_parts$key == "" && partition != "") {s3_key <- paste(name, partition, Name, sep = "/")}
-  else if (uri_parts$key == "" && partition == "") {s3_key <- paste(name, Name, sep = "/")}
-  else {s3_key <- paste(uri_parts$key, name, partition, Name, sep = "/")}
+  if(s3_info$key != "" && partition == ""){s3_key <- paste(s3_info$key,name, Name, sep = "/")}
+  else if (s3_info$key == "" && partition != "") {s3_key <- paste(name, partition, Name, sep = "/")}
+  else if (s3_info$key == "" && partition == "") {s3_key <- paste(name, Name, sep = "/")}
+  else {s3_key <- paste(s3_info$key, name, partition, Name, sep = "/")}
   
   tryCatch(s3 <- con@ptr$resource("s3"),
            error = function(e) py_error(e))
-  tryCatch(s3$Bucket(uri_parts$bucket_name)$upload_file(Filename = x, Key = s3_key),
+  tryCatch(s3$Bucket(s3_info$bucket)$upload_file(Filename = x, Key = s3_key),
            error = function(e) py_error(e))
   
   invisible(TRUE)
@@ -285,7 +285,6 @@ setMethod("sqlCreateTable", "AthenaConnection",
     
     field <- createFields(con, fields, field.types = field.types)
     file.type <- match.arg(file.type)
-    if(!is.s3_uri(s3.location))stop("s3.location need to be in correct format.", call. = F)
     table1 <- gsub(".*\\.", "", table)
     
     s3.location <- gsub("/$", "", s3.location)

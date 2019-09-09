@@ -6,12 +6,12 @@ boto_verison <- function(){
 }
 
 # split s3 uri
-s3_split_uri <- function(uri) {
+split_s3_uri <- function(uri) {
   stopifnot(is.s3_uri(uri))
-  path <- sub('^s3://', '', uri)
+  path <- gsub('^s3://', '', uri)
   list(
-    bucket_name = sub('/.*$', '', path),
-    key = sub('^[a-z0-9][a-z0-9\\.-]+[a-z0-9]/', '', path)
+    bucket = gsub('/.*$', '', path),
+    key = gsub('^[a-z0-9][a-z0-9\\.-]+[a-z0-9]/', '', path)
   )
 }
 
