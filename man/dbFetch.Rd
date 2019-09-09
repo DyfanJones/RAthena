@@ -12,10 +12,9 @@
 \item{res}{An object inheriting from \linkS4class{DBIResult}, created by
 \code{\link[=dbSendQuery]{dbSendQuery()}}.}
 
-\item{n}{maximum number of records to retrieve per fetch. Use \code{n = -1}
-or \code{n = Inf}
-to retrieve all pending records.  Some implementations may recognize other
-special values.}
+\item{n}{maximum number of records to retrieve per fetch. Use \code{n = -1} or \code{n = Inf} to retrieve all pending records.
+Some implementations may recognize other special values. Currently chunk sizes range from 0 to 999, 
+if entire dataframe is required use \code{n = -1} or \code{n = Inf}.}
 
 \item{...}{Other arguments passed on to methods.}
 }
@@ -40,6 +39,7 @@ con <- dbConnect(RAthena::athena(),
 
 res <- dbSendQuery(con, "show databases")
 dbFetch(res)
+dbClearResults(res)
 
 # Check if connection if valid after closing connection
 dbDisconnect(con)

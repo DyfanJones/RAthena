@@ -103,6 +103,9 @@ setMethod(
 #' 
 #' Currently returns the top n elements (rows) from result set or returns entire table from Athena.
 #' @name dbFetch
+#' @param n maximum number of records to retrieve per fetch. Use \code{n = -1} or \code{n = Inf} to retrieve all pending records.
+#'          Some implementations may recognize other special values. Currently chunk sizes range from 0 to 999, 
+#'          if entire dataframe is required use \code{n = -1} or \code{n = Inf}.
 #' @inheritParams DBI::dbFetch
 #' @return \code{dbFetch()} returns a data frame.
 #' @seealso \code{\link[DBI]{dbFetch}}
@@ -121,6 +124,7 @@ setMethod(
 #' 
 #' res <- dbSendQuery(con, "show databases")
 #' dbFetch(res)
+#' dbClearResults(res)
 #' 
 #' # Check if connection if valid after closing connection
 #' dbDisconnect(con)
@@ -145,17 +149,16 @@ setMethod(
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
-    if(n > 0 && n !=Inf){
-      n = as.integer(n)
+    if(n >= 0 && n !=Inf){
+      n = as.integer(n + 1)
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
                error = function(e) py_error(e))
-
-      for (i in 1:n){
-        if(i == 1){
-          df <- data.frame(matrix(ncol = length(unlist(result$ResultSet$Rows[[i]])), nrow = 0))
-          colnames(df)  <- unlist(result$ResultSet$Rows[[1]])} else {df[i-1,] <- unlist(result$ResultSet$Rows[[2]]$Data)}
-      }
-
+      
+      output <- lapply(result$ResultSet$Rows, function(x) (sapply(x$Data, function(x) if(length(x) == 0 ) NA else x)))
+      df <- t(sapply(output, function(x) unlist(x)))
+      colnames(df) <- unname(df[1,])
+      df <- data.frame(df)[-1,]
+      rownames(df) <- NULL
       return(df)
     }
 
