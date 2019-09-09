@@ -397,5 +397,3 @@ project, this project has used an appropriate name to reflect this …
   - Investigate boto3 `get_paginator` method for iterative methods for
     `dbFetch` possible method: `paginator =
     res@athena$get_paginator("get_query_results")`
-  - Add support for Assumming ARN Role:
-    <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role>
