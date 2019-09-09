@@ -5,6 +5,8 @@
   * `list_work_group`: Lists available workgroups for the account.
   * `get_work_group`: Returns information about the workgroup with the specified name.
   * `update_work_group`: Updates the workgroup with the specified name. The workgroup's name cannot be changed.
+* Added lower level api function `get_session_token` to create temporary session credentials
+* Created helper function `set_aws_env` to set aws tokens to environmental variables
 * Created a helper function `tag_options` to create tag options for `create_work_group`
 * Created a backend helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
