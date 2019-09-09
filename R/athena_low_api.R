@@ -224,7 +224,7 @@ update_work_group <- function(conn,
 get_session_token <- function(profile_name = NULL,
                               serial_number = NULL,
                               token_code = NULL,
-                              duration_seconds = 43200,
+                              duration_seconds = 43200L,
                               set_env = FALSE){
   stopifnot(is.null(profile_name) || is.character(profile_name),
             is.character(serial_number),
