@@ -6,7 +6,7 @@
 \title{Get Session Tokens for Boto Connection}
 \usage{
 get_session_token(profile_name = NULL, serial_number = NULL,
-  token_code = NULL, duration_seconds = 43200, set_env = FALSE)
+  token_code = NULL, duration_seconds = 43200L, set_env = FALSE)
 }
 \arguments{
 \item{profile_name}{The name of a profile to use. If not given, then the default profile is used.
