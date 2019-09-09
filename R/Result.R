@@ -162,7 +162,6 @@ setMethod(
       return(df)
     }
 
-
     #create temp file
     File <- tempfile()
     on.exit(unlink(File))
