@@ -10,6 +10,8 @@
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * Removed old s3_staging_dir validation check from `dbConnect` method
 * Improved `dbFetch` with chunk sizes between 0 - 999. Fixed error where `for loop` would return error instead of breaking.
+* simplified `py_error` function, set `call.` parameter to `FALSE`
+* renamed helper function `s3_split_uri` to `split_s3_uri`
 
 # RAthena 1.1.0
 * Added new features in `AthenaConnection`:
