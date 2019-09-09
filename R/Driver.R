@@ -128,7 +128,11 @@ setMethod(
     encryption_option <- switch(encryption_option[1],
                                 "NULL" = NULL,
                                 match.arg(encryption_option))
-  
+    
+    aws_access_key_id <- aws_access_key_id %||% Sys.getenv("AWS_ACCESS_KEY_ID")
+    aws_secret_access_key <- aws_secret_access_key %||% Sys.getenv("AWS_SECRET_ACCESS_KEY")
+    aws_session_token <- aws_session_token %||% Sys.getenv("AWS_SESSION_TOKEN")
+    
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,
                             aws_session_token = aws_session_token,
