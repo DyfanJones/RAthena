@@ -542,8 +542,7 @@ setMethod(
   function(conn,
            statement = NULL, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-    s3_staging_dir <- conn@info$s3_staging
-    rs <- dbSendQuery(conn, statement = statement, s3_staging_dir = s3_staging_dir)
+    rs <- dbSendQuery(conn, statement = statement)
     on.exit(dbClearResult(rs))
     dbFetch(res = rs, n = -1, ...)
   })
