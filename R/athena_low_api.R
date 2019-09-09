@@ -227,7 +227,7 @@ get_session_token <- function(profile_name = NULL,
                               duration_seconds = 43200,
                               set_env = FALSE){
   stopifnot(is.null(profile_name) || is.character(profile_name),
-            is.character(serial_numner),
+            is.character(serial_number),
             is.character(token_code),
             is.integer(duration_seconds),
             is.logical(set_env))
