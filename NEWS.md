@@ -9,6 +9,7 @@
 * Created a backend helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * Removed old s3_staging_dir validation check from `dbConnect` method
+* Improved `dbFetch` with chunk sizes between 0 - 999. Fixed error where `for loop` would return error instead of breaking.
 
 # RAthena 1.1.0
 * Added new features in `AthenaConnection`:
