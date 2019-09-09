@@ -45,11 +45,9 @@ rand_poll <- function() {runif(n = 1, min = 50, max = 100) / 100}
 
 # python error handler
 py_error <- function(e){
-  e$call <- sys.calls()[[1]]
-  if (sys.nframe() > 5) {e$call <- sys.calls()[[sys.nframe() - 5]]}
-  pe <- py_last_error()
-  if (!is.null(pe)) {e$message <- paste0('Python `', pe$type, '`: ', pe$value)}
-  stop(e)}
+  py_err <- py_last_error()
+  stop(py_err$value, call. = F)
+  }
 
 # checks if resource is active
 resource_active <- function(dbObj){
