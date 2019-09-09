@@ -199,3 +199,30 @@ update_work_group <- function(conn,
            error = function(e) py_error(e))
   invisible(NULL)
 }
+
+#' Get Session Tokens for Boto Connection
+#' @name session_token
+#' @export
+get_session_token <- function(profile_name = "default",
+                              serial_number = NULL,
+                              token_code = NULL,
+                              duration_seconds = NULL){
+  stopifnot(is.character(profile_name),
+            is.character(serial_numner),
+            is.character(token_code),
+            is.integer(duration_seconds))
+  
+  duration_seconds <- as.integer(duration_seconds)
+  tryCatch({sts <- boto$Session(profile_name = profile_name)$client("sts")
+            response <- sts$get_session_token(SerialNumber = serial_number,
+                                              TokenCode = token_code,
+                                              DurationSeconds = duration_seconds)},
+           error = function(e) py_error(e))
+  set_aws_env(response)
+  response$Credentials
+}
+
+
+
+
+
