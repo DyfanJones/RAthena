@@ -10,8 +10,8 @@
   aws_secret_access_key = NULL, aws_session_token = NULL,
   schema_name = "default", work_group = NULL, poll_interval = NULL,
   encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
-  kms_key = NULL, s3_staging_dir = NULL, region_name = NULL,
-  botocore_session = NULL, profile_name = NULL, ...)
+  kms_key = NULL, profile_name = NULL, s3_staging_dir = NULL,
+  region_name = NULL, botocore_session = NULL, ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \linkS4class{DBIDriver},
@@ -37,15 +37,15 @@ usually changing this option is not required.}
 \item{kms_key}{\href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service}, 
 please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.}
 
+\item{profile_name}{The name of a profile to use. If not given, then the default profile is used.
+To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
+To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.}
+
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 
 \item{region_name}{Default region when creating new connections}
 
 \item{botocore_session}{Use this Botocore session instead of creating a new default one.}
-
-\item{profile_name}{The name of a profile to use. If not given, then the default profile is used.
-To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
-To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.}
 
 \item{...}{Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}}
 }
