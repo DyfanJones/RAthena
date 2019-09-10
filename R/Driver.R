@@ -64,12 +64,12 @@ setMethod(
 #'                          usually changing this option is not required.
 #' @param kms_key \href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service}, 
 #'                please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.
-#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
-#' @param region_name Default region when creating new connections
-#' @param botocore_session Use this Botocore session instead of creating a new default one.
 #' @param profile_name The name of a profile to use. If not given, then the default profile is used.
 #'                     To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
 #'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
+#' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
+#' @param region_name Default region when creating new connections
+#' @param botocore_session Use this Botocore session instead of creating a new default one.
 #' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @aliases dbConnect
 #' @return \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
@@ -104,10 +104,10 @@ setMethod(
            poll_interval = NULL,
            encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
            kms_key = NULL,
+           profile_name = NULL,
            s3_staging_dir = NULL,
            region_name = NULL,
-           botocore_session = NULL,
-           profile_name = NULL, ...) {
+           botocore_session = NULL, ...) {
     if(!py_module_available("boto3")){
       stop("Boto3 is not detected please install boto3 using either: `pip install boto3` in terminal or `install_boto()`.
             Alternatively `reticulate::use_python` or `reticulate::use_condaenv` will have to be used if boto3 is in another environment.",
