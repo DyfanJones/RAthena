@@ -144,10 +144,10 @@ work_group_config_update <-
 
 # Set aws environmental variable
 set_aws_env <- function(x){
-  cred <- x$Credentials
-  Sys.setenv("AWS_ACCESS_KEY_ID" = cred$AccessKeyId)
-  Sys.setenv("AWS_SECRET_ACCESS_KEY" = cred$SecretAccessKey)
-  Sys.setenv("AWS_SESSION_TOKEN" = cred$SessionToken)
+  creds <- x$Credentials
+  Sys.setenv("AWS_ACCESS_KEY_ID" = creds$AccessKeyId)
+  Sys.setenv("AWS_SECRET_ACCESS_KEY" = creds$SecretAccessKey)
+  Sys.setenv("AWS_SESSION_TOKEN" = creds$SessionToken)
 }
 
 
