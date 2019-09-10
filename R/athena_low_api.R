@@ -229,7 +229,7 @@ get_session_token <- function(profile_name = NULL,
   stopifnot(is.null(profile_name) || is.character(profile_name),
             is.character(serial_number),
             is.character(token_code),
-            is.integer(duration_seconds),
+            is.numeric(duration_seconds),
             is.logical(set_env))
   
   duration_seconds <- as.integer(duration_seconds)
@@ -241,8 +241,5 @@ get_session_token <- function(profile_name = NULL,
   if(set_env) {set_aws_env(response)}
   response$Credentials
 }
-
-
-
 
 
