@@ -10,8 +10,11 @@
   aws_secret_access_key = NULL, aws_session_token = NULL,
   schema_name = "default", work_group = NULL, poll_interval = NULL,
   encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
-  kms_key = NULL, profile_name = NULL, s3_staging_dir = NULL,
-  region_name = NULL, botocore_session = NULL, ...)
+  kms_key = NULL, profile_name = NULL, role_arn = NULL,
+  role_session_name = sprintf("RAthena-session-\%s",
+  as.integer(Sys.time())), duration_seconds = 3600L,
+  s3_staging_dir = NULL, region_name = NULL, botocore_session = NULL,
+  ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \linkS4class{DBIDriver},
@@ -41,9 +44,17 @@ please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/conc
 To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
 To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.}
 
+\item{role_arn}{The Amazon Resource Name (ARN) of the role to assume (such as \code{arn:aws:sts::123456789012:assumed-role/role_name/role_session_name})}
+
+\item{role_session_name}{An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}}
+
+\item{duration_seconds}{The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role. 
+This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour).}
+
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 
-\item{region_name}{Default region when creating new connections}
+\item{region_name}{Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
+AWS region codes (region code example: Region = EU (Ireland)     \code{ region_name = "eu-west-1"})}
 
 \item{botocore_session}{Use this Botocore session instead of creating a new default one.}
 
@@ -71,6 +82,14 @@ Connect to Athena using python's sdk boto3
  con <- dbConnect(RAthena::athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   s3_staging_dir = "s3://path/to/query/bucket/")
+ dbDisconnect(con)
+ 
+# Connect to Athena using ARN role
+ con <- dbConnect(athena(),
+                  profile_name = "YOUR_PROFILE_NAME",
+                  role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+                  s3_staging_dir = "s3://test-rathena/athena-query/")
+                 
  dbDisconnect(con)
 }
 }
