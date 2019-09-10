@@ -262,6 +262,9 @@ tbl(con, "iris") %>%
 Creating work group:
 
 ``` r
+library(RAthena)
+library(DBI)
+
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
                 encryption_option = "SSE_S3",
@@ -352,18 +355,64 @@ get_work_group(con, "demo_work_group")
     $CreationTime
     2019-09-06 18:51:28.902000+01:00
 
-Delete work group:
-
-``` r
-delete_work_group(con, "demo_work_group")
-```
-
 Connect to Athena using work group:
 
 ``` r
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
                 work_group = "demo_work_group")
+```
+
+Delete work group:
+
+``` r
+delete_work_group(con, "demo_work_group")
+```
+
+## AWS ARN Role & Temporary Session
+
+### To create a temporary session connection to athena:
+
+``` r
+library(RAthena)
+library(DBI)
+ 
+# Create Temporary Credentials duration 1 hour
+get_session_token("YOUR_PROFILE_NAME",
+                  serial_number='arn:aws:iam::123456789012:mfa/user',
+                  token_code = "531602",
+                  set_env = TRUE)
+
+# Connect to Athena using temporary credentials
+con <- dbConnect(athena(),
+                 s3_staging_dir = "s3://test-rathena/athena-query/")
+```
+
+### Assume Amazon Resource Name (ARN) Role:
+
+``` r
+library(RAthena)
+library(DBI)
+
+# Assuming demo ARN role
+assume_role(profile_name = "YOUR_PROFILE_NAME",
+            role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+            set_env = TRUE)
+
+# Connect to Athena using temporary credentials
+con <- dbConnect(athena(),
+                 s3_staging_dir = "s3://test-rathena/athena-query/")
+```
+
+OR
+
+``` r
+library(DBI)
+
+con <- dbConnect(RAthena::athena(),
+                 profile_name = "YOUR_PROFILE_NAME",
+                 role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+                 s3_staging_dir = "s3://test-rathena/athena-query/")
 ```
 
 # Similar Projects
