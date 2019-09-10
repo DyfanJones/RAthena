@@ -67,8 +67,13 @@ setMethod(
 #' @param profile_name The name of a profile to use. If not given, then the default profile is used.
 #'                     To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
 #'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
+#' @param role_arn The Amazon Resource Name (ARN) of the role to assume (such as \code{arn:aws:sts::123456789012:assumed-role/role_name/role_session_name})
+#' @param role_session_name An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}
+#' @param duration_seconds The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role. 
+#'                         This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour). 
 #' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
-#' @param region_name Default region when creating new connections
+#' @param region_name Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
+#'                    AWS region codes (region code example: Region = EU (Ireland) 	\code{ region_name = "eu-west-1"})
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
 #' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @aliases dbConnect
@@ -90,6 +95,14 @@ setMethod(
 #'                   profile_name = "YOUR_PROFILE_NAME",
 #'                   s3_staging_dir = "s3://path/to/query/bucket/")
 #'  dbDisconnect(con)
+#'  
+#' # Connect to Athena using ARN role
+#'  con <- dbConnect(athena(),
+#'                   profile_name = "YOUR_PROFILE_NAME",
+#'                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+#'                   s3_staging_dir = "s3://test-rathena/athena-query/")
+#'                  
+#'  dbDisconnect(con)
 #' }
 #' @seealso \code{\link[DBI]{dbConnect}}
 #' @export
@@ -105,6 +118,9 @@ setMethod(
            encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
            kms_key = NULL,
            profile_name = NULL,
+           role_arn= NULL,
+           role_session_name= sprintf("RAthena-session-%s", as.integer(Sys.time())),
+           duration_seconds = 3600L,
            s3_staging_dir = NULL,
            region_name = NULL,
            botocore_session = NULL, ...) {
@@ -123,15 +139,31 @@ setMethod(
               is.null(kms_key) || is.character(kms_key),
               is.null(s3_staging_dir) || is.s3_uri(s3_staging_dir),
               is.null(region_name) || is.character(region_name),
-              is.null(profile_name) || is.character(profile_name))
+              is.null(profile_name) || is.character(profile_name),
+              is.null(role_arn) || is.character(role_arn),
+              is.character(role_session_name),
+              is.numeric(duration_seconds))
     
     encryption_option <- switch(encryption_option[1],
                                 "NULL" = NULL,
                                 match.arg(encryption_option))
     
-    aws_access_key_id <- aws_access_key_id %||% Sys.getenv("AWS_ACCESS_KEY_ID")
-    aws_secret_access_key <- aws_secret_access_key %||% Sys.getenv("AWS_SECRET_ACCESS_KEY")
-    aws_session_token <- aws_session_token %||% Sys.getenv("AWS_SESSION_TOKEN")
+    aws_access_key_id <- aws_access_key_id %||% get_aws_env("AWS_ACCESS_KEY_ID")
+    aws_secret_access_key <- aws_secret_access_key %||% get_aws_env("AWS_SECRET_ACCESS_KEY")
+    aws_session_token <- aws_session_token %||% get_aws_env("AWS_SESSION_TOKEN")
+    role_arn <- role_arn %||% get_aws_env("AWS_ROLE_ARN")
+    
+    if(!is.null(role_arn)) {
+      creds <- assume_role(profile_name = profile_name,
+                           region_name = region_name,
+                           role_arn = role_arn,
+                           role_session_name = role_session_name,
+                           duration_seconds = duration_seconds)
+      profile_name <- NULL
+      aws_access_key_id <- creds$AccessKeyId
+      aws_secret_access_key <- creds$SecretAccessKey
+      aws_session_token <- creds$SessionToken
+    }
     
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,
