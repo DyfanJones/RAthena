@@ -150,5 +150,9 @@ set_aws_env <- function(x){
   Sys.setenv("AWS_SESSION_TOKEN" = creds$SessionToken)
 }
 
+# Return NULL if System environment variable doesnt exist
+get_aws_env <- function(x) {
+  x <- Sys.getenv(x)
+  if(nchar(x) == 0) return(NULL) else return(x)}
 
 `%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
