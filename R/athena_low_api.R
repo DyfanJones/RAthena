@@ -247,15 +247,17 @@ get_session_token <- function(profile_name = NULL,
                               set_env = FALSE){
   stopifnot(is.null(profile_name) || is.character(profile_name),
             is.character(serial_number),
-            is.character(token_code),
+            is.null(token_code) || is.character(token_code),
             is.numeric(duration_seconds),
             is.logical(set_env))
   
-  duration_seconds <- as.integer(duration_seconds)
+  args <- list()
+  args$SerialNumber <- serial_number
+  args$TokenCode <- token_code
+  args$DurationSeconds <- as.integer(duration_seconds)
+  
   tryCatch({sts <- boto$Session(profile_name = profile_name)$client("sts")
-            response <- sts$get_session_token(SerialNumber = serial_number,
-                                              TokenCode = token_code,
-                                              DurationSeconds = duration_seconds)},
+            response <- do.call(sts$get_session_token, args)},
            error = function(e) py_error(e))
   if(set_env) {set_aws_env(response)}
   response$Credentials
@@ -302,15 +304,16 @@ assume_role <- function(profile_name = NULL,
                         role_session_name= sprintf("RAthena-session-%s", as.integer(Sys.time())),
                         duration_seconds = 3600L,
                         set_env = FALSE){
-  stopifnot(is.character(profile_name),
+  stopifnot(is.null(profile_name) || is.character(profile_name),
             is.null(region_name) || is.character(region_name),
             is.character(role_arn),
             is.numeric(duration_seconds),
             is.logical(set_env))
+  
   tryCatch({sts <- boto$Session(profile_name = profile_name, region_name = region_name)$client("sts")
   response <- sts$assume_role(RoleArn = role_arn,
                               RoleSessionName = role_session_name,
-                              DurationSeconds = duration_seconds)},
+                              DurationSeconds = as.integer(duration_seconds))},
   error = function(e) py_error(e))
   if(set_env) {set_aws_env(response)}
   response$Credentials
