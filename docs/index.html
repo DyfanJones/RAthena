@@ -414,48 +414,6 @@
 <p>Delete work group:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw"><a href="reference/work_group.html">delete_work_group</a></span>(con, <span class="st">"demo_work_group"</span>)</a></code></pre></div>
 </div>
-<div id="aws-arn-role--temporary-session" class="section level2">
-<h2 class="hasAnchor">
-<a href="#aws-arn-role--temporary-session" class="anchor"></a>AWS ARN Role &amp; Temporary Session</h2>
-<div id="to-create-a-temporary-session-connection-to-athena" class="section level3">
-<h3 class="hasAnchor">
-<a href="#to-create-a-temporary-session-connection-to-athena" class="anchor"></a>To create a temporary session connection to athena:</h3>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb33-3" title="3"> </a>
-<a class="sourceLine" id="cb33-4" title="4"><span class="co"># Create Temporary Credentials duration 1 hour</span></a>
-<a class="sourceLine" id="cb33-5" title="5"><span class="kw"><a href="reference/session_token.html">get_session_token</a></span>(<span class="st">"YOUR_PROFILE_NAME"</span>,</a>
-<a class="sourceLine" id="cb33-6" title="6">                  <span class="dt">serial_number=</span><span class="st">'arn:aws:iam::123456789012:mfa/user'</span>,</a>
-<a class="sourceLine" id="cb33-7" title="7">                  <span class="dt">token_code =</span> <span class="st">"531602"</span>,</a>
-<a class="sourceLine" id="cb33-8" title="8">                  <span class="dt">set_env =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-9" title="9"></a>
-<a class="sourceLine" id="cb33-10" title="10"><span class="co"># Connect to Athena using temporary credentials</span></a>
-<a class="sourceLine" id="cb33-11" title="11">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="reference/athena.html">athena</a></span>(),</a>
-<a class="sourceLine" id="cb33-12" title="12">                 <span class="dt">s3_staging_dir =</span> <span class="st">"s3://test-rathena/athena-query/"</span>)</a></code></pre></div>
-</div>
-<div id="assume-amazon-resource-name-arn-role" class="section level3">
-<h3 class="hasAnchor">
-<a href="#assume-amazon-resource-name-arn-role" class="anchor"></a>Assume Amazon Resource Name (ARN) Role:</h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb34-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb34-3" title="3"></a>
-<a class="sourceLine" id="cb34-4" title="4"><span class="co"># Assuming demo ARN role</span></a>
-<a class="sourceLine" id="cb34-5" title="5"><span class="kw"><a href="reference/assume_role.html">assume_role</a></span>(<span class="dt">profile_name =</span> <span class="st">"YOUR_PROFILE_NAME"</span>,</a>
-<a class="sourceLine" id="cb34-6" title="6">            <span class="dt">role_arn =</span> <span class="st">"arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"</span>,</a>
-<a class="sourceLine" id="cb34-7" title="7">            <span class="dt">set_env =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb34-8" title="8"></a>
-<a class="sourceLine" id="cb34-9" title="9"><span class="co"># Connect to Athena using temporary credentials</span></a>
-<a class="sourceLine" id="cb34-10" title="10">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="reference/athena.html">athena</a></span>(),</a>
-<a class="sourceLine" id="cb34-11" title="11">                 <span class="dt">s3_staging_dir =</span> <span class="st">"s3://test-rathena/athena-query/"</span>)</a></code></pre></div>
-<p>OR</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb35-2" title="2"></a>
-<a class="sourceLine" id="cb35-3" title="3">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
-<a class="sourceLine" id="cb35-4" title="4">                 <span class="dt">profile_name =</span> <span class="st">"YOUR_PROFILE_NAME"</span>,</a>
-<a class="sourceLine" id="cb35-5" title="5">                 <span class="dt">role_arn =</span> <span class="st">"arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"</span>,</a>
-<a class="sourceLine" id="cb35-6" title="6">                 <span class="dt">s3_staging_dir =</span> <span class="st">"s3://test-rathena/athena-query/"</span>)</a></code></pre></div>
-</div>
-</div>
 </div>
 <div id="similar-projects" class="section level1">
 <h1 class="hasAnchor">
