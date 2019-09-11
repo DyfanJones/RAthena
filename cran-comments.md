@@ -14,7 +14,7 @@ Initial release of RAthena package
 0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 # unit tests (using testthat) results
-* OK:       28
+* OK:       29
 * Failed:   0
 * Warnings: 0
 * Skipped:  0
