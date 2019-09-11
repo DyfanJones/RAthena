@@ -17,7 +17,6 @@ Imports:
 Suggests: 
     arrow,
     data.table,
-    knitr,
     testthat
 Depends: R (>= 3.2.0)
 License: MIT + file LICENSE
