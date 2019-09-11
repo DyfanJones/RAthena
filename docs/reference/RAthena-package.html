@@ -37,7 +37,7 @@
 
 <meta property="og:title" content="RAthena: a DBI interface into Athena using Boto3 SDK — RAthena-package" />
 <meta property="og:description" content="RAthena provides a seamless DBI interface into Athena using the python package 
-Boto3" />
+Boto3." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,28 +116,27 @@ Boto3" />
 
     <div class="ref-description">
     <p>RAthena provides a seamless DBI interface into Athena using the python package 
-<a href='https://boto3.amazonaws.com/v1/documentation/api/latest/index.html'>Boto3</a></p>
+<a href='https://boto3.amazonaws.com/v1/documentation/api/latest/index.html'>Boto3</a>.</p>
     </div>
 
 
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="goal-of-package"><a class="anchor" href="#goal-of-package"></a>Goal of Package</h2>
 
-    <p>It has one key main goal:</p>
-<ul>
-<li><p>To remove the requirement of additional drivers to connect to Athena.</p></li>
-</ul>
+    
 
+<p>The goal of the <code>RAthena</code> package is to provide a DBI-compliant interface to <a href='https://aws.amazon.com/athena/'>Amazon’s Athena</a>
+using <code>Boto3</code> software development kit (SDK). This allows for an efficient, easy setup connection to Athena using the <code>Boto3</code> SDK as a driver.</p>
     <h2 class="hasAnchor" id="installation"><a class="anchor" href="#installation"></a>Installation</h2>
 
     
 
-<p>Before starting with RAthena, <a href='https://www.python.org/'>python</a> is require to be installed on the machine you are running RAthena.</p>
+<p>Before starting with <code>RAthena</code>, <a href='https://www.python.org/'>Python</a> is require to be installed on the machine you are intending to run <code>RAthena</code>.</p>
     <h2 class="hasAnchor" id="aws-command-line-interface"><a class="anchor" href="#aws-command-line-interface"></a>AWS Command Line Interface</h2>
 
     
 
-<p>As RAthena is using Boto3 as it's backend, <a href='https://aws.amazon.com/cli/'>AWS Command Line Interface (AWS CLI)</a> can be used
+<p>As RAthena is using <code>Boto3</code> as it's backend, <a href='https://aws.amazon.com/cli/'>AWS Command Line Interface (AWS CLI)</a> can be used
 to remove user credentials when interacting with Athena.</p>
 <p>This allows AWS profile names to be set up so that RAthena can connect to different accounts from the same machine,
 without needing hard code any credentials.</p>
@@ -154,7 +153,7 @@ without needing hard code any credentials.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#details">Details</a></li>
+      <li><a href="#goal-of-package">Goal of Package</a></li>
       <li><a href="#installation">Installation</a></li>
       <li><a href="#aws-command-line-interface">AWS Command Line Interface</a></li>
       <li><a href="#see-also">See also</a></li>
