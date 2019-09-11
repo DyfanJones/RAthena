@@ -70,7 +70,7 @@ setMethod(
 #' @param role_arn The Amazon Resource Name (ARN) of the role to assume (such as \code{arn:aws:sts::123456789012:assumed-role/role_name/role_session_name})
 #' @param role_session_name An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}
 #' @param duration_seconds The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role. 
-#'                         This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour). 
+#'                         This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 seconds (1 hour). 
 #' @param s3_staging_dir The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}
 #' @param region_name Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
 #'                    AWS region codes (region code example: Region = EU (Ireland) 	\code{ region_name = "eu-west-1"})
