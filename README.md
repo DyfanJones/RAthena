@@ -33,6 +33,92 @@ To install RAthena (currently not on cran):
 remotes::install_github("dyfanjones/rathena")
 ```
 
+## Connection Methods
+
+### Hard Coding
+
+The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is **not** recommended as your credentials are hardcoded in your code.
+```r
+library(DBI)
+
+con <- dbConnect(RAthena::athena(),
+                aws_access_key_id='YOUR_ACCESS_KEY_ID',
+                aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
+                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+                region_name='eu-west-1')
+```
+
+### AWS Profile Name
+
+The next method is to use profile names set up by AWS CLI or created manually in the `~/.aws` directory. To create the profile names manaully please refer to: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html.
+
+##### Setting up AWS CLI
+
+RAthena is compatible with AWS CLI. This allows your aws credentials to
+be stored and not be hard coded in your connection.
+
+To install AWS CLI please refer to:
+<https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html>,
+to configure AWS CLI please refer to:
+<https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html>
+
+Once AWS CLI has been set up you will be able to connect to Athena by
+only putting the `s3_staging_dir`.
+
+Using default profile name:
+``` r
+library(DBI)
+con <- dbConnect(RAthena::athena(),
+                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+```
+Connecting to Athena using profile name other than `default`.
+``` r
+library(DBI)
+con <- dbConnect(RAthena::athena(),
+                 profile_name = "your_profile",
+                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+```
+
+### Temporary Credentials with MFA Account:
+
+```r
+library(RAthena)
+get_session_token("YOUR_PROFILE_NAME",
+                  serial_number='arn:aws:iam::123456789012:mfa/user',
+                  token_code = "531602",
+                  set_env = TRUE)
+
+# Connect to Athena using temporary credentials
+con <- dbConnect(athena(),
+                s3_staging_dir = "s3://test-rathena/athena-query/")
+```
+
+## Assuming ARN Role for connection
+
+Another method in connecting to Athena is to use Amazon Resource Name (ARN) role.
+
+Setting credentials in environmental variables:
+```r
+library(RAthena)
+assume_role(profile_name = "YOUR_PROFILE_NAME",
+            role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+            set_env = TRUE)
+
+# Connect to Athena using temporary credentials
+con <- dbConnect(athena(),
+                s3_staging_dir = "s3://test-rathena/athena-query/")
+```
+Connnecting to Athena directly using ARN role:
+
+```r
+library(DBI)
+ con <- dbConnect(athena(),
+                  profile_name = "YOUR_PROFILE_NAME",
+                  role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
+                  s3_staging_dir = "s3://test-rathena/athena-query/")
+```
+To change the duration of ARN role session please change the parameter `duration_seconds`. By default `duration_seconds` is set to 3600 seconds (1 hour).
+
 ## Usage
 
 ### Basic Usage
@@ -109,21 +195,8 @@ RAthena::dbShow(con, "impressions")
 
 ### Advanced Usage
 
-#### Setting up AWS CLI
-
-RAthena is compatible with AWS CLI. This allows your aws credentials to
-be stored and not be hard coded in your connection.
-
-To install AWS CLI please refer to:
-<https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html>,
-to configure AWS CLI please refer to:
-<https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html>
-
-Once AWS CLI has been set up you will be able to connect to Athena by
-only putting the `s3_staging_dir`.
-
 ``` r
-library(RAthena)
+library(DBI)
 con <- dbConnect(RAthena::athena(),
                  s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
 ```
