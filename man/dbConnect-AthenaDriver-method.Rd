@@ -49,7 +49,7 @@ To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/late
 \item{role_session_name}{An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}}
 
 \item{duration_seconds}{The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role. 
-This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour).}
+This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 seconds (1 hour).}
 
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 

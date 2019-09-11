@@ -77,7 +77,7 @@ For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/wor
 \item{create_work_group}{Returns \code{NULL} but invisible}
 \item{tag_options}{Returns \code{list} but invisible}
 \item{delete_work_group}{Returns \code{NULL} but invisible}
-\item{list_work_group}{Returns list of aviable work groups}
+\item{list_work_group}{Returns list of available work groups}
 \item{get_work_group}{Returns list of work group meta data}
 \item{update_work_group}{Returns \code{NULL} but invisible}
 }
@@ -104,7 +104,7 @@ con <- dbConnect(RAthena::athena(),
                  profile_name = "YOUR_PROFILE_NAME",
                  s3_staging_dir = "s3://path/to/query/bucket/")
 
-# List current work group aviable
+# List current work group available
 list_work_group(con)
 
 # Create a new work group

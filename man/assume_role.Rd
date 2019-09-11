@@ -21,7 +21,7 @@ AWS region codes (region code example: Region = EU (Ireland)     \code{ region_n
 \item{role_session_name}{An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}}
 
 \item{duration_seconds}{The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role.
-This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour).}
+This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 seconds (1 hour).}
 
 \item{set_env}{If set to \code{TRUE} environmental variables \code{AWS_ACCESS_KEY_ID}, \code{AWS_SECRET_ACCESS_KEY} and \code{AWS_SESSION_TOKEN} will be set.}
 }

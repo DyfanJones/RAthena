@@ -15,14 +15,14 @@ To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/late
 
 \item{serial_number}{The identification number of the MFA device that is associated with the IAM user who is making the GetSessionToken call.
 Specify this value if the IAM user has a policy that requires MFA authentication. The value is either the serial number for a hardware device
-(such as GAHT12345678 ) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).}
+(such as `GAHT12345678`) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).}
 
 \item{token_code}{The value provided by the MFA device, if MFA is required. If any policy requires the IAM user to submit an MFA code, 
 specify this value. If MFA authentication is required, the user must provide a code when requesting a set of temporary
 security credentials. A user who fails to provide the code receives an "access denied" response when requesting resources 
 that require MFA authentication.}
 
-\item{duration_seconds}{The duration, in seconds, that the credentials should remain valid. Acceptable durations for IAM user sessions range
+\item{duration_seconds}{The duration, in seconds, that the credentials should remain valid. Acceptable duration for IAM user sessions range
 from 900 seconds (15 minutes) to 129,600 seconds (36 hours), with 3,600 seconds (1 hour) as the default.}
 
 \item{set_env}{If set to \code{TRUE} environmental variables \code{AWS_ACCESS_KEY_ID}, \code{AWS_SECRET_ACCESS_KEY} and \code{AWS_SESSION_TOKEN} will be set.}

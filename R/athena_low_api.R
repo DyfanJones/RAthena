@@ -46,7 +46,7 @@
 #' \item{create_work_group}{Returns \code{NULL} but invisible}
 #' \item{tag_options}{Returns \code{list} but invisible}
 #' \item{delete_work_group}{Returns \code{NULL} but invisible}
-#' \item{list_work_group}{Returns list of aviable work groups}
+#' \item{list_work_group}{Returns list of available work groups}
 #' \item{get_work_group}{Returns list of work group meta data}
 #' \item{update_work_group}{Returns \code{NULL} but invisible}
 #' }
@@ -60,7 +60,7 @@
 #'                  profile_name = "YOUR_PROFILE_NAME",
 #'                  s3_staging_dir = "s3://path/to/query/bucket/")
 #'
-#' # List current work group aviable
+#' # List current work group available
 #' list_work_group(con)
 #'
 #' # Create a new work group
@@ -209,12 +209,12 @@ update_work_group <- function(conn,
 #'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
 #' @param serial_number The identification number of the MFA device that is associated with the IAM user who is making the GetSessionToken call.
 #'                      Specify this value if the IAM user has a policy that requires MFA authentication. The value is either the serial number for a hardware device
-#'                      (such as GAHT12345678 ) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).
+#'                      (such as `GAHT12345678`) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).
 #' @param token_code The value provided by the MFA device, if MFA is required. If any policy requires the IAM user to submit an MFA code, 
 #'                   specify this value. If MFA authentication is required, the user must provide a code when requesting a set of temporary
 #'                   security credentials. A user who fails to provide the code receives an "access denied" response when requesting resources 
 #'                   that require MFA authentication.
-#' @param duration_seconds The duration, in seconds, that the credentials should remain valid. Acceptable durations for IAM user sessions range
+#' @param duration_seconds The duration, in seconds, that the credentials should remain valid. Acceptable duration for IAM user sessions range
 #'                         from 900 seconds (15 minutes) to 129,600 seconds (36 hours), with 3,600 seconds (1 hour) as the default.
 #' @param set_env If set to \code{TRUE} environmental variables \code{AWS_ACCESS_KEY_ID}, \code{AWS_SECRET_ACCESS_KEY} and \code{AWS_SESSION_TOKEN} will be set.
 #' 
@@ -276,7 +276,7 @@ get_session_token <- function(profile_name = NULL,
 #' @param role_arn The Amazon Resource Name (ARN) of the role to assume (such as \code{arn:aws:sts::123456789012:assumed-role/role_name/role_session_name})
 #' @param role_session_name An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}
 #' @param duration_seconds The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role.
-#'                         This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 secondes (1 hour). 
+#'                         This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 seconds (1 hour). 
 #' @param set_env If set to \code{TRUE} environmental variables \code{AWS_ACCESS_KEY_ID}, \code{AWS_SECRET_ACCESS_KEY} and \code{AWS_SESSION_TOKEN} will be set. 
 #' @return \code{assume_role()} returns a list containing: \code{"AccessKeyId"}, \code{"SecretAccessKey"}, \code{"SessionToken"} and \code{"Expiration"}
 #' @seealso \code{\link{dbConnect}}
