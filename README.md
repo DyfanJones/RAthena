@@ -108,7 +108,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
 con <- dbConnect(athena(),
                 s3_staging_dir = "s3://test-rathena/athena-query/")
 ```
-Connnecting to Athena directly using ARN role:
+Connecting to Athena directly using ARN role:
 
 ```r
 library(DBI)
