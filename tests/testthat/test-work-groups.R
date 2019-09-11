@@ -5,7 +5,7 @@ test_that("Create and Delete Athena Work Groups",{
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(RAthena::athena(),
                    profile_name = "rathena",
-                   s3_staging_dir = "s3://test-rathena/athena-query/")
+                   s3_staging_dir = Sys.getenv("rathena_s3"))
   
   output1 <- list_work_groups(con)
   work_groups1 <- sapply(output1, function(x) x$Name)

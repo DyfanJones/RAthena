@@ -8,7 +8,7 @@ test_that("Check if Athena DDL's are created correctly",{
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
                    profile_name = "rathena",
-                   s3_staging_dir = "s3://test-rathena/athena-query-results/")
+                   s3_staging_dir = Sys.getenv("rathena_s3"))
   
   expect_ddl1 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "csv")
   expect_ddl2 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "tsv")

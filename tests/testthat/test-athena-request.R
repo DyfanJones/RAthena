@@ -8,22 +8,22 @@ test_that("Check if Athena Request created correctly",{
                     encryption_option = "SSE_S3",
                     kms_key = "test_key",
                     work_group = "test_group",
-                    s3_staging_dir = "s3://test-rathena/athena-query/")
+                    s3_staging_dir = Sys.getenv("rathena_s3"))
   
   con2 <- dbConnect(athena(),
                     profile_name = "rathena",
                     encryption_option = "SSE_S3",
                     work_group = "test_group",
-                    s3_staging_dir = "s3://test-rathena/athena-query/")
+                    s3_staging_dir = Sys.getenv("rathena_s3"))
   
   con3 <- dbConnect(athena(),
                     profile_name = "rathena",
                     work_group = "test_group",
-                    s3_staging_dir = "s3://test-rathena/athena-query/")
+                    s3_staging_dir = Sys.getenv("rathena_s3"))
   
   con4 <- dbConnect(athena(),
                     profile_name = "rathena",
-                    s3_staging_dir = "s3://test-rathena/athena-query/")
+                    s3_staging_dir = Sys.getenv("rathena_s3"))
   
   R1 <- RAthena:::request(con1, "select * from test_query")
   R2 <- RAthena:::request(con2, "select * from test_query")
