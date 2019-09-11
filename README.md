@@ -20,8 +20,10 @@ Before installing RAthena ensure that Python 3+ is installed onto your
 machine: <https://www.python.org/downloads/>. To install Boto3 either it
 can installed the pip command or using RAthena installation function:
 
-    pip install boto3
-
+```
+pip install boto3
+```
+RAthena Method (after RAthena has been installed this method can be used)
 ``` r
 RAthena::install_boto()
 ```
