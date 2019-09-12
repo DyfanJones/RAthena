@@ -77,7 +77,7 @@ For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/wor
 \item{create_work_group}{Returns \code{NULL} but invisible}
 \item{tag_options}{Returns \code{list} but invisible}
 \item{delete_work_group}{Returns \code{NULL} but invisible}
-\item{list_work_group}{Returns list of available work groups}
+\item{list_work_groups}{Returns list of available work groups}
 \item{get_work_group}{Returns list of work group meta data}
 \item{update_work_group}{Returns \code{NULL} but invisible}
 }
@@ -85,13 +85,16 @@ For more information, see \href{https://docs.aws.amazon.com/athena/latest/ug/wor
 \description{
 Lower level API access, allows user to create and delete Athena Work Groups.
 \describe{
-\item{create_work_group}{Creates a workgroup with the specified name. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+\item{create_work_group}{Creates a workgroup with the specified name (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.create_work_group}{link}). 
+                         The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
                          The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
 \item{tag_options}{Helper function to create tag options for function \code{create_work_group()}}
-\item{delete_work_group}{Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.}
-\item{list_work_group}{Lists available workgroups for the account.}
-\item{get_work_group}{Returns information about the workgroup with the specified name}
-\item{update_work_group}{Updates the workgroup with the specified name. The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
+\item{delete_work_group}{Deletes the workgroup with the specified name (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.delete_work_group}{link}). 
+                         The primary workgroup cannot be deleted.}
+\item{list_work_groups}{Lists available workgroups for the account (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.list_work_groups}{link}).}
+\item{get_work_group}{Returns information about the workgroup with the specified name (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_work_group}{link}).}
+\item{update_work_group}{Updates the workgroup with the specified name (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.update_work_group}{link}). 
+                         The workgroup's name cannot be changed. The work group utilises parameters from the \code{dbConnect} object, to determine the encryption and output location of the work group.
                          The s3_staging_dir, encryption_option and kms_key parameters are gotten from \code{\link{dbConnect}}}
 }
 }
