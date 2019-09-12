@@ -6,29 +6,29 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/RAthena)
 
-The goal of the RAthena package is to provide a DBI-compliant interface
-to Amazon’s Athena (<https://aws.amazon.com/athena/>) using Boto3 SDK.
+The goal of the `RAthena` package is to provide a DBI-compliant interface
+to Amazon’s Athena (<https://aws.amazon.com/athena/>) using `Boto3` SDK.
 This allows for an efficient, easy setup connection to Athena using the
-Boto3 SDK as a driver.
+`Boto3` SDK as a driver.
 
-**NOTE:** *Before using RAthena you must have an aws account or have
+**NOTE:** *Before using `RAthena` you must have an aws account or have
 access to aws account with permissions allowing you to use Athena.*
 
 ## Installation:
 
-Before installing RAthena ensure that Python 3+ is installed onto your
-machine: <https://www.python.org/downloads/>. To install Boto3 either it
-can installed the pip command or using RAthena installation function:
+Before installing `RAthena` ensure that `Python 3+` is installed onto your
+machine: <https://www.python.org/downloads/>. To install `Boto3` either it
+can installed the pip command or using `RAthena` installation function:
 
 ```
 pip install boto3
 ```
-RAthena Method (after RAthena has been installed this method can be used)
+RAthena Method (after `RAthena` has been installed this method can be used)
 ``` r
 RAthena::install_boto()
 ```
 
-To install RAthena (currently not on cran):
+To install `RAthena` (currently not on cran):
 
 ``` r
 # The development version from Github
@@ -39,7 +39,9 @@ remotes::install_github("dyfanjones/rathena")
 
 ### Hard Coding
 
-The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is **not** recommended as your credentials are hard-coded.
+The most basic way to connect to AWS Athena is to hard-code your access key 
+and secret access key. However this method is **not** recommended as your 
+credentials are hard-coded.
 ```r
 library(DBI)
 
@@ -52,7 +54,9 @@ con <- dbConnect(RAthena::athena(),
 
 ### AWS Profile Name
 
-The next method is to use profile names set up by AWS CLI or created manually in the `~/.aws` directory. To create the profile names manaully please refer to: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html.
+The next method is to use profile names set up by AWS CLI or created manually 
+in the `~/.aws` directory. To create the profile names manaully please refer 
+to: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html.
 
 ##### Setting up AWS CLI
 
@@ -119,7 +123,8 @@ library(DBI)
                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
                   s3_staging_dir = "s3://test-rathena/athena-query/")
 ```
-To change the duration of ARN role session please change the parameter `duration_seconds`. By default `duration_seconds` is set to 3600 seconds (1 hour).
+To change the duration of ARN role session please change the parameter `duration_seconds`. 
+rBy default `duration_seconds` is set to 3600 seconds (1 hour).
 
 ## Usage
 

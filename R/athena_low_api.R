@@ -203,7 +203,7 @@ update_work_group <- function(conn,
   invisible(NULL)
 }
 
-#' Get Session Tokens for Boto Connection
+#' Get Session Tokens for Boto3 Connection
 #' 
 #' Returns a set of temporary credentials for an AWS account or IAM user (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.get_session_token}{link}).
 #' 

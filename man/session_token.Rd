@@ -3,7 +3,7 @@
 \name{session_token}
 \alias{session_token}
 \alias{get_session_token}
-\title{Get Session Tokens for Boto Connection}
+\title{Get Session Tokens for Boto3 Connection}
 \usage{
 get_session_token(profile_name = NULL, serial_number = NULL,
   token_code = NULL, duration_seconds = 3600L, set_env = FALSE)
