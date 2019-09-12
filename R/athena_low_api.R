@@ -239,7 +239,7 @@ update_work_group <- function(conn,
 #'
 #' # Connect to Athena using temporary credentials
 #' con <- dbConnect(athena(),
-#'                 s3_staging_dir = "s3://test-rathena/athena-query/")
+#'                 s3_staging_dir = "s3://path/to/query/bucket/")
 #' }
 #' @name session_token
 #' @export
@@ -298,7 +298,7 @@ get_session_token <- function(profile_name = NULL,
 #'             
 #' # Connect to Athena using temporary credentials
 #' con <- dbConnect(athena(),
-#'                 s3_staging_dir = "s3://test-rathena/athena-query/")
+#'                 s3_staging_dir = "s3://path/to/query/bucket/")
 #' }
 #' @export
 assume_role <- function(profile_name = NULL,

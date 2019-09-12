@@ -73,7 +73,7 @@ Connect to Athena using python's sdk boto3
  con <- dbConnect(RAthena:athena(),
                   aws_access_key_id='YOUR_ACCESS_KEY_ID', # 
                   aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
-                  s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+                  s3_staging_dir='s3://path/to/query/bucket/',
                   region_name='us-west-2')
  dbDisconnect(con)
  
@@ -81,14 +81,14 @@ Connect to Athena using python's sdk boto3
 # Profile name can be created by using AWS CLI
  con <- dbConnect(RAthena::athena(),
                   profile_name = "YOUR_PROFILE_NAME",
-                  s3_staging_dir = "s3://path/to/query/bucket/")
+                  s3_staging_dir = 's3://path/to/query/bucket/')
  dbDisconnect(con)
  
 # Connect to Athena using ARN role
  con <- dbConnect(athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
-                  s3_staging_dir = "s3://test-rathena/athena-query/")
+                  s3_staging_dir = 's3://path/to/query/bucket/')
                  
  dbDisconnect(con)
 }

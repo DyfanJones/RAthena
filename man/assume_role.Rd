@@ -48,7 +48,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
             
 # Connect to Athena using temporary credentials
 con <- dbConnect(athena(),
-                s3_staging_dir = "s3://test-rathena/athena-query/")
+                s3_staging_dir = "s3://path/to/query/bucket/")
 }
 }
 \seealso{

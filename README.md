@@ -48,7 +48,7 @@ library(DBI)
 con <- dbConnect(RAthena::athena(),
                 aws_access_key_id='YOUR_ACCESS_KEY_ID',
                 aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
-                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+                s3_staging_dir='s3://path/to/query/bucket/',
                 region_name='eu-west-1')
 ```
 
@@ -75,14 +75,14 @@ Using default profile name:
 ``` r
 library(DBI)
 con <- dbConnect(RAthena::athena(),
-                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+                 s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 Connecting to Athena using profile name other than `default`.
 ``` r
 library(DBI)
 con <- dbConnect(RAthena::athena(),
                  profile_name = "your_profile",
-                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+                 s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 
 ### Temporary Credentials with MFA Account:
@@ -96,7 +96,7 @@ get_session_token("YOUR_PROFILE_NAME",
 
 # Connect to Athena using temporary credentials
 con <- dbConnect(athena(),
-                s3_staging_dir = "s3://test-rathena/athena-query/")
+                s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 
 ## Assuming ARN Role for connection
@@ -112,7 +112,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
 
 # Connect to Athena using temporary credentials
 con <- dbConnect(athena(),
-                s3_staging_dir = "s3://test-rathena/athena-query/")
+                s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 Connecting to Athena directly using ARN role:
 
@@ -121,7 +121,7 @@ library(DBI)
  con <- dbConnect(athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
-                  s3_staging_dir = "s3://test-rathena/athena-query/")
+                  s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 To change the duration of ARN role session please change the parameter `duration_seconds`. 
 rBy default `duration_seconds` is set to 3600 seconds (1 hour).
@@ -138,7 +138,7 @@ library(DBI)
 con <- dbConnect(RAthena::athena(),
                 aws_access_key_id='YOUR_ACCESS_KEY_ID',
                 aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
-                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+                s3_staging_dir='s3://path/to/query/bucket/',
                 region_name='eu-west-1')
 
 res <- dbExecute(con, "SELECT * FROM one_row")
@@ -205,7 +205,7 @@ RAthena::dbShow(con, "impressions")
 ``` r
 library(DBI)
 con <- dbConnect(RAthena::athena(),
-                 s3_staging_dir = 's3://YOUR_S3_BUCKET/path/to/')
+                 s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 
 #### Sending data to Athena
@@ -242,7 +242,7 @@ library(dplyr)
 con <- dbConnect(RAthena::athena(),
                 aws_access_key_id='YOUR_ACCESS_KEY_ID',
                 aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
-                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
+                s3_staging_dir='s3://path/to/query/bucket/',
                 region_name='eu-west-1')
 tbl(con, sql("SELECT * FROM iris"))
 ```
@@ -295,7 +295,7 @@ information.
 ``` r
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
-                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/')
+                s3_staging_dir='s3://path/to/query/bucket/')
 tbl(con, "iris")) %>% 
   filter(petal_length < 1.3)
 ```
@@ -348,7 +348,7 @@ library(DBI)
 con <- dbConnect(RAthena::athena(),
                 profile_name = "your_profile",
                 encryption_option = "SSE_S3",
-                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/')
+                s3_staging_dir='s3://path/to/query/bucket/')
 
 create_work_group(con, "demo_work_group", description = "This is a demo work group",
                   tags = tag_options(key= "demo_work_group", value = "demo_01"))
@@ -408,7 +408,7 @@ get_work_group(con, "demo_work_group")
     $Configuration
     $Configuration$ResultConfiguration
     $Configuration$ResultConfiguration$OutputLocation
-    [1] "s3://YOUR_S3_BUCKET/path/to/"
+    [1] "s3://path/to/query/bucket/"
     
     $Configuration$ResultConfiguration$EncryptionConfiguration
     $Configuration$ResultConfiguration$EncryptionConfiguration$EncryptionOption
