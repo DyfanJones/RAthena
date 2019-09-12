@@ -263,7 +263,7 @@ setMethod(
 #' @name dbColumnInfo
 #' @inheritParams DBI::dbColumnInfo
 #' @return \code{dbColumnInfo()} returns a data.frame with as many rows as there are output fields in the result.
-#'         The data.frame has two columns (field_nam, type).
+#'         The data.frame has two columns (field_name, type).
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
 #' \dontrun{
@@ -294,7 +294,7 @@ NULL
 setMethod(
   "dbColumnInfo", "AthenaResult",
   function(res, ...){
-    if (!dbIsValid(dbObj)) {stop("Result already cleared", call. = FALSE)}
+    if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     result <- poll(res)
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
