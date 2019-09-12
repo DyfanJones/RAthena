@@ -39,7 +39,7 @@ remotes::install_github("dyfanjones/rathena")
 
 ### Hard Coding
 
-The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is **not** recommended as your credentials are hardcoded in your code.
+The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is **not** recommended as your credentials are hard-coded.
 ```r
 library(DBI)
 
