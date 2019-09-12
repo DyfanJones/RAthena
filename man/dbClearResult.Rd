@@ -3,10 +3,10 @@
 \docType{methods}
 \name{dbClearResult}
 \alias{dbClearResult}
-\alias{dbClearResult,AthenaQuery-method}
+\alias{dbClearResult,AthenaResult-method}
 \title{Clear Results}
 \usage{
-\S4method{dbClearResult}{AthenaQuery}(res, ...)
+\S4method{dbClearResult}{AthenaResult}(res, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}

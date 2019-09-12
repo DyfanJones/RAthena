@@ -4,12 +4,12 @@
 \name{dbGetInfo}
 \alias{dbGetInfo}
 \alias{dbGetInfo,AthenaConnection-method}
-\alias{dbGetInfo,AthenaQuery-method}
+\alias{dbGetInfo,AthenaResult-method}
 \title{Get DBMS metadata}
 \usage{
 \S4method{dbGetInfo}{AthenaConnection}(dbObj, ...)
 
-\S4method{dbGetInfo}{AthenaQuery}(dbObj, ...)
+\S4method{dbGetInfo}{AthenaResult}(dbObj, ...)
 }
 \arguments{
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},

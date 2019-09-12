@@ -12,13 +12,13 @@ AthenaResult <- function(conn,
   tryCatch(response <- do.call(Athena$start_query_execution, Request, quote = T),
            error = function(e) py_error(e))
 
-  new("AthenaQuery", connection = conn, athena = Athena, info = response)
+  new("AthenaResult", connection = conn, athena = Athena, info = response)
 }
 
 #' @rdname AthenaConnection
 #' @export
 setClass(
-  "AthenaQuery",
+  "AthenaResult",
   contains = "DBIResult",
   slots = list(
     connection = "AthenaConnection",
@@ -60,7 +60,7 @@ NULL
 #' @rdname dbClearResult
 #' @export
 setMethod(
-  "dbClearResult", "AthenaQuery",
+  "dbClearResult", "AthenaResult",
   function(res, ...){
     if (!dbIsValid(res)) {
       warning("Result already cleared", call. = FALSE)
@@ -135,7 +135,7 @@ NULL
 #' @rdname dbFetch
 #' @export
 setMethod(
-  "dbFetch", "AthenaQuery",
+  "dbFetch", "AthenaResult",
   function(res, n = -1, ...){
     if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     # check status of query
@@ -224,7 +224,7 @@ NULL
 #' @rdname dbHasCompleted
 #' @export
 setMethod(
-  "dbHasCompleted", "AthenaQuery",
+  "dbHasCompleted", "AthenaResult",
   function(res, ...) {
     if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
@@ -237,7 +237,7 @@ setMethod(
 #' @rdname dbIsValid
 #' @export
 setMethod(
-  "dbIsValid", "AthenaQuery",
+  "dbIsValid", "AthenaResult",
   function(dbObj, ...){
     resource_active(dbObj)
   }
@@ -247,8 +247,10 @@ setMethod(
 #' @inheritParams DBI::dbGetInfo
 #' @export
 setMethod(
-  "dbGetInfo", "AthenaQuery",
+  "dbGetInfo", "AthenaResult",
   function(dbObj, ...) {
     info <- dbObj@info
     info
   })
+
+#' 

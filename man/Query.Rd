@@ -26,7 +26,7 @@
 \item{...}{Other parameters passed on to methods.}
 }
 \value{
-Returns \code{AthenaQuery} s4 class.
+Returns \code{AthenaResult} s4 class.
 }
 \description{
 The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to Athena but does not wait for query to execute. 

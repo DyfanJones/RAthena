@@ -3,10 +3,10 @@
 \docType{methods}
 \name{dbFetch}
 \alias{dbFetch}
-\alias{dbFetch,AthenaQuery-method}
+\alias{dbFetch,AthenaResult-method}
 \title{Fetch records from previously executed query}
 \usage{
-\S4method{dbFetch}{AthenaQuery}(res, n = -1, ...)
+\S4method{dbFetch}{AthenaResult}(res, n = -1, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}, created by

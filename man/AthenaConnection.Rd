@@ -5,7 +5,7 @@
 \alias{AthenaConnection}
 \alias{AthenaConnection-class}
 \alias{show,AthenaConnection-method}
-\alias{AthenaQuery-class}
+\alias{AthenaResult-class}
 \title{Athena Connection Methods}
 \usage{
 \S4method{show}{AthenaConnection}(object)

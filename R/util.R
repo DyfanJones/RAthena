@@ -61,7 +61,7 @@ resource_active.AthenaConnection <- function(dbObj){
   if(!py_is_null_xptr(dbObj@ptr)) TRUE else FALSE
 }
 
-resource_active.AthenaQuery <- function(dbObj){
+resource_active.AthenaResult <- function(dbObj){
   if(!is.null(dbObj@connection@ptr) && !is.null(dbObj@athena) &&
      !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(TRUE)
   else if(is.null(dbObj@connection@ptr) && is.null(dbObj@athena) &&

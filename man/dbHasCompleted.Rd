@@ -3,10 +3,10 @@
 \docType{methods}
 \name{dbHasCompleted}
 \alias{dbHasCompleted}
-\alias{dbHasCompleted,AthenaQuery-method}
+\alias{dbHasCompleted,AthenaResult-method}
 \title{Completion status}
 \usage{
-\S4method{dbHasCompleted}{AthenaQuery}(res, ...)
+\S4method{dbHasCompleted}{AthenaResult}(res, ...)
 }
 \arguments{
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}

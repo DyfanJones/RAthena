@@ -4,12 +4,12 @@
 \name{dbIsValid}
 \alias{dbIsValid}
 \alias{dbIsValid,AthenaConnection-method}
-\alias{dbIsValid,AthenaQuery-method}
+\alias{dbIsValid,AthenaResult-method}
 \title{Is this DBMS object still valid?}
 \usage{
 \S4method{dbIsValid}{AthenaConnection}(dbObj, ...)
 
-\S4method{dbIsValid}{AthenaQuery}(dbObj, ...)
+\S4method{dbIsValid}{AthenaResult}(dbObj, ...)
 }
 \arguments{
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},

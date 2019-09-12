@@ -168,7 +168,7 @@ setMethod(
 #'              The \code{dbExecute()} method submits a query to Athena and waits for the query to be executed.
 #' @name Query
 #' @inheritParams DBI::dbSendQuery
-#' @return Returns \code{AthenaQuery} s4 class.
+#' @return Returns \code{AthenaResult} s4 class.
 #' @seealso \code{\link[DBI]{dbSendQuery}}, \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}
 #' @examples
 #' \dontrun{
