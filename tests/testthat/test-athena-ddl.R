@@ -1,6 +1,12 @@
 context("Athena DDL")
 
-s3.location <- "s3://test-rathena/removeable_table/"
+# NOTE System variable format returned for Unit tests:
+# Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
+# Sys.getenv("rathena_s3"): "s3://path/to/query/bucket/"
+# Sys.getenv("rathena_removeable"): "s3://path/to/bucket/removeable_table/"
+# Sys.getenv("rathena_test_df"): "s3://path/to/bucket/test_df/"
+
+s3.location <- Sys.getenv("rathena_test_df")
 df <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = F)
 
 test_that("Check if Athena DDL's are created correctly",{

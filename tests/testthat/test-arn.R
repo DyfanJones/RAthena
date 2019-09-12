@@ -1,5 +1,11 @@
 context("ARN Connection")
 
+# NOTE System variable format returned for Unit tests:
+# Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
+# Sys.getenv("rathena_s3"): "s3://path/to/query/bucket/"
+# Sys.getenv("rathena_removeable"): "s3://path/to/bucket/removeable_table/"
+# Sys.getenv("rathena_test_df"): "s3://path/to/bucket/test_df/"
+
 test_that("Check if can connect to Athena using ARN",{
   skip_if_no_boto()
   # Test connection is using AWS CLI to set profile_name 
