@@ -11,7 +11,7 @@ AthenaResult <- function(conn,
   
   tryCatch(response <- do.call(Athena$start_query_execution, Request, quote = T),
            error = function(e) py_error(e))
-
+  on.exit(if(!is.null(conn@info$expiration)) time_check(conn@info$expiration))
   new("AthenaResult", connection = conn, athena = Athena, info = response)
 }
 
