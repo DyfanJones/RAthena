@@ -6,14 +6,14 @@ context("ARN Connection")
 # Sys.getenv("rathena_removeable"): "s3://path/to/bucket/removeable_table/"
 # Sys.getenv("rathena_test_df"): "s3://path/to/bucket/test_df/"
 
-test_that("Check if can connect to Athena using ARN",{
+test_that("Check connection to Athena using ARN",{
   skip_if_no_boto()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
                    profile_name = "rathena",
                    role_arn = Sys.getenv("rathena_arn"),
                    s3_staging_dir = Sys.getenv("rathena_s3"),
-                   duration_seconds = 900)
+                   duration_seconds = 1000)
   
   output <- dbGetQuery(con, "show Databases")
   expect_equal(any(grepl("default", output)), TRUE)
