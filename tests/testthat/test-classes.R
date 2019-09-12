@@ -15,5 +15,5 @@ test_that("Testing class formation", {
   expect_identical(names(attributes(con)), c("ptr", "info", "quote","class"))
   expect_identical(names(attributes(res)), c("connection", "athena", "info", "class"))
   expect_s4_class(con,"AthenaConnection")
-  expect_s4_class(res,"AthenaQuery")
+  expect_s4_class(res,"AthenaResult")
 })
