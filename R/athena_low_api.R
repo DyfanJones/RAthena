@@ -262,6 +262,7 @@ get_session_token <- function(profile_name = NULL,
   tryCatch({sts <- boto$Session(profile_name = profile_name)$client("sts")
             response <- do.call(sts$get_session_token, args)},
            error = function(e) py_error(e))
+  response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
   response$Credentials
 }
@@ -318,6 +319,7 @@ assume_role <- function(profile_name = NULL,
                               RoleSessionName = role_session_name,
                               DurationSeconds = as.integer(duration_seconds))},
   error = function(e) py_error(e))
+  response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
   response$Credentials
 }
