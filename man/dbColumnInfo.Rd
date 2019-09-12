@@ -15,7 +15,7 @@
 }
 \value{
 \code{dbColumnInfo()} returns a data.frame with as many rows as there are output fields in the result.
-        The data.frame has two columns (field_nam, type).
+        The data.frame has two columns (field_name, type).
 }
 \description{
 Produces a data.frame that describes the output of a query.
@@ -36,7 +36,7 @@ con <- dbConnect(RAthena::athena(),
 # Get Column information from query
 res <- dbSendQuery(con, "select * from mydataframe")
 dbColumnInfo(res)
-dbClearResult
+dbClearResult(res)
  
 # Disconnect from Athena
 dbDisconnect(con)

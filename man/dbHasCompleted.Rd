@@ -36,7 +36,7 @@ con <- dbConnect(RAthena::athena(),
 res <- dbSendQuery(con, "show databases")
 dbHasCompleted(res)
 
-dbClearResult
+dbClearResult(res)
 
 # Disconnect from Athena
 dbDisconnect(con)
