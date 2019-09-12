@@ -214,8 +214,10 @@ setMethod(
 #' # Check if query has completed
 #' res <- dbSendQuery(con, "show databases")
 #' dbHasCompleted(res)
+#'
+#' dbClearResult(res)
 #' 
-#' # Check if connection if valid after closing connection
+#' # Disconnect from Athena
 #' dbDisconnect(con)
 #' }
 #' @docType methods
@@ -249,8 +251,61 @@ setMethod(
 setMethod(
   "dbGetInfo", "AthenaResult",
   function(dbObj, ...) {
+    if (!dbIsValid(dbObj)) {stop("Result already cleared", call. = FALSE)}
     info <- dbObj@info
     info
   })
 
+
+#' Information about result types
 #' 
+#' Produces a data.frame that describes the output of a query. 
+#' @name dbColumnInfo
+#' @inheritParams DBI::dbColumnInfo
+#' @return \code{dbColumnInfo()} returns a data.frame with as many rows as there are output fields in the result.
+#'         The data.frame has two columns (field_nam, type).
+#' @seealso \code{\link[DBI]{dbHasCompleted}}
+#' @examples
+#' \dontrun{
+#' # Note: 
+#' # - Require AWS Account to run below example.
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' 
+#' library(DBI)
+#' 
+#' # Demo connection to Athena using profile name 
+#' con <- dbConnect(RAthena::athena(),
+#'                  profile_name = "YOUR_PROFILE_NAME",
+#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' 
+#' # Get Column information from query
+#' res <- dbSendQuery(con, "select * from mydataframe")
+#' dbColumnInfo(res)
+#' dbClearResult(res)
+#'  
+#' # Disconnect from Athena
+#' dbDisconnect(con)
+#' }
+#' @docType methods
+NULL
+
+#' @rdname dbColumnInfo
+#'@export
+setMethod(
+  "dbColumnInfo", "AthenaResult",
+  function(res, ...){
+    if (!dbIsValid(dbObj)) {stop("Result already cleared", call. = FALSE)}
+    result <- poll(res)
+    if(result$QueryExecution$Status$State == "FAILED") {
+      stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
+    }
+    
+    tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = as.integer(1)),
+             error = function(e) py_error(e))
+    
+    Name <- sapply(result$ResultSet$ResultSetMetadata$ColumnInfo, function(x) x$Name)
+    Type <- sapply(result$ResultSet$ResultSetMetadata$ColumnInfo, function(x) x$Type)
+    data.frame(field_name = Name,
+               type = Type, stringsAsFactors = F)
+  }
+)
