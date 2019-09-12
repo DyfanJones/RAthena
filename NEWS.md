@@ -14,15 +14,18 @@
 * Created a helper function `tag_options` to create tag options for `create_work_group`
 * Created a helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
+* created `dbColumnInfo` method: returns data.frame containing `field_name` and `type`
 
 ### Changes
 * Removed old s3_staging_dir validation check from `dbConnect` method
 * Improved `dbFetch` with chunk sizes between 0 - 999. Fixed error where `for loop` would return error instead of breaking.
 * simplified `py_error` function, set `call.` parameter to `FALSE`
+* `AthenaQuery` s4 changed to `AthenaResult`
 
 ### Unit tests
 * ARN Connection
 * Athena Work Groups
+* Athena Metadata
 
 # RAthena 1.1.0
 ### New Features
