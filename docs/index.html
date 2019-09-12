@@ -96,7 +96,7 @@
 <div id="hard-coding" class="section level3">
 <h3 class="hasAnchor">
 <a href="#hard-coding" class="anchor"></a>Hard Coding</h3>
-<p>The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is <strong>not</strong> recommended as your credentials are hardcoded in your code.</p>
+<p>The most basic way to connect to AWS Athena is to hard code your access key and secret access key. However this method is <strong>not</strong> recommended as your credentials are hard-coded.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>

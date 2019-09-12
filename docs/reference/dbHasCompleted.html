@@ -117,7 +117,7 @@
     <p>This method returns if the query has completed.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaQuery</span>
+    <pre class="usage"><span class='co'># S4 method for AthenaResult</span>
 <span class='fu'>dbHasCompleted</span>(<span class='no'>res</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,7 +157,9 @@
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbHasCompleted</span>(<span class='no'>res</span>)
 
-<span class='co'># Check if connection if valid after closing connection</span>
+<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
+
+<span class='co'># Disconnect from Athena</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
 }</div></pre>
   </div>

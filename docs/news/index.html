@@ -142,6 +142,8 @@
 <li>Created a helper function <code>work_group_config</code> and <code>work_group_config_update</code> to create config of work group</li>
 <li>Added extra feature to get work group output location in connection function <code>AthenaConnection</code>
 </li>
+<li>created <code>dbColumnInfo</code> method: returns data.frame containing <code>field_name</code> and <code>type</code>
+</li>
 </ul>
 </div>
 <div id="changes" class="section level3">
@@ -152,6 +154,9 @@
 <li>Improved <code>dbFetch</code> with chunk sizes between 0 - 999. Fixed error where <code>for loop</code> would return error instead of breaking.</li>
 <li>simplified <code>py_error</code> function, set <code>call.</code> parameter to <code>FALSE</code>
 </li>
+<li>
+<code>AthenaQuery</code> s4 changed to <code>AthenaResult</code>
+</li>
 </ul>
 </div>
 <div id="unit-tests" class="section level3">
@@ -160,6 +165,7 @@
 <ul>
 <li>ARN Connection</li>
 <li>Athena Work Groups</li>
+<li>Athena Metadata</li>
 </ul>
 </div>
 </div>
