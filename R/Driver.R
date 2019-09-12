@@ -164,6 +164,7 @@ setMethod(
       aws_access_key_id <- creds$AccessKeyId
       aws_secret_access_key <- creds$SecretAccessKey
       aws_session_token <- creds$SessionToken
+      aws_expiration <- creds$Expiration
     }
     
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
@@ -177,6 +178,7 @@ setMethod(
                             s3_staging_dir = s3_staging_dir,
                             region_name = region_name,
                             botocore_session = botocore_session,
-                            profile_name = profile_name, ...)
+                            profile_name = profile_name, 
+                            aws_expiration = aws_expiration,...)
     con
   })
