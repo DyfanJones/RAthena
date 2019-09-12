@@ -148,6 +148,7 @@ set_aws_env <- function(x){
   Sys.setenv("AWS_ACCESS_KEY_ID" = creds$AccessKeyId)
   Sys.setenv("AWS_SECRET_ACCESS_KEY" = creds$SecretAccessKey)
   Sys.setenv("AWS_SESSION_TOKEN" = creds$SessionToken)
+  Sys.setenv("AWS_EXPIRATION" = creds$Expiration)
 }
 
 # Return NULL if System environment variable doesnt exist
@@ -156,3 +157,9 @@ get_aws_env <- function(x) {
   if(nchar(x) == 0) return(NULL) else return(x)}
 
 `%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
+
+# time check warning when connection will expire soon
+time_check <- function(x){ 
+  x <- as.numeric(x - Sys.time(), units = "secs") 
+  if(x %/% 60 < 15) warning("Athena Connection will expire in " ,x %/% 60, ":",round(x %% 60, 0), " (mm:ss)",
+                            call. = F)}
