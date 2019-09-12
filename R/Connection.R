@@ -24,7 +24,8 @@ AthenaConnection <-
     s3_staging_dir = NULL,
     region_name = NULL,
     botocore_session = NULL,
-    profile_name = NULL, ...){
+    profile_name = NULL, 
+    aws_expiration = NULL,...){
     
     tryCatch(
       ptr <- boto$Session(aws_access_key_id = aws_access_key_id,
@@ -44,14 +45,17 @@ AthenaConnection <-
     }
     
     s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
+    aws_expiration <- aws_expiration %||% get_aws_env("AWS_EXPIRATION")
     
     if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`
                                       or when work_group is defined in `create_work_group()`", call. = F)}
     
+    
+    
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group,
                  poll_interval = poll_interval, encryption_option = encryption_option,
-                 kms_key = kms_key)
+                 kms_key = kms_key, expiration = aws_expiration)
 
     res <- new("AthenaConnection",  ptr = ptr, info = info, quote = quote)
   }
@@ -350,6 +354,7 @@ setMethod(
   "dbListTables", "AthenaConnection",
   function(conn,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+
     dbGetQuery(conn, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
   }
 )
@@ -651,7 +656,6 @@ setMethod(
       Table <- gsub(".*\\.", "" , name)
     } else {dbms.name <- conn@info$dbms.name
     Table <- name}
-    
     dbGetQuery(conn, paste0("SHOW PARTITIONS ", dbms.name,".",Table))
   })
 
@@ -707,6 +711,5 @@ setMethod(
       Table <- gsub(".*\\.", "" , name)
     } else {dbms.name <- conn@info$dbms.name
     Table <- name}
-    
     SQL(dbGetQuery(conn, paste0("SHOW CREATE TABLE ", dbms.name,".",Table))[[1]])
   })
