@@ -15,6 +15,7 @@
 * Created a helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * created `dbColumnInfo` method: returns data.frame containing `field_name` and `type`
+* Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes notify user with a warning message
 
 ### Changes
 * Removed old s3_staging_dir validation check from `dbConnect` method
