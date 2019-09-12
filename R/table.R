@@ -87,7 +87,8 @@ Athena_write_table <-
     if(append && is.null(partition)) stop("Athena requires the table to be partitioned to append", call. = FALSE)
 
     t <- tempfile()
-    on.exit({unlink(t)})
+    on.exit({unlink(t)
+             if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
 
     value <- sqlData(conn, value, row.names = row.names)
 
@@ -130,13 +131,13 @@ Athena_write_table <-
                             partition = names(partition),
                             s3.location = s3.location, file.type = file.type)
       # create Athena table
-      rs <- dbExecute(conn, sql)
+      rs <- suppressWarnings(dbExecute(conn, sql))
       dbClearResult(rs)}
     
     # Repair table
-    res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
+    res <- suppressWarnings(dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name)))
     dbClearResult(res)
-
+    
     invisible(TRUE)
   }
 
