@@ -46,7 +46,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
             role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
             set_env = TRUE)
             
-# Connect to Athena using temporary credentials
+# Connect to Athena using ARN Role
 con <- dbConnect(athena(),
                 s3_staging_dir = "s3://path/to/query/bucket/")
 }
