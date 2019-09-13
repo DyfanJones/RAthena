@@ -54,7 +54,7 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
 \item{partition}{Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}}
 
-\item{s3.location}{s3 bucket to store Athena table}
+\item{s3.location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
 
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
 
