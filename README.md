@@ -55,7 +55,7 @@ con <- dbConnect(RAthena::athena(),
 ### AWS Profile Name
 
 The next method is to use profile names set up by AWS CLI or created manually 
-in the `~/.aws` directory. To create the profile names manaully please refer 
+in the `~/.aws` directory. To create the profile names manually please refer 
 to: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html.
 
 ##### Setting up AWS CLI
