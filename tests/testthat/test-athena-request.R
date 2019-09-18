@@ -2,34 +2,34 @@ context("Athena Request")
 
 # NOTE System variable format returned for Unit tests:
 # Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
-# Sys.getenv("rathena_s3"): "s3://path/to/query/bucket/"
-# Sys.getenv("rathena_removeable"): "s3://path/to/bucket/removeable_table/"
-# Sys.getenv("rathena_test_df"): "s3://path/to/bucket/test_df/"
+# Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
+# Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
 test_that("Check if Athena Request created correctly",{
   skip_if_no_boto()
+  skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con1 <- dbConnect(athena(),
                     profile_name = "rathena",
                     encryption_option = "SSE_S3",
                     kms_key = "test_key",
                     work_group = "test_group",
-                    s3_staging_dir = Sys.getenv("rathena_s3"))
+                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con2 <- dbConnect(athena(),
                     profile_name = "rathena",
                     encryption_option = "SSE_S3",
                     work_group = "test_group",
-                    s3_staging_dir = Sys.getenv("rathena_s3"))
+                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con3 <- dbConnect(athena(),
                     profile_name = "rathena",
                     work_group = "test_group",
-                    s3_staging_dir = Sys.getenv("rathena_s3"))
+                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con4 <- dbConnect(athena(),
                     profile_name = "rathena",
-                    s3_staging_dir = Sys.getenv("rathena_s3"))
+                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   R1 <- RAthena:::request(con1, "select * from test_query")
   R2 <- RAthena:::request(con2, "select * from test_query")

@@ -2,19 +2,19 @@ context("Athena Metadata")
 
 # NOTE System variable format returned for Unit tests:
 # Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
-# Sys.getenv("rathena_s3"): "s3://path/to/query/bucket/"
-# Sys.getenv("rathena_removeable"): "s3://path/to/bucket/removeable_table/"
-# Sys.getenv("rathena_test_df"): "s3://path/to/bucket/test_df/"
+# Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
+# Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
 df_col_info <- data.frame(field_name = c("x","y", "z", "timestamp"),
                           type = c("integer", "varchar", "boolean", "varchar"), stringsAsFactors = F)
 
 test_that("Returning meta data from query",{
   skip_if_no_boto()
+  skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(RAthena::athena(),
                    profile_name = "rathena",
-                   s3_staging_dir = Sys.getenv("rathena_s3"))
+                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   res <- dbExecute(con, "select * from test_df")
   column_info <- dbColumnInfo(res)
