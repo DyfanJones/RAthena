@@ -53,25 +53,34 @@ db_save_query.AthenaConnection <- function(con, sql, name ,
                                            partition = NULL, ...){
   stopifnot(is.null(s3.location) || is.s3_uri(s3.location))
   file.type = match.arg(file.type)
-  tt_sql <- paste0("CREATE TABLE ",name, " ", db_save_query_with(con,file.type, s3.location, partition), "AS ",
+  tt_sql <- paste0("CREATE TABLE ",name, " ", db_save_query_with(file.type, s3.location, partition), "AS ",
                    sql, ";")
-  dbExecute(con, tt_sql)
+  res <- dbExecute(con, tt_sql)
+  # check if execution failed
+  query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId)
+  if(query_execution$QueryExecution$Status$State == "FAILED") {
+    stop(query_execution$QueryExecution$Status$StateChangeReason, call. = FALSE)
+  }
   name
 }
 
 # helper function
-db_save_query_with <- function(con, file.type, s3.location,partition){
-  if(file.type!="NULL" || is.null(s3.location) || is.null(partition)){
+db_save_query_with <- function(file.type, s3.location,partition){
+  if(file.type!="NULL" || !is.null(s3.location) || !is.null(partition)){
     FILE <- switch(file.type,
                    "csv" = "format = 'TEXTFILE'",
                    "parquet" = "format = 'PARQUET'",
-                   "json" = "format = 'JSON'")
-    LOCATION <- if(!is.null(s3.location)){paste0(",\nexternal_location ='", s3.location, "'")}
-    if(!is.null(partition)){
+                   "json" = "format = 'JSON'",
+                   "")
+    LOCATION <- if(!is.null(s3.location)){
+      if(file.type == "NULL") paste0("external_location ='", s3.location, "'")
+      else paste0(",\nexternal_location ='", s3.location, "'")
+      } else ""
+    PARTITION <- if(!is.null(partition)){
       partition <- paste(partition, collapse = "','")
-      PARTITION <- paste0(",\npartitioned_by = ARRAY['",partition,"']")
-    }
-    paste0("WITH (", FILE, LOCATION,
-           PARTITION,")\n")
+      if(is.null(s3.location) && file.type == "NULL") paste0("partitioned_by = ARRAY['",partition,"']")
+      else paste0(",\npartitioned_by = ARRAY['",partition,"']")
+    } else ""
+    paste0("WITH (", FILE, LOCATION, PARTITION,")\n")
   } else ""
 }
