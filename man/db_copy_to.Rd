@@ -24,6 +24,8 @@ just any valid bare table name.}
 \item{append}{Allow appending to the destination table. Cannot be
 `TRUE` if `overwrite` is also `TRUE`.}
 
+\item{types}{Additional field types used to override derived types.}
+
 \item{partition}{Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}}
 
 \item{s3_location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}

@@ -101,6 +101,7 @@ db_save_query_with <- function(file.type, s3.location,partition){
 #'   `TRUE` if `append` is also `TRUE`.
 #' @param append Allow appending to the destination table. Cannot be
 #'   `TRUE` if `overwrite` is also `TRUE`.
+#' @param types Additional field types used to override derived types.
 #' @param s3_location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
@@ -119,7 +120,7 @@ db_copy_to.AthenaConnection <- function(con, table, values,
   names(types) <- names(values)
   
   file_type = match.arg(file_type)
-  dbWriteTable(conn, name = table,
+  dbWriteTable(conn = con, name = table,
                overwrite = overwrite, append = append,
                field.types = types, partition = partition,
                s3.location = s3_location, file.type = file_type)
