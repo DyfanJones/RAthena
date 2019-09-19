@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Completion status — dbHasCompleted • RAthena</title>
+<title>S3 implementation of <code>db_save_query</code> for Athena — db_save_query • RAthena</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,10 @@
 
 
 
-<meta property="og:title" content="Completion status — dbHasCompleted" />
-<meta property="og:description" content="This method returns if the query has completed." />
+<meta property="og:title" content="S3 implementation of <code>db_save_query</code> for Athena — db_save_query" />
+<meta property="og:description" content="This is a backend method for dplyr function db_save_query to creating tables from tbl using compute function.
+Users won't be required to access and run this function. However users may find it useful to know the extra
+parameters db_save_query provided for compute function." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,68 +110,64 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Completion status</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Result.R'><code>R/Result.R</code></a></small>
-    <div class="hidden name"><code>dbHasCompleted.Rd</code></div>
+    <h1>S3 implementation of <code>db_save_query</code> for Athena</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/dplyr_integration.R'><code>R/dplyr_integration.R</code></a></small>
+    <div class="hidden name"><code>db_save_query.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This method returns if the query has completed.</p>
+    <p>This is a backend method for dplyr function <code>db_save_query</code> to creating tables from <code>tbl</code> using <code>compute</code> function.
+Users won't be required to access and run this function. However users may find it useful to know the extra
+parameters <code>db_save_query</code> provided for <code>compute</code> function.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaResult</span>
-<span class='fu'>dbHasCompleted</span>(<span class='no'>res</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>db_save_query.AthenaConnection</span>(<span class='no'>con</span>, <span class='no'>sql</span>, <span class='no'>name</span>, <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"NULL"</span>,
+  <span class='st'>"csv"</span>, <span class='st'>"parquet"</span>, <span class='st'>"json"</span>), <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>partition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>res</th>
-      <td><p>An object inheriting from DBIResult.</p></td>
+      <th>con</th>
+      <td><p>A <code><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></code> object, as returned by <code><a href='dbConnect-AthenaDriver-method.html'>dbConnect()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>sql</th>
+      <td><p>SQL code to be sent to the data</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Table name if left default RAthena will use default from 'dplyr''s <code>compute</code> function.</p></td>
+    </tr>
+    <tr>
+      <th>file.type</th>
+      <td><p>What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
+<code>"NULL"</code> will let athena set the file.type for you.</p></td>
+    </tr>
+    <tr>
+      <th>s3.location</th>
+      <td><p>s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")</p></td>
+    </tr>
+    <tr>
+      <th>partition</th>
+      <td><p>Partition Athena table, requires to be a partitioned variable from previous table.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed on to methods.</p></td>
+      <td><p>other parameters, currently not implemented</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>dbHasCompleted()</code> returns a logical scalar. <code>TRUE</code> if the query has completed, <code>FALSE</code> otherwise.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>db_save_query returns table name</p>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/DBI/man/dbHasCompleted.html'>dbHasCompleted</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># Note: </span>
-<span class='co'># - Require AWS Account to run below example.</span>
-<span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-
-<span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(),
-                 <span class='kw'>profile_name</span> <span class='kw'>=</span> <span class='st'>"YOUR_PROFILE_NAME"</span>,
-                 <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/query/bucket/"</span>)
-
-<span class='co'># Check if query has completed</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='fu'>dbHasCompleted</span>(<span class='no'>res</span>)
-
-<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
-
-<span class='co'># Disconnect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
