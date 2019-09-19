@@ -3,6 +3,8 @@ boto <- NULL
 .onLoad <- function(libname, pkgname) {
   boto <<- reticulate::import("boto3", delay_load = T)
   register_s3_method("dplyr", "db_desc", "AthenaConnection")
+  register_s3_method("dbplyr", "db_compute", "AthenaConnection")
+  register_s3_method("dplyr", "db_save_query", "AthenaConnection")
 }
 
 register_s3_method <- function(pkg, generic, class, fun = NULL) {
