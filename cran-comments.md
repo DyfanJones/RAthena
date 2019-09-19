@@ -16,7 +16,7 @@ This a feature release exposing athena work groups, aws arn roles, extra DBI met
 0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 # unit tests (using testthat) results
-* OK:       31
+* OK:       33
 * Failed:   0
 * Warnings: 0
 * Skipped:  0
