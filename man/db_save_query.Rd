@@ -28,5 +28,7 @@ db_save_query.AthenaConnection(con, sql, name, file.type = c("NULL",
 db_save_query returns table name
 }
 \description{
-This is a backend method for dplyr function \code{db_save_query} to retrieve meta data about Athena queries. Users won't be required to access and run this function.
+This is a backend method for dplyr function \code{db_save_query} to creating tables from \code{tbl} using \code{compute} function.
+Users won't be required to access and run this function. However users may find it useful to know the extra
+parameters \code{db_save_query} provided for \code{compute} function.
 }

@@ -37,7 +37,9 @@ db_compute.AthenaConnection <- function(con,
 
 #' S3 implementation of \code{db_save_query} for Athena
 #' 
-#' This is a backend method for dplyr function \code{db_save_query} to retrieve meta data about Athena queries. Users won't be required to access and run this function.
+#' This is a backend method for dplyr function \code{db_save_query} to creating tables from \code{tbl} using \code{compute} function.
+#' Users won't be required to access and run this function. However users may find it useful to know the extra
+#' parameters \code{db_save_query} provided for \code{compute} function.
 #' @param con A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
 #' @param sql SQL code to be sent to the data
 #' @param name Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.
