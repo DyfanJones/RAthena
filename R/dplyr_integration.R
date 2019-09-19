@@ -88,3 +88,42 @@ db_save_query_with <- function(file.type, s3.location,partition){
     paste0("WITH (", FILE, LOCATION, PARTITION,")\n")
   } else ""
 }
+
+#' S3 implementation of \code{db_copy_to} for Athena
+#' 
+#' This is an Athena method for dbplyr function \code{db_copy_to} to create an Athena table from a \code{data.frame}.
+#' @param con A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
+#' @param table A character string specifying a table name. Names will be
+#'   automatically quoted so you can use any sequence of characters, not
+#'   just any valid bare table name.
+#' @param values A data.frame to write to the database.
+#' @param overwrite Allow overwriting the destination table. Cannot be
+#'   `TRUE` if `append` is also `TRUE`.
+#' @param append Allow appending to the destination table. Cannot be
+#'   `TRUE` if `overwrite` is also `TRUE`.
+#' @param s3_location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
+#' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
+#' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
+#' @name db_copy_to
+#' @seealso \code{\link{dbWriteTable}}
+#' @return
+#' db_copy_to returns table name
+
+db_copy_to.AthenaConnection <- function(con, table, values,
+                                        overwrite = FALSE, append = FALSE,
+                                        types = NULL, partition = NULL,
+                                        s3_location = NULL, 
+                                        file_type = c("csv", "tsv", "parquet")){
+  
+  types <- types %||% dbDataType(con, values)
+  names(types) <- names(values)
+  
+  file_type = match.arg(file_type)
+  dbWriteTable(conn, name = table,
+               overwrite = overwrite, append = append,
+               field.types = types, partition = partition,
+               s3.location = s3_location, file.type = file_type)
+  table
+}
+
+
