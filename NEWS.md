@@ -18,6 +18,7 @@
 * Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes notify user with a warning message
 * Created s3 method for function `db_collect` for better integration with dplyr
 * Created s3 method for function `db_save_query` for better integration with dplyr
+* Created s3 method for function `db_copy_to` for better integration with dplyr
 
 ### Changes
 * Removed old s3_staging_dir validation check from `dbConnect` method
