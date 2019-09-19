@@ -124,7 +124,7 @@ library(DBI)
                   s3_staging_dir = 's3://path/to/query/bucket/')
 ```
 To change the duration of ARN role session please change the parameter `duration_seconds`. 
-rBy default `duration_seconds` is set to 3600 seconds (1 hour).
+By default `duration_seconds` is set to 3600 seconds (1 hour).
 
 ## Usage
 
