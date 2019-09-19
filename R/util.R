@@ -163,3 +163,12 @@ time_check <- function(x){
   x <- as.numeric(x - Sys.time(), units = "secs") 
   if(x %/% 60 < 15) warning("Athena Connection will expire in " ,x %/% 60, ":",round(x %% 60, 0), " (mm:ss)",
                             call. = F)}
+
+# get parent pkg function and method
+pkg_method <- function(fun, pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    stop(fun,' requires the ', pkg,' package, please install it first and try again',
+         call. = F)}
+  fun_name <- utils::getFromNamespace(fun, pkg)
+  return(fun_name)
+}
