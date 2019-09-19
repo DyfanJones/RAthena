@@ -16,6 +16,8 @@
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * created `dbColumnInfo` method: returns data.frame containing `field_name` and `type`
 * Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes notify user with a warning message
+* Created s3 method for function `db_collect` for better integration with dplyr
+* Created s3 method for function `db_save_query` for better integration with dplyr
 
 ### Changes
 * Removed old s3_staging_dir validation check from `dbConnect` method
