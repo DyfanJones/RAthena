@@ -2,7 +2,7 @@
 #' 
 #' This is a backend function for dplyr to retrieve meta data about Athena queries. Users won't be required to access and run this function.
 #' @param x A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
-#' 
+#' @name db_desc
 #' @return
 #' Character variable containing Meta Data about query sent to Athena. The Meta Data is returned in the following format:
 #' 
@@ -22,7 +22,7 @@ db_desc.AthenaConnection <- function(x) {
 #' @param table Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.
 #' @param sql SQL code to be sent to the data
 #' @param ... passes \code{RAthena} table creation parameters: [\code{file.type},\code{s3.location},\code{partition}]
-#' 
+#' @name db_compute
 #' @return
 #' db_compute returns table name
 #' @seealso \code{\link{db_save_query}}
@@ -30,13 +30,14 @@ db_compute.AthenaConnection <- function(con,
                                         table,
                                         sql,
                                         ...) {
+  db_save_query <- pkg_method("db_save_query", "dplyr")
   table <- db_save_query(con, sql, table, ...)
   table
 }
 
 #' S3 implementation of \code{db_save_query} for Athena
 #' 
-#' This is a backend function for dplyr function \code{db_save_query} to retrieve meta data about Athena queries. Users won't be required to access and run this function.
+#' This is a backend method for dplyr function \code{db_save_query} to retrieve meta data about Athena queries. Users won't be required to access and run this function.
 #' @param con A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
 #' @param sql SQL code to be sent to the data
 #' @param name Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.
@@ -45,12 +46,14 @@ db_compute.AthenaConnection <- function(con,
 #' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
 #' @param partition Partition Athena table, requires to be a partitioned variable from previous table.
 #' @param ... other parameters, currently not implemented
+#' @name db_save_query
 #' @return
 #' db_save_query returns table name
 db_save_query.AthenaConnection <- function(con, sql, name , 
                                            file.type = c("NULL","csv", "parquet", "json"),
                                            s3.location = NULL,
-                                           partition = NULL, ...){
+                                           partition = NULL,
+                                           ...){
   stopifnot(is.null(s3.location) || is.s3_uri(s3.location))
   file.type = match.arg(file.type)
   tt_sql <- paste0("CREATE TABLE ",name, " ", db_save_query_with(file.type, s3.location, partition), "AS ",
