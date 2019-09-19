@@ -106,7 +106,7 @@ db_save_query_with <- function(file.type, s3.location,partition){
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @name db_copy_to
-#' @seealso \code{\link{dbWriteTable}}
+#' @seealso \code{\link{AthenaWriteTables}}
 #' @return
 #' db_copy_to returns table name
 

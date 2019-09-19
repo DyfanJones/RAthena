@@ -39,5 +39,5 @@ db_copy_to returns table name
 This is an Athena method for dbplyr function \code{db_copy_to} to create an Athena table from a \code{data.frame}.
 }
 \seealso{
-\code{\link{dbWriteTable}}
+\code{\link{AthenaWriteTables}}
 }
