@@ -58,7 +58,7 @@ NULL
 Athena_write_table <-
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...) {
+           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...) {
     # variable checks
     stopifnot(is.character(name),
               is.data.frame(value),
@@ -172,7 +172,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
@@ -185,7 +185,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "Id", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
@@ -198,7 +198,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "SQL", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location, file.type = c("csv", "tsv", "parquet"), ...){
+           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,

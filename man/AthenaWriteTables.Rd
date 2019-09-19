@@ -10,17 +10,17 @@
 \usage{
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
   value, overwrite = FALSE, append = FALSE, row.names = NA,
-  field.types = NULL, partition = NULL, s3.location,
+  field.types = NULL, partition = NULL, s3.location = NULL,
   file.type = c("csv", "tsv", "parquet"), ...)
 
 \S4method{dbWriteTable}{AthenaConnection,Id,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
-  field.types = NULL, partition = NULL, s3.location,
+  field.types = NULL, partition = NULL, s3.location = NULL,
   file.type = c("csv", "tsv", "parquet"), ...)
 
 \S4method{dbWriteTable}{AthenaConnection,SQL,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
-  field.types = NULL, partition = NULL, s3.location,
+  field.types = NULL, partition = NULL, s3.location = NULL,
   file.type = c("csv", "tsv", "parquet"), ...)
 }
 \arguments{
