@@ -128,7 +128,7 @@
     </tr>
     <tr>
       <th>table</th>
-      <td><p>Table name if left default RAthena will use default from 'dplyr''s <code>compute</code> function.</p></td>
+      <td><p>Table name, if left default RAthena will use the default from <code>dplyr</code>'s <code>compute</code> function.</p></td>
     </tr>
     <tr>
       <th>sql</th>
@@ -136,7 +136,12 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>passes <code>RAthena</code> table creation parameters: [<code>file.type</code>,<code>s3.location</code>,<code>partition</code>]</p></td>
+      <td><p>passes <code>RAthena</code> table creation parameters: [<code>file_type</code>,<code>s3_location</code>,<code>partition</code>]</p><ul>
+<li><p><code>file_type:</code> What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
+                       <code>"NULL"</code> will let athena set the file_type for you.</p></li>
+<li><p><code>s3_location:</code> s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")</p></li>
+<li><p><code>partition:</code> Partition Athena table, requires to be a partitioned variable from previous table.</p></li>
+</ul></td>
     </tr>
     </table>
 
@@ -147,6 +152,40 @@
 
     <div class='dont-index'><p><code><a href='db_save_query.html'>db_save_query</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Note: </span>
+<span class='co'># - Require AWS Account to run below example.</span>
+<span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+
+<span class='co'># Demo connection to Athena using profile name </span>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(),
+                 <span class='kw'>profile_name</span> <span class='kw'>=</span> <span class='st'>"YOUR_PROFILE_NAME"</span>,
+                 <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/query/bucket/"</span>)
+
+<span class='co'># Write data.frame to Athena table</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/copy_to.html'>copy_to</a></span>(<span class='no'>con</span>, <span class='no'>mtcars</span>,
+        <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='st'>"s3://mybucket/data/"</span>)
+
+<span class='co'># Write Athena table from tbl_sql</span>
+<span class='no'>athena_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)
+<span class='no'>mtcars_filter</span> <span class='kw'>&lt;-</span> <span class='no'>athena_mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>gear</span> <span class='kw'>&gt;=</span><span class='fl'>4</span>)
+
+<span class='co'># create athena with unique table name</span>
+<span class='no'>mtcars_filer</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span>()
+
+<span class='co'># create athena with specified name and s3 location</span>
+<span class='no'>mtcars_filer</span> <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span>(<span class='st'>"mtcars_filer"</span>,
+            <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='st'>"s3://mybucket/mtcars_filer/"</span>)
+
+<span class='co'># Disconnect from Athena</span>
+<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -154,6 +193,7 @@
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#see-also">See also</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

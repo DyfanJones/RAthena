@@ -121,8 +121,10 @@ Users won't be required to access and run this function. However users may find 
 parameters <code>db_save_query</code> provided for <code>compute</code> function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_save_query.AthenaConnection</span>(<span class='no'>con</span>, <span class='no'>sql</span>, <span class='no'>name</span>, <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"NULL"</span>,
-  <span class='st'>"csv"</span>, <span class='st'>"parquet"</span>, <span class='st'>"json"</span>), <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>partition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for AthenaConnection</span>
+<span class='fu'>db_save_query</span>(<span class='no'>con</span>, <span class='no'>sql</span>, <span class='no'>name</span>,
+  <span class='kw'>file_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"NULL"</span>, <span class='st'>"csv"</span>, <span class='st'>"parquet"</span>, <span class='st'>"json"</span>), <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>partition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,12 +142,12 @@ parameters <code>db_save_query</code> provided for <code>compute</code> function
       <td><p>Table name if left default RAthena will use default from 'dplyr''s <code>compute</code> function.</p></td>
     </tr>
     <tr>
-      <th>file.type</th>
+      <th>file_type</th>
       <td><p>What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
-<code>"NULL"</code> will let athena set the file.type for you.</p></td>
+<code>"NULL"</code> will let athena set the file_type for you.</p></td>
     </tr>
     <tr>
-      <th>s3.location</th>
+      <th>s3_location</th>
       <td><p>s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")</p></td>
     </tr>
     <tr>

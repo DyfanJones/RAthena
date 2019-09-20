@@ -10,11 +10,16 @@ db_compute.AthenaConnection(con, table, sql, ...)
 \arguments{
 \item{con}{A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}}
 
-\item{table}{Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.}
+\item{table}{Table name, if left default RAthena will use the default from \code{dplyr}'s \code{compute} function.}
 
 \item{sql}{SQL code to be sent to the data}
 
-\item{...}{passes \code{RAthena} table creation parameters: [\code{file_type},\code{s3_location},\code{partition}]}
+\item{...}{passes \code{RAthena} table creation parameters: [\code{file_type},\code{s3_location},\code{partition}]
+\itemize{
+         \item{\code{file_type:} What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
+                       \code{"NULL"} will let athena set the file_type for you.}
+         \item{\code{s3_location:} s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
+         \item{\code{partition:} Partition Athena table, requires to be a partitioned variable from previous table.}}}
 }
 \value{
 db_compute returns table name
@@ -22,8 +27,7 @@ db_compute returns table name
 \description{
 This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.
 }
-\seealso{
-\code{\link{db_save_query}}
+\examples{
 \dontrun{
 # Note: 
 # - Require AWS Account to run below example.
@@ -43,18 +47,21 @@ copy_to(con, mtcars,
              
 # Write Athena table from tbl_sql
 athena_mtcars <- tbl(con, "mtcars")
-mtcars_filter <- athena_mtcars %>% filter(gear >=4)
+mtcars_filter <- athena_mtcars \%>\% filter(gear >=4)
 
 # create athena with unique table name
-mtcars_filer %>% 
+mtcars_filer \%>\% 
   compute()
 
 # create athena with specified name and s3 location
-mtcars_filer %>% 
+mtcars_filer \%>\% 
     compute("mtcars_filer",
-            s3_location = "s3://mybucket/mtcars_filer/"))
+            s3_location = "s3://mybucket/mtcars_filer/")
 
 # Disconnect from Athena
 dbDisconnect(con)
 }
+}
+\seealso{
+\code{\link{db_save_query}}
 }

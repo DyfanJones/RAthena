@@ -18,13 +18,19 @@ db_desc.AthenaConnection <- function(x) {
 #' 
 #' This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.
 #' @param con A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}
-#' @param table Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.
+#' @param table Table name, if left default RAthena will use the default from \code{dplyr}'s \code{compute} function.
 #' @param sql SQL code to be sent to the data
 #' @param ... passes \code{RAthena} table creation parameters: [\code{file_type},\code{s3_location},\code{partition}]
+#' \itemize{
+#'          \item{\code{file_type:} What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
+#'                        \code{"NULL"} will let athena set the file_type for you.}
+#'          \item{\code{s3_location:} s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
+#'          \item{\code{partition:} Partition Athena table, requires to be a partitioned variable from previous table.}}
 #' @name db_compute
 #' @return
 #' db_compute returns table name
 #' @seealso \code{\link{db_save_query}}
+#' @examples 
 #' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
@@ -53,7 +59,7 @@ db_desc.AthenaConnection <- function(x) {
 #' # create athena with specified name and s3 location
 #' mtcars_filer %>% 
 #'     compute("mtcars_filer",
-#'             s3_location = "s3://mybucket/mtcars_filer/"))
+#'             s3_location = "s3://mybucket/mtcars_filer/")
 #' 
 #' # Disconnect from Athena
 #' dbDisconnect(con)
