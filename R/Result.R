@@ -78,7 +78,10 @@ setMethod(
       # clear s3 athena output
       tryCatch(s3 <- res@connection@ptr$resource("s3"),
                error = function(e) py_error(e))
+        
+      # split s3_uri
       s3_info <- split_s3_uri(res@connection@info$s3_staging)
+      result_info <- split_s3_uri(query_execution$QueryExecution$ResultConfiguration$OutputLocation)
       
       tryCatch(bucket <- s3$Bucket(s3_info$bucket),
                error = function(e) py_error(e))
@@ -87,13 +90,9 @@ setMethod(
       eval.parent(substitute(res@connection@ptr <- NULL))
       eval.parent(substitute(res@athena <- NULL))
       
-      tryCatch(output <- iterate(bucket$objects$all(), list),
-               error = function(e) py_error(e))
-      s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
-      staging_file <- s3Objs[grepl(res@info$QueryExecutionId,s3Objs)]
-      tryCatch(s3$Object(s3_info$bucket, staging_file[1])$delete(),
+      tryCatch(s3$Object(s3_info$bucket, paste0(result_info$key, ".metadata"))$delete(),
                error = function(e) warning("Don't have access to free remote resource", call. = F))
-      tryCatch(s3$Object(s3_info$bucket, staging_file[2])$delete(),
+      tryCatch(s3$Object(s3_info$bucket, result_info$key)$delete(),
                error = function(e) cat(""))
       }
     invisible(TRUE)
@@ -140,15 +139,15 @@ setMethod(
     if (!dbIsValid(res)) {stop("Result already cleared", call. = FALSE)}
     # check status of query
     result <- poll(res)
-
-    tryCatch(s3 <- res@connection@ptr$resource("s3"),
-             error = function(e) py_error(e))
+    
     s3_info <- split_s3_uri(res@connection@info$s3_staging)
-    s3_stage_file <- res@info$QueryExecutionId
-
+    result_info <- split_s3_uri(result$QueryExecution$ResultConfiguration$OutputLocation)
+    
+    # if query failed stop
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
+  
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
@@ -165,24 +164,22 @@ setMethod(
     #create temp file
     File <- tempfile()
     on.exit(unlink(File))
-
-    tryCatch(bucket <- s3$Bucket(s3_info$bucket),
-             error = function(e) py_error(e))
-    output <- iterate(bucket$objects$all(), list)
-    s3Objs <- sapply(seq_along(output), function(i) output[[i]][[1]][["key"]])
-    staging_file <- s3Objs[grepl(s3_stage_file,s3Objs)][1]
-
-
-    tryCatch(s3$Bucket(s3_info$bucket)$download_file(staging_file, File),
+    
+    # connect to s3 and create a bucket object
+    tryCatch({s3 <- res@connection@ptr$resource("s3")},
              error = function(e) py_error(e))
     
+    # download athena output
+    tryCatch(s3$Bucket(s3_info$bucket)$download_file(result_info$key, File),
+             error = function(e) py_error(e))
     
+    # return metadata of athena data types
     tryCatch(result_class <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = as.integer(1)),
              error = function(e) py_error(e))
     Type <- tolower(sapply(result_class$ResultSet$ResultSetMetadata$ColumnInfo, function(x) x$Type))
     Type <- vapply(Type, athena_to_r, FUN.VALUE = character(1))
     
-    if(grepl("\\.csv$",staging_file)){
+    if(grepl("\\.csv$",result_info$key)){
       if (requireNamespace("data.table", quietly=TRUE)){output <- data.table::fread(File)}
       else {output <- read_athena(File, Type)}
     } else{
