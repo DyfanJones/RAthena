@@ -176,9 +176,15 @@ setMethod(
     tryCatch(s3$Bucket(s3_info$bucket)$download_file(staging_file, File),
              error = function(e) py_error(e))
     
+    
+    tryCatch(result_class <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = as.integer(1)),
+             error = function(e) py_error(e))
+    Type <- tolower(sapply(result_class$ResultSet$ResultSetMetadata$ColumnInfo, function(x) x$Type))
+    Type <- vapply(Type, athena_to_r, FUN.VALUE = character(1))
+    
     if(grepl("\\.csv$",staging_file)){
       if (requireNamespace("data.table", quietly=TRUE)){output <- data.table::fread(File)}
-      else {output <- suppressWarnings(read.csv(File, stringsAsFactors = F))}
+      else {output <- read_athena(File, Type)}
     } else{
       file_con <- file(File)
       output <- suppressWarnings(readLines(file_con))
