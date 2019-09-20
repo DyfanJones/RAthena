@@ -325,95 +325,117 @@
 <a class="sourceLine" id="cb24-13" title="13"> <span class="dv">9</span>          <span class="fl">4.4</span>         <span class="fl">2.9</span>          <span class="fl">1.4</span>         <span class="fl">0.2</span></a>
 <a class="sourceLine" id="cb24-14" title="14"><span class="dv">10</span>          <span class="fl">4.9</span>         <span class="fl">3.1</span>          <span class="fl">1.5</span>         <span class="fl">0.1</span></a>
 <a class="sourceLine" id="cb24-15" title="15"><span class="co"># … with more rows</span></a></code></pre></div>
+<p>Upload data using <code>dplyr</code> function <code>copy_to</code> and <code>compute</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb25-3" title="3"></a>
+<a class="sourceLine" id="cb25-4" title="4">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
+<a class="sourceLine" id="cb25-5" title="5">                <span class="dt">profile_name =</span> <span class="st">"your_profile"</span>,</a>
+<a class="sourceLine" id="cb25-6" title="6">                <span class="dt">s3_staging_dir=</span><span class="st">'s3://path/to/query/bucket/'</span>)</a></code></pre></div>
+<p>Write data.frame to Athena table</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw"><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to</a></span>(con, mtcars,</a>
+<a class="sourceLine" id="cb26-2" title="2">        <span class="dt">s3_location =</span> <span class="st">"s3://mybucket/data/"</span>)</a></code></pre></div>
+<p>Write Athena table from tbl_sql</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">athena_mtcars &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"mtcars"</span>)</a>
+<a class="sourceLine" id="cb27-2" title="2">mtcars_filter &lt;-<span class="st"> </span>athena_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(gear <span class="op">&gt;=</span><span class="dv">4</span>)</a></code></pre></div>
+<p>Create athena with unique table name</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">mtcars_filer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">compute</a></span>()</a></code></pre></div>
+<p>Create athena with specified name and s3 location</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">mtcars_filer <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">compute</a></span>(<span class="st">"mtcars_filer"</span>,</a>
+<a class="sourceLine" id="cb29-3" title="3">          <span class="dt">s3_location =</span> <span class="st">"s3://mybucket/mtcars_filer/"</span>)</a>
+<a class="sourceLine" id="cb29-4" title="4"></a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="co"># Disconnect from Athena</span></a>
+<a class="sourceLine" id="cb29-6" title="6"><span class="kw"><a href="reference/dbDisconnect.html">dbDisconnect</a></span>(con)</a></code></pre></div>
 </div>
 </div>
 <div id="work-groups" class="section level2">
 <h2 class="hasAnchor">
 <a href="#work-groups" class="anchor"></a>Work Groups</h2>
 <p>Creating work group:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb25-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb25-3" title="3"></a>
-<a class="sourceLine" id="cb25-4" title="4">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
-<a class="sourceLine" id="cb25-5" title="5">                <span class="dt">profile_name =</span> <span class="st">"your_profile"</span>,</a>
-<a class="sourceLine" id="cb25-6" title="6">                <span class="dt">encryption_option =</span> <span class="st">"SSE_S3"</span>,</a>
-<a class="sourceLine" id="cb25-7" title="7">                <span class="dt">s3_staging_dir=</span><span class="st">'s3://path/to/query/bucket/'</span>)</a>
-<a class="sourceLine" id="cb25-8" title="8"></a>
-<a class="sourceLine" id="cb25-9" title="9"><span class="kw"><a href="reference/work_group.html">create_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group"</span>,</a>
-<a class="sourceLine" id="cb25-10" title="10">                  <span class="dt">tags =</span> <span class="kw"><a href="reference/work_group.html">tag_options</a></span>(<span class="dt">key=</span> <span class="st">"demo_work_group"</span>, <span class="dt">value =</span> <span class="st">"demo_01"</span>))</a></code></pre></div>
-<p>List work groups:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw"><a href="reference/work_group.html">list_work_groups</a></span>(con)</a></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb27-2" title="2">[[<span class="dv">1</span>]]<span class="op">$</span>Name</a>
-<a class="sourceLine" id="cb27-3" title="3">[<span class="dv">1</span>] <span class="st">"demo_work_group"</span></a>
-<a class="sourceLine" id="cb27-4" title="4"></a>
-<a class="sourceLine" id="cb27-5" title="5">[[<span class="dv">1</span>]]<span class="op">$</span>State</a>
-<a class="sourceLine" id="cb27-6" title="6">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
-<a class="sourceLine" id="cb27-7" title="7"></a>
-<a class="sourceLine" id="cb27-8" title="8">[[<span class="dv">1</span>]]<span class="op">$</span>Description</a>
-<a class="sourceLine" id="cb27-9" title="9">[<span class="dv">1</span>] <span class="st">"This is a demo work group"</span></a>
-<a class="sourceLine" id="cb27-10" title="10"></a>
-<a class="sourceLine" id="cb27-11" title="11">[[<span class="dv">1</span>]]<span class="op">$</span>CreationTime</a>
-<a class="sourceLine" id="cb27-12" title="12"><span class="dv">2019-09-06</span> <span class="dv">18</span><span class="op">:</span><span class="dv">51</span><span class="op">:</span><span class="fl">28.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a>
-<a class="sourceLine" id="cb27-13" title="13"></a>
-<a class="sourceLine" id="cb27-14" title="14"></a>
-<a class="sourceLine" id="cb27-15" title="15">[[<span class="dv">2</span>]]</a>
-<a class="sourceLine" id="cb27-16" title="16">[[<span class="dv">2</span>]]<span class="op">$</span>Name</a>
-<a class="sourceLine" id="cb27-17" title="17">[<span class="dv">1</span>] <span class="st">"primary"</span></a>
-<a class="sourceLine" id="cb27-18" title="18"></a>
-<a class="sourceLine" id="cb27-19" title="19">[[<span class="dv">2</span>]]<span class="op">$</span>State</a>
-<a class="sourceLine" id="cb27-20" title="20">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
-<a class="sourceLine" id="cb27-21" title="21"></a>
-<a class="sourceLine" id="cb27-22" title="22">[[<span class="dv">2</span>]]<span class="op">$</span>Description</a>
-<a class="sourceLine" id="cb27-23" title="23">[<span class="dv">1</span>] <span class="st">""</span></a>
-<a class="sourceLine" id="cb27-24" title="24"></a>
-<a class="sourceLine" id="cb27-25" title="25">[[<span class="dv">2</span>]]<span class="op">$</span>CreationTime</a>
-<a class="sourceLine" id="cb27-26" title="26"><span class="dv">2019-08-22</span> <span class="dv">16</span><span class="op">:</span><span class="dv">14</span><span class="op">:</span><span class="fl">47.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a></code></pre></div>
-<p>Update work group:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw"><a href="reference/work_group.html">update_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group update"</span>)</a></code></pre></div>
-<p>Return work group meta data:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw"><a href="reference/work_group.html">get_work_group</a></span>(con, <span class="st">"demo_work_group"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="op">$</span>Name</a>
-<a class="sourceLine" id="cb30-2" title="2">[<span class="dv">1</span>] <span class="st">"demo_work_group"</span></a>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
+<a class="sourceLine" id="cb30-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb30-3" title="3"></a>
-<a class="sourceLine" id="cb30-4" title="4"><span class="op">$</span>State</a>
-<a class="sourceLine" id="cb30-5" title="5">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
-<a class="sourceLine" id="cb30-6" title="6"></a>
-<a class="sourceLine" id="cb30-7" title="7"><span class="op">$</span>Configuration</a>
-<a class="sourceLine" id="cb30-8" title="8"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration</a>
-<a class="sourceLine" id="cb30-9" title="9"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>OutputLocation</a>
-<a class="sourceLine" id="cb30-10" title="10">[<span class="dv">1</span>] <span class="st">"s3://path/to/query/bucket/"</span></a>
-<a class="sourceLine" id="cb30-11" title="11"></a>
-<a class="sourceLine" id="cb30-12" title="12"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>EncryptionConfiguration</a>
-<a class="sourceLine" id="cb30-13" title="13"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>EncryptionConfiguration<span class="op">$</span>EncryptionOption</a>
-<a class="sourceLine" id="cb30-14" title="14">[<span class="dv">1</span>] <span class="st">"SSE_S3"</span></a>
-<a class="sourceLine" id="cb30-15" title="15"></a>
-<a class="sourceLine" id="cb30-16" title="16"></a>
-<a class="sourceLine" id="cb30-17" title="17"></a>
-<a class="sourceLine" id="cb30-18" title="18"><span class="op">$</span>Configuration<span class="op">$</span>EnforceWorkGroupConfiguration</a>
-<a class="sourceLine" id="cb30-19" title="19">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb30-20" title="20"></a>
-<a class="sourceLine" id="cb30-21" title="21"><span class="op">$</span>Configuration<span class="op">$</span>PublishCloudWatchMetricsEnabled</a>
-<a class="sourceLine" id="cb30-22" title="22">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb30-23" title="23"></a>
-<a class="sourceLine" id="cb30-24" title="24"><span class="op">$</span>Configuration<span class="op">$</span>BytesScannedCutoffPerQuery</a>
-<a class="sourceLine" id="cb30-25" title="25">[<span class="dv">1</span>] <span class="dv">10000000</span></a>
-<a class="sourceLine" id="cb30-26" title="26"></a>
-<a class="sourceLine" id="cb30-27" title="27"><span class="op">$</span>Configuration<span class="op">$</span>RequesterPaysEnabled</a>
-<a class="sourceLine" id="cb30-28" title="28">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb30-29" title="29"></a>
-<a class="sourceLine" id="cb30-30" title="30"></a>
-<a class="sourceLine" id="cb30-31" title="31"><span class="op">$</span>Description</a>
-<a class="sourceLine" id="cb30-32" title="32">[<span class="dv">1</span>] <span class="st">"This is a demo work group update"</span></a>
-<a class="sourceLine" id="cb30-33" title="33"></a>
-<a class="sourceLine" id="cb30-34" title="34"><span class="op">$</span>CreationTime</a>
-<a class="sourceLine" id="cb30-35" title="35"><span class="dv">2019-09-06</span> <span class="dv">18</span><span class="op">:</span><span class="dv">51</span><span class="op">:</span><span class="fl">28.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a></code></pre></div>
+<a class="sourceLine" id="cb30-4" title="4">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
+<a class="sourceLine" id="cb30-5" title="5">                <span class="dt">profile_name =</span> <span class="st">"your_profile"</span>,</a>
+<a class="sourceLine" id="cb30-6" title="6">                <span class="dt">encryption_option =</span> <span class="st">"SSE_S3"</span>,</a>
+<a class="sourceLine" id="cb30-7" title="7">                <span class="dt">s3_staging_dir=</span><span class="st">'s3://path/to/query/bucket/'</span>)</a>
+<a class="sourceLine" id="cb30-8" title="8"></a>
+<a class="sourceLine" id="cb30-9" title="9"><span class="kw"><a href="reference/work_group.html">create_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group"</span>,</a>
+<a class="sourceLine" id="cb30-10" title="10">                  <span class="dt">tags =</span> <span class="kw"><a href="reference/work_group.html">tag_options</a></span>(<span class="dt">key=</span> <span class="st">"demo_work_group"</span>, <span class="dt">value =</span> <span class="st">"demo_01"</span>))</a></code></pre></div>
+<p>List work groups:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw"><a href="reference/work_group.html">list_work_groups</a></span>(con)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb32-2" title="2">[[<span class="dv">1</span>]]<span class="op">$</span>Name</a>
+<a class="sourceLine" id="cb32-3" title="3">[<span class="dv">1</span>] <span class="st">"demo_work_group"</span></a>
+<a class="sourceLine" id="cb32-4" title="4"></a>
+<a class="sourceLine" id="cb32-5" title="5">[[<span class="dv">1</span>]]<span class="op">$</span>State</a>
+<a class="sourceLine" id="cb32-6" title="6">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
+<a class="sourceLine" id="cb32-7" title="7"></a>
+<a class="sourceLine" id="cb32-8" title="8">[[<span class="dv">1</span>]]<span class="op">$</span>Description</a>
+<a class="sourceLine" id="cb32-9" title="9">[<span class="dv">1</span>] <span class="st">"This is a demo work group"</span></a>
+<a class="sourceLine" id="cb32-10" title="10"></a>
+<a class="sourceLine" id="cb32-11" title="11">[[<span class="dv">1</span>]]<span class="op">$</span>CreationTime</a>
+<a class="sourceLine" id="cb32-12" title="12"><span class="dv">2019-09-06</span> <span class="dv">18</span><span class="op">:</span><span class="dv">51</span><span class="op">:</span><span class="fl">28.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a>
+<a class="sourceLine" id="cb32-13" title="13"></a>
+<a class="sourceLine" id="cb32-14" title="14"></a>
+<a class="sourceLine" id="cb32-15" title="15">[[<span class="dv">2</span>]]</a>
+<a class="sourceLine" id="cb32-16" title="16">[[<span class="dv">2</span>]]<span class="op">$</span>Name</a>
+<a class="sourceLine" id="cb32-17" title="17">[<span class="dv">1</span>] <span class="st">"primary"</span></a>
+<a class="sourceLine" id="cb32-18" title="18"></a>
+<a class="sourceLine" id="cb32-19" title="19">[[<span class="dv">2</span>]]<span class="op">$</span>State</a>
+<a class="sourceLine" id="cb32-20" title="20">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
+<a class="sourceLine" id="cb32-21" title="21"></a>
+<a class="sourceLine" id="cb32-22" title="22">[[<span class="dv">2</span>]]<span class="op">$</span>Description</a>
+<a class="sourceLine" id="cb32-23" title="23">[<span class="dv">1</span>] <span class="st">""</span></a>
+<a class="sourceLine" id="cb32-24" title="24"></a>
+<a class="sourceLine" id="cb32-25" title="25">[[<span class="dv">2</span>]]<span class="op">$</span>CreationTime</a>
+<a class="sourceLine" id="cb32-26" title="26"><span class="dv">2019-08-22</span> <span class="dv">16</span><span class="op">:</span><span class="dv">14</span><span class="op">:</span><span class="fl">47.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a></code></pre></div>
+<p>Update work group:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="reference/work_group.html">update_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group update"</span>)</a></code></pre></div>
+<p>Return work group meta data:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw"><a href="reference/work_group.html">get_work_group</a></span>(con, <span class="st">"demo_work_group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="op">$</span>Name</a>
+<a class="sourceLine" id="cb35-2" title="2">[<span class="dv">1</span>] <span class="st">"demo_work_group"</span></a>
+<a class="sourceLine" id="cb35-3" title="3"></a>
+<a class="sourceLine" id="cb35-4" title="4"><span class="op">$</span>State</a>
+<a class="sourceLine" id="cb35-5" title="5">[<span class="dv">1</span>] <span class="st">"ENABLED"</span></a>
+<a class="sourceLine" id="cb35-6" title="6"></a>
+<a class="sourceLine" id="cb35-7" title="7"><span class="op">$</span>Configuration</a>
+<a class="sourceLine" id="cb35-8" title="8"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration</a>
+<a class="sourceLine" id="cb35-9" title="9"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>OutputLocation</a>
+<a class="sourceLine" id="cb35-10" title="10">[<span class="dv">1</span>] <span class="st">"s3://path/to/query/bucket/"</span></a>
+<a class="sourceLine" id="cb35-11" title="11"></a>
+<a class="sourceLine" id="cb35-12" title="12"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>EncryptionConfiguration</a>
+<a class="sourceLine" id="cb35-13" title="13"><span class="op">$</span>Configuration<span class="op">$</span>ResultConfiguration<span class="op">$</span>EncryptionConfiguration<span class="op">$</span>EncryptionOption</a>
+<a class="sourceLine" id="cb35-14" title="14">[<span class="dv">1</span>] <span class="st">"SSE_S3"</span></a>
+<a class="sourceLine" id="cb35-15" title="15"></a>
+<a class="sourceLine" id="cb35-16" title="16"></a>
+<a class="sourceLine" id="cb35-17" title="17"></a>
+<a class="sourceLine" id="cb35-18" title="18"><span class="op">$</span>Configuration<span class="op">$</span>EnforceWorkGroupConfiguration</a>
+<a class="sourceLine" id="cb35-19" title="19">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb35-20" title="20"></a>
+<a class="sourceLine" id="cb35-21" title="21"><span class="op">$</span>Configuration<span class="op">$</span>PublishCloudWatchMetricsEnabled</a>
+<a class="sourceLine" id="cb35-22" title="22">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb35-23" title="23"></a>
+<a class="sourceLine" id="cb35-24" title="24"><span class="op">$</span>Configuration<span class="op">$</span>BytesScannedCutoffPerQuery</a>
+<a class="sourceLine" id="cb35-25" title="25">[<span class="dv">1</span>] <span class="dv">10000000</span></a>
+<a class="sourceLine" id="cb35-26" title="26"></a>
+<a class="sourceLine" id="cb35-27" title="27"><span class="op">$</span>Configuration<span class="op">$</span>RequesterPaysEnabled</a>
+<a class="sourceLine" id="cb35-28" title="28">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb35-29" title="29"></a>
+<a class="sourceLine" id="cb35-30" title="30"></a>
+<a class="sourceLine" id="cb35-31" title="31"><span class="op">$</span>Description</a>
+<a class="sourceLine" id="cb35-32" title="32">[<span class="dv">1</span>] <span class="st">"This is a demo work group update"</span></a>
+<a class="sourceLine" id="cb35-33" title="33"></a>
+<a class="sourceLine" id="cb35-34" title="34"><span class="op">$</span>CreationTime</a>
+<a class="sourceLine" id="cb35-35" title="35"><span class="dv">2019-09-06</span> <span class="dv">18</span><span class="op">:</span><span class="dv">51</span><span class="op">:</span><span class="fl">28.902000</span><span class="op">+</span><span class="dv">01</span><span class="op">:</span><span class="dv">00</span></a></code></pre></div>
 <p>Connect to Athena using work group:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
-<a class="sourceLine" id="cb31-2" title="2">                <span class="dt">profile_name =</span> <span class="st">"your_profile"</span>,</a>
-<a class="sourceLine" id="cb31-3" title="3">                <span class="dt">work_group =</span> <span class="st">"demo_work_group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>(),</a>
+<a class="sourceLine" id="cb36-2" title="2">                <span class="dt">profile_name =</span> <span class="st">"your_profile"</span>,</a>
+<a class="sourceLine" id="cb36-3" title="3">                <span class="dt">work_group =</span> <span class="st">"demo_work_group"</span>)</a></code></pre></div>
 <p>Delete work group:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw"><a href="reference/work_group.html">delete_work_group</a></span>(con, <span class="st">"demo_work_group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw"><a href="reference/work_group.html">delete_work_group</a></span>(con, <span class="st">"demo_work_group"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="similar-projects" class="section level1">

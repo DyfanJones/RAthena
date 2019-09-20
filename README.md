@@ -337,6 +337,44 @@ tbl(con, "iris") %>%
     10          4.9         3.1          1.5         0.1
     # … with more rows
 
+Upload data using `dplyr` function `copy_to` and `compute`.
+
+``` r
+library(DBI)
+library(dplyr)
+
+con <- dbConnect(RAthena::athena(),
+                profile_name = "your_profile",
+                s3_staging_dir='s3://path/to/query/bucket/')
+```
+
+Write data.frame to Athena table
+```r
+copy_to(con, mtcars,
+        s3_location = "s3://mybucket/data/")
+```              
+
+Write Athena table from tbl_sql
+```r
+athena_mtcars <- tbl(con, "mtcars")
+mtcars_filter <- athena_mtcars %>% filter(gear >=4)
+```
+
+Create athena with unique table name
+```r
+mtcars_filer %>% compute()
+```
+
+Create athena with specified name and s3 location
+```r
+mtcars_filer %>% 
+  compute("mtcars_filer",
+          s3_location = "s3://mybucket/mtcars_filer/")
+
+# Disconnect from Athena
+dbDisconnect(con)
+```
+
 ## Work Groups
 
 Creating work group:
