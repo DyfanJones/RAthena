@@ -15,18 +15,20 @@ test_that("Check RAthena s3 dplyr copy_to method",{
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   # creates Athena table and returns tbl_sql
-  mtcars2 <- copy_to(con, mtcars, s3_location = Sys.getenv("rathena_s3_tbl"), overwrite = T)
-  mtcars_filter <- mtcars2 %>% filter(gear >=4)
+  athena_mtcars <- copy_to(con, mtcars, s3_location = Sys.getenv("rathena_s3_tbl"))
+  mtcars_filter <- athena_mtcars %>% filter(gear >=4)
+  tbl_result <- is.tbl(mtcars_filter)
   # create another Athena table
-  copy_to(con, mtcars_filer)
+  copy_to(con, mtcars_filter)
   
   result1 <- dbExistsTable(con, "mtcars")
-  result1 <- dbExistsTable(con, "mtcars2")
+  result2 <- dbExistsTable(con, "mtcars_filter")
   
   # clean up athena
-  suppressWarnings(dbRemoveTable(con, "mtcars")) # suppress expected warning
-  suppressWarnings(dbRemoveTable(con, "mtcars_filter")) # suppress expected warning
+  dbRemoveTable(con, "mtcars")
+  dbRemoveTable(con, "mtcars_filter")
   
-  expect_equal(result1, TRUE)
-  expect_equal(result2, TRUE)
+  expect_true(tbl_result)
+  expect_true(result1)
+  expect_true(result2)
 })
