@@ -14,3 +14,19 @@ AthenaDataType <-
       stop("Unknown class ", paste(class(fields), collapse = "/"), call. = FALSE)
     )
   }
+
+athena_to_r <- function(x){
+  switch(x,
+         boolean = "logical",
+         int ="numeric",
+         integer = "integer",
+         tinyint = "integer",
+         smallint = "integer",
+         bigint = "integer",
+         float = "double",
+         decimal = "double",
+         string = "character",
+         varchar = "character",
+         date = "Date",
+         timestamp = "POSIXct")
+}
