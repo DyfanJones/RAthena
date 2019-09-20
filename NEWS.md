@@ -31,6 +31,7 @@
 * Athena Work Groups
 * Athena Metadata
 * dplyr compute
+* dplyr copy_to
 
 # RAthena 1.1.0
 ### New Features
