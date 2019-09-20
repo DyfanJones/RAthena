@@ -15,7 +15,7 @@ test_that("Check RAthena s3 dplyr compute method",{
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   athena_tbl <- tbl(con, sql("SELECT * FROM INFORMATION_SCHEMA.TABLES"))
-  athena_tbl %>% compute("compute_tbl1", s3.location = paste0(Sys.getenv("rathena_s3_tbl"),"compute_tbl/"))
+  athena_tbl %>% compute("compute_tbl1", s3_location = paste0(Sys.getenv("rathena_s3_tbl"),"compute_tbl/"))
   athena_tbl %>% compute("compute_tbl2")
   result1 <- dbExistsTable(con, "compute_tbl1")
   result2 <- dbExistsTable(con, "compute_tbl2")
