@@ -511,7 +511,7 @@ setMethod(
     
     res <- dbExecute(conn, paste("DROP TABLE ", name, ";"))
     dbClearResult(res)
-    warning("Only Athena table has been removed, Athena cannot remove s3 data from your account.", call. = FALSE)
+    message("Info: Only Athena table has been removed, Athena cannot remove s3 data from your account.")
     invisible(TRUE)
   })
 
