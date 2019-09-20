@@ -104,7 +104,9 @@ db_save_query_with <- function(file.type, s3.location,partition){
 #' @param types Additional field types used to override derived types.
 #' @param s3_location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
-#' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
+#' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]. 
+#'                  *Note:* "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
+#' @param ... other parameters currently not supported in RAthena
 #' @name db_copy_to
 #' @seealso \code{\link{AthenaWriteTables}}
 #' @return
@@ -114,13 +116,13 @@ db_copy_to.AthenaConnection <- function(con, table, values,
                                         overwrite = FALSE, append = FALSE,
                                         types = NULL, partition = NULL,
                                         s3_location = NULL, 
-                                        file_type = c("csv", "tsv", "parquet")){
+                                        file_type = c("csv", "tsv", "parquet"), ...){
   
   types <- types %||% dbDataType(con, values)
   names(types) <- names(values)
   
   file_type = match.arg(file_type)
-  dbWriteTable(conn = con, name = table,
+  dbWriteTable(conn = con, name = table, value = values,
                overwrite = overwrite, append = append,
                field.types = types, partition = partition,
                s3.location = s3_location, file.type = file_type)
