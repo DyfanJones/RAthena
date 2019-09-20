@@ -7,7 +7,7 @@
 \usage{
 db_copy_to.AthenaConnection(con, table, values, overwrite = FALSE,
   append = FALSE, types = NULL, partition = NULL,
-  s3_location = NULL, file_type = c("csv", "tsv", "parquet"))
+  s3_location = NULL, file_type = c("csv", "tsv", "parquet"), ...)
 }
 \arguments{
 \item{con}{A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}}
@@ -30,7 +30,10 @@ just any valid bare table name.}
 
 \item{s3_location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
 
-\item{file_type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
+\item{file_type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]. 
+*Note:* "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
+
+\item{...}{other parameters currently not supported in RAthena}
 }
 \value{
 db_copy_to returns table name
