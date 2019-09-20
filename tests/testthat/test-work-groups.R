@@ -22,7 +22,6 @@ test_that("Create and Delete Athena Work Groups",{
   output2 <- list_work_groups(con)
   work_groups2 <- sapply(output2, function(x) x$Name)
   
-  
   meta_data1 <- get_work_group(con, "demo_work_group")$Description
   update_work_group(con, "demo_work_group", description = "This is a demo work group update")
   meta_data2 <- get_work_group(con, "demo_work_group")$Description

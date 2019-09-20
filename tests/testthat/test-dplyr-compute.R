@@ -21,8 +21,8 @@ test_that("Check RAthena s3 dplyr compute method",{
   result2 <- dbExistsTable(con, "compute_tbl2")
   
   # clean up athena
-  suppressWarnings(dbRemoveTable(con, "compute_tbl1")) # suppress expected warning
-  suppressWarnings(dbRemoveTable(con, "compute_tbl2")) # suppress expected warning
+  dbRemoveTable(con, "compute_tbl1")
+  dbRemoveTable(con, "compute_tbl2")
   
   # clean s3: Athena is unable to clean up s3
   s3 <- con@ptr$resource("s3")
