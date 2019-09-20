@@ -41,6 +41,43 @@ db_copy_to returns table name
 \description{
 This is an Athena method for dbplyr function \code{db_copy_to} to create an Athena table from a \code{data.frame}.
 }
+\examples{
+\dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
+library(DBI)
+library(dplyr)
+
+# Demo connection to Athena using profile name 
+con <- dbConnect(RAthena::athena(),
+                 profile_name = "YOUR_PROFILE_NAME",
+                 s3_staging_dir = "s3://path/to/query/bucket/")
+
+# List existing tables in Athena
+dbListTables(con)
+
+# Write data.frame to Athena table
+copy_to(con, mtcars,
+        s3_location = "s3://mybucket/data/")
+             
+# Checking if uploaded table exists in Athena
+dbExistsTable(con, "mtcars")
+
+# Write Athena table from tbl_sql
+athena_mtcars <- tbl(con, "mtcars")
+mtcars_filter <- athena_mtcars \%>\% filter(gear >=4)
+
+copy_to(con, mtcars_filter)
+
+# Checking if uploaded table exists in Athena
+dbExistsTable(con, "mtcars_filter") 
+
+# Disconnect from Athena
+dbDisconnect(con)
+}
+}
 \seealso{
 \code{\link{AthenaWriteTables}}
 }

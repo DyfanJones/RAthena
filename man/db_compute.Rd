@@ -14,7 +14,7 @@ db_compute.AthenaConnection(con, table, sql, ...)
 
 \item{sql}{SQL code to be sent to the data}
 
-\item{...}{passes \code{RAthena} table creation parameters: [\code{file.type},\code{s3.location},\code{partition}]}
+\item{...}{passes \code{RAthena} table creation parameters: [\code{file_type},\code{s3_location},\code{partition}]}
 }
 \value{
 db_compute returns table name
@@ -24,4 +24,37 @@ This is a backend function for dplyr's \code{compute} function. Users won't be r
 }
 \seealso{
 \code{\link{db_save_query}}
+\dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
+library(DBI)
+library(dplyr)
+
+# Demo connection to Athena using profile name 
+con <- dbConnect(RAthena::athena(),
+                 profile_name = "YOUR_PROFILE_NAME",
+                 s3_staging_dir = "s3://path/to/query/bucket/")
+
+# Write data.frame to Athena table
+copy_to(con, mtcars,
+        s3_location = "s3://mybucket/data/")
+             
+# Write Athena table from tbl_sql
+athena_mtcars <- tbl(con, "mtcars")
+mtcars_filter <- athena_mtcars %>% filter(gear >=4)
+
+# create athena with unique table name
+mtcars_filer %>% 
+  compute()
+
+# create athena with specified name and s3 location
+mtcars_filer %>% 
+    compute("mtcars_filer",
+            s3_location = "s3://mybucket/mtcars_filer/"))
+
+# Disconnect from Athena
+dbDisconnect(con)
+}
 }
