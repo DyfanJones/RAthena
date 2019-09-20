@@ -121,7 +121,7 @@ Athena_write_table <-
     }
 
     if (found && overwrite) {
-      suppressWarnings(dbRemoveTable(conn, Name)) # suppressing user warning around athena limitations
+      suppressMessages(dbRemoveTable(conn, Name)) # suppressing info message
     }
 
     # send data over to s3 bucket
