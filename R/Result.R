@@ -90,8 +90,9 @@ setMethod(
       eval.parent(substitute(res@connection@ptr <- NULL))
       eval.parent(substitute(res@athena <- NULL))
       
+      # Out put Python error as warning if s3 resource can't be dropped
       tryCatch(s3$Object(s3_info$bucket, paste0(result_info$key, ".metadata"))$delete(),
-               error = function(e) warning("Don't have access to free remote resource", call. = F))
+               error = function(e) py_warning(e))
       tryCatch(s3$Object(s3_info$bucket, result_info$key)$delete(),
                error = function(e) cat(""))
       }
