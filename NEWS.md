@@ -24,7 +24,14 @@
 * Removed old s3_staging_dir validation check from `dbConnect` method
 * Improved `dbFetch` with chunk sizes between 0 - 999. Fixed error where `for loop` would return error instead of breaking.
 * simplified `py_error` function, set `call.` parameter to `FALSE`
-* `AthenaQuery` s4 changed to `AthenaResult`
+* `AthenaQuery` s4 class changed to `AthenaResult`
+* `dbFetch` added datatype collection
+* `dbFetch` replaced S3 search for query key with output location from Athena
+* `dbClearResult` changed error, to return python error as warning to warn user doesn't have permission to delete S3 resource
+* `dbClearResult` replaced S3 search for query key with out location from Athena
+
+### Bug Fixes
+* `dbFetch` athena data type miss alignment
 
 ### Unit tests
 * ARN Connection
