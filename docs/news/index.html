@@ -159,8 +159,24 @@
 <li>simplified <code>py_error</code> function, set <code>call.</code> parameter to <code>FALSE</code>
 </li>
 <li>
-<code>AthenaQuery</code> s4 changed to <code>AthenaResult</code>
+<code>AthenaQuery</code> s4 class changed to <code>AthenaResult</code>
 </li>
+<li>
+<code>dbFetch</code> added datatype collection</li>
+<li>
+<code>dbFetch</code> replaced S3 search for query key with output location from Athena</li>
+<li>
+<code>dbClearResult</code> changed error, to return python error as warning to warn user doesn’t have permission to delete S3 resource</li>
+<li>
+<code>dbClearResult</code> replaced S3 search for query key with out location from Athena</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<ul>
+<li>
+<code>dbFetch</code> athena data type miss alignment</li>
 </ul>
 </div>
 <div id="unit-tests" class="section level3">
@@ -209,9 +225,9 @@
     <div id="rathena-103" class="section level1">
 <h1 class="page-header">
 <a href="#rathena-103" class="anchor"></a>RAthena 1.0.3</h1>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using <code>dbWriteTable</code>)</li>
 </ul>
@@ -249,9 +265,9 @@
 </li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>fixed bug with field names containing “.”, replace with "_" for Athena tables.</li>
 </ul>
