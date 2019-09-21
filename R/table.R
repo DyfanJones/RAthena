@@ -76,8 +76,8 @@ Athena_write_table <-
     # made everything lower case due to aws Athena issue: https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/
     name <- tolower(name)
     s3.location <- tolower(s3.location)
+    if(!is.null(partition) && is.null(names(partition))) stop("partition parameter requires to be a named vector or list", call. = FALSE)
     if(!is.null(partition)) {names(partition) <- tolower(names(partition))}
-    if(!is.null(partition) && names(partition) == "") stop("partition parameter requires to be a named vector or list", call. = FALSE)
     
     if(!grepl("\\.", name)) Name <- paste(conn@info$dbms.name, name, sep = ".") 
     else{Name <- name
