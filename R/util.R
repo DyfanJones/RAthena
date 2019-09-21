@@ -49,6 +49,13 @@ py_error <- function(e){
   stop(py_err$value, call. = F)
   }
 
+# python warning handler
+py_warning <- function(e){
+  py_err <- py_last_error()
+  warning(py_err$value, call. = F)
+}
+
+
 # checks if resource is active
 resource_active <- function(dbObj){
   UseMethod("resource_active")
