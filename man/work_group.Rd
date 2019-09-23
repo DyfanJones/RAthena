@@ -100,6 +100,10 @@ Lower level API access, allows user to create and delete Athena Work Groups.
 }
 \examples{
 \dontrun{
+# Note: 
+# - Require AWS Account to run below example.
+# - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+
 library(RAthena)
 
 # Demo connection to Athena using profile name 
