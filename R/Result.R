@@ -122,7 +122,7 @@ setMethod(
 #' dbFetch(res)
 #' dbClearResult(res)
 #' 
-#' # Check if connection if valid after closing connection
+#' # Disconnect from Athena
 #' dbDisconnect(con)
 #' }
 #' @docType methods
