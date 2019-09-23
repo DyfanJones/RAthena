@@ -1,8 +1,7 @@
 ## Release Summary
 This a resubmission addressing cran comments and a feature release exposing amazon web services (AWS) Athena work groups, AWS Assume Resource Name (ARN) roles, extra DBI methods and dplyr integration
 
-## Resubmission
-This is a resubmission. In this version I have:
+In this version I have:
 
 * Converted the DESCRIPTION title to title case.
 * More clearly identified the copyright holders in the DESCRIPTION
@@ -19,7 +18,7 @@ This is a resubmission. In this version I have:
   * Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
 ## Test environments
-* local OS X install, R 3.5.2
+* local OS X install, R 3.6.1
 * rhub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
 
 ## R CMD check results (local)
