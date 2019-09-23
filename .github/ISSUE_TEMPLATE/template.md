@@ -1,8 +1,8 @@
 ---
 name: Template
 about: Package Issue
-title: ''
-labels: bug
+title: BUG
+labels: ''
 assignees: ''
 
 ---
