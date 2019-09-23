@@ -162,7 +162,8 @@ if entire dataframe is required use <code>n = -1</code> or <code>n = Inf</code>.
 <span class='fu'>dbFetch</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt;       var1
 #&gt; 1  default
 #&gt; 2 sampledb
-#&gt; 3     test</div><div class='input'><span class='fu'>dbClearResults</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbClearResults(res): could not find function "dbClearResults"</span></div><div class='input'>
+#&gt; 3     test</div><div class='input'><span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
+
 <span class='co'># Check if connection if valid after closing connection</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
 <span class='co'># }</span></div></pre>
