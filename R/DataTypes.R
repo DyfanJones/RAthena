@@ -31,6 +31,7 @@ AthenaToRDataType <- function(data_type){
          string = "character",
          varchar = "character",
          date = "Date",
-         timestamp = "POSIXct")}
+         timestamp = "POSIXct",
+         x)}
   vapply(Types, athena_to_r, FUN.VALUE = character(1))
 }
