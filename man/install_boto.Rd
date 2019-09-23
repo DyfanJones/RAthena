@@ -34,11 +34,3 @@ Install Amazon SDK boto3 for Athena connection
 \note{
 [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
 }
-\examples{
-\donttest{
-library(RAthena)
- 
-# install boto3 in default environment "RAthena"
-install_boto()
-}
-}

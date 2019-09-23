@@ -33,16 +33,17 @@ Get DBMS metadata
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
                  
 # Returns metadata from connnection object
-dbGetInfo(con)
+metadata <- dbGetInfo(con)
 
 # Return metadata from Athena query object
 res <- dbSendQuery(con, "show databases")
 dbGetInfo(res)
+
+# Clear result
+dbClearResult(res)
 
 # disconnect from Athena
 dbDisconnect(con)

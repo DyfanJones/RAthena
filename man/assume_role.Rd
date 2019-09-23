@@ -34,7 +34,7 @@ These temporary credentials consist of an access key ID, a secret access key, an
 your account or for cross-account access.
 }
 \examples{
-\donttest{
+\dontrun{
 # Note: 
 # - Require AWS Account to run below example.
 
@@ -47,8 +47,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
             set_env = TRUE)
             
 # Connect to Athena using ARN Role
-con <- dbConnect(athena(),
-                s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 }
 }
 \seealso{

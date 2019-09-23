@@ -29,9 +29,7 @@ and removed the connection resource locally.
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 res <- dbSendQuery(con, "show databases")
 dbClearResult(res)

@@ -18,13 +18,6 @@
 #'   
 #' @note [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
 #' @return Returns \code{NULL} after installing \code{Python} \code{Boto3}.
-#' @examples 
-#' \donttest{
-#' library(RAthena)
-#'  
-#' # install boto3 in default environment "RAthena"
-#' install_boto()
-#'}
 #' @export
 
 install_boto <- function(method = c("auto", "virtualenv", "conda"),

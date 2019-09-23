@@ -44,9 +44,7 @@ setClass(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' res <- dbSendQuery(con, "show databases")
 #' dbClearResult(res)
@@ -118,13 +116,11 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' res <- dbSendQuery(con, "show databases")
 #' dbFetch(res)
-#' dbClearResults(res)
+#' dbClearResult(res)
 #' 
 #' # Check if connection if valid after closing connection
 #' dbDisconnect(con)
@@ -211,9 +207,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Check if query has completed
 #' res <- dbSendQuery(con, "show databases")
@@ -278,12 +272,10 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Get Column information from query
-#' res <- dbSendQuery(con, "select * from mydataframe")
+#' res <- dbSendQuery(con, "select * from information_schema.tables")
 #' dbColumnInfo(res)
 #' dbClearResult(res)
 #'  

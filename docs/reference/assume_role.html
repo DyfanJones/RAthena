@@ -179,8 +179,7 @@ This setting can have a value from 1 hour to 12 hours. By default duration is se
             <span class='kw'>set_env</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Connect to Athena using ARN Role</span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='fu'><a href='athena.html'>athena</a></span>(),
-                <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/query/bucket/"</span>)
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -28,7 +28,7 @@ db_compute returns table name
 This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.
 }
 \examples{
-\donttest{
+\dontrun{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -37,9 +37,7 @@ library(DBI)
 library(dplyr)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # Write data.frame to Athena table
 copy_to(con, mtcars,

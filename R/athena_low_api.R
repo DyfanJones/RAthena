@@ -63,28 +63,30 @@
 #' library(RAthena)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'
 #' # List current work group available
-#' list_work_group(con)
+#' list_work_groups(con)
 #'
 #' # Create a new work group
-#' create_work_group(con, "demo_work_group", description = "This is a demo work group",
-#'                   tags = tag_options(key= "demo_work_group", value = "demo_01"))
+#' wg <- create_work_group(con,
+#'                   "demo_work_group",
+#'                    description = "This is a demo work group",
+#'                    tags = tag_options(key= "demo_work_group", value = "demo_01"))
 #'  
 #' # List work groups to see new work group
-#' list_work_group(con)
+#' list_work_groups(con)
 #' 
 #' # get meta data from work group
-#' get_work_group(con, "demo_work_group")
+#' wg <- get_work_group(con, "demo_work_group")
 #' 
 #' # Update work group
-#' update_work_group(con, "demo_work_group", description = "This is a demo work group update")
+#' wg <- update_work_group(con, "demo_work_group",
+#'                   description = "This is a demo work group update")
+#' 
 #' 
 #' # get updated meta data from work group
-#' get_work_group(con, "demo_work_group")                  
+#' wg <- get_work_group(con, "demo_work_group") 
 #' 
 #' # Delete work group
 #' delete_work_group(con, "demo_work_group")
@@ -228,7 +230,7 @@ update_work_group <- function(conn,
 #' @return \code{get_session_token()} returns a list containing: \code{"AccessKeyId"}, \code{"SecretAccessKey"}, \code{"SessionToken"} and \code{"Expiration"}
 #' 
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' 
@@ -242,8 +244,7 @@ update_work_group <- function(conn,
 #'                   set_env = TRUE)
 #'
 #' # Connect to Athena using temporary credentials
-#' con <- dbConnect(athena(),
-#'                 s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(athena())
 #' }
 #' @name session_token
 #' @export
@@ -289,7 +290,7 @@ get_session_token <- function(profile_name = NULL,
 #' @return \code{assume_role()} returns a list containing: \code{"AccessKeyId"}, \code{"SecretAccessKey"}, \code{"SessionToken"} and \code{"Expiration"}
 #' @seealso \code{\link{dbConnect}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' 
@@ -302,8 +303,7 @@ get_session_token <- function(profile_name = NULL,
 #'             set_env = TRUE)
 #'             
 #' # Connect to Athena using ARN Role
-#' con <- dbConnect(athena(),
-#'                 s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' }
 #' @export
 assume_role <- function(profile_name = NULL,

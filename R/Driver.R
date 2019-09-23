@@ -80,7 +80,7 @@ setMethod(
 #' @aliases dbConnect
 #' @return \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Connect to Athena using your aws access keys
 #'  library(DBI)
 #'  con <- dbConnect(RAthena:athena(),
