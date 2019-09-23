@@ -2,7 +2,7 @@
 name: Template
 about: Package Issue
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
