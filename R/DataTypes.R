@@ -15,10 +15,13 @@ AthenaDataType <-
     )
   }
 
-athena_to_r <- function(x){
-  switch(x,
+
+AthenaToRDataType <- function(data_type){
+  Types <- tolower(sapply(data_type, function(x) x$Type))
+  athena_to_r <- function(x){
+    switch(x,
          boolean = "logical",
-         int ="numeric",
+         int ="integer",
          integer = "integer",
          tinyint = "integer",
          smallint = "integer",
@@ -28,5 +31,6 @@ athena_to_r <- function(x){
          string = "character",
          varchar = "character",
          date = "Date",
-         timestamp = "POSIXct")
+         timestamp = "POSIXct")}
+  vapply(Types, athena_to_r, FUN.VALUE = character(1))
 }

@@ -177,8 +177,8 @@ setMethod(
     # return metadata of athena data types
     tryCatch(result_class <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = as.integer(1)),
              error = function(e) py_error(e))
-    Type <- tolower(sapply(result_class$ResultSet$ResultSetMetadata$ColumnInfo, function(x) x$Type))
-    Type <- vapply(Type, athena_to_r, FUN.VALUE = character(1))
+    
+    Type <- AthenaToRDataType(result_class$ResultSet$ResultSetMetadata$ColumnInfo)
     
     if(grepl("\\.csv$",result_info$key)){
       if (requireNamespace("data.table", quietly=TRUE)){output <- data.table::fread(File)}
