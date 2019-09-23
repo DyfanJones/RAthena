@@ -21,7 +21,7 @@ Frees all resources (local and Athena) associated with result set. It does this 
 and removed the connection resource locally.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

@@ -67,7 +67,7 @@ AWS region codes (region code example: Region = EU (Ireland)     \code{ region_n
 Connect to Athena using python's sdk boto3
 }
 \examples{
-\dontrun{
+\donttest{
 # Connect to Athena using your aws access keys
  library(DBI)
  con <- dbConnect(RAthena:athena(),

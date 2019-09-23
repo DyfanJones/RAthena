@@ -55,7 +55,7 @@
 #' }
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -228,7 +228,7 @@ update_work_group <- function(conn,
 #' @return \code{get_session_token()} returns a list containing: \code{"AccessKeyId"}, \code{"SecretAccessKey"}, \code{"SessionToken"} and \code{"Expiration"}
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' 
@@ -289,7 +289,7 @@ get_session_token <- function(profile_name = NULL,
 #' @return \code{assume_role()} returns a list containing: \code{"AccessKeyId"}, \code{"SecretAccessKey"}, \code{"SessionToken"} and \code{"Expiration"}
 #' @seealso \code{\link{dbConnect}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' 

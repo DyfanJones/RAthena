@@ -23,7 +23,7 @@
 Returns logical scalar if the table exists or not. \code{TRUE} if the table exists, \code{FALSE} otherwise.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

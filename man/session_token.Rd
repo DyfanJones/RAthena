@@ -34,7 +34,7 @@ from 900 seconds (15 minutes) to 129,600 seconds (36 hours), with 3,600 seconds 
 Returns a set of temporary credentials for an AWS account or IAM user (\href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.get_session_token}{link}).
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 

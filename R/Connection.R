@@ -87,7 +87,7 @@ setMethod(
 #' @return \code{dbDisconnect()} returns \code{TRUE}, invisibly.
 #' @seealso \code{\link[DBI]{dbDisconnect}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -124,7 +124,7 @@ setMethod(
 #' @return \code{dbIsValid()} returns logical scalar, \code{TRUE} if the object (\code{dbObj}) is valid, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -174,7 +174,7 @@ setMethod(
 #' @return Returns \code{AthenaResult} s4 class.
 #' @seealso \code{\link[DBI]{dbSendQuery}}, \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -257,7 +257,7 @@ setMethod(
 #' vapply(iris, function(x) dbDataType(RAthena::athena(), x),
 #'        FUN.VALUE = character(1), USE.NAMES = TRUE)
 #' 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -327,7 +327,7 @@ setMethod(
 #' @return \code{dbListTables()} returns a character vector with all the tables from Athena.
 #' @seealso \code{\link[DBI]{dbListTables}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -367,7 +367,7 @@ setMethod(
 #' @seealso \code{\link[DBI]{dbListFields}}
 #' @aliases dbListFields
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -418,7 +418,7 @@ setMethod(
 #' @return \code{dbExistsTable()} returns logical scalar. \code{TRUE} if the table exists, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbExistsTable}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -474,7 +474,7 @@ setMethod(
 #' @inheritParams DBI::dbRemoveTable
 #' @seealso \code{\link[DBI]{dbRemoveTable}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -522,7 +522,7 @@ setMethod(
 #' @return \code{dbGetQuery()} returns a dataframe.
 #' @seealso \code{\link[DBI]{dbGetQuery}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -563,7 +563,7 @@ setMethod(
 #' @return a named list
 #' @seealso \code{\link[DBI]{dbGetInfo}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -610,7 +610,7 @@ setMethod(
 #'         function will return error from Athena.
 #' @name dbGetPartition
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -665,7 +665,7 @@ setMethod(
 #' @name dbShow
 #' @return \code{dbShow()} returns \code{\link[DBI]{SQL}} characters of the Athena table DDL.
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

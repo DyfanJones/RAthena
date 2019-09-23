@@ -21,7 +21,7 @@
 #'         an error is raised; the remote table remains unchanged.
 #' @seealso \code{\link[DBI]{dbWriteTable}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -242,7 +242,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

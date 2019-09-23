@@ -42,7 +42,7 @@ db_copy_to returns table name
 This is an Athena method for dbplyr function \code{db_copy_to} to create an Athena table from a \code{data.frame}.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

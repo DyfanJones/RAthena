@@ -28,7 +28,7 @@ db_compute returns table name
 This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

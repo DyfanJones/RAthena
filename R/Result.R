@@ -36,7 +36,7 @@ setClass(
 #' @return \code{dbClearResult()} returns \code{TRUE}, invisibly.
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -110,7 +110,7 @@ setMethod(
 #' @return \code{dbFetch()} returns a data frame.
 #' @seealso \code{\link[DBI]{dbFetch}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -203,7 +203,7 @@ setMethod(
 #' @return \code{dbHasCompleted()} returns a logical scalar. \code{TRUE} if the query has completed, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -270,7 +270,7 @@ setMethod(
 #'         The data.frame has two columns (field_name, type).
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

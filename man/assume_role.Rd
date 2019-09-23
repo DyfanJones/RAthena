@@ -34,7 +34,7 @@ These temporary credentials consist of an access key ID, a secret access key, an
 your account or for cross-account access.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 

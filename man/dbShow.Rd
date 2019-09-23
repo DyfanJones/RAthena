@@ -25,7 +25,7 @@ dbShow(conn, name, ...)
 Executes a statement to return the data description language (DDL) of the Athena table.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

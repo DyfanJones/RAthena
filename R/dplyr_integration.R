@@ -31,7 +31,7 @@ db_desc.AthenaConnection <- function(x) {
 #' db_compute returns table name
 #' @seealso \code{\link{db_save_query}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -151,7 +151,7 @@ db_save_query_with <- function(file_type, s3_location,partition){
 #' @return
 #' db_copy_to returns table name
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

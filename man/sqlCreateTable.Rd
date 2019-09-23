@@ -42,7 +42,7 @@ A data frame: field types are generated using
 Creates an interface to compose \code{CREATE EXTERNAL TABLE}.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

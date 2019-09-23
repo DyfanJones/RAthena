@@ -26,7 +26,7 @@ data.frame that returns all partitions in table, if no partitions in Athena tabl
 This method returns all partitions from Athena table.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

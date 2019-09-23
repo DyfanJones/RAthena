@@ -23,7 +23,7 @@
 Removes Athena table but does not remove the data from Amazon S3 bucket.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
