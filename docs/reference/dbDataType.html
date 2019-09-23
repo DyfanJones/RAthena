@@ -160,7 +160,7 @@ or DBIConnection</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span>(<span class='no'>iris</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>dbDataType</span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(), <span class='no'>x</span>),
        <span class='kw'>FUN.VALUE</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>1</span>), <span class='kw'>USE.NAMES</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
 #&gt;      "FLOAT"      "FLOAT"      "FLOAT"      "FLOAT"     "STRING" </div><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># \donttest{</span>
 <span class='co'># Note: </span>
 <span class='co'># - Require AWS Account to run below example.</span>
 <span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
@@ -168,16 +168,14 @@ or DBIConnection</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(),
-                 <span class='kw'>profile_name</span> <span class='kw'>=</span> <span class='st'>"YOUR_PROFILE_NAME"</span>,
-                 <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/query/bucket/"</span>)
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
 
 <span class='co'># Sending Queries to Athena</span>
-<span class='fu'>dbDataType</span>(<span class='no'>con</span>, <span class='no'>iris</span>)
-
+<span class='fu'>dbDataType</span>(<span class='no'>con</span>, <span class='no'>iris</span>)</div><div class='output co'>#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
+#&gt;      "FLOAT"      "FLOAT"      "FLOAT"      "FLOAT"     "STRING" </div><div class='input'>
 <span class='co'># Disconnect conenction</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-}</div></pre>
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

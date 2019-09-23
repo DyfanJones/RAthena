@@ -34,9 +34,7 @@ This method returns all partitions from Athena table.
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
                  
 # write iris table to Athena                  
 dbWriteTable(con, "iris",

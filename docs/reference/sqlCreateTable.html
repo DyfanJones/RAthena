@@ -173,7 +173,7 @@ Field types are unescaped.</p>
     <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/DBI/man/sqlCreateTable.html'>sqlCreateTable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Note: </span>
 <span class='co'># - Require AWS Account to run below example.</span>
 <span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
@@ -181,27 +181,57 @@ Field types are unescaped.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(),
-                 <span class='kw'>profile_name</span> <span class='kw'>=</span> <span class='st'>"YOUR_PROFILE_NAME"</span>,
-                 <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/query/bucket/"</span>)
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
 
 <span class='co'># Create DDL for iris data.frame</span>
-<span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>, <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)
-
+<span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>, <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; ROW FORMAT DELIMITED
+#&gt; 	FIELDS TERMINATED BY ','
+#&gt; 	ESCAPED BY '\\'
+#&gt; 	LINES TERMINATED BY '\n'
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; TBLPROPERTIES ("skip.header.line.count"="1");</div><div class='input'>
 <span class='co'># Create DDL for iris data.frame with partition</span>
 <span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>,
                <span class='kw'>partition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"timestamp"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(), <span class='st'>"%Y%m%d"</span>)),
-               <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)
-
+               <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; PARTITIONED BY (20190923 STRING)
+#&gt; ROW FORMAT DELIMITED
+#&gt; 	FIELDS TERMINATED BY ','
+#&gt; 	ESCAPED BY '\\'
+#&gt; 	LINES TERMINATED BY '\n'
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; TBLPROPERTIES ("skip.header.line.count"="1");</div><div class='input'>
 <span class='co'># Create DDL for iris data.frame with partition and file.type parquet</span>
 <span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>,
                <span class='kw'>partition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"timestamp"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(), <span class='st'>"%Y%m%d"</span>)),
                <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>,
-               <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='st'>"parquet"</span>)
-
+               <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='st'>"parquet"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; PARTITIONED BY (20190923 STRING)
+#&gt; STORED AS PARQUET
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; ;</div><div class='input'>
 <span class='co'># Disconnect from Athena</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-}</div></pre>
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -29,9 +29,7 @@ Returns the unquoted names of Athena tables accessible through this connection.
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
              
 # Return list of tables in Athena
 dbListTables(con)

@@ -34,7 +34,7 @@ The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to 
              The \code{dbExecute()} method submits a query to Athena and waits for the query to be executed.
 }
 \examples{
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -42,9 +42,7 @@ The \code{dbSendQuery()} and \code{dbSendStatement()} method submits a query to 
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # Sending Queries to Athena
 res1 <- dbSendQuery(con, "show databases")

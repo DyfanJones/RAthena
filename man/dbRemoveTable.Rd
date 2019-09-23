@@ -31,9 +31,7 @@ Removes Athena table but does not remove the data from Amazon S3 bucket.
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # Write data.frame to Athena table
 dbWriteTable(con, "mtcars", mtcars,

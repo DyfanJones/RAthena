@@ -44,7 +44,7 @@ dbDataType(athena(), list(raw(10), raw(20)))
 vapply(iris, function(x) dbDataType(RAthena::athena(), x),
        FUN.VALUE = character(1), USE.NAMES = TRUE)
 
-\dontrun{
+\donttest{
 # Note: 
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -52,9 +52,7 @@ vapply(iris, function(x) dbDataType(RAthena::athena(), x),
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # Sending Queries to Athena
 dbDataType(con, iris)

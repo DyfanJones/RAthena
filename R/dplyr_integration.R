@@ -40,9 +40,7 @@ db_desc.AthenaConnection <- function(x) {
 #' library(dplyr)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Write data.frame to Athena table
 #' copy_to(con, mtcars,
@@ -160,9 +158,7 @@ db_save_query_with <- function(file_type, s3_location,partition){
 #' library(dplyr)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # List existing tables in Athena
 #' dbListTables(con)

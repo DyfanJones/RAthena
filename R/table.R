@@ -29,9 +29,7 @@
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # List existing tables in Athena
 #' dbListTables(con)
@@ -242,7 +240,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -250,9 +248,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'                  
 #' # Create DDL for iris data.frame
 #' sqlCreateTable(con, "iris", iris, s3.location = "s3://path/to/athena/table")

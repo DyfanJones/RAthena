@@ -47,8 +47,7 @@ assume_role(profile_name = "YOUR_PROFILE_NAME",
             set_env = TRUE)
             
 # Connect to Athena using ARN Role
-con <- dbConnect(athena(),
-                s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 }
 }
 \seealso{

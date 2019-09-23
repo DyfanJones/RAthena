@@ -78,9 +78,7 @@ Convenience functions for reading/writing DBMS tables
 library(DBI)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # List existing tables in Athena
 dbListTables(con)

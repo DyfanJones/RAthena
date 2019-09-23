@@ -37,9 +37,7 @@ library(DBI)
 library(dplyr)
 
 # Demo connection to Athena using profile name 
-con <- dbConnect(RAthena::athena(),
-                 profile_name = "YOUR_PROFILE_NAME",
-                 s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(RAthena::athena())
 
 # Write data.frame to Athena table
 copy_to(con, mtcars,

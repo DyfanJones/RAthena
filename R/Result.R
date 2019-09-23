@@ -36,7 +36,7 @@ setClass(
 #' @return \code{dbClearResult()} returns \code{TRUE}, invisibly.
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -44,9 +44,7 @@ setClass(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' res <- dbSendQuery(con, "show databases")
 #' dbClearResult(res)
@@ -110,7 +108,7 @@ setMethod(
 #' @return \code{dbFetch()} returns a data frame.
 #' @seealso \code{\link[DBI]{dbFetch}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -118,15 +116,13 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' res <- dbSendQuery(con, "show databases")
 #' dbFetch(res)
-#' dbClearResults(res)
+#' dbClearResult(res)
 #' 
-#' # Check if connection if valid after closing connection
+#' # Disconnect from Athena
 #' dbDisconnect(con)
 #' }
 #' @docType methods
@@ -203,7 +199,7 @@ setMethod(
 #' @return \code{dbHasCompleted()} returns a logical scalar. \code{TRUE} if the query has completed, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -211,9 +207,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Check if query has completed
 #' res <- dbSendQuery(con, "show databases")
@@ -270,7 +264,7 @@ setMethod(
 #'         The data.frame has two columns (field_name, type).
 #' @seealso \code{\link[DBI]{dbHasCompleted}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -278,12 +272,10 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Get Column information from query
-#' res <- dbSendQuery(con, "select * from mydataframe")
+#' res <- dbSendQuery(con, "select * from information_schema.tables")
 #' dbColumnInfo(res)
 #' dbClearResult(res)
 #'  

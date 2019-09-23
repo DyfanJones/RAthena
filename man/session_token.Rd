@@ -48,7 +48,6 @@ get_session_token("YOUR_PROFILE_NAME",
                   set_env = TRUE)
 
 # Connect to Athena using temporary credentials
-con <- dbConnect(athena(),
-                s3_staging_dir = "s3://path/to/query/bucket/")
+con <- dbConnect(athena())
 }
 }

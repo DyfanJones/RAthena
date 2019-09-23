@@ -46,8 +46,8 @@ AthenaConnection <-
     
     s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
     
-    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`
-                                      or when work_group is defined in `create_work_group()`", call. = F)}
+    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
+                                      "or when work_group is defined in `create_work_group()`", call. = F)}
     
     
     
@@ -87,7 +87,7 @@ setMethod(
 #' @return \code{dbDisconnect()} returns \code{TRUE}, invisibly.
 #' @seealso \code{\link[DBI]{dbDisconnect}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -95,9 +95,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Disconnect conenction
 #' dbDisconnect(con)
@@ -124,7 +122,7 @@ setMethod(
 #' @return \code{dbIsValid()} returns logical scalar, \code{TRUE} if the object (\code{dbObj}) is valid, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -132,9 +130,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'
 #' # Check is connection is valid
 #' dbIsValid(con)
@@ -174,7 +170,7 @@ setMethod(
 #' @return Returns \code{AthenaResult} s4 class.
 #' @seealso \code{\link[DBI]{dbSendQuery}}, \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -182,9 +178,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Sending Queries to Athena
 #' res1 <- dbSendQuery(con, "show databases")
@@ -257,7 +251,7 @@ setMethod(
 #' vapply(iris, function(x) dbDataType(RAthena::athena(), x),
 #'        FUN.VALUE = character(1), USE.NAMES = TRUE)
 #' 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -265,9 +259,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Sending Queries to Athena
 #' dbDataType(con, iris)
@@ -335,9 +327,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'              
 #' # Return list of tables in Athena
 #' dbListTables(con)
@@ -375,9 +365,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Write data.frame to Athena table
 #' dbWriteTable(con, "mtcars", mtcars,
@@ -426,9 +414,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Write data.frame to Athena table
 #' dbWriteTable(con, "mtcars", mtcars,
@@ -482,9 +468,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Write data.frame to Athena table
 #' dbWriteTable(con, "mtcars", mtcars,
@@ -522,7 +506,7 @@ setMethod(
 #' @return \code{dbGetQuery()} returns a dataframe.
 #' @seealso \code{\link[DBI]{dbGetQuery}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -530,9 +514,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #' 
 #' # Sending Queries to Athena
 #' dbGetQuery(con, "show databases")
@@ -563,7 +545,7 @@ setMethod(
 #' @return a named list
 #' @seealso \code{\link[DBI]{dbGetInfo}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -571,16 +553,17 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'                  
 #' # Returns metadata from connnection object
-#' dbGetInfo(con)
+#' metadata <- dbGetInfo(con)
 #' 
 #' # Return metadata from Athena query object
 #' res <- dbSendQuery(con, "show databases")
 #' dbGetInfo(res)
+#' 
+#' # Clear result
+#' dbClearResult(res)
 #' 
 #' # disconnect from Athena
 #' dbDisconnect(con)
@@ -618,9 +601,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'                  
 #' # write iris table to Athena                  
 #' dbWriteTable(con, "iris",
@@ -673,9 +654,7 @@ setMethod(
 #' library(DBI)
 #' 
 #' # Demo connection to Athena using profile name 
-#' con <- dbConnect(RAthena::athena(),
-#'                  profile_name = "YOUR_PROFILE_NAME",
-#'                  s3_staging_dir = "s3://path/to/query/bucket/")
+#' con <- dbConnect(RAthena::athena())
 #'                  
 #' # write iris table to Athena                  
 #' dbWriteTable(con, "iris",
