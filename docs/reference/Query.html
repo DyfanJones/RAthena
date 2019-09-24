@@ -167,12 +167,16 @@
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())</div><div class='output co'>#&gt; <span class='error'>Error in AthenaConnection(aws_access_key_id = aws_access_key_id, aws_secret_access_key = aws_secret_access_key,     aws_session_token = aws_session_token, schema_name = schema_name,     work_group = work_group, poll_interval = poll_interval, encryption_option = encryption_option,     kms_key = kms_key, s3_staging_dir = s3_staging_dir, region_name = region_name,     botocore_session = botocore_session, profile_name = profile_name,     aws_expiration = aws_expiration, ...): object 'aws_expiration' not found</span></div><div class='input'>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
+
 <span class='co'># Sending Queries to Athena</span>
-<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbSendQuery(con, "show databases"): object 'con' not found</span></div><div class='input'><span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendStatement.html'>dbSendStatement</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbSendStatement(con, "show databases"): object 'con' not found</span></div><div class='input'><span class='no'>res3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbExecute.html'>dbExecute</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbExecute(con, "show databases"): object 'con' not found</span></div><div class='input'>
+<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendStatement.html'>dbSendStatement</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='no'>res3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbExecute.html'>dbExecute</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+
 <span class='co'># Disconnect conenction</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbDisconnect(con): object 'con' not found</span></div><div class='input'># }
-</div></pre>
+<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
