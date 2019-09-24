@@ -1,33 +1,24 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
-
----
-
 <!--
 If you are wishing to request a new feature please ignore the following (and feel free to delete the below). Issues please try to use the template as it will help me get to the problem faster. 
 
 Please remove all the extra text.
 -->
-
-### Issue Description and Expected Result
+  
+### Issue Description
 <!--Example: `dbGetQuery()` returns incorrect timestamps.-->
-
+  
 ### Reproducible Example
 <!--
 Please include a small code example, if you can please use open source data i.e. `iris`, `mtcars` etc... To demostrate your issue.
 
 If you struggle with markdown and formatting please use the:
-
+  
 `reprex` package to help `install.packages("reprex")`
 
 https://github.com/tidyverse/reprex#what-is-a-reprex
 
 Example:
-```r
+  ```r
 library(RAthena)
 library(DBI)
 con <- dbConnect(RAthena::athena(),
