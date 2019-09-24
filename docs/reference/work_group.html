@@ -260,75 +260,30 @@ For more information, see <a href='https://docs.aws.amazon.com/athena/latest/ug/
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RAthena</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
-
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())</div><div class='output co'>#&gt; <span class='error'>Error in AthenaConnection(aws_access_key_id = aws_access_key_id, aws_secret_access_key = aws_secret_access_key,     aws_session_token = aws_session_token, schema_name = schema_name,     work_group = work_group, poll_interval = poll_interval, encryption_option = encryption_option,     kms_key = kms_key, s3_staging_dir = s3_staging_dir, region_name = region_name,     botocore_session = botocore_session, profile_name = profile_name,     aws_expiration = aws_expiration, ...): object 'aws_expiration' not found</span></div><div class='input'>
 <span class='co'># List current work group available</span>
-<span class='fu'>list_work_groups</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [[1]]$Name
-#&gt; [1] "primary"
-#&gt; 
-#&gt; [[1]]$State
-#&gt; [1] "ENABLED"
-#&gt; 
-#&gt; [[1]]$Description
-#&gt; [1] ""
-#&gt; 
-#&gt; [[1]]$CreationTime
-#&gt; 2019-08-22 16:14:47.902000+01:00
-#&gt; 
-#&gt; </div><div class='input'>
+<span class='fu'>list_work_groups</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># Create a new work group</span>
 <span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>create_work_group</span>(<span class='no'>con</span>,
                   <span class='st'>"demo_work_group"</span>,
                    <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"This is a demo work group"</span>,
-                   <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'>tag_options</span>(<span class='kw'>key</span><span class='kw'>=</span> <span class='st'>"demo_work_group"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"demo_01"</span>))
-
+                   <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'>tag_options</span>(<span class='kw'>key</span><span class='kw'>=</span> <span class='st'>"demo_work_group"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"demo_01"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># List work groups to see new work group</span>
-<span class='fu'>list_work_groups</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [[1]]$Name
-#&gt; [1] "demo_work_group"
-#&gt; 
-#&gt; [[1]]$State
-#&gt; [1] "ENABLED"
-#&gt; 
-#&gt; [[1]]$Description
-#&gt; [1] "This is a demo work group"
-#&gt; 
-#&gt; [[1]]$CreationTime
-#&gt; 2019-09-23 21:53:43.225000+01:00
-#&gt; 
-#&gt; 
-#&gt; [[2]]
-#&gt; [[2]]$Name
-#&gt; [1] "primary"
-#&gt; 
-#&gt; [[2]]$State
-#&gt; [1] "ENABLED"
-#&gt; 
-#&gt; [[2]]$Description
-#&gt; [1] ""
-#&gt; 
-#&gt; [[2]]$CreationTime
-#&gt; 2019-08-22 16:14:47.902000+01:00
-#&gt; 
-#&gt; </div><div class='input'>
+<span class='fu'>list_work_groups</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># get meta data from work group</span>
-<span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>get_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)
-
+<span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>get_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># Update work group</span>
 <span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>update_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>,
-                  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"This is a demo work group update"</span>)
-
+                  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"This is a demo work group update"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 
 <span class='co'># get updated meta data from work group</span>
-<span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>get_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)
-
+<span class='no'>wg</span> <span class='kw'>&lt;-</span> <span class='fu'>get_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># Delete work group</span>
-<span class='fu'>delete_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)
-
+<span class='fu'>delete_work_group</span>(<span class='no'>con</span>, <span class='st'>"demo_work_group"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbIsValid(conn): object 'con' not found</span></div><div class='input'>
 <span class='co'># Disconect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-<span class='co'># }</span></div></pre>
+<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbDisconnect(con): object 'con' not found</span></div><div class='input'># }
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

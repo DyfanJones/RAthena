@@ -52,6 +52,20 @@ setMethod(
   })
 
 #' Connect to Athena using python's sdk boto3
+#' 
+#' @description 
+#' It is never adviced to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is adviced to use
+#' \code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
+#' \href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
+#' of supported environment variables:
+#' \itemize{
+#' \item{\strong{AWS_ACCESS_KEY_ID:} is equivalent to the dbConnect parameter - \code{aws_access_key_id}}
+#' \item{\strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the dbConnect parameter - \code{aws_secret_access_key}}
+#' \item{\strong{AWS_SESSION_TOKEN:} is equivalent to the dbConnect parameter - \code{aws_session_token}}
+#' \item{\strong{AWS_ROLE_ARN:} is equivalent to the dbConnect parameter - \code{role_arn}}
+#' \item{\strong{AWS_EXPIRATION:} is equivalent to the dbConnect parameter - \code{duration_seconds}}
+#' \item{\strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the dbConnect parameter - \code{s3_staging_dir}}
+#' }
 #'
 #' @inheritParams DBI::dbConnect
 #' @param aws_access_key_id AWS access key ID
@@ -154,20 +168,18 @@ setMethod(
     aws_session_token <- aws_session_token %||% get_aws_env("AWS_SESSION_TOKEN")
     role_arn <- role_arn %||% get_aws_env("AWS_ROLE_ARN")
     
-    aws_expiration <- NULL
     if(!is.null(role_arn)) {
       creds <- assume_role(profile_name = profile_name,
                            region_name = region_name,
                            role_arn = role_arn,
                            role_session_name = role_session_name,
-                           duration_seconds = duration_seconds)
+                           duration_seconds = duration_seconds %||% get_aws_env("AWS_EXPIRATION"))
       profile_name <- NULL
       aws_access_key_id <- creds$AccessKeyId
       aws_secret_access_key <- creds$SecretAccessKey
       aws_session_token <- creds$SessionToken
       aws_expiration <- creds$Expiration
     }
-    aws_expiration <- aws_expiration %||% get_aws_env("AWS_EXPIRATION")
     
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,

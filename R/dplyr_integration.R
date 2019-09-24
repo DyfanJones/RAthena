@@ -142,7 +142,7 @@ db_save_query_with <- function(file_type, s3_location,partition){
 #' @param s3_location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param file_type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]. 
-#'                  *Note:* "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
+#'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param ... other parameters currently not supported in RAthena
 #' @name db_copy_to
 #' @seealso \code{\link{AthenaWriteTables}}

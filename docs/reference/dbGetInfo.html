@@ -154,50 +154,16 @@ or a DBIResult</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
-
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())</div><div class='output co'>#&gt; <span class='error'>Error in AthenaConnection(aws_access_key_id = aws_access_key_id, aws_secret_access_key = aws_secret_access_key,     aws_session_token = aws_session_token, schema_name = schema_name,     work_group = work_group, poll_interval = poll_interval, encryption_option = encryption_option,     kms_key = kms_key, s3_staging_dir = s3_staging_dir, region_name = region_name,     botocore_session = botocore_session, profile_name = profile_name,     aws_expiration = aws_expiration, ...): object 'aws_expiration' not found</span></div><div class='input'>
 <span class='co'># Returns metadata from connnection object</span>
-<span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='fu'>dbGetInfo</span>(<span class='no'>con</span>)
-
+<span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='fu'>dbGetInfo</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbGetInfo(con): object 'con' not found</span></div><div class='input'>
 <span class='co'># Return metadata from Athena query object</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "8461e7e9-5307-483c-bc3c-6399526c8afd"
-#&gt; 
-#&gt; $ResponseMetadata
-#&gt; $ResponseMetadata$RequestId
-#&gt; [1] "c6a41ae8-7bd3-4115-8bf2-feeed28f252d"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPStatusCode
-#&gt; [1] 200
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders
-#&gt; $ResponseMetadata$HTTPHeaders$`content-type`
-#&gt; [1] "application/x-amz-json-1.1"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$date
-#&gt; [1] "Mon, 23 Sep 2019 20:53:35 GMT"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`x-amzn-requestid`
-#&gt; [1] "c6a41ae8-7bd3-4115-8bf2-feeed28f252d"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`content-length`
-#&gt; [1] "59"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$connection
-#&gt; [1] "keep-alive"
-#&gt; 
-#&gt; 
-#&gt; $ResponseMetadata$RetryAttempts
-#&gt; [1] 0
-#&gt; 
-#&gt; </div><div class='input'>
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbSendQuery(con, "show databases"): object 'con' not found</span></div><div class='input'><span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbGetInfo(res): object 'res' not found</span></div><div class='input'>
 <span class='co'># Clear result</span>
-<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
-
+<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbClearResult(res): object 'res' not found</span></div><div class='input'>
 <span class='co'># disconnect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-<span class='co'># }</span></div></pre>
+<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbDisconnect(con): object 'con' not found</span></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
