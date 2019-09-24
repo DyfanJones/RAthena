@@ -31,7 +31,7 @@ just any valid bare table name.}
 \item{s3_location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
 
 \item{file_type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]. 
-*Note:* "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
+\strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
 
 \item{...}{other parameters currently not supported in RAthena}
 }
