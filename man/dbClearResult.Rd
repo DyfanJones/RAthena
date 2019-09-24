@@ -17,8 +17,8 @@
 \code{dbClearResult()} returns \code{TRUE}, invisibly.
 }
 \description{
-Frees all resources (local and Athena) associated with result set. It does this by removing s3 query output result on Amazon,
-and removed the connection resource locally.
+Frees all resources (local and Athena) associated with result set. It does this by removing query output in AWS S3 Bucket,
+stopping query execution if still runnning and removed the connection resource locally.
 }
 \examples{
 \donttest{

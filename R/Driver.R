@@ -52,6 +52,20 @@ setMethod(
   })
 
 #' Connect to Athena using python's sdk boto3
+#' 
+#' @description 
+#' It is never adviced to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is adviced to use
+#' \code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
+#' \href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
+#' of supported environment variables:
+#' \describe{
+#' \item{AWS_ACCESS_KEY_ID}{dbConnect parameter: \code{aws_access_key_id}}
+#' \item{AWS_SECRET_ACCESS_KEY}{dbConnect parameter: \code{aws_secret_access_key}}
+#' \item{AWS_SESSION_TOKEN}{dbConnect parameter: \code{aws_session_token}}
+#' \item{AWS_ROLE_ARN}{dbConnect parameter: \code{role_arn}}
+#' \item{AWS_EXPIRATION}{dbConnect parameter: \code{duration_seconds}}
+#' \item{AWS_ATHENA_S3_STAGING_DIR}{dbConnect parameter: \code{s3_staging_dir}}
+#' }
 #'
 #' @inheritParams DBI::dbConnect
 #' @param aws_access_key_id AWS access key ID
@@ -154,20 +168,18 @@ setMethod(
     aws_session_token <- aws_session_token %||% get_aws_env("AWS_SESSION_TOKEN")
     role_arn <- role_arn %||% get_aws_env("AWS_ROLE_ARN")
     
-    aws_expiration <- NULL
     if(!is.null(role_arn)) {
       creds <- assume_role(profile_name = profile_name,
                            region_name = region_name,
                            role_arn = role_arn,
                            role_session_name = role_session_name,
-                           duration_seconds = duration_seconds)
+                           duration_seconds = duration_seconds %||% get_aws_env("AWS_EXPIRATION"))
       profile_name <- NULL
       aws_access_key_id <- creds$AccessKeyId
       aws_secret_access_key <- creds$SecretAccessKey
       aws_session_token <- creds$SessionToken
       aws_expiration <- creds$Expiration
     }
-    aws_expiration <- aws_expiration %||% get_aws_env("AWS_EXPIRATION")
     
     con <- AthenaConnection(aws_access_key_id = aws_access_key_id,
                             aws_secret_access_key = aws_secret_access_key ,

@@ -64,7 +64,18 @@ AWS region codes (region code example: Region = EU (Ireland)     \code{ region_n
 \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 }
 \description{
-Connect to Athena using python's sdk boto3
+It is never adviced to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is adviced to use
+\code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
+\href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
+of supported environment variables:
+\describe{
+\item{AWS_ACCESS_KEY_ID}{dbConnect parameter: \code{aws_access_key_id}}
+\item{AWS_SECRET_ACCESS_KEY}{dbConnect parameter: \code{aws_secret_access_key}}
+\item{AWS_SESSION_TOKEN}{dbConnect parameter: \code{aws_session_token}}
+\item{AWS_ROLE_ARN}{dbConnect parameter: \code{role_arn}}
+\item{AWS_EXPIRATION}{dbConnect parameter: \code{duration_seconds}}
+\item{AWS_ATHENA_S3_STAGING_DIR}{dbConnect parameter: \code{s3_staging_dir}}
+}
 }
 \examples{
 \dontrun{
