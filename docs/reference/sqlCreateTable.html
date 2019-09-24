@@ -181,21 +181,57 @@ Field types are unescaped.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())</div><div class='output co'>#&gt; <span class='error'>Error in AthenaConnection(aws_access_key_id = aws_access_key_id, aws_secret_access_key = aws_secret_access_key,     aws_session_token = aws_session_token, schema_name = schema_name,     work_group = work_group, poll_interval = poll_interval, encryption_option = encryption_option,     kms_key = kms_key, s3_staging_dir = s3_staging_dir, region_name = region_name,     botocore_session = botocore_session, profile_name = profile_name,     aws_expiration = aws_expiration, ...): object 'aws_expiration' not found</span></div><div class='input'>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
+
 <span class='co'># Create DDL for iris data.frame</span>
-<span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>, <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sqlCreateTable(con, "iris", iris, s3.location = "s3://path/to/athena/table"): object 'con' not found</span></div><div class='input'>
+<span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>, <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; ROW FORMAT DELIMITED
+#&gt; 	FIELDS TERMINATED BY ','
+#&gt; 	ESCAPED BY '\\'
+#&gt; 	LINES TERMINATED BY '\n'
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; TBLPROPERTIES ("skip.header.line.count"="1");</div><div class='input'>
 <span class='co'># Create DDL for iris data.frame with partition</span>
 <span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>,
                <span class='kw'>partition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"timestamp"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(), <span class='st'>"%Y%m%d"</span>)),
-               <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sqlCreateTable(con, "iris", iris, partition = c(timestamp = format(Sys.Date(),     "%Y%m%d")), s3.location = "s3://path/to/athena/table"): object 'con' not found</span></div><div class='input'>
+               <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; PARTITIONED BY (20190924 STRING)
+#&gt; ROW FORMAT DELIMITED
+#&gt; 	FIELDS TERMINATED BY ','
+#&gt; 	ESCAPED BY '\\'
+#&gt; 	LINES TERMINATED BY '\n'
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; TBLPROPERTIES ("skip.header.line.count"="1");</div><div class='input'>
 <span class='co'># Create DDL for iris data.frame with partition and file.type parquet</span>
 <span class='fu'>sqlCreateTable</span>(<span class='no'>con</span>, <span class='st'>"iris"</span>, <span class='no'>iris</span>,
                <span class='kw'>partition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"timestamp"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(), <span class='st'>"%Y%m%d"</span>)),
                <span class='kw'>s3.location</span> <span class='kw'>=</span> <span class='st'>"s3://path/to/athena/table"</span>,
-               <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='st'>"parquet"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sqlCreateTable(con, "iris", iris, partition = c(timestamp = format(Sys.Date(),     "%Y%m%d")), s3.location = "s3://path/to/athena/table", file.type = "parquet"): object 'con' not found</span></div><div class='input'>
+               <span class='kw'>file.type</span> <span class='kw'>=</span> <span class='st'>"parquet"</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; CREATE EXTERNAL TABLE iris (
+#&gt;   Sepal_Length FLOAT,
+#&gt;   Sepal_Width FLOAT,
+#&gt;   Petal_Length FLOAT,
+#&gt;   Petal_Width FLOAT,
+#&gt;   Species STRING
+#&gt; )
+#&gt; PARTITIONED BY (20190924 STRING)
+#&gt; STORED AS PARQUET
+#&gt; LOCATION 's3://path/to/athena/table/iris/'
+#&gt; ;</div><div class='input'>
 <span class='co'># Disconnect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dbDisconnect(con): object 'con' not found</span></div><div class='input'># }
-</div></pre>
+<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
