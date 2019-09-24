@@ -68,13 +68,13 @@ It is never adviced to hard-code credentials when making a connection to Athena 
 \code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
 \href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
 of supported environment variables:
-\describe{
-\item{AWS_ACCESS_KEY_ID}{dbConnect parameter: \code{aws_access_key_id}}
-\item{AWS_SECRET_ACCESS_KEY}{dbConnect parameter: \code{aws_secret_access_key}}
-\item{AWS_SESSION_TOKEN}{dbConnect parameter: \code{aws_session_token}}
-\item{AWS_ROLE_ARN}{dbConnect parameter: \code{role_arn}}
-\item{AWS_EXPIRATION}{dbConnect parameter: \code{duration_seconds}}
-\item{AWS_ATHENA_S3_STAGING_DIR}{dbConnect parameter: \code{s3_staging_dir}}
+\itemize{
+\item{\strong{AWS_ACCESS_KEY_ID:} is equivalent to the dbConnect parameter - \code{aws_access_key_id}}
+\item{\strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the dbConnect parameter - \code{aws_secret_access_key}}
+\item{\strong{AWS_SESSION_TOKEN:} is equivalent to the dbConnect parameter - \code{aws_session_token}}
+\item{\strong{AWS_ROLE_ARN:} is equivalent to the dbConnect parameter - \code{role_arn}}
+\item{\strong{AWS_EXPIRATION:} is equivalent to the dbConnect parameter - \code{duration_seconds}}
+\item{\strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the dbConnect parameter - \code{s3_staging_dir}}
 }
 }
 \examples{
