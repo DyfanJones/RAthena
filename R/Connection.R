@@ -387,20 +387,24 @@ NULL
 
 #' @rdname dbListFields
 #' @export
-setMethod(
-  "dbListFields", c("AthenaConnection","character") ,
-  function(conn, name,...){
-    if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-    
-    if(grepl("\\.", name)){
-      dbms.name <- gsub("\\..*", "" , name)
-      Table <- gsub(".*\\.", "" , name)
-    } else {dbms.name <- conn@info$dbms.name
-    Table <- name}
-    
-    dbGetQuery(conn, paste0("SHOW COLUMNS IN ",dbms.name,".",Table))[[1]]
-  }
-)
+setMethod("dbListFields", c("AthenaConnection", "character") ,
+          function(conn, name, ...) {
+            if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+            
+            if (grepl("\\.", name)) {
+              dbms.name <- gsub("\\..*", "" , name)
+              Table <- gsub(".*\\.", "" , name)
+            } else {
+              dbms.name <- conn@info$dbms.name
+              Table <- name}
+            
+            glue <- conn@ptr$client("glue")
+            tryCatch(
+              output <- glue$get_table(DatabaseName = dbms.name,
+                                       Name = Table)$Table$StorageDescriptor$Columns,
+              error = function(e) py_error(e))
+            sapply(output, function(y) y$Name)
+          })
 
 #' Does Athena table exist?
 #' 
