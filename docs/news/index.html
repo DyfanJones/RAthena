@@ -169,6 +169,10 @@
 <code>dbClearResult</code> changed error, to return python error as warning to warn user doesn’t have permission to delete S3 resource</li>
 <li>
 <code>dbClearResult</code> replaced S3 search for query key with out location from Athena</li>
+<li>
+<code>dbListTables</code> now returns vector of tables from <code>aws glue</code> instead of using an <code>aws athena</code> query. This method increases speed of call of query</li>
+<li>
+<code>dbListFields</code> now returns column names from <code>aws glue</code> instead of using an <code>aws athena</code> query.. This method increases speed of call of query</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
