@@ -343,8 +343,12 @@ setMethod(
   "dbListTables", "AthenaConnection",
   function(conn,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-
-    dbGetQuery(conn, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES")[[1]]
+    glue <- conn@ptr$client("glue")
+    tryCatch(Databases <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
+             error = function(e) py_error(e))
+    tryCatch(output <- lapply(Databases, function (x) glue$get_tables(DatabaseName = x)$TableList),
+             error = function(e) py_error(e))
+    unlist(lapply(output, function(x) sapply(x, function(y) y$Name)))
   }
 )
 
