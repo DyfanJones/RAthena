@@ -31,6 +31,7 @@
 * `dbClearResult` replaced S3 search for query key with out location from Athena
 * `dbListTables` now returns vector of tables from `aws glue` instead of using an `aws athena` query. This method increases speed of call of query
 * `dbListFields` now returns column names from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
+* `dbExistsTable` now returns boolean from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
 
 ### Bug Fixes
 * `dbFetch` athena data type miss alignment
