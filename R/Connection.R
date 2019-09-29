@@ -444,19 +444,18 @@ setMethod(
   "dbExistsTable", c("AthenaConnection", "character"),
   function(conn, name, ...) {
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
-    
+  
     if(grepl("\\.", name)){
       dbms.name <- gsub("\\..*", "" , name)
       Table <- gsub(".*\\.", "" , name)
     } else {dbms.name <- conn@info$dbms.name
-            Table <- name}
+    Table <- tolower(name)}
     
-    Query <- paste0("SELECT table_schema, table_name 
-                    FROM INFORMATION_SCHEMA.TABLES
-                    WHERE LOWER(table_schema) = '", tolower(dbms.name), "'",
-                    "AND LOWER(table_name) = '", tolower(Table),"'")
-    
-    if(nrow(dbGetQuery(conn, Query))> 0) TRUE else FALSE
+    glue <- conn@ptr$client("glue")
+    tryCatch(output <- glue$get_tables(DatabaseName = dbms.name)$TableList,
+             error = function(e) py_error(e))
+    tables <- tolower(unlist(lapply(output, function(x) x$Name)))
+    any(Table %in% tables)
   })
 
 
