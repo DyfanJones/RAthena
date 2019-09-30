@@ -450,12 +450,13 @@ setMethod(
       Table <- gsub(".*\\.", "" , name)
     } else {dbms.name <- conn@info$dbms.name
     Table <- tolower(name)}
-    
+
     glue <- conn@ptr$client("glue")
-    tryCatch(output <- glue$get_tables(DatabaseName = dbms.name)$TableList,
-             error = function(e) py_error(e))
-    tables <- tolower(unlist(lapply(output, function(x) x$Name)))
-    any(Table %in% tables)
+    tryerror <- try(tryCatch(glue$get_table(DatabaseName = dbms.name, Name = Table),
+                             error = function(e) py_error(e)), silent = TRUE)
+    if(inherits(tryerror, "try-error") && !grepl(".*table.*not.*found.*", tryerror[1], ignore.case = T)){
+      stop(gsub("^Error : ", "", tryerror[1]), call. = F)}
+    !grepl(".*table.*not.*found.*", tryerror[1], ignore.case = T)
   })
 
 
