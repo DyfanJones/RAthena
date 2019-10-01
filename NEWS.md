@@ -35,6 +35,7 @@
 
 ### Bug Fixes
 * `dbFetch` athena data type miss alignment
+* Added Athena classes and names to file readers to prevent miss classification
 
 ### Unit tests
 * ARN Connection
