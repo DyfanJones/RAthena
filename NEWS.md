@@ -36,6 +36,7 @@
 ### Bug Fixes
 * `dbFetch` athena data type miss alignment
 * Added Athena classes and names to file readers to prevent miss classification
+* Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.
 
 ### Unit tests
 * ARN Connection
