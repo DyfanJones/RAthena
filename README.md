@@ -501,6 +501,12 @@ delete_work_group(con, "demo_work_group")
 
   - `AWR.Athena` - A R wrapper of RJDBC for the AWS Athena’s JDBC
     drivers: <https://github.com/nfultz/AWR.Athena>
+  - `awsathena` - rJava Interface to AWS Athena SDK <https://github.com/hrbrmstr/awsathena>
+  - `metis` - Helpers for Accessing and Querying Amazon Athena using R, Including a lightweight RJDBC shim <https://github.com/hrbrmstr/metis>
+  - `metisjars` - JARs for `metis` <https://github.com/hrbrmstr/metis-jars>
+  - `metis.tidy` - Access and Query Amazon Athena via the Tidyverse <https://github.com/hrbrmstr/metis-tidy>
+  
+`awsathena` and `metis` package family are currently used in production every day to analyze petabytes of internet scan and honeypot data.
 
 ## Comparison:
 
