@@ -506,7 +506,7 @@ delete_work_group(con, "demo_work_group")
   - `metisjars` - JARs for `metis` <https://github.com/hrbrmstr/metis-jars>
   - `metis.tidy` - Access and Query Amazon Athena via the Tidyverse <https://github.com/hrbrmstr/metis-tidy>
   
-`awsathena` and `metis` package family are currently used in production every day to analyze petabytes of internet scan and honeypot data.
+`awsathena` and `metis` family of packages are currently used in production every day to analyze petabytes of internet scan and honeypot data.
 
 ## Comparison:
 
