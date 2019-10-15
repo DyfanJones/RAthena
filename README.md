@@ -4,7 +4,7 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/RAthena)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/RAthena)](https://CRAN.R-project.org/package=RAthena)
 
 The goal of the `RAthena` package is to provide a DBI-compliant interface
 to Amazon’s Athena (<https://aws.amazon.com/athena/>) using `Boto3` SDK.
@@ -28,10 +28,13 @@ RAthena Method (after `RAthena` has been installed this method can be used)
 RAthena::install_boto()
 ```
 
-To install `RAthena` (currently not on cran):
-
+To install `RAthena` you can get it from CRAN with:
 ``` r
-# The development version from Github
+install.packages("RAthena")
+```
+
+Or to get the development version from Github with:
+```r
 remotes::install_github("dyfanjones/rathena")
 ```
 
@@ -501,6 +504,7 @@ delete_work_group(con, "demo_work_group")
 
   - `AWR.Athena` - A R wrapper of RJDBC for the AWS Athena’s JDBC
     drivers: <https://github.com/nfultz/AWR.Athena>
+  - `noctua` - A R wrapper of the R AWS SDK [`paws`](https://github.com/paws-r/paws) to develop a DBI interface <https://github.com/DyfanJones/noctua>
   - `awsathena` - rJava Interface to AWS Athena SDK <https://github.com/hrbrmstr/awsathena>
   - `metis` - Helpers for Accessing and Querying Amazon Athena using R, Including a lightweight RJDBC shim <https://github.com/hrbrmstr/metis>
   - `metisjars` - JARs for `metis` <https://github.com/hrbrmstr/metis-jars>
@@ -519,7 +523,6 @@ project, this project has used an appropriate name to reflect this …
 
 # To Do list:
 
-  - Upload package to cran
   - Add a logo (as everyone loves a logo)
   - Investigate boto3 `get_paginator` method for iterative methods for
     `dbFetch` possible method: `paginator =
