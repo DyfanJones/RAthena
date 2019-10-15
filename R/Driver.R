@@ -54,7 +54,7 @@ setMethod(
 #' Connect to Athena using python's sdk boto3
 #' 
 #' @description 
-#' It is never adviced to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is adviced to use
+#' It is never advised to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is advised to use
 #' \code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
 #' \href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
 #' of supported environment variables:

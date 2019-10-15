@@ -168,8 +168,12 @@ get_aws_env <- function(x) {
 # time check warning when connection will expire soon
 time_check <- function(x){ 
   x <- as.numeric(x - Sys.time(), units = "secs") 
-  if(x %/% 60 < 15) warning("Athena Connection will expire in " ,x %/% 60, ":",round(x %% 60, 0), " (mm:ss)",
+  m <- x %/% 60
+  s <- round(x %% 60, 0)
+  if(m < 15) warning("Athena Connection will expire in ",time_format(m), ":",time_format(s)," (mm:ss)",
                             call. = F)}
+
+time_format <- function(x) if(x < 10) paste0(0,x) else x
 
 # get parent pkg function and method
 pkg_method <- function(fun, pkg) {
@@ -194,6 +198,6 @@ char_log <- function(value, athena_class){
 
 # simple wrapper to correct miss classification
 read_athena <- function(file, athena_class){
-  output <- read.csv(file, stringsAsFactors = F) 
+  output <- read.csv(file, col.names = names(athena_class), stringsAsFactors = F) 
   char_log(output, athena_class)
 }

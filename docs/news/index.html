@@ -145,7 +145,7 @@
 </li>
 <li>created <code>dbColumnInfo</code> method: returns data.frame containing <code>field_name</code> and <code>type</code>
 </li>
-<li>Created helper function <code>time_check</code> to check how long is left on the Athena Connection, if less than 15 minutes notify user with a warning message</li>
+<li>Created helper function <code>time_check</code> to check how long is left on the Athena Connection, if less than 15 minutes a warning message is outputed to notify user</li>
 <li>Created s3 method for function <code>db_collect</code> for better integration with dplyr</li>
 <li>Created s3 method for function <code>db_save_query</code> for better integration with dplyr</li>
 <li>Created s3 method for function <code>db_copy_to</code> for better integration with dplyr</li>
@@ -170,6 +170,12 @@
 <code>dbClearResult</code> changed error, to return python error as warning to warn user doesn’t have permission to delete S3 resource</li>
 <li>
 <code>dbClearResult</code> replaced S3 search for query key with out location from Athena</li>
+<li>
+<code>dbListTables</code> now returns vector of tables from <code>aws glue</code> instead of using an <code>aws athena</code> query. This method increases speed of call of query</li>
+<li>
+<code>dbListFields</code> now returns column names from <code>aws glue</code> instead of using an <code>aws athena</code> query.. This method increases speed of call of query</li>
+<li>
+<code>dbExistsTable</code> now returns boolean from <code>aws glue</code> instead of using an <code>aws athena</code> query.. This method increases speed of call of query</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
@@ -178,6 +184,8 @@
 <ul>
 <li>
 <code>dbFetch</code> athena data type miss alignment</li>
+<li>Added Athena classes and names to file readers to prevent miss classification</li>
+<li>Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.</li>
 </ul>
 </div>
 <div id="unit-tests" class="section level3">

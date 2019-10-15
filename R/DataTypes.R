@@ -5,7 +5,8 @@ AthenaDataType <-
       logical =   "BOOLEAN",
       integer =   "INT",
       integer64 = "BIGINT",
-      numeric =   "FLOAT",
+      numeric =   "DOUBLE",
+      double = "DOUBLE",
       factor =    "STRING",
       character = "STRING",
       list = "STRING",
@@ -17,6 +18,7 @@ AthenaDataType <-
 
 
 AthenaToRDataType <- function(data_type){
+  Names <- tolower(sapply(data_type, function(x) x$Name))
   Types <- tolower(sapply(data_type, function(x) x$Type))
   athena_to_r <- function(x){
     switch(x,
@@ -33,5 +35,7 @@ AthenaToRDataType <- function(data_type){
          date = "Date",
          timestamp = "POSIXct",
          x)}
-  vapply(Types, athena_to_r, FUN.VALUE = character(1))
+  output <- vapply(Types, athena_to_r, FUN.VALUE = character(1))
+  names(output) <- Names
+  output
 }

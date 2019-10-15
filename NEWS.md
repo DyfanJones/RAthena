@@ -15,7 +15,7 @@
 * Created a helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * created `dbColumnInfo` method: returns data.frame containing `field_name` and `type`
-* Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes notify user with a warning message
+* Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes a warning message is outputed to notify user
 * Created s3 method for function `db_collect` for better integration with dplyr
 * Created s3 method for function `db_save_query` for better integration with dplyr
 * Created s3 method for function `db_copy_to` for better integration with dplyr
@@ -29,9 +29,14 @@
 * `dbFetch` replaced S3 search for query key with output location from Athena
 * `dbClearResult` changed error, to return python error as warning to warn user doesn't have permission to delete S3 resource
 * `dbClearResult` replaced S3 search for query key with out location from Athena
+* `dbListTables` now returns vector of tables from `aws glue` instead of using an `aws athena` query. This method increases speed of call of query
+* `dbListFields` now returns column names from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
+* `dbExistsTable` now returns boolean from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
 
 ### Bug Fixes
 * `dbFetch` athena data type miss alignment
+* Added Athena classes and names to file readers to prevent miss classification
+* Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.
 
 ### Unit tests
 * ARN Connection
