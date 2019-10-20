@@ -183,21 +183,3 @@ pkg_method <- function(fun, pkg) {
   fun_name <- utils::getFromNamespace(fun, pkg)
   return(fun_name)
 }
-
-# convert character to logical
-char_log <- function(value, athena_class){
-  col_want <- sapply(athena_class, function(x) x == "logical")
-  for (i in seq_along(which(col_want))) {
-    want = which(value[[which(col_want)[i]]] == "true")
-    output = rep(FALSE, times = nrow(value))
-    output[want] = TRUE
-    value[[which(col_want)[i]]] <- output
-  }
-  value
-}
-
-# simple wrapper to correct miss classification
-read_athena <- function(file, athena_class){
-  output <- read.csv(file, col.names = names(athena_class), stringsAsFactors = F) 
-  char_log(output, athena_class)
-}
