@@ -176,17 +176,15 @@ setMethod(
     Type <- AthenaToRDataType(result_class$ResultSet$ResultSetMetadata$ColumnInfo)
     
     if(grepl("\\.csv$",result_info$key)){
-      if (requireNamespace("data.table", quietly=TRUE)){output <- data.table::fread(File, col.names = names(Type), colClasses = unname(Type))}
-      else {output <- read_athena(File, Type)}
+      output <- data.table::fread(File, col.names = names(Type), colClasses = unname(Type))
     } else{
       file_con <- file(File)
       output <- suppressWarnings(readLines(file_con))
       close(file_con)
       if(any(grepl("create|table", output, ignore.case = T))){
-        output <-data.frame("TABLE_DDL" = paste0(output, collapse = "\n"), stringsAsFactors = FALSE)
+        output <- data.frame("TABLE_DDL" = paste0(output, collapse = "\n"), stringsAsFactors = FALSE)
       } else (output <- data.frame(var1 = trimws(output), stringsAsFactors = FALSE))
     }
-    
     return(output)
   })
 

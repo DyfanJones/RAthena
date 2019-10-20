@@ -1,7 +1,7 @@
 Package: RAthena
 Type: Package
 Title: Connect to 'AWS Athena' using 'Boto3' ('DBI' Interface)
-Version: 1.2.0
+Version: 1.2.9000
 Authors@R: person("Dyfan", "Jones", email="dyfan.r.jones@gmail.com", 
                   role= c("aut", "cre"))
 Description: Designed to be compatible with the R package 'DBI' (Database Interface)
@@ -9,6 +9,7 @@ Description: Designed to be compatible with the R package 'DBI' (Database Interf
     To do this 'Python' 'Boto3' Software Development Kit ('SDK')
     <https://boto3.amazonaws.com/v1/documentation/api/latest/index.html> is used as a driver.
 Imports: 
+    data.table,
     DBI (>= 0.7),
     methods,
     reticulate (>= 1.13),
@@ -16,7 +17,7 @@ Imports:
     utils
 Suggests: 
     arrow,
-    data.table,
+    bit64,
     dplyr,
     dbplyr,
     testthat
