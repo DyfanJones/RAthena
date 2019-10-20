@@ -18,7 +18,8 @@
 #' without needing hard code any credentials.
 #' 
 #' @import reticulate
-#' @importFrom utils packageVersion read.csv write.table
+#' @importFrom utils packageVersion
 #' @importFrom stats runif
 #' @import DBI
+#' @import data.table
 "_PACKAGE"
