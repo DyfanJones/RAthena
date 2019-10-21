@@ -100,8 +100,8 @@ Athena_write_table <-
 
     # writes out csv/tsv, uses data.table for extra speed
     switch(file.type,
-           "csv" = data.table::fwrite(value, t),
-           "tsv" = data.table::fwrite(value, t, sep = "\t"))
+           "csv" = data.table::fwrite(value, t, showProgress = F),
+           "tsv" = data.table::fwrite(value, t, sep = "\t", showProgress = F))
 
     found <- dbExistsTable(conn, Name)
     if (found && !overwrite && !append) {
