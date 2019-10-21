@@ -176,7 +176,8 @@ setMethod(
     Type <- AthenaToRDataType(result_class$ResultSet$ResultSetMetadata$ColumnInfo)
     
     if(grepl("\\.csv$",result_info$key)){
-      output <- data.table::fread(File, col.names = names(Type), colClasses = unname(Type))
+      # currently parameter data.table is left as default. If users require data.frame to be returned then parameter will be updated
+      output <- data.table::fread(File, col.names = names(Type), colClasses = unname(Type), showProgress = F)
     } else{
       file_con <- file(File)
       output <- suppressWarnings(readLines(file_con))
