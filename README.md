@@ -520,10 +520,3 @@ AWS SDK `Boto3`. The ultimate goal is to provide an extra method for R
 users to interface with AWS Athena. As `pyAthena` is the most similar
 project, this project has used an appropriate name to reflect this …
 `RAthena`.
-
-# To Do list:
-
-  - Add a logo (as everyone loves a logo)
-  - Investigate boto3 `get_paginator` method for iterative methods for
-    `dbFetch` possible method: `paginator =
-    res@athena$get_paginator("get_query_results")`

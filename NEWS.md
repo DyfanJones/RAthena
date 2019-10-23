@@ -1,12 +1,20 @@
+# RAthena 1.3.0
+* Move from development version to CRAN publishing version
+
 # RAthena 1.2.9001
 ### Minor Change
 * Progress bar from `data.table::fread` and `data.table::fwrite` have been disabled
 * Removed `util` functions from namespace: `write.table`, `read.csv`
-* Added data.table to namespace
+* Added `data.table` to namespace
+
+## Unit tests
+* Added `bigint` to `integer64` in data.transfer unit test
 
 # RAthena 1.2.9000
 ### New Features:
 * AWS Athena `bigint` are convert into R `bit64::integer64` and visa versa
+
+### Major Changes
 * RAthena now defaults in using data.table to read and write files when transferring data to and from AWS Athena. Reason for change:
   * Increase speed in data transfer
   * Data types from AWS Athena can be passed to `data.table::fread`. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R

@@ -1,17 +1,11 @@
 ## Release Summary
-This a resubmission addressing cran comments and a feature release exposing amazon web services (AWS) Athena work groups, AWS Assume Resource Name (ARN) roles, extra DBI methods and dplyr integration
+This is a feature updated, focusing on the setting `data.table` as the default file parser and handling of 'AWS Athena' `bigint` classes
 
 In this version I have:
+* Correctly pass Amazon Web Service ('AWS') Athena `bigint` to R `integer64` class.
+* data.table has been made a dependency as `fread` and `fwrite` have been made the default file parsers to transfer data to and from 'AWS Athena'
 
-* Added explanation to all aliases in package description
-* Added new features to integrate package with `AWS Athena` lower level services i.e. work groups
-* Added dplyr integration methods
-* Added more unit testing
-* Removed hard coded `AWS S3 bucket URI` and `AWS ARN` role from unit tests. Inputs are now set in environment variables. This is to enable testing of package by other users, linking to other `AWS accounts`. Required environment variables: ["rathena_arn", "rathena_s3_query", "rathena_s3_tbl"]
-  * **NOTE:** *System variable format returned for Unit tests:*
-  * Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
-  * Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
-  * Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
+## Examples Note:
 * All R examples with `\dontrun` & `\donttest` have been given a note warning users that `AWS credentials` are required to run
 * All R examples with `\dontrun` have a dummy `AWS S3 Bucket uri` example and won't run until user replace the `AWS S3 bucket uri`.
 
@@ -23,12 +17,10 @@ In this version I have:
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 ## R devtools::check_rhub() results
-  Maintainer: 'Dyfan Jones <dyfan.r.jones@gmail.com>'
-  New submission
-0 errors ✔ | 0 warnings ✔ | 1 note ✖
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 ## unit tests (using testthat) results
-* OK:       36
+* OK:       37
 * Failed:   0
 * Warnings: 0
 * Skipped:  0
