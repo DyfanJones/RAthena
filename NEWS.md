@@ -7,7 +7,7 @@
 * Removed `util` functions from namespace: `write.table`, `read.csv`
 * Added `data.table` to namespace
 
-## Unit tests
+### Unit tests
 * Added `bigint` to `integer64` in data.transfer unit test
 
 # RAthena 1.2.9000
