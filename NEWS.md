@@ -11,7 +11,7 @@
 ### New Features:
 * AWS Athena `bigint` are convert into R `bit64::integer64` and visa versa
 
-# Major Changes
+### Major Changes
 * RAthena now defaults in using data.table to read and write files when transferring data to and from AWS Athena. Reason for change:
   * Increase speed in data transfer
   * Data types from AWS Athena can be passed to `data.table::fread`. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R
