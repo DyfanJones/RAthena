@@ -274,7 +274,6 @@ setMethod("sqlCreateTable", "AthenaConnection",
               is.data.frame(fields),
               is.null(field.types) || is.character(field.types),
               is.null(partition) || is.character(partition) || is.list(partition),
-              is.null(field.types) || is.character(field.types),
               is.s3_uri(s3.location))
     
     field <- createFields(con, fields, field.types = field.types)
@@ -305,7 +304,8 @@ createFields <- function(con, fields, field.types) {
   }
   
   field_names <- tolower(gsub("\\.", "_", make.names(names(fields), unique = TRUE)))
-  message("Info: data.frame colnames have been converted to align with Athena DDL naming convertions: \n",paste0(field_names, collapse= ",\n"))
+  DIFF <- setdiff(field_names, names(fields))
+  if (length(DIFF) > 0) message("Info: data.frame colnames have been converted to align with Athena DDL naming convertions: \n",paste0(DIFF, collapse= ",\n"))
   field.types <- unname(fields)
   paste0(field_names, " ", field.types)
 }
