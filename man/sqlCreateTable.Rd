@@ -8,7 +8,8 @@
 \usage{
 \S4method{sqlCreateTable}{AthenaConnection}(con, table = NULL,
   fields = NULL, field.types = NULL, partition = NULL,
-  s3.location = NULL, file.type = c("csv", "tsv", "parquet"), ...)
+  s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
+  compress = c("default", "gz"), ...)
 }
 \arguments{
 \item{con}{A database connection.}
@@ -32,6 +33,8 @@ A data frame: field types are generated using
 \item{s3.location}{s3 bucket to store Athena table}
 
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
+
+\item{compress}{Compression type currently only ["default", "gz] is supported. \code{Default} is no compression}
 
 \item{...}{Other arguments used by individual methods.}
 }

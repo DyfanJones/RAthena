@@ -60,6 +60,8 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
 
 \item{...}{Other arguments used by individual methods.}
+
+\item{compress}{Compression type currently only ["default", "gz] is supported. \code{Default} is no compression}
 }
 \value{
 \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
