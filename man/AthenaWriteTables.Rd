@@ -11,17 +11,20 @@
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
   value, overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), ...)
+  file.type = c("csv", "tsv", "parquet"), compress = c("default",
+  "gz"), ...)
 
 \S4method{dbWriteTable}{AthenaConnection,Id,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), ...)
+  file.type = c("csv", "tsv", "parquet"), compress = c("default",
+  "gz"), ...)
 
 \S4method{dbWriteTable}{AthenaConnection,SQL,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), ...)
+  file.type = c("csv", "tsv", "parquet"), compress = c("default",
+  "gz"), ...)
 }
 \arguments{
 \item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by
@@ -54,10 +57,14 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
 \item{partition}{Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}}
 
-\item{s3.location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
+\item{s3.location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
+By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object, it is advised to change 
+this as it will cause S3 Bucket will get cluttered.}
 
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
 \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
+
+\item{compress}{Compression type currently only ["default", "gz] is supported. \code{Default} is no compression}
 
 \item{...}{Other arguments used by individual methods.}
 }
