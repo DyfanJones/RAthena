@@ -148,12 +148,15 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   Name <- paste(name, FileType, sep = ".")
   s3_info <- split_s3_uri(s3.location)
   s3_info$key <- gsub("/$", "", s3_info$key)
-  if(grepl(name, s3_info$key)){s3_info$key <- gsub(name, "", s3_info$key)
-  s3_info$key <- gsub( "|/$", "", s3_info$key)}
+  split_key <- unlist(strsplit(s3_info$key,"/"))
+  
+  if(split_key[length(split_key)] == name) split_key[length(split_key)] <- ""
+  s3_info$key <- paste(split_key, collapse = "/")
   
   if(s3_info$key != "" && partition == ""){s3_key <- paste(s3_info$key,name, Name, sep = "/")}
   else if (s3_info$key == "" && partition != "") {s3_key <- paste(name, partition, Name, sep = "/")}
   else if (s3_info$key == "" && partition == "") {s3_key <- paste(name, Name, sep = "/")}
+  else if (split_key[length(split_key)] != name) {s3_key <- paste(s3_info$key, partition, Name, sep = "/")}
   else {s3_key <- paste(s3_info$key, name, partition, Name, sep = "/")}
   
   tryCatch(s3 <- con@ptr$resource("s3"),
