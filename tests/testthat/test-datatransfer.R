@@ -37,7 +37,7 @@ test_that("Testing data transfer between R and athena", {
   dbWriteTable(con, "df_bigint", df2, overwrite = T, s3.location = s3.location2)
   
   # if data.table is available in namespace result returned as data.table
-  test_df <- as.data.frame(dbGetQuery(con, paste0("select x, y, z from test_df where timestamp ='", format(Sys.Date(), "%Y%m%d"),"'")))
+  test_df <- as.data.frame(dbGetQuery(con, paste0("select x, y, z from test_df where timestamp ='", format(DATE, "%Y%m%d"),"'")))
   test_df2 <- as.data.frame(dbGetQuery(con, paste0("select x, y, z from test_df2 where year = '", format(DATE, "%Y"), "' and month = '",format(DATE, "%m"), "' and day = '", format(DATE, "%d"),"'")))
   test_df3 <- as.data.frame(dbGetQuery(con, "select * from df_bigint"))
   expect_equal(test_df,df)
