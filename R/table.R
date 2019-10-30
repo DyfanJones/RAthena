@@ -12,7 +12,9 @@
 #'   `TRUE` if `overwrite` is also `TRUE`.
 #' @param field.types Additional field types used to override derived types.
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
-#' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
+#' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
+#'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object, it is advised to change 
+#'        this as it will cause S3 Bucket will get cluttered.
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress Compression type currently only ["default", "gz] is supported. \code{Default} is no compression
@@ -65,11 +67,14 @@ Athena_write_table <-
               is.data.frame(value),
               is.logical(overwrite),
               is.logical(append),
-              is.s3_uri(s3.location))
+              is.null(s3.location) || is.s3_uri(s3.location))
     stopifnot(is.null(partition) || is.character(partition) || is.list(partition))
 
     sapply(tolower(names(partition)), function(x){if(x %in% tolower(names(value))){
       stop("partition ", x, " is a variable in data.frame ", deparse(substitute(value)), call. = FALSE)}})
+    
+    # added s3 uri path of s3_staging_dir if s3.location is left as null
+    if(is.null(s3.location)) s3.location <- conn@info$s3_staging
     
     file.type = match.arg(file.type)
     compress = match.arg(compress)
@@ -242,7 +247,9 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #' @inheritParams DBI::sqlCreateTable
 #' @param field.types Additional field types used to override derived types.
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
-#' @param s3.location s3 bucket to store Athena table
+#' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
+#'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object, it is advised to change 
+#'        this as it will cause S3 Bucket will get cluttered.
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
 #' @param compress Compression type currently only ["default", "gz] is supported. \code{Default} is no compression
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
@@ -287,11 +294,14 @@ setMethod("sqlCreateTable", "AthenaConnection",
               is.data.frame(fields),
               is.null(field.types) || is.character(field.types),
               is.null(partition) || is.character(partition) || is.list(partition),
-              is.s3_uri(s3.location))
+              is.null(s3.location) || is.s3_uri(s3.location))
     
     field <- createFields(con, fields, field.types = field.types)
     file.type <- match.arg(file.type)
     compress <- match.arg(compress)
+    # added s3 uri path of s3_staging_dir if s3.location is left as null
+    if(is.null(s3.location)) s3.location <- con@info$s3_staging
+    
     table1 <- gsub(".*\\.", "", table)
     
     s3.location <- gsub("/$", "", s3.location)
