@@ -1,3 +1,10 @@
+# RAthena 1.3.0.9000
+### New Feature
+* GZIP compression is now supported for "csv" and "tsv" file format in `dbWriteTable`
+
+### Minor Change
+* `sqlCreateTable` info message will now only inform user if colnames have changed and display the colname that have changed
+
 # RAthena 1.3.0
 * Move from development version to CRAN publishing version
 
