@@ -135,7 +135,9 @@ Athena_write_table <-
     if (!append) {
       sql <- sqlCreateTable(conn, Name, value, field.types = field.types, 
                             partition = names(partition),
-                            s3.location = s3.location, file.type = file.type)
+                            s3.location = s3.location, file.type = file.type,
+                            compress = compress)
+      
       # create Athena table
       rs <- dbExecute(conn, sql)
       dbClearResult(rs)}
