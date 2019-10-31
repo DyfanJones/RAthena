@@ -17,7 +17,8 @@
 #'        this as it will cause S3 Bucket will get cluttered.
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
-#' @param compress To compression file.type, if file type ["csv", "tsv"] "gzip" compression is used. Currently parquet compression isn't supported.
+#' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used.
+#'        Currently parquet compression isn't supported.
 #' @inheritParams DBI::sqlCreateTable
 #' @return \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
 #'         arguments are unset, or append = TRUE and the data frame with the new data has different column names,
@@ -254,7 +255,8 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
 #'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object, it is advised to change 
 #'        this as it will cause S3 Bucket will get cluttered.
 #' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]
-#' @param compress To compression file.type, if file type ["csv", "tsv"] "gzip" compression is used. Currently parquet compression isn't supported.
+#' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used.
+#'        Currently parquet compression isn't supported.
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
 #' @examples 

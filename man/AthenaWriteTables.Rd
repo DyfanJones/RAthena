@@ -61,7 +61,8 @@ this as it will cause S3 Bucket will get cluttered.}
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
 \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
 
-\item{compress}{To compression file.type, if file type ["csv", "tsv"] "gzip" compression is used. Currently parquet compression isn't supported.}
+\item{compress}{\code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used.
+Currently parquet compression isn't supported.}
 
 \item{...}{Other arguments used by individual methods.}
 }
