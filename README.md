@@ -4,7 +4,8 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/RAthena)](https://CRAN.R-project.org/package=RAthena)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/RAthena)](https://CRAN.R-project.org/package=RAthena)
+![downloads](https://cranlogs.r-pkg.org/badges/RAthena)
 
 The goal of the `RAthena` package is to provide a DBI-compliant interface
 to Amazon’s Athena (<https://aws.amazon.com/athena/>) using `Boto3` SDK.
