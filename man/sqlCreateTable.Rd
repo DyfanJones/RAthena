@@ -9,7 +9,7 @@
 \S4method{sqlCreateTable}{AthenaConnection}(con, table = NULL,
   fields = NULL, field.types = NULL, partition = NULL,
   s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
-  compress = c("default", "gz"), ...)
+  compress = FALSE, ...)
 }
 \arguments{
 \item{con}{A database connection.}
@@ -36,7 +36,7 @@ this as it will cause S3 Bucket will get cluttered.}
 
 \item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"]}
 
-\item{compress}{Compression type currently only ["default", "gz] is supported. \code{Default} is no compression}
+\item{compress}{To compression file.type, if file type ["csv", "tsv"] "gzip" compression is used. Currently parquet compression isn't supported.}
 
 \item{...}{Other arguments used by individual methods.}
 }
