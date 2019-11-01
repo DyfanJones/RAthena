@@ -1,9 +1,11 @@
 ## Release Summary
-This is a feature updated, focusing on the setting `data.table` as the default file parser and handling of 'AWS Athena' `bigint` classes
+This is a feature updated, focusing on methods to compress flat files before submitting them to `Amazon Web Service S3`. 
 
 In this version I have:
-* Correctly pass Amazon Web Service ('AWS') Athena `bigint` to R `integer64` class.
-* data.table has been made a dependency as `fread` and `fwrite` have been made the default file parsers to transfer data to and from 'AWS Athena'
+* created a new parameter in `dbWriteTable` called `compress` that enables compression method `gzip` to be utilised when sending data to AWS S3.
+
+**Bug Fix**
+* Fixed minor bug of s3_uri being incorrectly built
 
 ## Examples Note:
 * All R examples with `\dontrun` & `\donttest` have been given a note warning users that `AWS credentials` are required to run
@@ -20,7 +22,7 @@ In this version I have:
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 ## unit tests (using testthat) results
-* OK:       37
+* OK:       38
 * Failed:   0
 * Warnings: 0
 * Skipped:  0
