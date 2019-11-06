@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -154,7 +154,8 @@ Field types are unescaped.</p>
     </tr>
     <tr>
       <th>s3.location</th>
-      <td><p>s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/").</p></td>
+      <td><p>s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
+By default s3.location is set s3 staging directory from <code><a href='AthenaConnection.html'>AthenaConnection</a></code> object.</p></td>
     </tr>
     <tr>
       <th>file.type</th>
@@ -223,7 +224,7 @@ Currently parquet compression isn't supported.</p></td>
 #&gt;   petal_width DOUBLE,
 #&gt;   species STRING
 #&gt; )
-#&gt; PARTITIONED BY (20191031 STRING)
+#&gt; PARTITIONED BY (20191106 STRING)
 #&gt; ROW FORMAT DELIMITED
 #&gt; 	FIELDS TERMINATED BY ','
 #&gt; 	ESCAPED BY '\\'
@@ -246,7 +247,7 @@ Currently parquet compression isn't supported.</p></td>
 #&gt;   petal_width DOUBLE,
 #&gt;   species STRING
 #&gt; )
-#&gt; PARTITIONED BY (20191031 STRING)
+#&gt; PARTITIONED BY (20191106 STRING)
 #&gt; STORED AS PARQUET
 #&gt; LOCATION 's3://path/to/athena/table/iris/'
 #&gt; ;</div><div class='input'>

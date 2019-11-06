@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -110,6 +110,52 @@
       <small>Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rathena-140" class="section level1">
+<h1 class="page-header">
+<a href="#rathena-140" class="anchor"></a>RAthena 1.4.0<small> Unreleased </small>
+</h1>
+<p>Updated package version for cran release</p>
+</div>
+    <div id="rathena-1309001" class="section level1">
+<h1 class="page-header">
+<a href="#rathena-1309001" class="anchor"></a>RAthena 1.3.0.9001<small> Unreleased </small>
+</h1>
+<div id="minor-change" class="section level3">
+<h3 class="hasAnchor">
+<a href="#minor-change" class="anchor"></a>Minor Change</h3>
+<ul>
+<li>
+<code>s3.location</code> parameter is <code>dbWriteTable</code> can now be made nullable</li>
+</ul>
+</div>
+<div id="backend-change" class="section level3">
+<h3 class="hasAnchor">
+<a href="#backend-change" class="anchor"></a>Backend Change</h3>
+<ul>
+<li>helper function <code>upload_data</code> has been rebuilt and removed the old “horrible” if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is alot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
+</ul>
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+
+con &lt;- dbConnect(RAthena::athena())
+
+dbWrite(con, "iris", iris)</a></code></pre>
+</div>
+<div id="bug-fix" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fix" class="anchor"></a>Bug Fix</h3>
+<ul>
+<li>Info message wasn’t being return when colnames needed changing for Athena DDL</li>
+</ul>
+</div>
+<div id="unit-tests" class="section level3">
+<h3 class="hasAnchor">
+<a href="#unit-tests" class="anchor"></a>Unit Tests</h3>
+<ul>
+<li>
+<code>data transfer</code> test now tests compress, and default s3.location when transfering data</li>
+</ul>
+</div>
+</div>
     <div id="rathena-1309000" class="section level1">
 <h1 class="page-header">
 <a href="#rathena-1309000" class="anchor"></a>RAthena 1.3.0.9000<small> Unreleased </small>
@@ -122,9 +168,9 @@
 </li>
 </ul>
 </div>
-<div id="minor-change" class="section level3">
+<div id="minor-change-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#minor-change" class="anchor"></a>Minor Change</h3>
+<a href="#minor-change-1" class="anchor"></a>Minor Change</h3>
 <ul>
 <li>
 <code>sqlCreateTable</code> info message will now only inform user if colnames have changed and display the colname that have changed</li>
@@ -143,9 +189,9 @@
 <h1 class="page-header">
 <a href="#rathena-129001" class="anchor"></a>RAthena 1.2.9001<small> Unreleased </small>
 </h1>
-<div id="minor-change-1" class="section level3">
+<div id="minor-change-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#minor-change-1" class="anchor"></a>Minor Change</h3>
+<a href="#minor-change-2" class="anchor"></a>Minor Change</h3>
 <ul>
 <li>Progress bar from <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread</a></code> and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fwrite.html">data.table::fwrite</a></code> have been disabled</li>
 <li>Removed <code>util</code> functions from namespace: <code>write.table</code>, <code>read.csv</code>
@@ -153,9 +199,9 @@
 <li>Added <code>data.table</code> to namespace</li>
 </ul>
 </div>
-<div id="unit-tests" class="section level3">
+<div id="unit-tests-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#unit-tests" class="anchor"></a>Unit tests</h3>
+<a href="#unit-tests-1" class="anchor"></a>Unit tests</h3>
 <ul>
 <li>Added <code>bigint</code> to <code>integer64</code> in data.transfer unit test</li>
 </ul>
@@ -263,9 +309,9 @@
 <li>Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.</li>
 </ul>
 </div>
-<div id="unit-tests-1" class="section level3">
+<div id="unit-tests-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#unit-tests-1" class="anchor"></a>Unit tests</h3>
+<a href="#unit-tests-2" class="anchor"></a>Unit tests</h3>
 <ul>
 <li>ARN Connection</li>
 <li>Athena Work Groups</li>
@@ -299,9 +345,9 @@
 </li>
 </ul>
 </div>
-<div id="unit-tests-2" class="section level3">
+<div id="unit-tests-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#unit-tests-2" class="anchor"></a>Unit tests</h3>
+<a href="#unit-tests-3" class="anchor"></a>Unit tests</h3>
 <ul>
 <li>Athena Request</li>
 </ul>
@@ -318,9 +364,9 @@
 <li>Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using <code>dbWriteTable</code>)</li>
 </ul>
 </div>
-<div id="unit-tests-3" class="section level3">
+<div id="unit-tests-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#unit-tests-3" class="anchor"></a>Unit tests</h3>
+<a href="#unit-tests-4" class="anchor"></a>Unit tests</h3>
 <ul>
 <li>Added logical variable type in data transfer unit test</li>
 </ul>
@@ -359,9 +405,9 @@
 <li>fixed bug with field names containing “.”, replace with "_" for Athena tables.</li>
 </ul>
 </div>
-<div id="unit-tests-4" class="section level3">
+<div id="unit-tests-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#unit-tests-4" class="anchor"></a>Unit tests</h3>
+<a href="#unit-tests-5" class="anchor"></a>Unit tests</h3>
 <ul>
 <li>Athena DDL</li>
 <li>Athena Classes</li>
@@ -411,6 +457,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rathena-140">1.4.0</a></li>
+        <li><a href="#rathena-1309001">1.3.0.9001</a></li>
         <li><a href="#rathena-1309000">1.3.0.9000</a></li>
         <li><a href="#rathena-130">1.3.0</a></li>
         <li><a href="#rathena-129001">1.2.9001</a></li>

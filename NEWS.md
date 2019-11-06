@@ -1,3 +1,6 @@
+# RAthena 1.4.0
+Updated package version for cran release
+
 # RAthena 1.3.0.9001
 ### Minor Change
 * `s3.location` parameter is `dbWriteTable` can now be made nullable
