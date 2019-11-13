@@ -5,7 +5,7 @@ In this version I have:
 * created a new parameter in `dbWriteTable` called `compress` that enables compression method `gzip` to be utilised when sending data to AWS S3.
 
 **Bug Fix**
-* Fixed minor bug of s3_uri being incorrectly built
+* Fixed minor bug of s3_uri being incorrectly built in helper function `upload_data`
 
 ## Examples Note:
 * All R examples with `\dontrun` & `\donttest` have been given a note warning users that `AWS credentials` are required to run
