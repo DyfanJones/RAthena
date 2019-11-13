@@ -65,7 +65,7 @@ dbWrite(con, "iris", iris)
 * Created a helper function `work_group_config` and `work_group_config_update` to create config of work group
 * Added extra feature to get work group output location in connection function `AthenaConnection`
 * created `dbColumnInfo` method: returns data.frame containing `field_name` and `type`
-* Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes a warning message is outputed to notify user
+* Created helper function `time_check` to check how long is left on the Athena Connection, if less than 15 minutes a warning message is outputted to notify user
 * Created s3 method for function `db_collect` for better integration with dplyr
 * Created s3 method for function `db_save_query` for better integration with dplyr
 * Created s3 method for function `db_copy_to` for better integration with dplyr
