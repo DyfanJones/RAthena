@@ -120,7 +120,7 @@ Athena_write_table <-
         stop("The package arrow is required for R to utilise Apache Arrow to create parquet files.", call. = FALSE)
       else {
         cp <- if(compress) "snappy" else NULL
-        arrow::write_parquet(value, FileLocation, compress = cp)}
+        arrow::write_parquet(value, FileLocation, compression = cp)}
     }
     
     # writes out csv/tsv, uses data.table for extra speed
