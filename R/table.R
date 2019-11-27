@@ -146,7 +146,7 @@ Athena_write_table <-
     upload_data(conn, FileLocation, name, partition, s3.location, file.type, compress)
     
     if (!append) {
-      sql <- sqlCreateTable(conn, Name, value, field.types = field.types, 
+      sql <- sqlCreateTable(conn, table = Name, fields = value, field.types = field.types, 
                             partition = names(partition),
                             s3.location = s3.location, file.type = file.type,
                             compress = compress)
