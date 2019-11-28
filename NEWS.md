@@ -1,3 +1,10 @@
+# RAthena 1.4.1
+### New Features:
+* Parquet file type can now be compress using snappy compression when writting data to S3.
+
+### Bug fixed
+* Older versions of R are returning errors when function `dbWriteTable` is called. The bug is due to function `sqlCreateTable` which `dbWriteTable` calls. Parameters `table` and `fields` were set to `NULL`. This has now been fixed.
+
 # RAthena 1.4.0
 Updated package version for cran release
 
