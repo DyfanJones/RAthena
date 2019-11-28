@@ -312,7 +312,7 @@ NULL
 #' @rdname sqlCreateTable
 #' @export
 setMethod("sqlCreateTable", "AthenaConnection",
-  function(con, table = NULL, fields = NULL, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), 
+  function(con, table, fields, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), 
            compress = FALSE, ...){
     if (!dbIsValid(con)) {stop("Connection already closed.", call. = FALSE)}
     stopifnot(is.character(table),
