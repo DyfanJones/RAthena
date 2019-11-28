@@ -322,7 +322,7 @@ setMethod("sqlCreateTable", "AthenaConnection",
               is.null(s3.location) || is.s3_uri(s3.location),
               is.logical(compress))
     
-    field <- createFields(con, fields, field.types = field.types)
+    field <- createFields(con, fields = fields, field.types = field.types)
     file.type <- match.arg(file.type)
     
     # use default s3_staging directory is s3.location isn't provided
