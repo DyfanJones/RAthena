@@ -18,7 +18,7 @@ Imports:
 Suggests: 
     arrow,
     bit64,
-    dplyr,
+    dplyr (>= 0.7.0),
     dbplyr,
     testthat
 Depends: R (>= 3.2.0)
