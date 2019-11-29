@@ -12,6 +12,12 @@ export(install_boto)
 export(list_work_groups)
 export(tag_options)
 export(update_work_group)
+if (getRversion() >= "3.6.0") {
+  S3method(dplyr::sql_translate_env,AthenaConnection)
+} else {
+  export(sql_translate_env.AthenaConnection)
+}
+
 exportClasses(AthenaConnection)
 exportClasses(AthenaDriver)
 exportClasses(AthenaResult)
