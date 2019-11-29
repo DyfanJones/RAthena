@@ -8,7 +8,7 @@
 sql_translate_env.AthenaConnection(con)
 }
 \arguments{
-\item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by
+\item{con}{An \code{\linkS4class{AthenaConnection}} object, produced by
 [DBI::dbConnect()]}
 }
 \description{
