@@ -1,20 +1,22 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
-# All rights reserved.
-#
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree at https://github.com/prestodb/RPresto.
+#' @include Connection.R
+NULL
 
-#' @include dbplyr_compatible.R Connection.R
+#' AWS Athena backend dbplyr 
+#' 
+#' Create s3 implementation of \code{sql_translate_env} for AWS Athena sql translate envirnoment based off
+#' \href{https://docs.aws.amazon.com/athena/latest/ug/data-types.html}{Athena Data Types} and 
+#' \href{https://docs.aws.amazon.com/athena/latest/ug/functions-operators-reference-section.html}{DML Queries, Functions, and Operators}
+#' @param conn An \code{\linkS4class{AthenaConnection}} object, produced by
+#'   [DBI::dbConnect()]
+#' @name sql_translate_env
 NULL
 
 athena_window_functions <- function() {
-  base_win <- dbplyr_compatible('base_win')
-  if (utils::packageVersion('dplyr') < '0.5.0.9004') {
-    return(base_win)
-  }
-  sql_translator <- dbplyr_compatible('sql_translator')
-  win_absent <- dbplyr_compatible('win_absent')
-  win_recycled <- dbplyr_compatible('win_recycled')
+  # using pkg_method to retrieve external pkg methods
+  base_win <- pkg_method('base_win', "dbplyr")
+  sql_translator <- pkg_method('sql_translator', "dbplyr")
+  win_absent <- pkg_method('win_absent', "dbplyr")
+  win_recycled <- pkg_method('win_recycled', "dbplyr")
   return(sql_translator(
     .parent=base_win,
     all=win_recycled('bool_and'),
@@ -24,40 +26,31 @@ athena_window_functions <- function() {
   ))
 }
 
-#' S3 implementation of \code{sql_translate_env} for Athena
-#'
-#' @rdname dplyr_function_implementations
-#' @keywords internal
-#'
-#' @rawNamespace
-#' if (getRversion() >= "3.6.0") {
-#'   S3method(dplyr::sql_translate_env,AthenaConnection)
-#' } else {
-#'   export(sql_translate_env.AthenaConnection)
-#' }
+
+#' @rdname sql_translate_env
+#' @export
 sql_translate_env.AthenaConnection <- function(con) {
-  sql_variant <- dbplyr_compatible('sql_variant')
-  sql_translator <- dbplyr_compatible('sql_translator')
-  sql_prefix <- dbplyr_compatible('sql_prefix')
-  sql_cast <- dbplyr_compatible('sql_cast')
-  sql <- dbplyr_compatible('sql')
-  build_sql <- dbplyr_compatible('build_sql')
-  base_scalar <- dbplyr_compatible('base_scalar')
-  base_agg <- dbplyr_compatible('base_agg')
-  return(sql_variant(
+  sql_variant <- pkg_method("sql_variant", "dbplyr")
+  sql_translator <- pkg_method("sql_translator", "dbplyr")
+  sql_prefix <- pkg_method("sql_prefix", "dbplyr")
+  sql_cast <- pkg_method('sql_cast', "dbplyr")
+  sql <- pkg_method('sql', "dplyr")
+  build_sql <- pkg_method('build_sql', "dbplyr")
+  base_scalar <- pkg_method('base_scalar', "dbplyr")
+  base_agg <- pkg_method('base_agg', "dbplyr")
+  
+  sql_variant(
     sql_translator(.parent = base_scalar,
       ifelse = sql_prefix("IF"),
       as = function(column, type) {
-        sql_type <- stringi::stri_trans_toupper(
-          dbDataType(athena(), type),
-          'en_US.UTF-8'
-        )
+        sql_type <- toupper(dbDataType(athena(), type)) # using toupper to keep dependencies low
         build_sql('CAST(', column, ' AS ', sql(sql_type), ')')
       },
-      as.character = sql_cast("VARCHAR"),
+      as.character = sql_cast("STRING"), # using STRING from DataTypes.R conversion from R to Athena
       as.numeric = sql_cast("DOUBLE"),
       as.double = sql_cast("DOUBLE"),
-      as.integer = sql_cast("BIGINT"),
+      as.integer = sql_cast("INT"), # using INT from DataTypes.R conversion from R to Athena
+      as.integer64 = sql_cast("BIGINT"), # as.integer64 reflects bigint for athena
       as.Date = sql_cast("DATE"),
       as.logical = sql_cast("BOOLEAN"),
       as.raw = sql_cast("VARBINARY"),
@@ -69,10 +62,10 @@ sql_translate_env.AthenaConnection <- function(con) {
       is.infinite = sql_prefix("IS_FINITE"),
       is.nan = sql_prefix("IS_NAN"),
       `[[` = function(x, i) {
-        if (is.numeric(i) && isTRUE(all.equal(i, as.integer(i)))) {
+        if (is.numeric(i) && all.equal(i, as.integer(i))) {
           i <- as.integer(i)
         }
-        dbplyr::build_sql(x, "[", i, "]")
+        build_sql(x, "[", i, "]")
       }
     ),
     sql_translator(.parent = base_agg,
@@ -83,5 +76,5 @@ sql_translate_env.AthenaConnection <- function(con) {
       any = sql_prefix("BOOL_OR")
     ),
     athena_window_functions()
-  ))
+  )
 }
