@@ -33,7 +33,7 @@ athena_window_functions <- function() {
 #' if (getRversion() >= "3.6.0") {
 #'   S3method(dplyr::sql_translate_env,AthenaConnection)
 #' } else {
-#'   export(sql_translate_env.PrestoConnection)
+#'   export(sql_translate_env.AthenaConnection)
 #' }
 sql_translate_env.AthenaConnection <- function(con) {
   sql_variant <- dbplyr_compatible('sql_variant')
