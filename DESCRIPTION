@@ -40,3 +40,5 @@ Collate:
     'table.R'
     'util.R'
     'zzz.R'
+    'dbplyr_compatible.R'
+    'sql_translate_env.R'
