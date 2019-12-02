@@ -17,3 +17,4 @@
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaConnection objects.
 }
+\keyword{internal}

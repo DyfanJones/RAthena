@@ -60,6 +60,7 @@ AthenaConnection <-
   }
 
 #' @rdname AthenaConnection
+#' @keywords internal
 #' @export
 setClass(
   "AthenaConnection",
