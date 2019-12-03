@@ -340,6 +340,7 @@ setMethod("sqlCreateTable", "AthenaConnection",
     if (is.null(s3.location)) s3.location <- con@info$s3_staging
 
     table1 <- gsub(".*\\.", "", table)
+    table <- dbQuoteIdentifier(con, table)
     
     s3.location <- gsub("/$", "", s3.location)
     if(grepl(table1, s3.location)){s3.location <- gsub(paste0("/", table1,"$"), "", s3.location)}
@@ -367,6 +368,8 @@ createFields <- function(con, fields, field.types) {
   field_names <- tolower(gsub("\\.", "_", make.names(names(fields), unique = TRUE)))
   DIFF <- setdiff(field_names, names(fields))
   if (length(DIFF) > 0) message("Info: data.frame colnames have been converted to align with Athena DDL naming convertions: \n",paste0(DIFF, collapse= ",\n"))
+  
+  field_names <- dbQuoteIdentifier(con, field_names)
   field.types <- unname(fields)
   paste0(field_names, " ", field.types)
 }
