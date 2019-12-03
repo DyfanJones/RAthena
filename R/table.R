@@ -109,11 +109,8 @@ Athena_write_table <-
     on.exit({unlink(t)
              if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
 
-    # Force formatting of timestamps
-    timestampcols <- sapply(sapply(value, class), FUN = function(x) "POSIXct" %in% x)
-    if(sum(timestampcols) == 1) value[, timestampcols] <- strftime(value[,timestampcols], format="%Y-%m-%d %H:%M:%S.000000")
-    if(sum(timestampcols) > 1) value[, timestampcols] <- apply(value[,timestampcols], 2, function(x) strftime(x, format="%Y-%m-%d %H:%M:%S.000000"))
-    
+    # return original Athena Types
+    if(is.null(field.types)) field.types <- dbDataType(con, value)
     value <- sqlData(conn, value, row.names = row.names)
     
     # compress file
@@ -257,17 +254,26 @@ NULL
 #' @export
 setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ...) {
   stopifnot(is.data.frame(value))
-  value <- sqlRownamesToColumn(value, row.names)
+  
+  Value <- copy(value)
+  Value <- sqlRownamesToColumn(Value, row.names)
   field_names <- tolower(gsub("\\.", "_", make.names(names(value), unique = TRUE)))
-  DIFF <- setdiff(field_names, names(value))
-  names(value) <- field_names
+  DIFF <- setdiff(field_names, names(Value))
+  names(Value) <- field_names
   if (length(DIFF) > 0) message("Info: data.frame colnames have been converted to align with Athena DDL naming convertions: \n",paste0(DIFF, collapse= ",\n"))
-  for(i in seq_along(value)){
-    if(is.list(value[[i]])){
-      value[[i]] <- sapply(value[[i]], paste, collapse = "|")
-    }
-  }
-  value
+  
+  # get R col types
+  col_types <- sapply(Value, class)
+  
+  # preprosing proxict format
+  posixct_cols<- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
+  for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%S.000000"))
+  
+  # preprosing list format
+  list_cols <- names(Value)[sapply(col_types, function(x) "list" %in% x)]
+  for (col in list_cols) set(Value, j=col, value=sapply(Value[[col]], paste, collapse = "|"))
+  
+  Value
 })
 
 #' Creates query to create a simple Athena table
