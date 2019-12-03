@@ -47,10 +47,6 @@ test_that("Testing data transfer between R and athena", {
   test_df3 <- as.data.frame(dbGetQuery(con, "select * from df_bigint"))
   test_df4 <- as.data.frame(dbGetQuery(con, "select * from mtcars2"))
   
-  # due the nature of POSIXct have to cast POSIXct to string to compare
-  # test_df$w <- strftime(test_df$w, format="%Y-%m-%d %H:%M:%S")
-  # df$w <- strftime(df$w, format="%Y-%m-%d %H:%M:%S")
-  
   expect_equal(test_df,df)
   expect_equal(test_df2,df)
   expect_equal(test_df3,df2)
