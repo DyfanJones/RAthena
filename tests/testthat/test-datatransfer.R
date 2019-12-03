@@ -16,7 +16,8 @@ test_that("Testing data transfer between R and athena", {
                    profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
-  df <- data.frame(x = 1:10,
+  df <- data.frame(w = as.POSIXct((Sys.time() -9):Sys.time(), origin = "1970-01-01"),
+                   x = 1:10,
                    y = letters[1:10], 
                    z = sample(c(TRUE, FALSE), 10, replace = T),
                    stringsAsFactors = F)
@@ -41,10 +42,15 @@ test_that("Testing data transfer between R and athena", {
   dbWriteTable(con, "mtcars2", mtcars2, overwrite = T, compress = T)
   
   # if data.table is available in namespace result returned as data.table
-  test_df <- as.data.frame(dbGetQuery(con, paste0("select x, y, z from test_df where timestamp ='", format(DATE, "%Y%m%d"),"'")))
-  test_df2 <- as.data.frame(dbGetQuery(con, paste0("select x, y, z from test_df2 where year = '", format(DATE, "%Y"), "' and month = '",format(DATE, "%m"), "' and day = '", format(DATE, "%d"),"'")))
+  test_df <- as.data.frame(dbGetQuery(con, paste0("select w, x, y, z from test_df where timestamp ='", format(DATE, "%Y%m%d"),"'")))
+  test_df2 <- as.data.frame(dbGetQuery(con, paste0("select w, x, y, z from test_df2 where year = '", format(DATE, "%Y"), "' and month = '",format(DATE, "%m"), "' and day = '", format(DATE, "%d"),"'")))
   test_df3 <- as.data.frame(dbGetQuery(con, "select * from df_bigint"))
   test_df4 <- as.data.frame(dbGetQuery(con, "select * from mtcars2"))
+  
+  # due the nature of POSIXct have to cast POSIXct to string to compare
+  # test_df$w <- strftime(test_df$w, format="%Y-%m-%d %H:%M:%S")
+  # df$w <- strftime(df$w, format="%Y-%m-%d %H:%M:%S")
+  
   expect_equal(test_df,df)
   expect_equal(test_df2,df)
   expect_equal(test_df3,df2)
