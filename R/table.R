@@ -110,7 +110,7 @@ Athena_write_table <-
              if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
 
     # return original Athena Types
-    if(is.null(field.types)) field.types <- dbDataType(con, value)
+    if(is.null(field.types)) field.types <- dbDataType(conn, value)
     value <- sqlData(conn, value, row.names = row.names)
     
     # compress file
