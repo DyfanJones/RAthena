@@ -36,8 +36,7 @@ AthenaConnection <-
                           profile_name = profile_name,
                           ...),
       error = function(e) py_error(e))
-    quote <- "'"
-  
+    
     if(is.null(s3_staging_dir) && !is.null(work_group)){
       Athena <- ptr$client("athena")
       tryCatch(s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
@@ -56,7 +55,7 @@ AthenaConnection <-
                  poll_interval = poll_interval, encryption_option = encryption_option,
                  kms_key = kms_key, expiration = aws_expiration)
 
-    res <- new("AthenaConnection",  ptr = ptr, info = info, quote = quote)
+    res <- new("AthenaConnection",  ptr = ptr, info = info, quote = "`")
   }
 
 #' @rdname AthenaConnection
@@ -307,8 +306,19 @@ setMethod(
 #' @rdname dbQuote
 #' @export
 setMethod(
-  "dbQuoteIdentifier", c("AthenaConnection", "SQL"),
-  getMethod("dbQuoteIdentifier", c("DBIConnection", "SQL"), asNamespace("DBI")))
+  "dbQuoteIdentifier", c("AthenaConnection", "character"),
+  function(conn, x, ...) {
+    if (length(x) == 0L) {
+      return(DBI::SQL(character()))
+    }
+    if (any(is.na(x))) {
+      stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
+    }
+    if (nzchar(conn@quote)) {
+      x <- gsub(conn@quote, paste0(conn@quote, conn@quote), x, fixed = TRUE)
+    }
+    DBI::SQL(paste(conn@quote, encodeString(x), conn@quote, sep = ""))
+  })
 
 
 #' List Athena Tables
