@@ -267,6 +267,7 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
   
   # preprosing proxict format
   posixct_cols<- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
+  # create timestamp in athena format: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
   for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%OS3"))
   
   # preprosing list format
