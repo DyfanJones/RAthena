@@ -1,3 +1,7 @@
+# RAthena 1.4.1.9001
+### Bug Fixed
+When returning a single column data.frame from Athena, `RAthena` would translate output into a vector with current the method `dbFetch` n = 0.
+
 # RAthena 1.4.1.9000
 ### Bug Fixed
 Thanks to @OssiLehtinen for identifying issue around `sql_translate_env`. Previously `RAthena` would take the default `dplyr::sql_translate_env`, now `RAthena` has a custom method that uses Data types from: https://docs.aws.amazon.com/athena/latest/ug/data-types.html and window functions from: https://docs.aws.amazon.com/athena/latest/ug/functions-operators-reference-section.html
