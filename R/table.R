@@ -341,7 +341,7 @@ setMethod("sqlCreateTable", "AthenaConnection",
     if (is.null(s3.location)) s3.location <- con@info$s3_staging
 
     table1 <- gsub(".*\\.", "", table)
-    table <- dbQuoteIdentifier(con, table)
+    table <- quote_identifier(con, table)
     
     s3.location <- gsub("/$", "", s3.location)
     if(grepl(table1, s3.location)){s3.location <- gsub(paste0("/", table1,"$"), "", s3.location)}
@@ -370,7 +370,7 @@ createFields <- function(con, fields, field.types) {
   DIFF <- setdiff(field_names, names(fields))
   if (length(DIFF) > 0) message("Info: data.frame colnames have been converted to align with Athena DDL naming convertions: \n",paste0(DIFF, collapse= ",\n"))
   
-  field_names <- dbQuoteIdentifier(con, field_names)
+  field_names <- quote_identifier(con, field_names)
   field.types <- unname(fields)
   paste0(field_names, " ", field.types)
 }
@@ -408,4 +408,18 @@ Compress <- function(file.type, compress){
          "tsv" = paste(file.type, "gz", sep = "."),
          "parquet" = paste("snappy", file.type, sep = "."))
   } else {file.type}
+}
+
+# helper function to format column and table name
+quote_identifier <- function(conn, x, ...) {
+  if (length(x) == 0L) {
+    return(DBI::SQL(character()))
+  }
+  if (any(is.na(x))) {
+    stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
+  }
+  if (nzchar(conn@quote)) {
+    x <- gsub(conn@quote, paste0(conn@quote, conn@quote), x, fixed = TRUE)
+  }
+  DBI::SQL(paste(conn@quote, encodeString(x), conn@quote, sep = ""))
 }
