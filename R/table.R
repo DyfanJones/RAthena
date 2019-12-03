@@ -109,6 +109,11 @@ Athena_write_table <-
     on.exit({unlink(t)
              if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
 
+    # Force formatting of timestamps
+    timestampcols <- sapply(sapply(value, class), FUN = function(x) "POSIXct" %in% x)
+    if(sum(timestampcols) == 1) value[, timestampcols] <- strftime(value[,timestampcols], format="%Y-%m-%d %H:%M:%S.000000")
+    if(sum(timestampcols) > 1) value[, timestampcols] <- apply(value[,timestampcols], 2, function(x) strftime(x, format="%Y-%m-%d %H:%M:%S.000000"))
+    
     value <- sqlData(conn, value, row.names = row.names)
     
     # compress file
