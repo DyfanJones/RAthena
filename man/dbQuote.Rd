@@ -4,12 +4,12 @@
 \name{dbQuote}
 \alias{dbQuote}
 \alias{dbQuoteString,AthenaConnection,character-method}
-\alias{dbQuoteIdentifier,AthenaConnection,SQL-method}
+\alias{dbQuoteIdentifier,AthenaConnection,character-method}
 \title{Quote Identifiers}
 \usage{
 \S4method{dbQuoteString}{AthenaConnection,character}(conn, x, ...)
 
-\S4method{dbQuoteIdentifier}{AthenaConnection,SQL}(conn, x, ...)
+\S4method{dbQuoteIdentifier}{AthenaConnection,character}(conn, x, ...)
 }
 \arguments{
 \item{conn}{A subclass of \linkS4class{DBIConnection}, representing
