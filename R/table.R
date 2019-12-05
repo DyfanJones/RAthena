@@ -18,9 +18,10 @@
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
-#' @param max.batch Split the data frame by max number of rows i.e. 100,000 so that multiple files can be uploaded into AWS S3. This is to help the 
+#' @param max.batch Split the data frame by max number of rows i.e. 100,000 so that multiple files can be uploaded into AWS S3. By default when compression
+#'                  is set to \code{TRUE} and file.type is "csv" or "tsv" max.batch will split data.frame into 20 batches. This is to help the 
 #'                  performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame 
-#'                  when loading file in parquet format.
+#'                  when loading file in parquet format. For more information please go to \href{https://github.com/DyfanJones/RAthena/issues/36}{link}
 #' @inheritParams DBI::sqlCreateTable
 #' @return \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
 #'         arguments are unset, or append = TRUE and the data frame with the new data has different column names,
@@ -92,7 +93,6 @@ Athena_write_table <-
     file.type = match.arg(file.type)
     
     if(max.batch < 0) stop("`max.batch` has to be greater than 0", call. = F)
-    if (!is.infinite(max.batch)) max.batch <- as.integer(max.batch)
     
     if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format
                                                                   in parrel. `max.batch` is used for compressed format `gzip` which is not splittable.")
