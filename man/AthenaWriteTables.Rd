@@ -11,17 +11,20 @@
 \S4method{dbWriteTable}{AthenaConnection,character,data.frame}(conn, name,
   value, overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), compress = FALSE, ...)
+  file.type = c("csv", "tsv", "parquet"), compress = FALSE,
+  max.batch = Inf, ...)
 
 \S4method{dbWriteTable}{AthenaConnection,Id,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), compress = FALSE, ...)
+  file.type = c("csv", "tsv", "parquet"), compress = FALSE,
+  max.batch = Inf, ...)
 
 \S4method{dbWriteTable}{AthenaConnection,SQL,data.frame}(conn, name, value,
   overwrite = FALSE, append = FALSE, row.names = NA,
   field.types = NULL, partition = NULL, s3.location = NULL,
-  file.type = c("csv", "tsv", "parquet"), compress = FALSE, ...)
+  file.type = c("csv", "tsv", "parquet"), compress = FALSE,
+  max.batch = Inf, ...)
 }
 \arguments{
 \item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by
@@ -62,6 +65,10 @@ By default s3.location is set s3 staging directory from \code{\linkS4class{Athen
 
 \item{compress}{\code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 "snappy" compression is used.}
+
+\item{max.batch}{Split the data frame by max number of rows i.e. 10,000 so that multiple files can be uploaded into AWS S3. This is to help the 
+performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame 
+when loading file in parquet format.}
 
 \item{...}{Other arguments used by individual methods.}
 }
