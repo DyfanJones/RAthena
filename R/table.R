@@ -18,6 +18,9 @@
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
+#' @param max.batch Split the data frame by max number of rows i.e. 10,000 so that multiple files can be uploaded into AWS S3. This is to help the 
+#'                  performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame 
+#'                  when loading file in parquet format.
 #' @inheritParams DBI::sqlCreateTable
 #' @return \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
 #'         arguments are unset, or append = TRUE and the data frame with the new data has different column names,
@@ -73,7 +76,7 @@ Athena_write_table <-
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
-           compress = FALSE, ...) {
+           compress = FALSE, max.batch = Inf,...) {
     # variable checks
     stopifnot(is.character(name),
               is.data.frame(value),
@@ -82,11 +85,17 @@ Athena_write_table <-
               is.null(s3.location) || is.s3_uri(s3.location),
               is.null(partition) || is.character(partition) || is.list(partition),
               is.logical(compress))
-
+    
     sapply(tolower(names(partition)), function(x){if(x %in% tolower(names(value))){
       stop("partition ", x, " is a variable in data.frame ", deparse(substitute(value)), call. = FALSE)}})
     
     file.type = match.arg(file.type)
+    
+    if(max.batch < 0) stop("`max.batch` has to be greater than 0", call. = F)
+    max.batch <- as.integer(max.batch)
+    
+    if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format
+                                                                  in parrel. `max.batch` is used for compressed format `gzip` which is not splittable.")
     
     # use default s3_staging directory is s3.location isn't provided
     if (is.null(s3.location)) s3.location <- conn@info$s3_staging
@@ -105,19 +114,17 @@ Athena_write_table <-
 
     if(append && is.null(partition)) stop("Athena requires the table to be partitioned to append", call. = FALSE)
 
-    t <- tempfile()
-    on.exit({unlink(t)
-             if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
-
     # return original Athena Types
     if(is.null(field.types)) field.types <- dbDataType(conn, value)
     value <- sqlData(conn, value, row.names = row.names)
     
-    # compress file
-    FileLocation <- paste(t, Compress(file.type, compress), sep =".")
+    
 
     # check if arrow is installed before attempting to create parquet
     if(file.type == "parquet"){
+      # compress file
+      FileLocation <- paste(t, Compress(file.type, compress), sep =".")
+      
       if(!requireNamespace("arrow", quietly=TRUE))
         stop("The package arrow is required for R to utilise Apache Arrow to create parquet files.", call. = FALSE)
       else {
@@ -126,9 +133,17 @@ Athena_write_table <-
     }
     
     # writes out csv/tsv, uses data.table for extra speed
-    switch(file.type,
-           "csv" = data.table::fwrite(value, FileLocation, showProgress = F),
-           "tsv" = data.table::fwrite(value, FileLocation, sep = "\t", showProgress = F))
+    if (file.type == "csv"){
+      FileLocation <- split_data(value, max.batch = max.batch, compress = compress, file.type = file.type)
+    }
+    
+    if (file.type == "tsv"){
+      FileLocation <- split_data(value, max.batch = max.batch, compress = compress, file.type = file.type, sep = "\t")
+    }
+    
+    # switch(file.type,
+    #        "csv" = data.table::fwrite(value, FileLocation, showProgress = F),
+    #        "tsv" = data.table::fwrite(value, FileLocation, sep = "\t", showProgress = F))
 
     found <- dbExistsTable(conn, Name)
     if (found && !overwrite && !append) {
@@ -161,6 +176,11 @@ Athena_write_table <-
     res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
     dbClearResult(res)
     
+    # t <- tempfile()
+    on.exit({lapply(FileLocation, unlink)
+      #unlink(t)
+      if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
+    
     invisible(TRUE)
   }
 
@@ -173,6 +193,7 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   
   # s3_file name
   FileType <- if(compress) Compress(file.type, compress) else file.type
+  if (length(x) > 1) name <- paste0(name,"_", 1:length(x))
   FileName <- paste(name, FileType, sep = ".")
   
   # s3 bucket and key split
@@ -191,9 +212,9 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   
   tryCatch(s3 <- con@ptr$resource("s3"),
            error = function(e) py_error(e))
-  tryCatch(s3$Bucket(s3_info$bucket)$upload_file(Filename = x, Key = s3_key),
-           error = function(e) py_error(e))
-  
+  for (i in 1:length(x)){
+    tryCatch(s3$Bucket(s3_info$bucket)$upload_file(Filename = x[i], Key = s3_key[i]),
+             error = function(e) py_error(e))}
   invisible(TRUE)
 }
 
@@ -205,11 +226,11 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
-           compress = FALSE, ...){
+           compress = FALSE, max.batch = Inf, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
-                      partition, s3.location, file.type, compress)
+                      partition, s3.location, file.type, compress, max.batch)
     })
 
 #' @rdname AthenaWriteTables
@@ -219,11 +240,11 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
-           compress = FALSE, ...){
+           compress = FALSE, max.batch = Inf, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
-                      partition, s3.location, file.type, compress)
+                      partition, s3.location, file.type, compress, max.batch)
   })
 
 #' @rdname AthenaWriteTables
@@ -233,11 +254,11 @@ setMethod(
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
            partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
-           compress = FALSE, ...){
+           compress = FALSE, max.batch = Inf,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
                       row.names, field.types,
-                      partition, s3.location, file.type, compress)
+                      partition, s3.location, file.type, compress, max.batch)
   })
 
 #' Converts data frame into suitable format to be uploaded to Athena
