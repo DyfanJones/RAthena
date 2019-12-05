@@ -188,7 +188,7 @@ pkg_method <- function(fun, pkg) {
 # split data frame into batches
 split_data <- function(x, max.batch = Inf, path = tempdir(), sep = ",", compress = T, file.type = "csv"){
   
-  if(max.batch < 10000L) message("Info: splitting data.frame smaller that a 10,000 per batch might not increase AWS Athena performance.")
+  if(max.batch < 100000L) message("Info: splitting data.frame smaller that a 100,000 per batch might not increase AWS Athena performance.")
   if(!compress) message("Info: `max.batch` is designed to help with gzip compression for AWS Athena, uncompressed flat files
                         can be read in parallel.")
   max_row <- nrow(x)
