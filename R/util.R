@@ -183,3 +183,26 @@ pkg_method <- function(fun, pkg) {
   fun_name <- utils::getFromNamespace(fun, pkg)
   return(fun_name)
 }
+
+
+# split data frame into batches
+split_data <- function(x, max.batch = Inf, path = tempdir(), sep = ",", compress = T, file.type = "csv"){
+  
+  if(max.batch < 10000L) message("Info: splitting data.frame smaller that a 10,000 per batch might not increase AWS Athena performance.")
+  if(!compress) message("Info: `max.batch` is designed to help with gzip compression for AWS Athena, uncompressed flat files
+                        can be read in parallel.")
+  max_row <- nrow(x)
+  if (is.infinite(max.batch)) max.batch = max_row
+  split_vec <- seq(1, max_row, max.batch)
+  sapply(split_vec, write_batch, dt = x, max.batch = max.batch,
+         max_row= max_row, path = path, sep = sep, 
+         compress=compress, file.type= file.type)
+}
+
+write_batch <- function(split_vec, dt, max.batch, max_row, path, sep, compress, file.type){
+  sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1))]
+  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
+  path <- file.path(path, file)
+  fwrite(sample, path, sep = sep, showProgress = FALSE)
+  path
+}
