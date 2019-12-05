@@ -188,12 +188,27 @@ pkg_method <- function(fun, pkg) {
 # split data frame into batches
 split_data <- function(x, max.batch = Inf, path = tempdir(), sep = ",", compress = T, file.type = "csv"){
   
-  if(max.batch < 100000L) message("Info: splitting data.frame smaller that a 100,000 per batch might not increase AWS Athena performance.")
-  if(!compress) message("Info: `max.batch` is designed to help with gzip compression for AWS Athena, uncompressed flat files
-                        can be read in parallel.")
+  
+  # Bypass splitter if not compressed
+  if(!compress){
+    file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
+    fwrite(x, file, sep = sep, showProgress = FALSE)
+    return(path)}
+  
+  # set up split vec
   max_row <- nrow(x)
-  if (is.infinite(max.batch)) max.batch = max_row
-  split_vec <- seq(1, max_row, max.batch)
+  split_10 <- .05 * nrow(x) # default currently set to 20 split: https://github.com/DyfanJones/RAthena/issues/36
+  min.batch = 1000000 # min.batch sized at 1M
+  
+  # if batch is set to default
+  if(is.infinite(max.batch)){
+    max.batch <- max(split_10, min.batch)
+    split_vec <- seq(1, max_row, max.batch)
+  }
+  
+  # if max.batch is set by user
+  if(!is.infinite(max.batch)) split_vec <- seq(1, max_row, as.integer(max.batch))
+     
   sapply(split_vec, write_batch, dt = x, max.batch = max.batch,
          max_row= max_row, path = path, sep = sep, 
          compress=compress, file.type= file.type)
