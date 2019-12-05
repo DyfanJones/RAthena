@@ -18,7 +18,7 @@
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
-#' @param max.batch Split the data frame by max number of rows i.e. 10,000 so that multiple files can be uploaded into AWS S3. This is to help the 
+#' @param max.batch Split the data frame by max number of rows i.e. 100,000 so that multiple files can be uploaded into AWS S3. This is to help the 
 #'                  performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame 
 #'                  when loading file in parquet format.
 #' @inheritParams DBI::sqlCreateTable
@@ -92,7 +92,7 @@ Athena_write_table <-
     file.type = match.arg(file.type)
     
     if(max.batch < 0) stop("`max.batch` has to be greater than 0", call. = F)
-    max.batch <- as.integer(max.batch)
+    if (!is.infinite(max.batch)) max.batch <- as.integer(max.batch)
     
     if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format
                                                                   in parrel. `max.batch` is used for compressed format `gzip` which is not splittable.")
@@ -193,8 +193,7 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   
   # s3_file name
   FileType <- if(compress) Compress(file.type, compress) else file.type
-  if (length(x) > 1) name <- paste0(name,"_", 1:length(x))
-  FileName <- paste(name, FileType, sep = ".")
+  FileName <- paste(if (length(x) > 1) paste0(name,"_", 1:length(x)) else name, FileType, sep = ".")
   
   # s3 bucket and key split
   s3_info <- split_s3_uri(s3.location)
