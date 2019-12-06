@@ -43,6 +43,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 
 Added information message to inform user about what files have been added to S3 location if user is overwritting an Athena table.
 
+### Minor Change
+* `copy_to` method now supports compress and max_batch, to align with `dbWriteTable`
+
 # RAthena 1.4.1.9003
 ### Bug Fixed
 * Fixed bug in regards to Athena DDL being created incorrectly when passed from `dbWriteTable`
