@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quote Identifiers — dbQuote • RAthena</title>
+<title>AWS Athena backend dbplyr — sql_translate_env • RAthena</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,10 @@
 
 
 
-<meta property="og:title" content="Quote Identifiers — dbQuote" />
-<meta property="og:description" content="Call this method to generate string that is suitable for use in a query as a column or table name." />
+<meta property="og:title" content="AWS Athena backend dbplyr — sql_translate_env" />
+<meta property="og:description" content="Create s3 implementation of sql_translate_env for AWS Athena sql translate envirnoment based off
+Athena Data Types and 
+DML Queries, Functions, and Operators" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,53 +110,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quote Identifiers</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Connection.R'><code>R/Connection.R</code></a></small>
-    <div class="hidden name"><code>dbQuote.Rd</code></div>
+    <h1>AWS Athena backend dbplyr</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/sql_translate_env.R'><code>R/sql_translate_env.R</code></a></small>
+    <div class="hidden name"><code>sql_translate_env.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Call this method to generate string that is suitable for use in a query as a column or table name.</p>
+    <p>Create s3 implementation of <code>sql_translate_env</code> for AWS Athena sql translate envirnoment based off
+<a href='https://docs.aws.amazon.com/athena/latest/ug/data-types.html'>Athena Data Types</a> and 
+<a href='https://docs.aws.amazon.com/athena/latest/ug/functions-operators-reference-section.html'>DML Queries, Functions, and Operators</a></p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'>dbQuoteString</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S4 method for AthenaConnection,SQL</span>
-<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>sql_translate_env.AthenaConnection</span>(<span class='no'>con</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>conn</th>
-      <td><p>A subclass of DBIConnection, representing
-an active connection to an DBMS.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>A character vector to quote as string.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments passed on to methods.</p></td>
+      <th>con</th>
+      <td><p>An <code><a href='AthenaConnection.html'>AthenaConnection</a></code> object, produced by
+[DBI::dbConnect()]</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Returns a character object, for more information please check out: <code><a href='https://rdrr.io/pkg/DBI/man/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://rdrr.io/pkg/DBI/man/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/DBI/man/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://rdrr.io/pkg/DBI/man/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
     </ul>
 
   </div>
