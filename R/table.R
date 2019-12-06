@@ -94,8 +94,8 @@ Athena_write_table <-
     
     if(max.batch < 0) stop("`max.batch` has to be greater than 0", call. = F)
     
-    if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format
-                                                                  in parrel. `max.batch` is used for compressed format `gzip` which is not splittable.")
+    if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format ",
+                                                                  "in parrel. `max.batch` is used for compressed `gzip` format which is not splittable.")
     
     # use default s3_staging directory is s3.location isn't provided
     if (is.null(s3.location)) s3.location <- conn@info$s3_staging
@@ -160,7 +160,7 @@ Athena_write_table <-
     }
 
     # send data over to s3 bucket
-    upload_data(conn, FileLocation, name, partition, s3.location, file.type, compress)
+    s3_uri <- upload_data(conn, FileLocation, name, partition, s3.location, file.type, compress)
     
     if (!append) {
       sql <- sqlCreateTable(conn, table = Name, fields = value, field.types = field.types, 
@@ -175,6 +175,18 @@ Athena_write_table <-
     # Repair table
     res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
     dbClearResult(res)
+    
+    
+    # Warn users to check if table that has been overwrite has been correctly overwritten.
+    if(compress && overwrite && file.type %in% c("csv", "tsv")){
+      s3_bucket <- split_s3_uri(s3.location)$bucket
+      s3.location <- gsub("/$", "", s3.location)
+      if(grepl(name, s3.location)){s3.location <- gsub(paste0("/", name,"$"), "", s3.location)}
+      s3.location <- paste0("'",s3.location,"/", name,"/'")
+      
+      message("Info: Please check that all files in ", s3.location," have been replaces with:\n",
+              paste0("s3://",s3_bucket, "/", s3_uri, collapse = "\n"))
+    }
     
     # t <- tempfile()
     on.exit({lapply(FileLocation, unlink)
@@ -214,7 +226,7 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   for (i in 1:length(x)){
     tryCatch(s3$Bucket(s3_info$bucket)$upload_file(Filename = x[i], Key = s3_key[i]),
              error = function(e) py_error(e))}
-  invisible(TRUE)
+  s3_key
 }
 
 #' @rdname AthenaWriteTables
