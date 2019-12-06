@@ -197,7 +197,7 @@ split_data <- function(x, max.batch = Inf, path = tempdir(), sep = ",", compress
   
   # set up split vec
   max_row <- nrow(x)
-  split_10 <- .05 * nrow(x) # default currently set to 20 split: https://github.com/DyfanJones/RAthena/issues/36
+  split_10 <- .05 * max_row # default currently set to 20 split: https://github.com/DyfanJones/RAthena/issues/36
   min.batch = 1000000 # min.batch sized at 1M
   
   # if batch is set to default
