@@ -33,7 +33,7 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   expect_equal(t1 ,sql("CAST(1.0 AS STRING)"))
   expect_equal(t2 ,sql("CAST('1' AS DOUBLE)"))
   expect_equal(t3 ,sql("CAST('1.2' AS DOUBLE)"))
-  expect_equal(t4 ,sql("CAST(1.2 AS INT)"))
+  expect_equal(t4 ,sql("CAST(1.2 AS INTEGER)"))
   expect_equal(t5 ,sql("CAST(1.2 AS BIGINT)"))
   expect_equal(t6 ,sql("CAST('2019-01-01' AS DATE)"))
   expect_equal(t7 ,sql("CAST('true' AS BOOLEAN)"))
