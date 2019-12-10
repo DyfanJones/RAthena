@@ -6,6 +6,10 @@
 * Fixed issue where row.names not being correctly catered and returning NA in column names #41
 * FIxed issue with `INTEGER` being incorrectly translated in `sql_translate_env.R`
 
+### Unit Tests
+* Added row.names to unit test data transfer
+* Updated dplyr sql_translate_env until test to cater bug fix
+
 # RAthena 1.5.0
 Updated package version for cran release
 
