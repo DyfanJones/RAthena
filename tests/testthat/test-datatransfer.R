@@ -36,7 +36,7 @@ test_that("Testing data transfer between R and athena", {
                              "DAY" = format(DATE, "%d")),
                s3.location = s3.location2)
   dbWriteTable(con, "df_bigint", df2, overwrite = T, s3.location = s3.location2)
-  dbWriteTable(con, "mtcars", mtcars, overwrite = T, compress = T) # mtcars used to test data.frame with row.names
+  dbWriteTable(con, "mtcars2", mtcars, overwrite = T, compress = T) # mtcars used to test data.frame with row.names
   
   # if data.table is available in namespace result returned as data.table
   test_df <- as.data.frame(dbGetQuery(con, paste0("select w, x, y, z from test_df where timestamp ='", format(DATE, "%Y%m%d"),"'")))
