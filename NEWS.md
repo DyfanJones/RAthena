@@ -1,3 +1,11 @@
+# RAthena 1.5.0.9000
+### Minor Change
+* Removed tolower conversion due to request #41
+
+### Bug fixed
+* Fixed issue where row.names not being correctly catered and returning NA in column names #41
+* FIxed issue with `INTEGER` being incorrectly translated in `sql_translate_env.R`
+
 # RAthena 1.5.0
 Updated package version for cran release
 
