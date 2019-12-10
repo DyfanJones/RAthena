@@ -42,7 +42,7 @@ test_that("Testing data transfer between R and athena", {
   test_df <- as.data.frame(dbGetQuery(con, paste0("select w, x, y, z from test_df where timestamp ='", format(DATE, "%Y%m%d"),"'")))
   test_df2 <- as.data.frame(dbGetQuery(con, paste0("select w, x, y, z from test_df2 where year = '", format(DATE, "%Y"), "' and month = '",format(DATE, "%m"), "' and day = '", format(DATE, "%d"),"'")))
   test_df3 <- as.data.frame(dbGetQuery(con, "select * from df_bigint"))
-  test_df4 <- as.data.frame(dbGetQuery(con, "select * from mtcars"))
+  test_df4 <- as.data.frame(dbGetQuery(con, "select * from mtcars2"))
   
   expect_equal(test_df,df)
   expect_equal(test_df2,df)
