@@ -30,7 +30,7 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   t14 <- translate_sql(is.infinite("var1"), con = con)
   t15 <- translate_sql(is.nan("var1"), con = con)
   
-  expect_equal(t1 ,sql("CAST(1.0 AS STRING)"))
+  expect_equal(t1 ,sql("CAST(1.0 AS VARCHAR)"))
   expect_equal(t2 ,sql("CAST('1' AS DOUBLE)"))
   expect_equal(t3 ,sql("CAST('1.2' AS DOUBLE)"))
   expect_equal(t4 ,sql("CAST(1.2 AS INTEGER)"))
