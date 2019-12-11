@@ -46,7 +46,7 @@ sql_translate_env.AthenaConnection <- function(con) {
         sql_type <- toupper(dbDataType(athena(), type)) # using toupper to keep dependencies low
         build_sql('CAST(', column, ' AS ', sql(sql_type), ')')
       },
-      as.character = sql_cast("STRING"), # using STRING from DataTypes.R conversion from R to AWS Athena
+      as.character = sql_cast("VARCHAR"), # Varchar types are created with a length specifier (between 1 and 65535)
       as.numeric = sql_cast("DOUBLE"),
       as.double = sql_cast("DOUBLE"),
       as.integer = sql_cast("INTEGER"), # https://docs.aws.amazon.com/athena/latest/ug/data-types.html#type-integer
