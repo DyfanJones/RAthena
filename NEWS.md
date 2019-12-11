@@ -1,4 +1,8 @@
 # RAthena 1.5.0.9000
+### Bug fixed
+* Fixed issue where `as.character` was getting wrongly translated #45
+
+# RAthena 1.5.0.9000
 ### Minor Change
 * Removed tolower conversion due to request #41
 
