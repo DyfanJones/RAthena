@@ -1,4 +1,3 @@
-
 # RAthena
 
 [![Project Status: Active – The project has reached a stable, usable
@@ -221,8 +220,7 @@ RAthena has created a method to send data.frame from R to Athena.
 dbListTables(con)
 # Upload iris to Athena
 dbWriteTable(con, "iris", iris, 
-             partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")),
-             s3.location = "s3://mybucket/data/")
+             partition=c("TIMESTAMP" = format(Sys.Date(), "%Y%m%d")))
 
 # Read in iris from Athena
 dbReadTable(con, "iris")
@@ -233,6 +231,8 @@ dbListTables(con)
 # Check if iris exists in Athena
 dbExistsTable(con, "iris")
 ```
+
+For more information around how to get the most out of AWS Athena when uploading data please check out: [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
 
 ### Tidyverse Usage
 
