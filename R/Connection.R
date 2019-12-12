@@ -495,14 +495,56 @@ NULL
 #' @export
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
-  function(conn, name, ...) {
+  function(conn, name, delete_data = FALSE, no_confirm = FALSE, ...) {
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     
-    if(!grepl("\\.", name)) name <- paste(conn@info$dbms.name, name, sep = ".")
+    if (grepl("\\.", name)) {
+      dbms.name <- gsub("\\..*", "" , name)
+      Table <- gsub(".*\\.", "" , name)
+    } else {
+      dbms.name <- conn@info$dbms.name
+      Table <- name}
     
-    res <- dbExecute(conn, paste("DROP TABLE ", name, ";"))
+    if(delete_data){
+      glue <- conn@ptr$client("glue")
+      s3 <- conn@ptr$client("s3")
+      nobjects <- 1000 # We get only 1000 objects at a time
+      while(nobjects >= 1000) {
+        tryCatch(
+          s3_path <- split_s3_uri(glue$get_table(DatabaseName = dbms.name,
+                                                 Name = Table)$Table$StorageDescriptor$Location),
+          error = function(e) py_error(e))
+        
+        tryCatch(
+          objects <- s3$list_objects(Bucket=s3_path$bucket, Prefix=s3_path$key),
+          error = function(e) py_error(e))
+        
+        nobjects <- length(objects$Contents)
+        
+        all_keys <- sapply(objects$Contents, function(x) x$Key)
+        
+        message(paste0("Info: The following S3 objects will be deleted:\n", paste0(paste0("s3://", s3_path$bucket, all_keys), collapse="\n")))
+        if(!no_confirm) {
+          confirm <- readline(prompt = "Delete files (y/n)?: ")
+          if(confirm != "y") {
+            message("Info: Table deletion aborted.")
+            return(NULL)
+          }
+          
+        }
+        
+        # This could be done with s3$delte_objects in one command, but cannot figure out the syntax right now...
+        for(c_object in all_keys){
+          tryCatch(
+            s3$delete_object(Bucket=s3_path$bucket, Key=c_object),
+            error = function(e) py_error(e))
+        }
+      }
+    }
+    
+    res <- dbExecute(conn, paste("DROP TABLE ", paste(dbms.name, Table, sep = "."), ";"))
     dbClearResult(res)
-    message("Info: Only Athena table has been removed, Athena cannot remove s3 data from your account.")
+    if(!delete_data) message("Info: Only Athena table has been removed.")
     invisible(TRUE)
   })
 
