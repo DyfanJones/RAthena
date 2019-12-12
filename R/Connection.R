@@ -465,6 +465,9 @@ setMethod(
 #' @name dbRemoveTable
 #' @return \code{dbRemoveTable()} returns \code{TRUE}, invisibly.
 #' @inheritParams DBI::dbRemoveTable
+#' @param delete_data Deletes S3 files linking to AWS Athena table
+#' @param no_confirm Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
+#'                   to avoid deleting other S3 files when the table's definition points to the root of S3 bucket.
 #' @seealso \code{\link[DBI]{dbRemoveTable}}
 #' @examples
 #' \dontrun{
