@@ -1,4 +1,8 @@
-# RAthena 1.5.0.9000
+# RAthena 1.5.0.9002
+### Minor Change
+* Added AWS_ATHENA_WORK_GROUP envrionmental variable support
+
+# RAthena 1.5.0.9001
 ### Bug fixed
 * Fixed issue where `as.character` was getting wrongly translated #45
 
