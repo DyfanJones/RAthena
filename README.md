@@ -232,6 +232,8 @@ dbListTables(con)
 dbExistsTable(con, "iris")
 ```
 
+Please check out `RAthena` method for [`dbWriteTable`](https://dyfanjones.github.io/RAthena/reference/AthenaWriteTables.html) for more information in how to upload data to AWS Athena and AWS S3.
+
 For more information around how to get the most out of AWS Athena when uploading data please check out: [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
 
 ### Tidyverse Usage
