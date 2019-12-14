@@ -296,10 +296,10 @@ setMethod("sqlData", "AthenaConnection",
   switch(file.type,
          csv = {# changed special character from "," to "." to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("," , "\\.", Value[[col]]))
-                message("Info: Special characters , have been converted to help with Athena reading file format csv")},
+                message("Info: Special character , has been converted to help with Athena reading file format csv")},
          tsv = {# changed special character from "\t" to " " to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("\t" , " ", Value[[col]]))
-                message("Info: Special characters \t have been converted to help with Athena reading file format tsv")})
+                message("Info: Special characters \t has been converted to help with Athena reading file format tsv")})
   
   Value
 })
