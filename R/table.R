@@ -266,8 +266,11 @@ NULL
 
 #' @rdname sqlData
 #' @export
-setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ...) {
+setMethod("sqlData", "AthenaConnection", 
+          function(con, value, row.names = NA, file.type = c("csv", "tsv", "parquet"),...) {
   stopifnot(is.data.frame(value))
+  
+  file.type = match.arg(file.type)
   
   Value <- copy(value)
   Value <- sqlRownamesToColumn(Value, row.names)
@@ -280,13 +283,25 @@ setMethod("sqlData", "AthenaConnection", function(con, value, row.names = NA, ..
   col_types <- sapply(Value, class)
   
   # preprosing proxict format
-  posixct_cols<- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
+  posixct_cols <- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
   # create timestamp in athena format: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
   for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%OS3"))
   
   # preprosing list format
   list_cols <- names(Value)[sapply(col_types, function(x) "list" %in% x)]
   for (col in list_cols) set(Value, j=col, value=sapply(Value[[col]], paste, collapse = "|"))
+  
+  # handle special characters in character and factor column types
+  special_char <- names(withquote)[col_types %in% c("character", "factor")]
+  switch(file.type,
+         csv = {# changed special character from "," to "." to avoid issue with parsing delimited files
+                for (col in special_char) set(Value, j=col, value=gsub("," , "\\.", Value[[col]]))
+                # changed " to ' to avoid issue with quotation
+                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))},
+         tsv = {# changed special character from "\t" to " " to avoid issue with parsing delimited files
+                for (col in special_char) set(Value, j=col, value=gsub("\t" , " ", Value[[col]]))
+                # changed " to ' to avoid issue with quotation
+                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))})
   
   Value
 })
