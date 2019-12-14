@@ -1,3 +1,10 @@
+# RAthena 1.5.0.9003
+### New Feature
+* Due to help from @OssiLehtinen, `dbRemoveTable` can now remove S3 files for AWS Athena table being removed.
+
+### Unit TestS
+* `dbRemoveTable` new parameters are added in unit test
+
 # RAthena 1.5.0.9002
 ### Minor Change
 * Added AWS_ATHENA_WORK_GROUP envrionmental variable support
