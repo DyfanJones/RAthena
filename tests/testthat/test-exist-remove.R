@@ -23,7 +23,7 @@ test_that("Check a table exist and remove table",{
   
   table_exist2 <- dbExistsTable(con, "removable_table")
   
-  dbRemoveTable(con, "removable_table")
+  dbRemoveTable(con, "removable_table", confirm = T)
   
   table_exist3 <- dbExistsTable(con, "removable_table")  
   
