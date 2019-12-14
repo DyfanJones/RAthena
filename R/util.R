@@ -218,6 +218,6 @@ write_batch <- function(split_vec, dt, max.batch, max_row, path, sep, compress, 
   sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
   file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
   path <- file.path(path, file)
-  fwrite(sample, path, sep = sep, showProgress = FALSE)
+  fwrite(sample, path, sep = sep, quote=FALSE, showProgress = FALSE)
   path
 }
