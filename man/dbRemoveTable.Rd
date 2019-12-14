@@ -7,7 +7,7 @@
 \title{Remove table from Athena}
 \usage{
 \S4method{dbRemoveTable}{AthenaConnection,character}(conn, name,
-  delete_data = FALSE, no_confirm = FALSE, ...)
+  delete_data = TRUE, confirm = FALSE, ...)
 }
 \arguments{
 \item{conn}{A \linkS4class{DBIConnection} object, as returned by
@@ -17,7 +17,7 @@
 
 \item{delete_data}{Deletes S3 files linking to AWS Athena table}
 
-\item{no_confirm}{Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
+\item{confirm}{Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
 to avoid deleting other S3 files when the table's definition points to the root of S3 bucket.}
 
 \item{...}{Other parameters passed on to methods.}
