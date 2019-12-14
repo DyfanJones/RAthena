@@ -466,7 +466,7 @@ setMethod(
 #' @return \code{dbRemoveTable()} returns \code{TRUE}, invisibly.
 #' @inheritParams DBI::dbRemoveTable
 #' @param delete_data Deletes S3 files linking to AWS Athena table
-#' @param no_confirm Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
+#' @param confirm Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
 #'                   to avoid deleting other S3 files when the table's definition points to the root of S3 bucket.
 #' @seealso \code{\link[DBI]{dbRemoveTable}}
 #' @examples
@@ -498,8 +498,10 @@ NULL
 #' @export
 setMethod(
   "dbRemoveTable", c("AthenaConnection", "character"),
-  function(conn, name, delete_data = FALSE, no_confirm = FALSE, ...) {
+  function(conn, name, delete_data = TRUE, confirm = FALSE, ...) {
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
+    stopifnot(is.logical(delete_data),
+              is.logical(confirm))
     
     if (grepl("\\.", name)) {
       dbms.name <- gsub("\\..*", "" , name)
@@ -508,46 +510,32 @@ setMethod(
       dbms.name <- conn@info$dbms.name
       Table <- name}
     
-    if(delete_data){
+    if (delete_data) {
       glue <- conn@ptr$client("glue")
-      s3 <- conn@ptr$client("s3")
-      nobjects <- 1000 # We get only 1000 objects at a time
-      while(nobjects >= 1000) {
-        tryCatch(
-          s3_path <- split_s3_uri(glue$get_table(DatabaseName = dbms.name,
-                                                 Name = Table)$Table$StorageDescriptor$Location),
-          error = function(e) py_error(e))
-        
-        tryCatch(
-          objects <- s3$list_objects(Bucket=s3_path$bucket, Prefix=s3_path$key),
-          error = function(e) py_error(e))
-        
-        nobjects <- length(objects$Contents)
-        
-        all_keys <- sapply(objects$Contents, function(x) x$Key)
-        
-        message(paste0("Info: The following S3 objects will be deleted:\n", paste0(paste0("s3://", s3_path$bucket, all_keys), collapse="\n")))
-        if(!no_confirm) {
-          confirm <- readline(prompt = "Delete files (y/n)?: ")
-          if(confirm != "y") {
-            message("Info: Table deletion aborted.")
-            return(NULL)
-          }
-          
-        }
-        
-        # This could be done with s3$delte_objects in one command, but cannot figure out the syntax right now...
-        for(c_object in all_keys){
-          tryCatch(
-            s3$delete_object(Bucket=s3_path$bucket, Key=c_object),
-            error = function(e) py_error(e))
-        }
+      s3 <- conn@ptr$resource("s3")
+      tryCatch(
+        s3_path <- split_s3_uri(glue$get_table(DatabaseName = dbms.name,
+                                               Name = Table)$Table$StorageDescriptor$Location),
+        error = function(e) py_error(e))
+      
+      message(paste0("Info: The S3 objects in prefix will be deleted:\n",
+                     paste0("s3://", s3_path$bucket, "/", s3_path$key)))
+      
+      if (!confirm) {
+        confirm <- readline(prompt = "Delete files (y/n)?: ")
+        if (tolower(confirm) != "y") {
+          message("Info: Table deletion aborted.")
+          return(NULL)}
       }
+      
+      # Remove objects in prefix of AWS Athena table
+      tryCatch(s3$Bucket(s3_path$bucket)$objects$filter(Prefix = paste0(s3_path$key, "/"))$delete(),
+               error = function(e) py_error(e))
     }
     
     res <- dbExecute(conn, paste("DROP TABLE ", paste(dbms.name, Table, sep = "."), ";"))
     dbClearResult(res)
-    if(!delete_data) message("Info: Only Athena table has been removed.")
+    if (!delete_data) message("Info: Only Athena table has been removed.")
     invisible(TRUE)
   })
 
