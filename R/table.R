@@ -297,11 +297,13 @@ setMethod("sqlData", "AthenaConnection",
          csv = {# changed special character from "," to "." to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("," , "\\.", Value[[col]]))
                 # changed " to ' to avoid issue with quotation
-                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))},
+                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))
+                message("Info: Special characters \" and , have been converted to help with Athena reading file format csv")},
          tsv = {# changed special character from "\t" to " " to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("\t" , " ", Value[[col]]))
                 # changed " to ' to avoid issue with quotation
-                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))})
+                for (col in special_char) set(Value, j=col, value=gsub("\"" , "'", Value[[col]]))
+                message("Info: Special characters \" and \t have been converted to help with Athena reading file format csv")})
   
   Value
 })
