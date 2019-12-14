@@ -25,8 +25,8 @@ test_that("Check RAthena s3 dplyr copy_to method",{
   result2 <- dbExistsTable(con, "mtcars_filter")
   
   # clean up athena
-  dbRemoveTable(con, "mtcars")
-  dbRemoveTable(con, "mtcars_filter")
+  dbRemoveTable(con, "mtcars", confirm = T)
+  dbRemoveTable(con, "mtcars_filter", confirm = T)
   
   expect_true(tbl_result)
   expect_true(result1)

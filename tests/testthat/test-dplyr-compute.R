@@ -21,13 +21,8 @@ test_that("Check RAthena s3 dplyr compute method",{
   result2 <- dbExistsTable(con, "compute_tbl2")
   
   # clean up athena
-  dbRemoveTable(con, "compute_tbl1")
-  dbRemoveTable(con, "compute_tbl2")
-  
-  # clean s3: Athena is unable to clean up s3
-  s3 <- con@ptr$resource("s3")
-  Bucket <- s3$Bucket(RAthena:::split_s3_uri(Sys.getenv("rathena_s3_tbl"))$bucket)
-  Bucket$objects$filter(Prefix = "compute_tbl/")$delete()
+  dbRemoveTable(con, "compute_tbl1",confirm = T)
+  dbRemoveTable(con, "compute_tbl2", confirm = T)
   
   expect_equal(result1, TRUE)
   expect_equal(result2, TRUE)
