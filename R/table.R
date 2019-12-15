@@ -292,7 +292,7 @@ setMethod("sqlData", "AthenaConnection",
   for (col in list_cols) set(Value, j=col, value=sapply(Value[[col]], paste, collapse = "|"))
   
   # handle special characters in character and factor column types
-  special_char <- names(withquote)[col_types %in% c("character", "factor")]
+  special_char <- names(Value)[col_types %in% c("character", "factor")]
   switch(file.type,
          csv = {# changed special character from "," to "." to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("," , "\\.", Value[[col]]))
@@ -413,7 +413,7 @@ partitioned <- function(obj = NULL){
 FileType <- function(obj){
   switch(obj,
          csv = gsub("_","","ROW FORMAT DELIMITED\n\tFIELDS TERMINATED BY ','\n\tLINES TERMINATED BY '\\_n'"),
-         tsv = gsub("_","","ROW FORMAT DELIMITED\n\tFIELDS TERMINATED BY '\t'\tLINES TERMINATED BY '\\_n'"),
+         tsv = gsub("_","","ROW FORMAT DELIMITED\n\tFIELDS TERMINATED BY '\t'\n\tLINES TERMINATED BY '\\_n'"),
          parquet = SQL("STORED AS PARQUET"))
 }
 
