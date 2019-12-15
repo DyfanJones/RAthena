@@ -18,7 +18,7 @@ test_that("Testing data transfer between R and athena", {
   
   df <- data.frame(w = as.POSIXct((Sys.time() -9):Sys.time(), origin = "1970-01-01"),
                    x = 1:10,
-                   y = letters[1:10], 
+                   y = c(letters[1:8], c(" \\t\\t\\n 123 \" \\t\\t\\n ", "15 \"")), 
                    z = sample(c(TRUE, FALSE), 10, replace = T),
                    stringsAsFactors = F)
   
