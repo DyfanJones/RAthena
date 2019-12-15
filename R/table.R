@@ -259,6 +259,8 @@ setMethod(
 #' This method converts data.frame columns into the correct format so that it can be uploaded Athena.
 #' @name sqlData
 #' @inheritParams DBI::sqlData
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
+#'                  \strong{Note:} This parameter is used for format any special characters that clash with file type separator.
 #' @return \code{sqlData} returns a dataframe formatted for Athena. Currently converts \code{list} variable types into \code{character}
 #'         split by \code{'|'}, similar to how \code{data.table} writes out to files.
 #' @seealso \code{\link[DBI]{sqlData}}
@@ -296,10 +298,10 @@ setMethod("sqlData", "AthenaConnection",
   switch(file.type,
          csv = {# changed special character from "," to "." to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("," , "\\.", Value[[col]]))
-                message("Info: Special character , has been converted to help with Athena reading file format csv")},
+                message("Info: Special character \",\" has been converted to \".\" to help with Athena reading file format csv")},
          tsv = {# changed special character from "\t" to " " to avoid issue with parsing delimited files
                 for (col in special_char) set(Value, j=col, value=gsub("\t" , " ", Value[[col]]))
-                message("Info: Special characters \t has been converted to help with Athena reading file format tsv")})
+                message("Info: Special characters \"\t\" has been converted to \" \" to help with Athena reading file format tsv")})
   
   Value
 })
