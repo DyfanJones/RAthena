@@ -1,8 +1,15 @@
+# RAthena 1.5.0.9004
+### Bug fix
+* Due to issue highlighted by @OssiLehtinen in #50, special characters have issue being processed when using flat file in the backend.
+
+### Unit Tests
+* Special characters have been added to unit test `data-transfer`
+
 # RAthena 1.5.0.9003
 ### New Feature
 * Due to help from @OssiLehtinen, `dbRemoveTable` can now remove S3 files for AWS Athena table being removed.
 
-### Unit TestS
+### Unit Tests
 * `dbRemoveTable` new parameters are added in unit test
 
 # RAthena 1.5.0.9002
