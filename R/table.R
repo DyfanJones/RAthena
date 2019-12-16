@@ -1,20 +1,21 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
-#' @param conn An \code{\linkS4class{AthenaConnection}} object, produced by
-#'   [DBI::dbConnect()]
+#' @param conn An \code{\linkS4class{AthenaConnection}} object, produced by [DBI::dbConnect()]
 #' @param name A character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
-#' @param overwrite Allow overwriting the destination table. Cannot be
-#'   `TRUE` if `append` is also `TRUE`.
-#' @param append Allow appending to the destination table. Cannot be
-#'   `TRUE` if `overwrite` is also `TRUE`.
+#' @param overwrite Allows overwriting the destination table. Cannot be \code{TRUE} if \code{append} is also \code{TRUE}.
+#' @param append Allow appending to the destination table. Cannot be \code{TRUE} if \code{overwrite} is also \code{TRUE}. Existing Athena DDL file type will be retained
+#'               and used when uploading data to AWS Athena. If parameter \code{file.type} doesn't match AWS Athena DDL file type a warning message will be created 
+#'               notifying user and \code{RAthena} will use the file type for the Athena DDL. 
 #' @param field.types Additional field types used to override derived types.
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
 #'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object.
-#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"]. 
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"]. Default delimited file type is "tsv", in previous versions
+#'                  of \code{RAthena (=< 1.6.0)} file type "csv" was used as default. The reason for the change is that columns containing \code{Array/JSON} format cannot be written to 
+#'                  Athena due to the separating value ",". This would cause issues with AWS Athena.                  
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
