@@ -136,7 +136,7 @@ Athena_write_table <-
       dbms.name <- gsub("\\..*", "" , Name)
       Table <- gsub(".*\\.", "" , Name)
       
-      glue <- con@ptr$client("glue")
+      glue <- conn@ptr$client("glue")
       tbl_info <- glue$get_table(DatabaseName = dbms.name,
                                  Name = Table)$Table
       
