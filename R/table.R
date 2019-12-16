@@ -137,8 +137,10 @@ Athena_write_table <-
       Table <- gsub(".*\\.", "" , Name)
       
       glue <- conn@ptr$client("glue")
-      tbl_info <- glue$get_table(DatabaseName = dbms.name,
-                                 Name = Table)$Table
+      tryCatch(
+              tbl_info <- glue$get_table(DatabaseName = dbms.name,
+                                         Name = Table)$Table,
+              error = function(e) py_error(e))
       
       # Return correct file format when appending onto existing AWS Athena table
       File.Type <- switch(tbl_info$StorageDescriptor$SerdeInfo$SerializationLibrary, 
