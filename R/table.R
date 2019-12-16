@@ -14,7 +14,7 @@
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
 #'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object.
-#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"].
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"]. 
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
@@ -95,7 +95,7 @@ Athena_write_table <-
     if(max.batch < 0) stop("`max.batch` has to be greater than 0", call. = F)
     
     if(!is.infinite(max.batch) && file.type == "parquet") message("Info: parquet format is splittable and AWS Athena can read parquet format ",
-                                                                  "in parrel. `max.batch` is used for compressed `gzip` format which is not splittable.")
+                                                                  "in parrellel. `max.batch` is used for compressed `gzip` format which is not splittable.")
     
     # use default s3_staging directory is s3.location isn't provided
     if (is.null(s3.location)) s3.location <- conn@info$s3_staging
@@ -113,14 +113,66 @@ Athena_write_table <-
     if (overwrite && append) stop("overwrite and append cannot both be TRUE", call. = FALSE)
 
     if(append && is.null(partition)) stop("Athena requires the table to be partitioned to append", call. = FALSE)
+    
+    # Check if table already exists in the database
+    found <- dbExistsTable(conn, Name)
+    
+    if (found && !overwrite && !append) {
+      stop("Table ", Name, " exists in database, and both overwrite and",
+           " append are FALSE", call. = FALSE)
+    }
+    
+    if(!found && append){
+      stop("Table ", Name, " does not exist in database and append is set to TRUE", call. = T)
+    }
+    
+    if (found && overwrite) {
+      dbRemoveTable(conn, Name, confirm = TRUE)
+    }
+    
+    # Check file format if appending
+    if(found && append){
+      dbms.name <- gsub("\\..*", "" , Name)
+      Table <- gsub(".*\\.", "" , Name)
+      
+      glue <- con@ptr$client("glue")
+      tbl_info <- glue$get_table(DatabaseName = dbms.name,
+                                 Name = Table)$Table
+      
+      # Return correct file format when appending onto existing AWS Athena table
+      File.Type <- switch(tbl_info$StorageDescriptor$SerdeInfo$SerializationLibrary, 
+                         "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe" = switch(tbl_info$StorageDescriptor$SerdeInfo$Parameters$field.delim, 
+                                                                                       "," = "csv",
+                                                                                       "\t" = "tsv",
+                                                                                       stop("RAthena currently only supports csv and tsv delimited format")),
+                         "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe" = "parquet",
+                         stop("Unable to append onto table: ", Name,"\n", tbl_info$StorageDescriptor$SerdeInfo$SerializationLibrary,
+                              ": Is currently not supported by RAthena", call. = F))
 
+      # Return if existing files are compressed or not
+      compress = switch(file.type,
+                        "parquet" = {if(is.null(tbl_info$Parameters$parquet.compress)) FALSE else {
+                                        if(tolower(tbl_info$Parameters$parquet.compress) == "snappy") TRUE else 
+                                          stop("RAthena currently only supports SNAPPY compression for parquet", call. = F)}
+                                    },
+                        "tsv" = {if(is.null(tbl_info$Parameters$compressionType)) FALSE else {
+                                    if(tolower(tbl_info$Parameters$compressionType) == "gzip") TRUE else
+                                      stop("RAthena currently only supports gzip compression for tsv", call. = F)}},
+                        "csv" = {if(is.null(tbl_info$Parameters$compressionType)) FALSE else {
+                                    if(tolower(tbl_info$Parameters$compressionType) == "gzip") TRUE else
+                                      stop("RAthena currently only supports gzip compression for csv", call. = F)}})
+      if(file.type != File.Type) warning('Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "', File.Type,'".', call. = FALSE)
+      file.type <- File.Type
+    }
+    
     # return original Athena Types
     if(is.null(field.types)) field.types <- dbDataType(conn, value)
     value <- sqlData(conn, value, row.names = row.names, file.type = file.type)
-
+    
     # check if arrow is installed before attempting to create parquet
     if(file.type == "parquet"){
       # compress file
+      t <- tempfile()
       FileLocation <- paste(t, Compress(file.type, compress), sep =".")
       
       if(!requireNamespace("arrow", quietly=TRUE))
@@ -137,20 +189,6 @@ Athena_write_table <-
     
     if (file.type == "tsv"){
       FileLocation <- split_data(value, max.batch = max.batch, compress = compress, file.type = file.type, sep = "\t")
-    }
-
-    found <- dbExistsTable(conn, Name)
-    if (found && !overwrite && !append) {
-      stop("Table ", Name, " exists in database, and both overwrite and",
-           " append are FALSE", call. = FALSE)
-    }
-    
-    if(!found && append){
-      stop("Table ", Name, " does not exist in database and append is set to TRUE", call. = T)
-    }
-
-    if (found && overwrite) {
-      dbRemoveTable(conn, Name, confirm = TRUE)
     }
 
     # send data over to s3 bucket
@@ -170,9 +208,7 @@ Athena_write_table <-
     res <- dbExecute(conn, paste0("MSCK REPAIR TABLE ", Name))
     dbClearResult(res)
     
-    # t <- tempfile()
     on.exit({lapply(FileLocation, unlink)
-      #unlink(t)
       if(!is.null(conn@info$expiration)) time_check(conn@info$expiration)})
     
     invisible(TRUE)
@@ -269,7 +305,7 @@ NULL
 #' @rdname sqlData
 #' @export
 setMethod("sqlData", "AthenaConnection", 
-          function(con, value, row.names = NA, file.type = c("tsv", "csv", "parquet"),...) {
+          function(con, value, row.names = NA, file.type = c("tsv","csv", "parquet"),...) {
   stopifnot(is.data.frame(value))
   
   file.type = match.arg(file.type)
@@ -353,7 +389,7 @@ NULL
 #' @rdname sqlCreateTable
 #' @export
 setMethod("sqlCreateTable", "AthenaConnection",
-  function(con, table, fields, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("csv", "tsv", "parquet"), 
+  function(con, table, fields, field.types = NULL, partition = NULL, s3.location= NULL, file.type = c("tsv","csv", "parquet"), 
            compress = FALSE, ...){
     if (!dbIsValid(con)) {stop("Connection already closed.", call. = FALSE)}
     stopifnot(is.character(table),
