@@ -182,6 +182,7 @@ setMethod(
       output <- data.table::fread(File, col.names = names(Type2), colClasses = unname(Type2), sep = ",", showProgress = F, na.strings="")
       # formatting POSIXct: from string to POSIXct
       for (col in names(Type[Type %in% "POSIXct"])) set(output, j=col, value=as.POSIXct(output[[col]]))
+      # AWS Athena returns " values as "". Due to this "" will be reformatted back to "
       for (col in names(Type[Type %in% "character"])) set(output, j=col, value=gsub('""' , '"', output[[col]]))
     } else{
       file_con <- file(File)
