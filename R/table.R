@@ -14,7 +14,7 @@
 #' @param partition Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}
 #' @param s3.location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
 #'        By default s3.location is set s3 staging directory from \code{\linkS4class{AthenaConnection}} object.
-#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["csv", "tsv", "parquet"].
+#' @param file.type What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"].
 #'                  \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 #' @param compress \code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
 #'                 "snappy" compression is used.
@@ -76,7 +76,7 @@ NULL
 Athena_write_table <-
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
+           partition = NULL, s3.location = NULL, file.type = c("tsv","csv", "parquet"),
            compress = FALSE, max.batch = Inf,...) {
     # variable checks
     stopifnot(is.character(name),
@@ -116,7 +116,7 @@ Athena_write_table <-
 
     # return original Athena Types
     if(is.null(field.types)) field.types <- dbDataType(conn, value)
-    value <- sqlData(conn, value, row.names = row.names)
+    value <- sqlData(conn, value, row.names = row.names, file.type = file.type)
 
     # check if arrow is installed before attempting to create parquet
     if(file.type == "parquet"){
@@ -218,7 +218,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "character", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
+           partition = NULL, s3.location = NULL, file.type = c("tsv","csv", "parquet"),
            compress = FALSE, max.batch = Inf, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
@@ -232,7 +232,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "Id", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
+           partition = NULL, s3.location = NULL, file.type = c("tsv","csv", "parquet"),
            compress = FALSE, max.batch = Inf, ...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
@@ -246,7 +246,7 @@ setMethod(
   "dbWriteTable", c("AthenaConnection", "SQL", "data.frame"),
   function(conn, name, value, overwrite=FALSE, append=FALSE,
            row.names = NA, field.types = NULL, 
-           partition = NULL, s3.location = NULL, file.type = c("csv", "tsv", "parquet"),
+           partition = NULL, s3.location = NULL, file.type = c("tsv","csv", "parquet"),
            compress = FALSE, max.batch = Inf,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     Athena_write_table(conn, name, value, overwrite, append,
@@ -269,7 +269,7 @@ NULL
 #' @rdname sqlData
 #' @export
 setMethod("sqlData", "AthenaConnection", 
-          function(con, value, row.names = NA, file.type = c("csv", "tsv", "parquet"),...) {
+          function(con, value, row.names = NA, file.type = c("tsv", "csv", "parquet"),...) {
   stopifnot(is.data.frame(value))
   
   file.type = match.arg(file.type)
