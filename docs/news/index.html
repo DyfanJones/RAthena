@@ -124,7 +124,7 @@
 <h3 class="hasAnchor">
 <a href="#major-change" class="anchor"></a>Major Change</h3>
 <ul>
-<li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will recieve a warning message:</li>
+<li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will receive a warning message:</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/warning.html">warning('Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "', File.Type,'".', call. = FALSE)</a></code></pre>
 </div>
@@ -172,7 +172,7 @@
 <h3 class="hasAnchor">
 <a href="#minor-change" class="anchor"></a>Minor Change</h3>
 <ul>
-<li>Added AWS_ATHENA_WORK_GROUP envrionmental variable support</li>
+<li>Added AWS_ATHENA_WORK_GROUP environmental variable support</li>
 </ul>
 </div>
 </div>
@@ -204,7 +204,7 @@
 <a href="#bug-fixed-1" class="anchor"></a>Bug fixed</h3>
 <ul>
 <li>Fixed issue where row.names not being correctly catered and returning NA in column names <a href='https://github.com/DyfanJones/RAthena/issues/41'>#41</a></li>
-<li>FIxed issue with <code>INTEGER</code> being incorrectly translated in <code>sql_translate_env.R</code>
+<li>Fixed issue with <code>INTEGER</code> being incorrectly translated in <code>sql_translate_env.R</code>
 </li>
 </ul>
 </div>
@@ -268,7 +268,7 @@ df &lt;- data.frame(w =runif(X),
 con &lt;- dbConnect(RAthena::athena())
 
 dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will now split compressed file into 20 equal size files.</a></code></pre>
-<p>Added information message to inform user about what files have been added to S3 location if user is overwritting an Athena table.</p>
+<p>Added information message to inform user about what files have been added to S3 location if user is overwriting an Athena table.</p>
 </div>
 <div id="minor-change-2" class="section level3">
 <h3 class="hasAnchor">
@@ -350,7 +350,7 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features:</h3>
 <ul>
-<li>Parquet file type can now be compress using snappy compression when writting data to S3.</li>
+<li>Parquet file type can now be compress using snappy compression when writing data to S3.</li>
 </ul>
 </div>
 <div id="bug-fixed-6" class="section level3">
@@ -403,7 +403,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <a href="#unit-tests-5" class="anchor"></a>Unit Tests</h3>
 <ul>
 <li>
-<code>data transfer</code> test now tests compress, and default s3.location when transfering data</li>
+<code>data transfer</code> test now tests compress, and default s3.location when transferring data</li>
 </ul>
 </div>
 </div>
