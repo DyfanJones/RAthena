@@ -9,7 +9,7 @@ warning('Appended `file.type` is not compatible with the existing Athena DDL fil
 ```
 
 **New Features**
-*  Support environment variable AWS_ATHENA_WORK_GROUP
+*  Support environment variable `AWS_ATHENA_WORK_GROUP`
 * Added append checker to `dbWriteTable`. This checks what file type is currently being used, utilities file type when pushing new data to existing `AWS Athena Table`.
 * `dbRemoveTable` to be able to delete Athena table s3 files
 
