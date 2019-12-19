@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@ or a DBIResult</p></td>
     <p>a named list</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/DBI/man/dbGetInfo.html'>dbGetInfo</a></code></p></div>
+    <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbGetInfo.html'>dbGetInfo</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -160,13 +160,13 @@ or a DBIResult</p></td>
 <span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='fu'>dbGetInfo</span>(<span class='no'>con</span>)
 
 <span class='co'># Return metadata from Athena query object</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "9f1b852b-7b61-483c-bae6-8cbe4e49b299"
+#&gt; [1] "536dbeda-8afd-4d86-9f6a-b30aa361e32b"
 #&gt; 
 #&gt; $ResponseMetadata
 #&gt; $ResponseMetadata$RequestId
-#&gt; [1] "7db8666b-8e4a-44a8-a954-3215a65e0f4f"
+#&gt; [1] "4fd15ae4-092d-4024-97c4-4c8e59c76c45"
 #&gt; 
 #&gt; $ResponseMetadata$HTTPStatusCode
 #&gt; [1] 200
@@ -176,10 +176,10 @@ or a DBIResult</p></td>
 #&gt; [1] "application/x-amz-json-1.1"
 #&gt; 
 #&gt; $ResponseMetadata$HTTPHeaders$date
-#&gt; [1] "Fri, 06 Dec 2019 19:41:06 GMT"
+#&gt; [1] "Wed, 18 Dec 2019 18:23:02 GMT"
 #&gt; 
 #&gt; $ResponseMetadata$HTTPHeaders$`x-amzn-requestid`
-#&gt; [1] "7db8666b-8e4a-44a8-a954-3215a65e0f4f"
+#&gt; [1] "4fd15ae4-092d-4024-97c4-4c8e59c76c45"
 #&gt; 
 #&gt; $ResponseMetadata$HTTPHeaders$`content-length`
 #&gt; [1] "59"
