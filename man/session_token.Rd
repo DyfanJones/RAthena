@@ -5,8 +5,13 @@
 \alias{get_session_token}
 \title{Get Session Tokens for Boto3 Connection}
 \usage{
-get_session_token(profile_name = NULL, serial_number = NULL,
-  token_code = NULL, duration_seconds = 3600L, set_env = FALSE)
+get_session_token(
+  profile_name = NULL,
+  serial_number = NULL,
+  token_code = NULL,
+  duration_seconds = 3600L,
+  set_env = FALSE
+)
 }
 \arguments{
 \item{profile_name}{The name of a profile to use. If not given, then the default profile is used.
