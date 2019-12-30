@@ -4,8 +4,13 @@
 \alias{install_boto}
 \title{Install Amazon SDK boto3 for Athena connection}
 \usage{
-install_boto(method = c("auto", "virtualenv", "conda"), conda = "auto",
-  envname = "RAthena", conda_python_version = "3.6", ...)
+install_boto(
+  method = c("auto", "virtualenv", "conda"),
+  conda = "auto",
+  envname = "RAthena",
+  conda_python_version = "3.6",
+  ...
+)
 }
 \arguments{
 \item{method}{Installation method. By default, "auto" automatically finds a
