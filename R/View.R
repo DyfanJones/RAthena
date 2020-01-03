@@ -1,31 +1,31 @@
 # adapted from R package odbc
 
-#' Return the object hierarchy supported by a connection.
-#'
-#' Lists the object types and metadata known by the connection, and how those
-#' object types relate to each other.
-#'
-#' The returned hierarchy takes the form of a nested list, in which each object
-#' type supported by the connection is a named list with the following
-#' attributes:
-#'
-#' \describe{
-#'   \item{contains}{A list of other object types contained by the object, or
-#'       "data" if the object contains data}
-#'   \item{icon}{An optional path to an icon representing the type}
-#' }
+# Return the object hierarchy supported by a connection.
 #
-#' For instance, a connection in which the top-level object is a database that
-#' contains tables and views, the function will return a list like the
-#' following:
-#'
-#' \preformatted{list(database = list(contains = list(
-#'                    list(name = "table", contains = "data")
-#'                    list(name = "view", contains = "data"))))
-#'
-#' }
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @return The hierarchy of object types supported by the connection.
+# Lists the object types and metadata known by the connection, and how those
+# object types relate to each other.
+#
+# The returned hierarchy takes the form of a nested list, in which each object
+# type supported by the connection is a named list with the following
+# attributes:
+#
+# \describe{
+#   \item{contains}{A list of other object types contained by the object, or
+#       "data" if the object contains data}
+#   \item{icon}{An optional path to an icon representing the type}
+# }
+#
+# For instance, a connection in which the top-level object is a database that
+# contains tables and views, the function will return a list like the
+# following:
+#
+# \preformatted{list(database = list(contains = list(
+#                    list(name = "table", contains = "data")
+#                    list(name = "view", contains = "data"))))
+#
+# }
+# @param connection A connection object, as returned by `dbConnect()`.
+# @return The hierarchy of object types supported by the connection.
 
 # nocov start
 AthenaListObjectTypes <- function(connection) {
@@ -54,20 +54,20 @@ AthenaListObjectTypes.default <- function(connection) {
   obj_types
 }
 
-#' List objects in a connection.
-#'
-#' Lists all of the objects in the connection, or all the objects which have
-#' specific attributes.
-#'
-#' When used without parameters, this function returns all of the objects known
-#' by the connection. Any parameters passed will filter the list to only objects
-#' which have the given attributes; for instance, passing \code{database = "foo"}
-#' will return only objects matching the database \code{foo}.
-#'
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @param ... Attributes to filter by.
-#' @return A data frame with \code{name} and \code{type} columns, listing the
-#'   objects.
+# List objects in a connection.
+#
+# Lists all of the objects in the connection, or all the objects which have
+# specific attributes.
+#
+# When used without parameters, this function returns all of the objects known
+# by the connection. Any parameters passed will filter the list to only objects
+# which have the given attributes; for instance, passing \code{database = "foo"}
+# will return only objects matching the database \code{foo}.
+#
+# @param connection A connection object, as returned by `dbConnect()`.
+# @param ... Attributes to filter by.
+# @return A data frame with \code{name} and \code{type} columns, listing the
+#   objects.
 
 AthenaListObjects <- function(connection, ...) {UseMethod("AthenaListObjects")}
 
@@ -97,18 +97,18 @@ AthenaListObjects.default <- function(connection, database = NULL, name = NULL, 
   )
 }
 
-#' List columns in an object.
-#'
-#' Lists the names and types of each column (field) of a specified object.
-#'
-#' The object to inspect must be specified as one of the arguments
-#' (e.g. \code{table = "employees"}); depending on the driver and underlying
-#' data store, additional specification arguments may be required.
-#'
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @param ... Parameters specifying the object.
-#' @return A data frame with \code{name} and \code{type} columns, listing the
-#'   object's fields.
+# List columns in an object.
+#
+# Lists the names and types of each column (field) of a specified object.
+#
+# The object to inspect must be specified as one of the arguments
+# (e.g. \code{table = "employees"}); depending on the driver and underlying
+# data store, additional specification arguments may be required.
+#
+# @param connection A connection object, as returned by `dbConnect()`.
+# @param ... Parameters specifying the object.
+# @return A data frame with \code{name} and \code{type} columns, listing the
+#   object's fields.
 
 # given a connection, returns its "host name" (a unique string which identifies it)
 computeHostName <- function(connection) {
@@ -184,18 +184,18 @@ AthenaDatabase <- function(connection, ...) {
              error = function(e) py_error(e))
 }
 
-#' Preview the data in an object.
-#'
-#' Return the data inside an object as a data frame.
-#'
-#' The object to previewed must be specified as one of the arguments
-#' (e.g. \code{table = "employees"}); depending on the driver and underlying
-#' data store, additional specification arguments may be required.
-#'
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @param rowLimit The maximum number of rows to display.
-#' @param ... Parameters specifying the object.
-#' @return A data frame containing the data in the object.
+# Preview the data in an object.
+#
+# Return the data inside an object as a data frame.
+#
+# The object to previewed must be specified as one of the arguments
+# (e.g. \code{table = "employees"}); depending on the driver and underlying
+# data store, additional specification arguments may be required.
+#
+# @param connection A connection object, as returned by `dbConnect()`.
+# @param rowLimit The maximum number of rows to display.
+# @param ... Parameters specifying the object.
+# @return A data frame containing the data in the object.
 
 AthenaPreviewObject <- function(connection, rowLimit, ...) UseMethod("AthenaPreviewObject")
 
@@ -214,14 +214,14 @@ AthenaPreviewObject <-
   dbGetQuery(connection, paste("SELECT * FROM", name, "LIMIT", rowLimit))
 }
 
-#' Get an icon representing a connection.
-#'
-#' Return the path on disk to an icon representing a connection.
-#'
-#' The icon returned should be a 32x32 square image file.
-#'
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @return The path to an icon file on disk.
+# Get an icon representing a connection.
+#
+# Return the path on disk to an icon representing a connection.
+#
+# The icon returned should be a 32x32 square image file.
+#
+# @param connection A connection object, as returned by `dbConnect()`.
+# @return The path to an icon file on disk.
 
 AthenaConnectionIcon <- function(connection) {
   # no icon is returned by default
@@ -229,20 +229,20 @@ AthenaConnectionIcon <- function(connection) {
   file.path(icons, "athena-logo.png")
 }
 
-#' List the actions supported for the connection
-#'
-#' Return a list of actions that can be performed on the connection.
-#'
-#' The list returned is a named list of actions, where each action has the
-#' following properties:
-#'
-#' \describe{
-#'   \item{callback}{A function to be invoked to perform the action}
-#'   \item{icon}{An optional path to an icon representing the action}
-#' }
-#'
-#' @param connection A connection object, as returned by `dbConnect()`.
-#' @return A named list of actions that can be performed on the connection.
+# List the actions supported for the connection
+#
+# Return a list of actions that can be performed on the connection.
+#
+# The list returned is a named list of actions, where each action has the
+# following properties:
+#
+# \describe{
+#   \item{callback}{A function to be invoked to perform the action}
+#   \item{icon}{An optional path to an icon representing the action}
+# }
+#
+# @param connection A connection object, as returned by `dbConnect()`.
+# @return A named list of actions that can be performed on the connection.
 
 AthenaConnectionActions <- function(connection) {
   icons <- system.file(file.path("icons"), package = "RAthena")
