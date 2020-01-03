@@ -45,7 +45,7 @@ AthenaConnection <-
     
     s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
     
-    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
+    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
                                       "or when work_group is defined in `create_work_group()`", call. = F)}
     
     
