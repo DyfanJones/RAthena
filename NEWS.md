@@ -1,3 +1,11 @@
+# RAthena 1.6.0.9000
+### New Feature
+Added integration into Rstudio connections tab
+
+# RAthena 1.6.0.9000
+### Documentation
+Updated rdocumentation to roxygen2 7.0.2
+
 # RAthena 1.6.0
 Updated package version for cran release
 
