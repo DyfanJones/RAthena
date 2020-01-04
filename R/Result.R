@@ -146,7 +146,7 @@ setMethod(
     
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
-      if (n > 1000)  n = 1000L; message("Info: n has been restricted to 1000 due to AWS Athena limitation")
+      if (n > 1000){n = 1000L; message("Info: n has been restricted to 1000 due to AWS Athena limitation")}
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
                error = function(e) py_error(e))
       
