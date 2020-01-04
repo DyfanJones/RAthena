@@ -143,7 +143,7 @@ setMethod(
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
-  
+    
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
@@ -156,7 +156,10 @@ setMethod(
       rownames(dt) <- NULL
       return(dt[-1,])
     }
-
+    
+    # Added data scan information when returning data from athena
+    message("INFO: (Data scanned: ",data_scanned(result$QueryExecution$Statistics$DataScannedInBytes),")")
+    
     #create temp file
     File <- tempfile()
     on.exit(unlink(File))
