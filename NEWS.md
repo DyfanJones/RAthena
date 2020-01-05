@@ -1,53 +1,56 @@
+# RAthena 1.7.0
+Updated package version for cran release
+
 # RAthena 1.6.0.9001
-## New Feature
+### New Feature
 * Added integration into Rstudio connections tab
 * Added information message of amount of data scanned by aws athena
 
 # RAthena 1.6.0.9000
-## Documentation
+### Documentation
 Updated rdocumentation to roxygen2 7.0.2
 
 # RAthena 1.6.0
 Updated package version for cran release
 
 # RAthena 1.5.0.9004
-## Major Change
+### Major Change
 * Default delimited file uploaded to AWS Athena changed from "csv" to "tsv" this is due to separating value "," in character variables. By using "tsv" file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change `dbWriteTable` `append` parameter checks and uses existing AWS Athena DDL file type. If `file.type` doesn't match Athena DDL file type then user will receive a warning message:
 
 ```
 warning('Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "', File.Type,'".', call. = FALSE)
 ```
 
-## Bug fix
+### Bug fix
 * Due to issue highlighted by @OssiLehtinen in #50, special characters have issue being processed when using flat file in the backend.
 
-## Unit Tests
+### Unit Tests
 * Special characters have been added to unit test `data-transfer`
 
 # RAthena 1.5.0.9003
-## New Feature
+### New Feature
 * Due to help from @OssiLehtinen, `dbRemoveTable` can now remove S3 files for AWS Athena table being removed.
 
-## Unit Tests
+### Unit Tests
 * `dbRemoveTable` new parameters are added in unit test
 
 # RAthena 1.5.0.9002
-## Minor Change
+### Minor Change
 * Added AWS_ATHENA_WORK_GROUP environmental variable support
 
 # RAthena 1.5.0.9001
-## Bug fixed
+### Bug fixed
 * Fixed issue where `as.character` was getting wrongly translated #45
 
 # RAthena 1.5.0.9000
-## Minor Change
+### Minor Change
 * Removed tolower conversion due to request #41
 
-## Bug fixed
+### Bug fixed
 * Fixed issue where row.names not being correctly catered and returning NA in column names #41
 * Fixed issue with `INTEGER` being incorrectly translated in `sql_translate_env.R`
 
-## Unit Tests
+### Unit Tests
 * Added row.names to unit test data transfer
 * Updated dplyr sql_translate_env until test to cater bug fix
 
@@ -55,7 +58,7 @@ warning('Appended `file.type` is not compatible with the existing Athena DDL fil
 Updated package version for cran release
 
 # RAthena 1.4.1.9004
-## Major Change
+### Major Change
 * `dbWriteTable` now will split `gzip` compressed files to improve AWS Athena performance. By default `gzip` compressed files will be split into 20.
 
 Performance results
@@ -99,48 +102,48 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 
 Added information message to inform user about what files have been added to S3 location if user is overwriting an Athena table.
 
-## Minor Change
+### Minor Change
 * `copy_to` method now supports compress and max_batch, to align with `dbWriteTable`
 
 # RAthena 1.4.1.9003
-## Bug Fixed
+### Bug Fixed
 * Fixed bug in regards to Athena DDL being created incorrectly when passed from `dbWriteTable`
 
 # RAthena 1.4.1.9002
-## Bug Fixed
+### Bug Fixed
 * Thanks to @OssiLehtinen for identifying issue around uploading class `POSIXct` to Athena. This class was convert incorrectly and AWS Athena would return NA instead. `RAthena` will now correctly convert `POSIXct` to timestamp but will also correct read in timestamp into `POSIXct`
 
 * Thanks to @OssiLehtinen for discovering an issue with `NA` in string format. Before `RAthena` would return `NA` in string class as `""` this has now been fixed.
 
-## Unit tests
+### Unit tests
 * `POSIXct` class has now been added to data transfer unit test
 
 # RAthena 1.4.1.9001
-## Bug Fixed
+### Bug Fixed
 When returning a single column data.frame from Athena, `RAthena` would translate output into a vector with current the method `dbFetch` n = 0.
 
 # RAthena 1.4.1.9000
-## Bug Fixed
+### Bug Fixed
 Thanks to @OssiLehtinen for identifying issue around `sql_translate_env`. Previously `RAthena` would take the default `dplyr::sql_translate_env`, now `RAthena` has a custom method that uses Data types from: https://docs.aws.amazon.com/athena/latest/ug/data-types.html and window functions from: https://docs.aws.amazon.com/athena/latest/ug/functions-operators-reference-section.html
 
-## Unit tests
+### Unit tests
 * `dplyr sql_translate_env` tests if R functions are correct translated in to Athena sql syntax.
 
 # RAthena 1.4.1
-## New Features:
+### New Features:
 * Parquet file type can now be compress using snappy compression when writing data to S3.
 
-## Bug fixed
+### Bug fixed
 * Older versions of R are returning errors when function `dbWriteTable` is called. The bug is due to function `sqlCreateTable` which `dbWriteTable` calls. Parameters `table` and `fields` were set to `NULL`. This has now been fixed.
 
 # RAthena 1.4.0
 Updated package version for cran release
 
 # RAthena 1.3.0.9001
-## Minor Change
+### Minor Change
 * `s3.location` parameter is `dbWriteTable` can now be made nullable
 
-## Backend Change
+### Backend Change
 * helper function `upload_data` has been rebuilt and removed the old "horrible" if statement with `paste` now the function relies on `sprintf` to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a `dbWriteTable` to be simplified. `dbWriteTable` can now upload data to the default s3_staging directory created in `dbConnect` this simplifies `dbWriteTable` to :
 ```
 library(DBI)
@@ -149,42 +152,42 @@ con <- dbConnect(RAthena::athena())
 
 dbWrite(con, "iris", iris)
 ```
-## Bug Fix
+### Bug Fix
 * Info message wasn't being return when colnames needed changing for Athena DDL
 
-## Unit Tests
+### Unit Tests
 * `data transfer` test now tests compress, and default s3.location when transferring data
 
 # RAthena 1.3.0.9000
-## New Feature
+### New Feature
 * GZIP compression is now supported for "csv" and "tsv" file format in `dbWriteTable`
 
-## Minor Change
+### Minor Change
 * `sqlCreateTable` info message will now only inform user if colnames have changed and display the colname that have changed
 
 # RAthena 1.3.0
 * Move from development version to CRAN publishing version
 
 # RAthena 1.2.9001
-## Minor Change
+### Minor Change
 * Progress bar from `data.table::fread` and `data.table::fwrite` have been disabled
 * Removed `util` functions from namespace: `write.table`, `read.csv`
 * Added `data.table` to namespace
 
-## Unit tests
+### Unit tests
 * Added `bigint` to `integer64` in data.transfer unit test
 
 # RAthena 1.2.9000
-## New Features:
+### New Features:
 * AWS Athena `bigint` are convert into R `bit64::integer64` and visa versa
 
-## Major Changes
+### Major Changes
 * RAthena now defaults in using data.table to read and write files when transferring data to and from AWS Athena. Reason for change:
   * Increase speed in data transfer
   * Data types from AWS Athena can be passed to `data.table::fread`. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R
 
 # RAthena 1.2.0
-## New Features:
+### New Features:
 * new lower level api to work with Athena work groups:
   * `create_work_group`: Creates a workgroup with the specified name.
   * `delete_work_group`: Deletes the workgroup with the specified name.
@@ -205,7 +208,7 @@ dbWrite(con, "iris", iris)
 * Created s3 method for function `db_save_query` for better integration with dplyr
 * Created s3 method for function `db_copy_to` for better integration with dplyr
 
-## Changes
+### Changes
 * Removed old s3_staging_dir validation check from `dbConnect` method
 * Improved `dbFetch` with chunk sizes between 0 - 999. Fixed error where `for loop` would return error instead of breaking.
 * simplified `py_error` function, set `call.` parameter to `FALSE`
@@ -218,12 +221,12 @@ dbWrite(con, "iris", iris)
 * `dbListFields` now returns column names from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
 * `dbExistsTable` now returns boolean from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
 
-## Bug Fixes
+### Bug Fixes
 * `dbFetch` athena data type miss alignment
 * Added Athena classes and names to file readers to prevent miss classification
 * Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.
 
-## Unit tests
+### Unit tests
 * ARN Connection
 * Athena Work Groups
 * Athena Metadata
@@ -231,7 +234,7 @@ dbWrite(con, "iris", iris)
 * dplyr copy_to
 
 # RAthena 1.1.0
-## New Features
+### New Features
 * Added new features in `AthenaConnection`:
   * poll_interval: Amount of time took when checking query execution state.
   * work_group: allows users to assign work groups to athena resource
@@ -242,21 +245,21 @@ dbWrite(con, "iris", iris)
 * Changed to default polling value from 1 to be random interval between 0 - 1
 * Added parameter validation on `dbConnect`
 
-## Unit tests
+### Unit tests
 * Athena Request
 
 # RAthena 1.0.3
-## Bug Fixes
+### Bug Fixes
 * Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using `dbWriteTable`)
 
-## Unit tests
+### Unit tests
 * Added logical variable type in data transfer unit test
 
-## New Feature
+### New Feature
 * Added `stop_query_execution` to `dbClearResult` if the query is still running
 
 # RAthena 1.0.2
-## CRAN Requirement Changes
+### CRAN Requirement Changes
 * Added explanation to DBI alias (Database Interface) to description file due to cran feedback
 * split functions out of overall r documentation
   * Added extra examples to each function
@@ -264,10 +267,10 @@ dbWrite(con, "iris", iris)
   * Added examples that allowed users not to require aws keys
   * Added note for user on some example that require an AWS account to run example
   
-## Bug Fixes
+### Bug Fixes
 * fixed bug with field names containing ".", replace with "_" for Athena tables.
 
-## Unit tests
+### Unit tests
 * Athena DDL
 * Athena Classes
 * Data Transfer
@@ -275,14 +278,14 @@ dbWrite(con, "iris", iris)
 * Exist/Remove
 
 # RAthena 1.0.1 
-## CRAN Requirement Changes
+### CRAN Requirement Changes
 * Fixes to description file due to cran submission feedback
   * Added link to AWS Athena
   * Added description of aliases "AWS", and "SDK" to description section
   * Removed generated MIT license from github
   * Formatted LICENSE file
 
-## Change
+### Change
 * changed helper function `waiter` to `poll`, to align with python's polling
 
 # RAthena 1.0.0
