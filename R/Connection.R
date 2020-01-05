@@ -316,7 +316,8 @@ setMethod(
 #' Returns the unquoted names of Athena tables accessible through this connection.
 #' @name dbListTables
 #' @inheritParams DBI::dbListTables
-#' @param database Athena database, default set to NULL to return all tables from all Athena databases
+#' @param schema Athena schema, default set to NULL to return all tables from all Athena schema.
+#'               Note: The use of DATABASE and SCHEMA is interchangeable within Athena.
 #' @aliases dbListTables
 #' @return \code{dbListTables()} returns a character vector with all the tables from Athena.
 #' @seealso \code{\link[DBI]{dbListTables}}
@@ -343,14 +344,14 @@ NULL
 #' @export
 setMethod(
   "dbListTables", "AthenaConnection",
-  function(conn, database = NULL,...){
+  function(conn, schema = NULL,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     glue <- conn@ptr$client("glue")
     
-    if(is.null(database)){
-    tryCatch(database <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
+    if(is.null(schema)){
+    tryCatch(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
              error = function(e) py_error(e))}
-    tryCatch(output <- lapply(database, function (x) glue$get_tables(DatabaseName = x)$TableList),
+    tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
              error = function(e) py_error(e))
     unlist(lapply(output, function(x) sapply(x, function(y) y$Name)))
   }
