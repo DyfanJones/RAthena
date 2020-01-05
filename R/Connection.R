@@ -45,7 +45,7 @@ AthenaConnection <-
     
     s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
     
-    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, evnironmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
+    if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
                                       "or when work_group is defined in `create_work_group()`", call. = F)}
     
     
@@ -110,7 +110,9 @@ setMethod(
   function(conn, ...) {
     if (!dbIsValid(conn)) {
       warning("Connection already closed.", call. = FALSE)
-    } else {eval.parent(substitute(conn@ptr <- NULL))}
+    } else {
+      on_connection_closed(conn)
+      eval.parent(substitute(conn@ptr <- NULL))}
     invisible(NULL)
   })
 
@@ -314,6 +316,8 @@ setMethod(
 #' Returns the unquoted names of Athena tables accessible through this connection.
 #' @name dbListTables
 #' @inheritParams DBI::dbListTables
+#' @param schema Athena schema, default set to NULL to return all tables from all Athena schemas.
+#'               Note: The use of DATABASE and SCHEMA is interchangeable within Athena.
 #' @aliases dbListTables
 #' @return \code{dbListTables()} returns a character vector with all the tables from Athena.
 #' @seealso \code{\link[DBI]{dbListTables}}
@@ -340,12 +344,14 @@ NULL
 #' @export
 setMethod(
   "dbListTables", "AthenaConnection",
-  function(conn,...){
+  function(conn, schema = NULL,...){
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     glue <- conn@ptr$client("glue")
-    tryCatch(Databases <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
-             error = function(e) py_error(e))
-    tryCatch(output <- lapply(Databases, function (x) glue$get_tables(DatabaseName = x)$TableList),
+    
+    if(is.null(schema)){
+    tryCatch(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
+             error = function(e) py_error(e))}
+    tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
              error = function(e) py_error(e))
     unlist(lapply(output, function(x) sapply(x, function(y) y$Name)))
   }
@@ -510,9 +516,13 @@ setMethod(
       dbms.name <- conn@info$dbms.name
       Table <- name}
     
-    if (delete_data) {
-      glue <- conn@ptr$client("glue")
-      s3 <- conn@ptr$resource("s3")
+    glue <- conn@ptr$client("glue")
+    s3 <- conn@ptr$resource("s3")
+    
+    tryCatch(TableType <- glue$get_table(DatabaseName = dbms.name, Name = Table)$Table$TableType,
+             error = function(e) py_error(e))
+    
+    if (delete_data && TableType == "EXTERNAL_TABLE") {
       tryCatch(
         s3_path <- split_s3_uri(glue$get_table(DatabaseName = dbms.name,
                                                Name = Table)$Table$StorageDescriptor$Location),
@@ -536,6 +546,7 @@ setMethod(
     res <- dbExecute(conn, paste("DROP TABLE ", paste(dbms.name, Table, sep = "."), ";"))
     dbClearResult(res)
     if (!delete_data) message("Info: Only Athena table has been removed.")
+    on_connection_updated(conn, Table)
     invisible(TRUE)
   })
 

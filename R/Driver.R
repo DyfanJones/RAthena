@@ -197,5 +197,8 @@ setMethod(
                             botocore_session = botocore_session,
                             profile_name = profile_name, 
                             aws_expiration = aws_expiration,...)
+    
+    # integrate with RStudio
+    on_connection_opened(con)
     con
   })
