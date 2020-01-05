@@ -4,7 +4,7 @@ NULL
 AthenaResult <- function(conn,
                          statement = NULL,
                          s3_staging_dir = NULL){
-
+  
   stopifnot(is.character(statement))
   Athena <- client_athena(conn)
   Request <- request(conn, statement)
@@ -62,8 +62,8 @@ setMethod(
   function(res, ...){
     if (!dbIsValid(res)) {
       warning("Result already cleared", call. = FALSE)
-      } else {
-        
+    } else {
+      
       # checks status of query
       tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
                error = function(e) py_error(e))
@@ -76,7 +76,7 @@ setMethod(
       # clear s3 athena output
       tryCatch(s3 <- res@connection@ptr$resource("s3"),
                error = function(e) py_error(e))
-        
+      
       # split s3_uri
       s3_info <- split_s3_uri(res@connection@info$s3_staging)
       result_info <- split_s3_uri(query_execution$QueryExecution$ResultConfiguration$OutputLocation)
@@ -93,7 +93,7 @@ setMethod(
                error = function(e) py_warning(e))
       tryCatch(s3$Object(s3_info$bucket, result_info$key)$delete(),
                error = function(e) cat(""))
-      }
+    }
     invisible(TRUE)
   })
 
@@ -143,20 +143,23 @@ setMethod(
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
-  
+    
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
+      if (n > 1000){n = 1000L; message("Info: n has been restricted to 1000 due to AWS Athena limitation")}
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
                error = function(e) py_error(e))
       
       output <- lapply(result$ResultSet$Rows, function(x) (sapply(x$Data, function(x) if(length(x) == 0 ) NA else x)))
-      
-      dt <- rbindlist(output)
+      dt <- rbindlist(output, fill = TRUE)
       colnames(dt) <- as.character(unname(dt[1,]))
       rownames(dt) <- NULL
       return(dt[-1,])
     }
-
+    
+    # Added data scan information when returning data from athena
+    message("Info: (Data scanned: ",data_scanned(result$QueryExecution$Statistics$DataScannedInBytes),")")
+    
     #create temp file
     File <- tempfile()
     on.exit(unlink(File))

@@ -47,7 +47,7 @@ rand_poll <- function() {runif(n = 1, min = 50, max = 100) / 100}
 py_error <- function(e){
   py_err <- py_last_error()
   stop(py_err$value, call. = F)
-  }
+}
 
 # python warning handler
 py_warning <- function(e){
@@ -130,7 +130,7 @@ work_group_config_update <-
            PublishCloudWatchMetricsEnabled = FALSE,
            BytesScannedCutoffPerQuery = 10000000L,
            RequesterPaysEnabled = FALSE){
-
+    
     ConfigurationUpdates <- list()
     ResultConfigurationUpdates <- list(OutputLocation = conn@info$s3_staging,
                                        RemoveOutputLocation = RemoveOutputLocation)
@@ -171,7 +171,7 @@ time_check <- function(x){
   m <- x %/% 60
   s <- round(x %% 60, 0)
   if(m < 15) warning("Athena Connection will expire in ",time_format(m), ":",time_format(s)," (mm:ss)",
-                            call. = F)}
+                     call. = F)}
 
 time_format <- function(x) if(x < 10) paste0(0,x) else x
 
@@ -208,7 +208,7 @@ split_data <- function(x, max.batch = Inf, path = tempdir(), sep = ",", compress
   
   # if max.batch is set by user
   if(!is.infinite(max.batch)) split_vec <- seq(1, max_row, as.integer(max.batch))
-     
+  
   sapply(split_vec, write_batch, dt = x, max.batch = max.batch,
          max_row= max_row, path = path, sep = sep, 
          compress=compress, file.type= file.type)
@@ -221,3 +221,15 @@ write_batch <- function(split_vec, dt, max.batch, max_row, path, sep, compress, 
   fwrite(sample, path, sep = sep, quote = FALSE, showProgress = FALSE)
   path
 }
+
+# Format DataScannedInBytes to a more readable format: 
+data_scanned <- 
+  function (x) {
+    standard <- "legacy"
+    base <- 1024
+    units_map <- c("B", "KB", "MB", "GB", "TB", "PB")
+    power <- if (x <= 0) 0L else min(as.integer(log(x, base = base)), length(units_map) - 1L)
+    unit <- units_map[power + 1L]
+    if (power == 0 && standard == "legacy") unit <- "Bytes"
+    paste(round(x/base^power, digits = 2), unit)
+  }
