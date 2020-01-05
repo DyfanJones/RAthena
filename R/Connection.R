@@ -316,7 +316,7 @@ setMethod(
 #' Returns the unquoted names of Athena tables accessible through this connection.
 #' @name dbListTables
 #' @inheritParams DBI::dbListTables
-#' @param schema Athena schema, default set to NULL to return all tables from all Athena schema.
+#' @param schema Athena schema, default set to NULL to return all tables from all Athena schemas.
 #'               Note: The use of DATABASE and SCHEMA is interchangeable within Athena.
 #' @aliases dbListTables
 #' @return \code{dbListTables()} returns a character vector with all the tables from Athena.
