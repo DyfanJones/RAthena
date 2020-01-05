@@ -143,23 +143,20 @@ setMethod(
     if(result$QueryExecution$Status$State == "FAILED") {
       stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
     }
-    
+  
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
-      if (n > 1000){n = 1000L; message("Info: n has been restricted to 1000 due to AWS Athena limitation")}
       tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
                error = function(e) py_error(e))
       
       output <- lapply(result$ResultSet$Rows, function(x) (sapply(x$Data, function(x) if(length(x) == 0 ) NA else x)))
-      dt <- rbindlist(output, fill = TRUE)
+      
+      dt <- rbindlist(output)
       colnames(dt) <- as.character(unname(dt[1,]))
       rownames(dt) <- NULL
       return(dt[-1,])
     }
-    
-    # Added data scan information when returning data from athena
-    message("Info: (Data scanned: ",data_scanned(result$QueryExecution$Statistics$DataScannedInBytes),")")
-    
+
     #create temp file
     File <- tempfile()
     on.exit(unlink(File))
