@@ -8,7 +8,7 @@ context("data transfer vroom")
 s3.location1 <- paste0(Sys.getenv("rathena_s3_tbl"),"test_df/")
 s3.location2 <- Sys.getenv("rathena_s3_tbl")
 
-test_that("Testing data transfer between R and athena", {
+test_that("Testing data transfer between R and athena vroom", {
   skip_if_no_boto()
   skip_if_no_env()
   
