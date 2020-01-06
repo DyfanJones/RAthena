@@ -70,7 +70,7 @@ split_data.athena_data.table <- function(method, x, max.batch = Inf, path = temp
          max_row= max_row, path = path, sep = sep, file.type= file.type)
 }
 
-# write data.frame by batch vroom
+# write data.frame by batch data.table
 write_batch_DT <- function(split_vec, dt, max.batch, max_row, path, sep, file.type){
   sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
   file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, TRUE), sep = ".")
@@ -86,7 +86,7 @@ split_data.athena_vroom <- function(method, x, max.batch = Inf, path = tempdir()
   if(!compress){
     file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
     path <- file.path(path, file)
-    vroom_write(x, path, delim = sep, quote = "none", progress = FALSE)
+    vroom_write(x, path, delim = sep, quote = "none", progress = FALSE, escape = "none")
     return(path)}
   
   # set up split vec
@@ -112,7 +112,7 @@ write_batch_vroom <- function(split_vec, dt, fun, max.batch, max_row, path, sep,
   sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
   file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, TRUE), sep = ".")
   path <- file.path(path, file)
-  fun(sample,  path, delim = sep, quote = "none", progress = FALSE)
+  fun(sample,  path, delim = sep, quote = "none", progress = FALSE, escape = "none")
   path
 }
 
