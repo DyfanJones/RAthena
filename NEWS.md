@@ -1,10 +1,8 @@
-# RAthena 1.7.0
-Updated package version for cran release
-
 # RAthena 1.6.0.9001
 ### New Feature
 * Added integration into Rstudio connections tab
 * Added information message of amount of data scanned by aws athena
+* Added method to change backend file parser so user can change file parser from `data.table` to `vroom`
 
 # RAthena 1.6.0.9000
 ### Documentation
