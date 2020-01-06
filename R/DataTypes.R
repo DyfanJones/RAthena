@@ -56,6 +56,7 @@ AthenaToRDataType.athena_vroom <-
              tinyint = "i",
              smallint = "i",
              bigint = "i64",
+             double = "d",
              float = "d",
              decimal = "d",
              string = "c",
