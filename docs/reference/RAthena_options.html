@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get DBMS metadata — dbGetInfo • RAthena</title>
+<title>A method to change RAthena backend file parser. — RAthena_options • RAthena</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Get DBMS metadata — dbGetInfo" />
-<meta property="og:description" content="Get DBMS metadata" />
+<meta property="og:title" content="A method to change RAthena backend file parser. — RAthena_options" />
+<meta property="og:description" content="A method to change RAthena backend file parser." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,103 +108,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get DBMS metadata</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Connection.R'><code>R/Connection.R</code></a>, <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Result.R'><code>R/Result.R</code></a></small>
-    <div class="hidden name"><code>dbGetInfo.Rd</code></div>
+    <h1>A method to change RAthena backend file parser.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Options.R'><code>R/Options.R</code></a></small>
+    <div class="hidden name"><code>RAthena_options.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get DBMS metadata</p>
+    <p>A method to change RAthena backend file parser.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaConnection</span>
-<span class='fu'>dbGetInfo</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
-
-<span class='co'># S4 method for AthenaResult</span>
-<span class='fu'>dbGetInfo</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>RAthena_options</span>(<span class='kw'>file_parser</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"data.table"</span>, <span class='st'>"vroom"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dbObj</th>
-      <td><p>An object inheriting from DBIObject,
-i.e. DBIDriver, DBIConnection,
-or a DBIResult</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments to methods.</p></td>
+      <th>file_parser</th>
+      <td><p>Method to read and write tables to Athena, currently defaults to data.table</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a named list</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbGetInfo.html'>dbGetInfo</a></code></p></div>
+    <p><code>RAthena_options()</code> returns <code>NULL</code>, invisibly.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># Note: </span>
-<span class='co'># - Require AWS Account to run below example.</span>
-<span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RAthena</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-
-<span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
-
-<span class='co'># Returns metadata from connnection object</span>
-<span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='fu'>dbGetInfo</span>(<span class='no'>con</span>)
-
-<span class='co'># Return metadata from Athena query object</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "8850d66d-0510-4384-8ce7-60fbcea455a9"
-#&gt; 
-#&gt; $ResponseMetadata
-#&gt; $ResponseMetadata$RequestId
-#&gt; [1] "6bb69a89-161b-448a-a5e6-8fb3e20b61f7"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPStatusCode
-#&gt; [1] 200
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders
-#&gt; $ResponseMetadata$HTTPHeaders$`content-type`
-#&gt; [1] "application/x-amz-json-1.1"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$date
-#&gt; [1] "Mon, 06 Jan 2020 17:34:23 GMT"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`x-amzn-requestid`
-#&gt; [1] "6bb69a89-161b-448a-a5e6-8fb3e20b61f7"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`content-length`
-#&gt; [1] "59"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$connection
-#&gt; [1] "keep-alive"
-#&gt; 
-#&gt; 
-#&gt; $ResponseMetadata$RetryAttempts
-#&gt; [1] 0
-#&gt; 
-#&gt; </div><div class='input'>
-<span class='co'># Clear result</span>
-<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
-
-<span class='co'># disconnect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-<span class='co'># }</span></div></pre>
+<span class='co'># change file parser from default data.table to vroom</span>
+<span class='fu'>RAthena_options</span>(<span class='st'>"vroom"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
