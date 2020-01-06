@@ -1,4 +1,4 @@
-context("data transfer")
+context("data transfer data.table")
 
 # NOTE System variable format returned for Unit tests:
 # Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
