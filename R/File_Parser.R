@@ -7,7 +7,6 @@ athena_read <- function(method, File, ...) {
 athena_read.athena_data.table <-
   function(method, File, athena_types , ...){
     Type2 <- Type <- AthenaToRDataType(method, athena_types)
-    
     # Type2 is to handle issue with data.table fread 
     Type2[Type2 %in% "POSIXct"] <- "character"
     
@@ -29,6 +28,7 @@ athena_read.athena_vroom <-
     
     # Type2 is to bigint
     Type2[Type2 %in% "i64"] <- "n"
+    
     output <- vroom(File, delim = ",", col_types = Type2, progress = FALSE,trim_ws = FALSE, altrep_opts = TRUE)
     
     # convert numeric class to integer64 to match athena's bigint
@@ -67,14 +67,13 @@ split_data.athena_data.table <- function(method, x, max.batch = Inf, path = temp
   if(!is.infinite(max.batch)) split_vec <- seq(1, max_row, as.integer(max.batch))
   
   sapply(split_vec, write_batch_DT, dt = x, max.batch = max.batch,
-         max_row= max_row, path = path, sep = sep, 
-         compress=compress, file.type= file.type)
+         max_row= max_row, path = path, sep = sep, file.type= file.type)
 }
 
 # write data.frame by batch vroom
-write_batch_DT <- function(split_vec, dt, max.batch, max_row, path, sep, compress, file.type){
+write_batch_DT <- function(split_vec, dt, max.batch, max_row, path, sep, file.type){
   sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
-  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
+  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, TRUE), sep = ".")
   path <- file.path(path, file)
   fwrite(sample, path, sep = sep, quote = FALSE, showProgress = FALSE)
   path
@@ -87,7 +86,7 @@ split_data.athena_vroom <- function(method, x, max.batch = Inf, path = tempdir()
   if(!compress){
     file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
     path <- file.path(path, file)
-    fwrite(x, path, sep = sep, quote = FALSE, showProgress = FALSE)
+    vroom_write(x, path, delim = sep, quote = "none", progress = FALSE)
     return(path)}
   
   # set up split vec
@@ -104,29 +103,18 @@ split_data.athena_vroom <- function(method, x, max.batch = Inf, path = tempdir()
   # if max.batch is set by user
   if(!is.infinite(max.batch)) split_vec <- seq(1, max_row, as.integer(max.batch))
   
-  if(compress) {
-    sapply(split_vec, write_batch_vroom_uncompress, dt = x, max.batch = max.batch,
-           max_row= max_row, path = path, sep = sep, 
-           compress=TRUE, file.type= file.type)
-  } else {
-    sapply(split_vec, write_batch_vroom_compress, dt = x, max.batch = max.batch,
-           max_row= max_row, path = path, sep = sep, 
-           compress=FALSE, file.type= file.type)}
+  sapply(split_vec, write_batch_vroom, dt = x, fun = vroom_write, max.batch = max.batch,
+         max_row= max_row, path = path, sep = sep, file.type= file.type)
 }
 
 # write data.frame by batch vroom
-write_batch_vroom_uncompress <- function(split_vec, dt, max.batch, max_row, path, sep, compress, file.type){
+write_batch_vroom <- function(split_vec, dt, fun, max.batch, max_row, path, sep, file.type){
   sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
-  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
+  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, TRUE), sep = ".")
   path <- file.path(path, file)
-  vroom_write(sample, path, delim = sep, quote = "none", progress = FALSE)
+  fun(sample,  path, delim = sep, quote = "none", progress = FALSE)
   path
 }
 
-write_batch_vroom_compress <- function(split_vec, dt, max.batch, max_row, path, sep, compress, file.type){
-  sample <- dt[split_vec:min(max_row,(split_vec+max.batch-1)),]
-  file <- paste(paste(sample(letters, 10, replace = TRUE), collapse = ""), Compress(file.type, compress), sep = ".")
-  path <- file.path(path, file)
-  vroom_write(sample, pipe(sprintf("pigz > %s", path)), delim = sep, quote = "none", progress = FALSE)
-  path
-}
+# To enable vroom to compress files in parrallel then pigz is required: https://zlib.net/pigz/. 
+# pipe(sprintf("pigz > %s", path))
