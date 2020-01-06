@@ -10,7 +10,7 @@ RAthena_options(file_parser = c("data.table", "vroom"))
 \item{file_parser}{Method to read and write tables to Athena, currently defaults to data.table}
 }
 \value{
-\code{RAthena_options()} returns \code{TRUE}, invisibly.
+\code{RAthena_options()} returns \code{NULL}, invisibly.
 }
 \description{
 A method to change RAthena backend file parser.
