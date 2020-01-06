@@ -9,7 +9,7 @@ class(athena_option_env$file_parser) <- "athena_data.table"
 #' A method to change RAthena backend file parser.
 #'
 #' @param file_parser Method to read and write tables to Athena, currently defaults to data.table
-#' @return \code{RAthena_options()} returns \code{TRUE}, invisibly.
+#' @return \code{RAthena_options()} returns \code{NULL}, invisibly.
 #' @examples
 #' library(RAthena)
 #' 
