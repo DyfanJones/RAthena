@@ -1,4 +1,4 @@
-context("data transfer")
+context("data transfer vroom")
 
 # NOTE System variable format returned for Unit tests:
 # Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
@@ -8,9 +8,11 @@ context("data transfer")
 s3.location1 <- paste0(Sys.getenv("rathena_s3_tbl"),"test_df/")
 s3.location2 <- Sys.getenv("rathena_s3_tbl")
 
-test_that("Testing data transfer between R and athena", {
+test_that("Testing data transfer between R and athena vroom", {
   skip_if_no_boto()
   skip_if_no_env()
+  
+  RAthena_options("vroom")
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
                    profile_name = "rathena",
@@ -24,9 +26,9 @@ test_that("Testing data transfer between R and athena", {
   
   # testing if bigint is transferred correctly
   df2 <- data.frame(var1 = sample(letters, 10, replace = T),
-                   var2 = bit64::as.integer64(1:10),
-                   stringsAsFactors = F)
-
+                    var2 = bit64::as.integer64(1:10),
+                    stringsAsFactors = F)
+  
   DATE <- Sys.Date()
   dbWriteTable(con, "test_df", df, overwrite = T, partition = c("timesTamp" = format(DATE, "%Y%m%d")), s3.location = s3.location1)
   dbWriteTable(con, "test_df2", df, 
@@ -44,8 +46,14 @@ test_that("Testing data transfer between R and athena", {
   test_df3 <- as.data.frame(dbGetQuery(con, "select * from df_bigint"))
   test_df4 <- as.data.frame(dbGetQuery(con, "select * from mtcars2"))
   
-  expect_equal(test_df,sqlData(con, df))
-  expect_equal(test_df2,sqlData(con, df))
+  # vroom adds attribute spec. Attribute spec needs to be removed to unit test
+  attributes(test_df)$spec <- NULL
+  attributes(test_df2)$spec <- NULL
+  attributes(test_df3)$spec <- NULL
+  attributes(test_df4)$spec <- NULL
+  
+  expect_equal(test_df,df)
+  expect_equal(test_df2, sqlData(con, df))
   expect_equal(test_df3,df2)
   expect_equal(test_df4, sqlData(con, mtcars))
 })
