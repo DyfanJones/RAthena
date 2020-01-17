@@ -81,11 +81,11 @@ sql_translate_env.AthenaConnection <- function(con) {
   )
 }
 
-
+# helper function to support R function paste in sql_translation_env
 athena_paste <- function(..., sep = " ", con) {
   escape <- pkg_method("escape", "dbplyr")
   sql <- pkg_method("sql", "dplyr")
-  sep <- paste0('||', sep, '||')
+  sep <- paste0('||', escape(sep, con = con), '||')
   pieces <- vapply(list(...), escape, con = con,collapse = sep, character(1))
   sql(paste(pieces))
 }
