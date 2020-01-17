@@ -61,6 +61,8 @@ sql_translate_env.AthenaConnection <- function(con) {
       is.finite = sql_prefix("IS_FINITE"),
       is.infinite = sql_prefix("IS_FINITE"),
       is.nan = sql_prefix("IS_NAN"),
+      paste0 = sql_prefix("CONCAT"),
+      paste = function(..., sep = " ") athena_paste(list(...), sep = sep, con = con),
       `[[` = function(x, i) {
         if (is.numeric(i) && all.equal(i, as.integer(i))) {
           i <- as.integer(i)
@@ -77,4 +79,13 @@ sql_translate_env.AthenaConnection <- function(con) {
     ),
     athena_window_functions()
   )
+}
+
+
+athena_paste <- function(..., sep = " ", con) {
+  escape <- pkg_method("escape", "dbplyr")
+  sql <- pkg_method("sql", "dplyr")
+  sep <- paste0('||', sep, '||')
+  pieces <- vapply(list(...), escape, con = con,collapse = sep, character(1))
+  sql(paste(pieces))
 }
