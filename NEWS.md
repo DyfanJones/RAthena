@@ -1,3 +1,20 @@
+# RAthena 1.7.0.9001
+### New Feature
+* `dbStatistics` is a wrapper around `boto3` `get_query_execution` to return statistics for `RAthena::dbSendQuery` results
+* `dbGetQuery` has new parameter `statistics` to print out `dbStatistics` before returning Athena results.
+
+# RAthena 1.7.0.9000
+### Bug Fix
+* R functions `paste`/`paste0` would use default `dplyr:sql-translate-env` (`concat_ws`). `paste0` now uses Presto's `concat` function and `paste` now uses pipes to get extra flexible for custom separating values.
+
+```
+# R code:
+paste("hi", "bye", sep = "-")
+
+# SQL translation:
+('hi'||'-'||'bye')
+```
+
 # RAthena 1.7.0
 Updated package version for cran release
 
