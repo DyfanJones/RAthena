@@ -346,8 +346,6 @@ setMethod("dbStatistics", "AthenaResult",
             # check status of query
             result <- poll(res)
             
-            result_info <- split_s3_uri(result$QueryExecution$ResultConfiguration$OutputLocation)
-            
             # if query failed stop
             if(result$QueryExecution$Status$State == "FAILED") {
               stop(result$QueryExecution$Status$StateChangeReason, call. = FALSE)
