@@ -14,6 +14,8 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
                    profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
+  test_date <- as.Date("2020-01-01")
+  
   t1 <- translate_sql(as.character(1), con = con)
   t2 <- translate_sql(as.numeric("1"), con = con)
   t3 <- translate_sql(as.double("1.2"), con = con)
@@ -32,6 +34,12 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   t16 <- translate_sql(paste("hi","bye"), con = con)
   t17 <- translate_sql(paste("hi","bye", sep = "-"), con = con)
   t18 <- translate_sql(paste0("hi","bye"), con = con)
+  t19 <- escape(test_date, con = con)
+  t20 <- escape("2020-01-01", con = con)
+  t21 <- escape("2020-13-01", con = con)
+  t22 <- translate_sql(as.character("2020-01-01"), con = con)
+  t23 <- translate_sql(c("2020-01-01", "2020-01-02"), con = con)
+  t24 <- translate_sql(c("2020-01-01", "2020-13-02"), con = con)
   
   expect_equal(t1 ,sql("CAST(1.0 AS VARCHAR)"))
   expect_equal(t2 ,sql("CAST('1' AS DOUBLE)"))
@@ -51,4 +59,10 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   expect_equal(t16 ,sql("('hi'||' '||'bye')"))
   expect_equal(t17 ,sql("('hi'||'-'||'bye')"))
   expect_equal(t18 ,sql("CONCAT('hi', 'bye')"))
+  expect_equal(t19, sql("DATE '2020-01-01'"))
+  expect_equal(t20, sql("DATE '2020-01-01'"))
+  expect_equal(t21, sql("'2020-13-01'"))
+  expect_equal(t22, sql("CAST(DATE '2020-01-01' AS VARCHAR)"))
+  expect_equal(t23, sql("(DATE '2020-01-01', DATE '2020-01-02')"))
+  expect_equal(t24, sql("('2020-01-01', '2020-13-02')"))
 })
