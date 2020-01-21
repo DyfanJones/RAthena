@@ -46,7 +46,7 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   expect_equal(t3 ,sql("CAST('1.2' AS DOUBLE)"))
   expect_equal(t4 ,sql("CAST(1.2 AS INTEGER)"))
   expect_equal(t5 ,sql("CAST(1.2 AS BIGINT)"))
-  expect_equal(t6 ,sql("CAST('2019-01-01' AS DATE)"))
+  expect_equal(t6 ,sql("CAST(DATE '2019-01-01' AS DATE)"))
   expect_equal(t7 ,sql("CAST('true' AS BOOLEAN)"))
   expect_equal(t8 ,sql("CAST(10.0 AS VARBINARY)"))
   expect_equal(t9 ,sql("LOWER('HELLO')"))
