@@ -1,3 +1,15 @@
+# RAthena 1.7.0.9002
+### Bug Fix
+* Thanks to @OssiLehtinen for fixing date variables being incorrectly translated by `sql_translate_env` (#44)
+
+```
+# Before
+translate_sql("2019-01-01", con = con) -> '2019-01-01'
+
+# Now
+translate_sql("2019-01-01", con = con) -> DATE '2019-01-01'
+```
+
 # RAthena 1.7.0.9001
 ### New Feature
 * `dbStatistics` is a wrapper around `boto3` `get_query_execution` to return statistics for `RAthena::dbSendQuery` results
