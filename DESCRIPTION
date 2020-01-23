@@ -21,7 +21,7 @@ Suggests:
     dplyr (>= 0.7.0),
     dbplyr,
     testthat,
-    vroom
+    vroom (>= 1.2.0)
 Depends: R (>= 3.2.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
