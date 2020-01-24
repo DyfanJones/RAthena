@@ -1,3 +1,12 @@
+# RAthena 1.7.0.9003
+### New Feature
+* `RAthena_options`
+  * Now checks if desired file parser is installed before changed file_parser method
+  * File parser `vroom` has been restricted to >= 1.2.0 due to integer64 support and changes to vroom api
+
+### Bug Fix
+* Dependency data.table now restricted to (>=1.12.4) due to file compression being added to fwrite (>=1.12.4) https://github.com/Rdatatable/data.table/blob/master/NEWS.md
+
 # RAthena 1.7.0.9002
 ### Bug Fix
 * Thanks to @OssiLehtinen for fixing date variables being incorrectly translated by `sql_translate_env` (#44)
