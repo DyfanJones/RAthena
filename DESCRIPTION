@@ -9,7 +9,7 @@ Description: Designed to be compatible with the R package 'DBI' (Database Interf
     To do this 'Python' 'Boto3' Software Development Kit ('SDK')
     <https://boto3.amazonaws.com/v1/documentation/api/latest/index.html> is used as a driver.
 Imports: 
-    data.table,
+    data.table (>= 1.12.4),
     DBI (>= 0.7),
     methods,
     reticulate (>= 1.13),
