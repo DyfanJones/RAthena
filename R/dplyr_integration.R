@@ -23,7 +23,7 @@ db_desc.AthenaConnection <- function(x) {
 #' @param ... passes \code{RAthena} table creation parameters: [\code{file_type},\code{s3_location},\code{partition}]
 #' \itemize{
 #'          \item{\code{file_type:} What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
-#'                        \code{"NULL"} will let athena set the file_type for you.}
+#'                        \code{"NULL"} will let Athena set the file_type for you.}
 #'          \item{\code{s3_location:} s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
 #'          \item{\code{partition:} Partition Athena table, requires to be a partitioned variable from previous table.}}
 #' @name db_compute
@@ -50,11 +50,11 @@ db_desc.AthenaConnection <- function(x) {
 #' athena_mtcars <- tbl(con, "mtcars")
 #' mtcars_filter <- athena_mtcars %>% filter(gear >=4)
 #' 
-#' # create athena with unique table name
+#' # create Athena with unique table name
 #' mtcars_filer %>% 
 #'   compute()
 #' 
-#' # create athena with specified name and s3 location
+#' # create Athena with specified name and s3 location
 #' mtcars_filer %>% 
 #'     compute("mtcars_filer",
 #'             s3_location = "s3://mybucket/mtcars_filer/")
@@ -80,7 +80,7 @@ db_compute.AthenaConnection <- function(con,
 #' @param sql SQL code to be sent to the data
 #' @param name Table name if left default RAthena will use default from 'dplyr''s \code{compute} function.
 #' @param file_type What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
-#'                  \code{"NULL"} will let athena set the file_type for you.
+#'                  \code{"NULL"} will let Athena set the file_type for you.
 #' @param s3_location s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")
 #' @param partition Partition Athena table, requires to be a partitioned variable from previous table.
 #' @param ... other parameters, currently not implemented

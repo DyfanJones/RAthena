@@ -2,10 +2,10 @@
 ### New Feature
 * `RAthena_options`
   * Now checks if desired file parser is installed before changed file_parser method
-  * File parser `vroom` has been restricted to >= 1.2.0 due to integer64 support and changes to vroom api
+  * File parser `vroom` has been restricted to >= 1.2.0 due to integer64 support and changes to `vroom` api
 
 ### Bug Fix
-* Dependency data.table now restricted to (>=1.12.4) due to file compression being added to fwrite (>=1.12.4) https://github.com/Rdatatable/data.table/blob/master/NEWS.md
+* Dependency data.table now restricted to (>=1.12.4) due to file compression being added to `fwrite` (>=1.12.4) https://github.com/Rdatatable/data.table/blob/master/NEWS.md
 
 # RAthena 1.7.0.9002
 ### Bug Fix
@@ -42,7 +42,7 @@ Updated package version for cran release
 # RAthena 1.6.0.9001
 ### New Feature
 * Added integration into Rstudio connections tab
-* Added information message of amount of data scanned by aws athena
+* Added information message of amount of data scanned by AWS Athena
 * Added method to change backend file parser so user can change file parser from `data.table` to `vroom`. From now on it is possible to change file parser using `RAthena_options` for example:
 
 ```
@@ -55,11 +55,11 @@ RAthena_options("vroom")
 * new function `dbGetTables` that returns Athena hierarchy as a data.frame
 
 ### Unit tests
-* Added datatransfer unit test for backend file parser vroom
+* Added datatransfer unit test for backend file parser `vroom`
 
 # RAthena 1.6.0.9000
 ### Documentation
-Updated rdocumentation to roxygen2 7.0.2
+Updated R documentation to `roxygen2` 7.0.2
 
 # RAthena 1.6.0
 Updated package version for cran release
@@ -95,7 +95,7 @@ warning('Appended `file.type` is not compatible with the existing Athena DDL fil
 
 # RAthena 1.5.0.9000
 ### Minor Change
-* Removed tolower conversion due to request #41
+* Removed `tolower` conversion due to request #41
 
 ### Bug fixed
 * Fixed issue where row.names not being correctly catered and returning NA in column names #41
@@ -103,7 +103,7 @@ warning('Appended `file.type` is not compatible with the existing Athena DDL fil
 
 ### Unit Tests
 * Added row.names to unit test data transfer
-* Updated dplyr sql_translate_env until test to cater bug fix
+* Updated dplyr `sql_translate_env` until test to cater bug fix
 
 # RAthena 1.5.0
 Updated package version for cran release
@@ -178,7 +178,7 @@ When returning a single column data.frame from Athena, `RAthena` would translate
 Thanks to @OssiLehtinen for identifying issue around `sql_translate_env`. Previously `RAthena` would take the default `dplyr::sql_translate_env`, now `RAthena` has a custom method that uses Data types from: https://docs.aws.amazon.com/athena/latest/ug/data-types.html and window functions from: https://docs.aws.amazon.com/athena/latest/ug/functions-operators-reference-section.html
 
 ### Unit tests
-* `dplyr sql_translate_env` tests if R functions are correct translated in to Athena sql syntax.
+* `dplyr sql_translate_env` tests if R functions are correct translated in to Athena `sql` syntax.
 
 # RAthena 1.4.1
 ### New Features:
@@ -214,7 +214,7 @@ dbWrite(con, "iris", iris)
 * GZIP compression is now supported for "csv" and "tsv" file format in `dbWriteTable`
 
 ### Minor Change
-* `sqlCreateTable` info message will now only inform user if colnames have changed and display the colname that have changed
+* `sqlCreateTable` info message will now only inform user if colnames have changed and display the column name that have changed
 
 # RAthena 1.3.0
 * Move from development version to CRAN publishing version
@@ -268,14 +268,14 @@ dbWrite(con, "iris", iris)
 * `dbFetch` replaced S3 search for query key with output location from Athena
 * `dbClearResult` changed error, to return python error as warning to warn user doesn't have permission to delete S3 resource
 * `dbClearResult` replaced S3 search for query key with out location from Athena
-* `dbListTables` now returns vector of tables from `aws glue` instead of using an `aws athena` query. This method increases speed of call of query
-* `dbListFields` now returns column names from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
-* `dbExistsTable` now returns boolean from `aws glue` instead of using an `aws athena` query.. This method increases speed of call of query
+* `dbListTables` now returns vector of tables from `aws glue` instead of using an `AWS Athena` query. This method increases speed of call of query
+* `dbListFields` now returns column names from `aws glue` instead of using an `AWS Athena` query.. This method increases speed of call of query
+* `dbExistsTable` now returns boolean from `aws glue` instead of using an `AWS Athena` query.. This method increases speed of call of query
 
 ### Bug Fixes
-* `dbFetch` athena data type miss alignment
+* `dbFetch` Athena data type miss alignment
 * Added Athena classes and names to file readers to prevent miss classification
-* Fixed athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by athena to fail.
+* Fixed Athena ddl and underlying data in s3 being miss aligned. Causing parquet files being read by Athena to fail.
 
 ### Unit tests
 * ARN Connection
@@ -288,10 +288,10 @@ dbWrite(con, "iris", iris)
 ### New Features
 * Added new features in `AthenaConnection`:
   * poll_interval: Amount of time took when checking query execution state.
-  * work_group: allows users to assign work groups to athena resource
+  * work_group: allows users to assign work groups to Athena resource
   * encryption_option: Athena encryption at rest
   * kms_key:AWS Key Management Service
-* New helper function `request` build athena query request
+* New helper function `request` build Athena query request
 * Created s3 method for function `db_desc`
 * Changed to default polling value from 1 to be random interval between 0 - 1
 * Added parameter validation on `dbConnect`
@@ -301,7 +301,7 @@ dbWrite(con, "iris", iris)
 
 # RAthena 1.0.3
 ### Bug Fixes
-* Fixed bug of miss-alignment of s3 location and athena table on lower level folder structures, when writing data.frame to athena (using `dbWriteTable`)
+* Fixed bug of miss-alignment of s3 location and Athena table on lower level folder structures, when writing data.frame to Athena (using `dbWriteTable`)
 
 ### Unit tests
 * Added logical variable type in data transfer unit test
