@@ -135,6 +135,9 @@ paste("hi", "bye", sep = "-")
 
 # SQL translation:
 ('hi'||'-'||'bye')</a></code></pre>
+<ul>
+<li>If table exists and parameter <code>append</code> set to <code>TRUE</code> then existing s3.location will be utilised (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>)</li>
+</ul>
 </div>
 <div id="new-feature" class="section level2">
 <h2 class="hasAnchor">
@@ -151,6 +154,8 @@ paste("hi", "bye", sep = "-")
 <code>dbStatistics</code> is a wrapper around <code>boto3</code> <code>get_query_execution</code> to return statistics for <code>RAthena::dbSendQuery</code> results</li>
 <li>
 <code>dbGetQuery</code> has new parameter <code>statistics</code> to print out <code>dbStatistics</code> before returning Athena results.</li>
+<li>
+<code>s3.location</code> now follows new syntax <code>s3://bucket/{schema}/{table}/{partition}/{table_file}</code> to align with <code>Pyathena</code> and to allow tables with same name but in different schema to be uploaded to s3 (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>).</li>
 </ul>
 </div>
 </div>
