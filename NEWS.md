@@ -38,8 +38,8 @@ An error would be raised: `Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.d
 * `RAthena_options`
   * Now checks if desired file parser is installed before changed file_parser method
   * File parser `vroom` has been restricted to >= 1.2.0 due to integer64 support and changes to `vroom` api
-* `dbStatistics` is a wrapper around `boto3` `get_query_execution` to return statistics for `RAthena::dbSendQuery` results
-* `dbGetQuery` has new parameter `statistics` to print out `dbStatistics` before returning Athena results.
+* `dbStatistics` is a wrapper around `boto3` `get_query_execution` to return statistics for `RAthena::dbSendQuery` results (#67)
+* `dbGetQuery` has new parameter `statistics` to print out `dbStatistics` before returning Athena results (#67)
 * `s3.location` now follows new syntax `s3://bucket/{schema}/{table}/{partition}/{table_file}` to align with `Pyathena` and to allow tables with same name but in different schema to be uploaded to s3 (#73).
 
 # RAthena 1.7.0
