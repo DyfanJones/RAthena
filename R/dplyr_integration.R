@@ -67,15 +67,16 @@ db_compute.AthenaConnection <- function(con,
                                         sql,
                                         ...) {
   db_save_query <- pkg_method("db_save_query", "dplyr")
+  in_schema <- pkg_method("in_schema", "dbplyr")
+  
   table <- db_save_query(con, sql, table, ...)
   if (grepl("\\.", table)) {
     schema <- gsub("\\..*", "" , table)
     table <- gsub(".*\\.", "" , table)
   } else {
-    schema <- conn@info$dbms.name
+    schema <- con@info$dbms.name
     table <- table}
   
-  in_schema <- pkg_method("in_schema", "dbplyr")
   in_schema(schema, table)
 }
 
