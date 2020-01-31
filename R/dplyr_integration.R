@@ -68,7 +68,15 @@ db_compute.AthenaConnection <- function(con,
                                         ...) {
   db_save_query <- pkg_method("db_save_query", "dplyr")
   table <- db_save_query(con, sql, table, ...)
-  table
+  if (grepl("\\.", table)) {
+    schema <- gsub("\\..*", "" , table)
+    table <- gsub(".*\\.", "" , table)
+  } else {
+    schema <- conn@info$dbms.name
+    table <- table}
+  
+  in_schema <- pkg_method("in_schema", "dbplyr")
+  in_schema(schema, table)
 }
 
 #' S3 implementation of \code{db_save_query} for Athena
