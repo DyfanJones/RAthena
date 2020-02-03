@@ -23,7 +23,9 @@ This release addresses several bugs identified by the community:
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 ## R devtools::check_rhub() results
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+0 errors ✓ | 0 warnings ✓ | 1 note x
+
+* Apologies for the fast re-submission: however this release is to address bugs that have been identified by the community.
 
 ## unit tests (using testthat) results
 * OK:       66
