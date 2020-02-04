@@ -357,7 +357,7 @@ setMethod(
   }
 )
 
-#' List Athena Schema, Tables and TableTypes
+#' List Athena Schema, Tables and Table Types
 #'
 #' Method to get Athena schema, tables and table types return as a data.frame
 #' @name dbGetTables

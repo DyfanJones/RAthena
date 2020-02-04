@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Execute a query on Athena — Query • RAthena</title>
+<title>Show AWS Athena Statistics — dbStatistics • RAthena</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,8 @@
 
 
 
-<meta property="og:title" content="Execute a query on Athena — Query" />
-<meta property="og:description" content="The dbSendQuery() and dbSendStatement() method submits a query to Athena but does not wait for query to execute. 
-             dbHasCompleted method will need to ran to check if query has been completed or not.
-             The dbExecute() method submits a query to Athena and waits for the query to be executed." />
+<meta property="og:title" content="Show AWS Athena Statistics — dbStatistics" />
+<meta property="og:description" content="Returns AWS Athena Statistics from execute queries dbSendQuery" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,50 +108,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Execute a query on Athena</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Connection.R'><code>R/Connection.R</code></a></small>
-    <div class="hidden name"><code>Query.Rd</code></div>
+    <h1>Show AWS Athena Statistics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Result.R'><code>R/Result.R</code></a></small>
+    <div class="hidden name"><code>dbStatistics.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The <code>dbSendQuery()</code> and <code>dbSendStatement()</code> method submits a query to Athena but does not wait for query to execute. 
-             <code><a href='dbHasCompleted.html'>dbHasCompleted</a></code> method will need to ran to check if query has been completed or not.
-             The <code>dbExecute()</code> method submits a query to Athena and waits for the query to be executed.</p>
+    <p>Returns AWS Athena Statistics from execute queries <code>dbSendQuery</code></p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'>dbSendQuery</span>(<span class='no'>conn</span>, <span class='kw'>statement</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>dbStatistics</span>(<span class='no'>res</span>, <span class='no'>...</span>)
 
-<span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'>dbSendStatement</span>(<span class='no'>conn</span>, <span class='kw'>statement</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'>dbExecute</span>(<span class='no'>conn</span>, <span class='kw'>statement</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='co'># S4 method for AthenaResult</span>
+<span class='fu'>dbStatistics</span>(<span class='no'>res</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>conn</th>
-      <td><p>A DBIConnection object, as returned by
-<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>statement</th>
-      <td><p>a character string containing SQL.</p></td>
+      <th>res</th>
+      <td><p>An object inheriting from DBIResult.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other parameters passed on to methods.</p></td>
+      <td><p>Other arguments passed on to methods.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns <code>AthenaResult</code> s4 class.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbSendStatement.html'>dbSendStatement</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></code></p></div>
+    <p><code>dbStatistics()</code> returns list containing Athena Statistics return from <code>boto3</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -162,17 +146,30 @@
 <span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RAthena</span>)
 
 <span class='co'># Demo connection to Athena using profile name </span>
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
 
-<span class='co'># Sending Queries to Athena</span>
-<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendStatement.html'>dbSendStatement</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='no'>res3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='fu'>dbStatistics</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $EngineExecutionTimeInMillis
+#&gt; [1] 280
+#&gt; 
+#&gt; $DataScannedInBytes
+#&gt; [1] 0
+#&gt; 
+#&gt; $TotalExecutionTimeInMillis
+#&gt; [1] 356
+#&gt; 
+#&gt; $QueryQueueTimeInMillis
+#&gt; [1] 48
+#&gt; 
+#&gt; $ServiceProcessingTimeInMillis
+#&gt; [1] 28
+#&gt; </div><div class='input'>
+<span class='co'># Clean up</span>
+<span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
 
-<span class='co'># Disconnect conenction</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
 <span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -180,7 +177,6 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

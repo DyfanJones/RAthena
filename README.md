@@ -269,9 +269,8 @@ tbl(con, sql("SELECT * FROM iris"))
     10          4.9         3.1          1.5         0.1 setosa 
     # … with more rows
 
-dplyr provides lazy querying with allows to short hand `tbl(con,
-sql("SELECT * FROM iris"))` to `tbl(con, "iris")`. For more information
-please look at <https://db.rstudio.com/dplyr/>.
+dplyr provides lazy querying with allows to short hand `tbl(con, sql("SELECT * FROM iris"))`
+to `tbl(con, "iris")`. For more information please look at <https://db.rstudio.com/dplyr/>.
 
 ``` r
 tbl(con, "iris")
