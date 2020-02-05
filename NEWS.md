@@ -42,6 +42,10 @@ An error would be raised: `Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.d
 * `dbGetQuery` has new parameter `statistics` to print out `dbStatistics` before returning Athena results (#67)
 * `s3.location` now follows new syntax `s3://bucket/{schema}/{table}/{partition}/{table_file}` to align with `Pyathena` and to allow tables with same name but in different schema to be uploaded to s3 (#73).
 
+## Unit test
+* `dplyr` sql_translate_env: expected results have now been updated to take into account bug fix with date fields
+* S3 upload location: Test if the created s3 location is in the correct location
+
 # RAthena 1.7.0
 ## New Feature
 * Added integration into Rstudio connections tab
