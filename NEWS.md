@@ -42,6 +42,27 @@ tbl(con, "iris") %>%
 * `dbStatistics` is a wrapper around `boto3` `get_query_execution` to return statistics for `RAthena::dbSendQuery` results (#67)
 * `dbGetQuery` has new parameter `statistics` to print out `dbStatistics` before returning Athena results (#67)
 * `s3.location` now follows new syntax `s3://bucket/{schema}/{table}/{partition}/{table_file}` to align with `Pyathena` and to allow tables with same name but in different schema to be uploaded to s3 (#73).
+* Thanks to @OssiLehtinen for improving the speed of `dplyr::tbl` when calling Athena when using the ident method (noctua [# 64](https://github.com/DyfanJones/noctua/issues/64)): 
+```
+library(DBI)
+library(dplyr)
+
+con <- dbConnect(RAthena::athena())
+
+# ident method:
+t1 <- system.time(tbl(con, "iris"))
+
+# sub query method:
+t2 <- system.time(tbl(con, sql("select * from iris")))
+
+# ident method
+user  system elapsed 
+0.082   0.012   0.288 
+
+# sub query method
+user  system elapsed 
+0.993   0.138   3.660 
+```
 
 ## Unit test
 * `dplyr` sql_translate_env: expected results have now been updated to take into account bug fix with date fields

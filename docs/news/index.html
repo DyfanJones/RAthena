@@ -171,7 +171,26 @@ tbl(con, "iris") %&gt;%
 <code>dbGetQuery</code> has new parameter <code>statistics</code> to print out <code>dbStatistics</code> before returning Athena results (<a href='https://github.com/DyfanJones/RAthena/issues/67'>#67</a>)</li>
 <li>
 <code>s3.location</code> now follows new syntax <code>s3://bucket/{schema}/{table}/{partition}/{table_file}</code> to align with <code>Pyathena</code> and to allow tables with same name but in different schema to be uploaded to s3 (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>).</li>
+<li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for improving the speed of <code><a href="https://dplyr.tidyverse.org/reference/tbl.html">dplyr::tbl</a></code> when calling Athena when using the ident method (noctua <a href="https://github.com/DyfanJones/noctua/issues/64"># 64</a>):</li>
 </ul>
+<pre><code>library(DBI)
+library(dplyr)
+
+con &lt;- dbConnect(RAthena::athena())
+
+# ident method:
+t1 &lt;- system.time(tbl(con, "iris"))
+
+# sub query method:
+t2 &lt;- system.time(tbl(con, sql("select * from iris")))
+
+# ident method
+user  system elapsed 
+0.082   0.012   0.288 
+
+# sub query method
+user  system elapsed 
+0.993   0.138   3.660 </code></pre>
 </div>
 <div id="unit-test" class="section level2">
 <h2 class="hasAnchor">
