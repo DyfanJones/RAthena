@@ -21,7 +21,7 @@ paste("hi", "bye", sep = "-")
 ('hi'||'-'||'bye')
 ```
 * If table exists and parameter `append` set to `TRUE` then existing s3.location will be utilised (#73)
-* `db_compute` returned table name, however when a user wished to write table to another location (#74) i.e.
+* `db_compute` returned table name, however when a user wished to write table to another location (#74). An error would be raised: `Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist` This has now been fixed with db_compute returning `dbplyr::in_schema`.
 ```
 library(DBI)
 library(dplyr)
@@ -31,8 +31,9 @@ con <- dbConnect(RAthena::athena())
 tbl(con, "iris") %>%
   compute(name = "temp.iris")
 ```
+* `dbListFields` didn't display partitioned columns. This has now been fixed with the call to AWS Glue being altered to include more metadata allowing for column names and partitions to be returned.
+* RStudio connections tab didn't display any partitioned columns, this has been fixed in the same manner as `dbListFields`
 
-An error would be raised: `Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist` This has now been fixed with db_compute returning `dbplyr::in_schema`
 
 ## New Feature
 * `RAthena_options`
