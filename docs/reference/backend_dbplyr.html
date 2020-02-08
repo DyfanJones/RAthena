@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 implementation of <code>db_compute</code> for Athena — db_compute • RAthena</title>
+<title>Athena S3 implementation of dbplyr backend functions — backend_dbplyr • RAthena</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,10 @@
 
 
 
-<meta property="og:title" content="S3 implementation of <code>db_compute</code> for Athena — db_compute" />
-<meta property="og:description" content="This is a backend function for dplyr's compute function. Users won't be required to access and run this function." />
+<meta property="og:title" content="Athena S3 implementation of dbplyr backend functions — backend_dbplyr" />
+<meta property="og:description" content="These functions are used to build the different types of SQL queries. 
+The AWS Athena implementation give extra parameters to allow access the to standard DBI Athena methods. They also
+utilies AWS Glue to speed up sql query execution." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,16 +110,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>S3 implementation of <code>db_compute</code> for Athena</h1>
+    <h1>Athena S3 implementation of dbplyr backend functions</h1>
     <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/dplyr_integration.R'><code>R/dplyr_integration.R</code></a></small>
-    <div class="hidden name"><code>db_compute.Rd</code></div>
+    <div class="hidden name"><code>backend_dbplyr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a backend function for dplyr's <code>compute</code> function. Users won't be required to access and run this function.</p>
+    <p>These functions are used to build the different types of SQL queries. 
+The AWS Athena implementation give extra parameters to allow access the to standard DBI Athena methods. They also
+utilies AWS Glue to speed up sql query execution.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_compute.AthenaConnection</span>(<span class='no'>con</span>, <span class='no'>table</span>, <span class='no'>sql</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>db_save_query.AthenaConnection</span>(
+  <span class='no'>con</span>,
+  <span class='no'>sql</span>,
+  <span class='no'>name</span>,
+  <span class='kw'>file_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"NULL"</span>, <span class='st'>"csv"</span>, <span class='st'>"parquet"</span>, <span class='st'>"json"</span>),
+  <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>partition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)
+
+<span class='fu'>db_explain.AthenaConnection</span>(<span class='no'>con</span>, <span class='no'>sql</span>, <span class='no'>...</span>)
+
+<span class='fu'>db_query_fields.AthenaConnection</span>(<span class='no'>con</span>, <span class='no'>sql</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,71 +143,49 @@
       <td><p>A <code><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></code> object, as returned by <code><a href='dbConnect-AthenaDriver-method.html'>dbConnect()</a></code></p></td>
     </tr>
     <tr>
-      <th>table</th>
-      <td><p>Table name, if left default RAthena will use the default from <code>dplyr</code>'s <code>compute</code> function.</p></td>
+      <th>sql</th>
+      <td><p>SQL code to be sent to AWS Athena</p></td>
     </tr>
     <tr>
-      <th>sql</th>
-      <td><p>SQL code to be sent to the data</p></td>
+      <th>name</th>
+      <td><p>Table name if left default noctua will use default from 'dplyr''s <code>compute</code> function.</p></td>
+    </tr>
+    <tr>
+      <th>file_type</th>
+      <td><p>What file type to store data.frame on s3, noctua currently supports ["NULL","csv", "parquet", "json"]. 
+<code>"NULL"</code> will let Athena set the file_type for you.</p></td>
+    </tr>
+    <tr>
+      <th>s3_location</th>
+      <td><p>s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")</p></td>
+    </tr>
+    <tr>
+      <th>partition</th>
+      <td><p>Partition Athena table, requires to be a partitioned variable from previous table.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>passes <code>RAthena</code> table creation parameters: [<code>file_type</code>,<code>s3_location</code>,<code>partition</code>]</p><ul>
-<li><p><code>file_type:</code> What file type to store data.frame on s3, RAthena currently supports ["NULL","csv", "parquet", "json"]. 
-                       <code>"NULL"</code> will let Athena set the file_type for you.</p></li>
-<li><p><code>s3_location:</code> s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")</p></li>
-<li><p><code>partition:</code> Partition Athena table, requires to be a partitioned variable from previous table.</p></li>
-</ul></td>
+      <td><p>other parameters, currently not implemented</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>db_compute</code> returns table name</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    
+<dl class='dl-horizontal'>
+<dt>db_save_query</dt><dd><p>Returns table name</p></dd>
+<dt>db_explain</dt><dd><p>Raises an <code>error</code> as AWS Athena does not support <code>EXPLAIN</code> queries <a href='https://docs.aws.amazon.com/athena/latest/ug/other-notable-limitations.html'>Athena Limitations</a></p></dd>
+<dt>db_query_fields</dt><dd><p>Returns sql query column names</p></dd>
 
-    <div class='dont-index'><p><code><a href='backend_dbplyr.html'>backend_dbplyr</a></code></p></div>
+</dl>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># Note: </span>
-<span class='co'># - Require AWS Account to run below example.</span>
-<span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-
-<span class='co'># Demo connection to Athena using profile name </span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>())
-
-<span class='co'># Write data.frame to Athena table</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/copy_to.html'>copy_to</a></span>(<span class='no'>con</span>, <span class='no'>mtcars</span>,
-        <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='st'>"s3://mybucket/data/"</span>)
-
-<span class='co'># Write Athena table from tbl_sql</span>
-<span class='no'>athena_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)
-<span class='no'>mtcars_filter</span> <span class='kw'>&lt;-</span> <span class='no'>athena_mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>gear</span> <span class='kw'>&gt;=</span><span class='fl'>4</span>)
-
-<span class='co'># create Athena with unique table name</span>
-<span class='no'>mtcars_filer</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span>()
-
-<span class='co'># create Athena with specified name and s3 location</span>
-<span class='no'>mtcars_filer</span> <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span>(<span class='st'>"mtcars_filer"</span>,
-            <span class='kw'>s3_location</span> <span class='kw'>=</span> <span class='st'>"s3://mybucket/mtcars_filer/"</span>)
-
-<span class='co'># Disconnect from Athena</span>
-<span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

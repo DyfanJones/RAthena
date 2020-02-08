@@ -455,9 +455,12 @@ setMethod("dbListFields", c("AthenaConnection", "character") ,
             glue <- conn@ptr$client("glue")
             tryCatch(
               output <- glue$get_table(DatabaseName = dbms.name,
-                                       Name = Table)$Table$StorageDescriptor$Columns,
+                                       Name = Table)$Table,
               error = function(e) py_error(e))
-            sapply(output, function(y) y$Name)
+            col_names = vapply(output$StorageDescriptor$Columns, function(y) y$Name, FUN.VALUE = character(1))
+            partitions = vapply(output$PartitionKeys,function(y) y$Name, FUN.VALUE = character(1))
+            
+            c(col_names, partitions)
           })
 
 #' Does Athena table exist?

@@ -144,10 +144,13 @@ AthenaListColumns <- function(connection, ...) UseMethod("AthenaListColumns")
 AthenaListColumns.default <- function(connection, table = NULL, view = NULL, database = NULL, ...) {
   if (dbIsValid(connection)) {
     tryCatch(glue <- connection@ptr$client("glue"), error = function(e) py_error(e))
-    tryCatch(tbl_meta <- glue$get_table(DatabaseName = database, Name = table %||% view)$Table$StorageDescriptor$Columns,
+    tryCatch(output <- glue$get_table(DatabaseName = database, Name = table %||% view)$Table,
              error = function(e) py_error(e))
-    tryCatch(tbl_meta <- sapply(tbl_meta, function(x){names(x$Type) = x$Name; x$Type}),
-             error = function(e) py_error(e))
+    
+    col_names <- sapply(output$StorageDescriptor$Columns, function(x){names(x$Type) = x$Name; x$Type})
+    partition <- unlist(sapply(output$PartitionKeys, function(x){names(x$Type) = x$Name; x$Type}))
+    
+    tbl_meta <- c(col_names, partition)
     data.frame(
       name = names(tbl_meta),
       type = unname(tbl_meta),
