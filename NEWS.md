@@ -1,7 +1,7 @@
 # RAthena 1.7.1
 ## Bug Fix
 * Dependency data.table now restricted to (>=1.12.4) due to file compression being added to `fwrite` (>=1.12.4) https://github.com/Rdatatable/data.table/blob/master/NEWS.md
-
+* Thanks to @OssiLehtinen for fixing date variables being incorrectly translated by `sql_translate_env` (#44)
 ```
 # Before
 translate_sql("2019-01-01", con = con) -> '2019-01-01'
@@ -9,8 +9,6 @@ translate_sql("2019-01-01", con = con) -> '2019-01-01'
 # Now
 translate_sql("2019-01-01", con = con) -> DATE '2019-01-01'
 ```
-
-* Thanks to @OssiLehtinen for fixing date variables being incorrectly translated by `sql_translate_env` (#44)
 * R functions `paste`/`paste0` would use default `dplyr:sql-translate-env` (`concat_ws`). `paste0` now uses Presto's `concat` function and `paste` now uses pipes to get extra flexible for custom separating values.
 
 ```

@@ -120,6 +120,7 @@
 <ul>
 <li>Dependency data.table now restricted to (&gt;=1.12.4) due to file compression being added to <code>fwrite</code> (&gt;=1.12.4) <a href="https://github.com/Rdatatable/data.table/blob/master/NEWS.md" class="uri">https://github.com/Rdatatable/data.table/blob/master/NEWS.md</a>
 </li>
+<li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for fixing date variables being incorrectly translated by <code>sql_translate_env</code> (<a href='https://github.com/DyfanJones/RAthena/issues/44'>#44</a>)</li>
 </ul>
 <pre><code># Before
 translate_sql("2019-01-01", con = con) -&gt; '2019-01-01'
@@ -127,7 +128,6 @@ translate_sql("2019-01-01", con = con) -&gt; '2019-01-01'
 # Now
 translate_sql("2019-01-01", con = con) -&gt; DATE '2019-01-01'</code></pre>
 <ul>
-<li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for fixing date variables being incorrectly translated by <code>sql_translate_env</code> (<a href='https://github.com/DyfanJones/RAthena/issues/44'>#44</a>)</li>
 <li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexible for custom separating values.</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/paste.html"># R code:
