@@ -2,18 +2,21 @@
 % Please edit documentation in R/Options.R
 \name{RAthena_options}
 \alias{RAthena_options}
-\title{A method to change RAthena backend file parser.}
+\title{A method to configue RAthena backend options.}
 \usage{
-RAthena_options(file_parser = c("data.table", "vroom"))
+RAthena_options(file_parser = c("data.table", "vroom"), cache_size = 0)
 }
 \arguments{
 \item{file_parser}{Method to read and write tables to Athena, currently defaults to data.table}
+
+\item{cache_size}{Number of queries to be cached. Currently only support caching up to 50 queries.}
 }
 \value{
 \code{RAthena_options()} returns \code{NULL}, invisibly.
 }
 \description{
-A method to change RAthena backend file parser.
+\code{RAthena_options()} provides a method to change the backend. This includes changing the file parser
+and whether \code{RAthena} should cache query ids locally.
 }
 \examples{
 library(RAthena)
