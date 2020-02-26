@@ -18,7 +18,7 @@
 #' without needing hard code any credentials.
 #' 
 #' @import reticulate
-#' @importFrom utils packageVersion
+#' @importFrom utils packageVersion head
 #' @importFrom stats runif
 #' @import DBI
 #' @import data.table
