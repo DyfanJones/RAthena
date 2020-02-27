@@ -1,3 +1,7 @@
+# RAthena 1.7.1.9000
+## New Feature
+* Inspired by `pyathena`, `RAthena_options` now has a new paramter `cache_size`. This implements local caching in R environments instead of using AWS `list_query_executions`. This is down to `dbClearResult` clearing S3's Athena output when caching isn't disabled
+
 # RAthena 1.7.1
 ## Bug Fix
 * Dependency data.table now restricted to (>=1.12.4) due to file compression being added to `fwrite` (>=1.12.4) https://github.com/Rdatatable/data.table/blob/master/NEWS.md

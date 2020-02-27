@@ -194,3 +194,22 @@ data_scanned <-
     if (power == 0) unit <- "Bytes"
     paste(round(x/base^power, digits = 2), unit)
   }
+
+# caching function to added metadata to cache data.table
+cache_query = function(poll_result){
+  cache_append = data.table("QueryId" = poll_result$QueryExecution$QueryExecutionId,
+                            "Query" = poll_result$QueryExecution$Query,
+                            "State"= poll_result$QueryExecution$Status$State,
+                            "StatementType"= poll_result$QueryExecution$StatementType,
+                            "WorkGroup" = poll_result$QueryExecution$WorkGroup)
+  new_query = fsetdiff(cache_append, athena_option_env$cache_dt, all = TRUE)
+  
+  # As Athena doesn't scanned data with Failed queries. Failed queries wont be cached: https://aws.amazon.com/athena/pricing/
+  if(nrow(new_query[get("State") != "FAILED"]) > 0) athena_option_env$cache_dt = head(rbind(cache_append, athena_option_env$cache_dt), athena_option_env$cache_size)
+}
+
+# check cached query ids
+check_cache = function(query, work_group){
+  query_id = athena_option_env$cache_dt[get("Query") == query & get("State") == "SUCCEEDED" & get("StatementType") == "DML" & get("WorkGroup") == work_group, get("QueryId")]
+  if(length(query_id) == 0) return(NULL) else return(query_id[1])
+}

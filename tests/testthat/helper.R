@@ -70,7 +70,8 @@ athena_test_req3 <-
 athena_test_req4 <-
   list(QueryString = "select * from test_query",
        QueryExecutionContext = list(Database = "default"),
-       ResultConfiguration = list(OutputLocation = Sys.getenv("rathena_s3_query")))
+       ResultConfiguration = list(OutputLocation = Sys.getenv("rathena_s3_query")),
+       WorkGroup = "primary")
 
 # static s3 path location
 s3_loc <- list(exp_s3_1 = "path/to/file/test/dummy_file/dummy_file.csv",
