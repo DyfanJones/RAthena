@@ -171,13 +171,16 @@ setMethod(
     work_group <- work_group %||% get_aws_env("AWS_ATHENA_WORK_GROUP")
     region_name <- region_name %||% get_aws_env("AWS_REGION")
     
+    # if aws session token then return duration
     aws_expiration <- NULL
+    if(!is.null(aws_session_token)) aws_expiration <- get_aws_env("AWS_EXPIRATION")
+    if(!is.null(aws_expiration)) aws_expiration <- as.POSIXct(as.numeric(aws_expiration), origin='1970-01-01')
     if(!is.null(role_arn)) {
       creds <- assume_role(profile_name = profile_name,
                            region_name = region_name,
                            role_arn = role_arn,
                            role_session_name = role_session_name,
-                           duration_seconds = duration_seconds %||% get_aws_env("AWS_EXPIRATION"))
+                           duration_seconds = duration_seconds)
       profile_name <- NULL
       aws_access_key_id <- creds$AccessKeyId
       aws_secret_access_key <- creds$SecretAccessKey
