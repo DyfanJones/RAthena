@@ -11,7 +11,6 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
-                   profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   test_date <- as.Date("2020-01-01")

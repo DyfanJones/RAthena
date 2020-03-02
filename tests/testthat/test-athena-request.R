@@ -10,25 +10,21 @@ test_that("Check if Athena Request created correctly",{
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con1 <- dbConnect(athena(),
-                    profile_name = "rathena",
                     encryption_option = "SSE_S3",
                     kms_key = "test_key",
                     work_group = "test_group",
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con2 <- dbConnect(athena(),
-                    profile_name = "rathena",
                     encryption_option = "SSE_S3",
                     work_group = "test_group",
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con3 <- dbConnect(athena(),
-                    profile_name = "rathena",
                     work_group = "test_group",
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   con4 <- dbConnect(athena(),
-                    profile_name = "rathena",
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   R1 <- RAthena:::request(con1, "select * from test_query")

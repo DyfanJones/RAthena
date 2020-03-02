@@ -10,7 +10,6 @@ test_that("Testing class formation", {
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- DBI::dbConnect(RAthena::athena(),
-                   profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
 
   res <- DBI::dbSendQuery(con, "show databases")
