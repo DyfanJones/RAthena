@@ -17,6 +17,7 @@ athena_option_env$cache_dt <-  cache_dt
 #' and whether \code{RAthena} should cache query ids locally.
 #' @param file_parser Method to read and write tables to Athena, currently defaults to data.table
 #' @param cache_size Number of queries to be cached. Currently only support caching up to 100 distinct queries.
+#' @param clear_cache Clears all previous cached query metadata
 #' @return \code{RAthena_options()} returns \code{NULL}, invisibly.
 #' @examples
 #' library(RAthena)
@@ -24,8 +25,9 @@ athena_option_env$cache_dt <-  cache_dt
 #' # change file parser from default data.table to vroom
 #' RAthena_options("vroom")
 #' @export
-RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size = 0) {
+RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size = 0, clear_cache = FALSE) {
   file_parser = match.arg(file_parser)
+  stopifnot(is.logical(clear_cache))
   
   if(cache_size < 0 | cache_size >= 100) stop("RAthena currently only supports up to 100 queries being cached", call. = F)
   
@@ -39,6 +41,8 @@ RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size =
   class(athena_option_env$file_parser) <- paste("athena", file_parser, sep = "_")
   
   athena_option_env$cache_size <- cache_size
+  
+  if(clear_cache) athena_option_env$cache_dt <- athena_option_env$cache_dt[0]
   
   invisible(NULL)
 }
