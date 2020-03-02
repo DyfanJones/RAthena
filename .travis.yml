@@ -2,7 +2,13 @@ language: R
 sudo: false
 cache:
   - packages
-  - pip
+  - pip3 install --user boto3
+
+addons:
+  apt:
+    packages:
+      - python-virtualenv
+      - python3-venv
 
 before_install:
   - pip install boto3
