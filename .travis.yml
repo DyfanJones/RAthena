@@ -15,6 +15,3 @@ before_install:
 before_deploy: Rscript -e 'install.packages("pkgdown")'
 after_success:
   - Rscript -e 'covr::codecov()'
-
-deploy:
-  script: Rscript -e 'pkgdown::deploy_site_github()'
