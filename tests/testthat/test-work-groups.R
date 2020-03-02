@@ -10,7 +10,6 @@ test_that("Create and Delete Athena Work Groups",{
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(RAthena::athena(),
-                   profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   output1 <- list_work_groups(con)

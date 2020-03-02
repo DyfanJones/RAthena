@@ -13,7 +13,6 @@ test_that("Returning meta data from query",{
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(RAthena::athena(),
-                   profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   res <- dbExecute(con, "select * from test_df")

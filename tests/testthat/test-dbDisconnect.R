@@ -12,7 +12,6 @@ test_that("Check if dbDisconnect working as intended",{
   skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
-                   profile_name = "rathena",
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   dbDisconnect(con)

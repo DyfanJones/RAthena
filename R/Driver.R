@@ -169,6 +169,7 @@ setMethod(
     aws_session_token <- aws_session_token %||% get_aws_env("AWS_SESSION_TOKEN")
     role_arn <- role_arn %||% get_aws_env("AWS_ROLE_ARN")
     work_group <- work_group %||% get_aws_env("AWS_ATHENA_WORK_GROUP")
+    region_name <- region_name %||% get_aws_env("AWS_REGION")
     
     aws_expiration <- NULL
     if(!is.null(role_arn)) {
