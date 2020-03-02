@@ -21,7 +21,12 @@ Suggests:
     dplyr (>= 0.7.0),
     dbplyr,
     testthat,
-    vroom (>= 1.2.0)
+    vroom (>= 1.2.0),
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: 
+    knitr
 Depends: R (>= 3.2.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
