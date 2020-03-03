@@ -73,8 +73,8 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   t27 <- translate_sql(iris[[1]], con = con)
   t28 <- grepl("^Athena.*\\[.*/.*\\]", dplyr::db_desc(con))
   t29 <- dbDataType(con, dt)
-  t30 <- noctua:::AthenaToRDataType.athena_data.table(method, data_types)
-  t31 <- noctua:::AthenaToRDataType.athena_vroom(method, data_types)
+  t30 <- RAthena:::AthenaToRDataType.athena_data.table(method, data_types)
+  t31 <- RAthena:::AthenaToRDataType.athena_vroom(method, data_types)
   
   expect_equal(t1 ,sql("CAST(1.0 AS VARCHAR)"))
   expect_equal(t2 ,sql("CAST('1' AS DOUBLE)"))
