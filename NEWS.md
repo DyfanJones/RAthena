@@ -1,6 +1,7 @@
 # RAthena 1.7.1.9000
 ## New Feature
 * Inspired by `pyathena`, `RAthena_options` now has a new paramter `cache_size`. This implements local caching in R environments instead of using AWS `list_query_executions`. This is down to `dbClearResult` clearing S3's Athena output when caching isn't disabled
+* `RAthena_options` now has `clear_cache` parameter to clear down all cached data.
 
 # RAthena 1.7.1
 ## Bug Fix

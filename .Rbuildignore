@@ -5,5 +5,5 @@
 ^CRAN-RELEASE$
 ^docs$
 ^\.github$
-^codecov\.yml$
+.codecov.yml
 .travis.yml

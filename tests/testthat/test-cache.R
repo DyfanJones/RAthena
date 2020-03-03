@@ -10,13 +10,18 @@ test_that("Testing if caching returns the same query id", {
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena())
   
-  res1 = dbExecute(con, "SELECT table_name FROM information_schema.tables limit 1")
+  res1 = dbSendStatement(con, "SELECT table_name FROM information_schema.tables limit 1")
+  dbFetch(res1)
   res2 = dbExecute(con, "SELECT table_name FROM information_schema.tables limit 1")
   
   RAthena_options(cache_size = 10)
   
-  res3 = dbExecute(con, "SELECT table_name FROM information_schema.tables limit 1")
+  res3 = dbSendStatement(con, "SELECT table_name FROM information_schema.tables limit 1")
+  dbFetch(res3)
   res4 = dbExecute(con, "SELECT table_name FROM information_schema.tables limit 1")
+  
+  # clear cached backend data
+  RAthena_options(clear_cache = T)
   
   # expect query ids not to be the same
   exp1 = res1@info$QueryExecutionId == res2@info$QueryExecutionId
@@ -25,4 +30,5 @@ test_that("Testing if caching returns the same query id", {
   expect_true(exp2)
   expect_error(RAthena_options(cache_size = 101))
   expect_error(RAthena_options(cache_size = -1))
+  expect_true(nrow(RAthena:::athena_option_env$cache_dt) == 0)
 })

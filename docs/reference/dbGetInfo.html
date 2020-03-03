@@ -84,6 +84,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/aws_athena_query_caching.html">AWS Athena Query Caching</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -162,35 +174,7 @@ or a DBIResult</p></td>
 <span class='co'># Return metadata from Athena query object</span>
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "ab40601b-b43d-4286-ba4d-e64a5632805b"
-#&gt; 
-#&gt; $ResponseMetadata
-#&gt; $ResponseMetadata$RequestId
-#&gt; [1] "68a249ac-9640-4c37-8191-b7ec6a4e5ec8"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPStatusCode
-#&gt; [1] 200
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders
-#&gt; $ResponseMetadata$HTTPHeaders$`content-type`
-#&gt; [1] "application/x-amz-json-1.1"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$date
-#&gt; [1] "Fri, 21 Feb 2020 15:51:10 GMT"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`x-amzn-requestid`
-#&gt; [1] "68a249ac-9640-4c37-8191-b7ec6a4e5ec8"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$`content-length`
-#&gt; [1] "59"
-#&gt; 
-#&gt; $ResponseMetadata$HTTPHeaders$connection
-#&gt; [1] "keep-alive"
-#&gt; 
-#&gt; 
-#&gt; $ResponseMetadata$RetryAttempts
-#&gt; [1] 0
-#&gt; 
+#&gt; [1] "cacf4d4c-2885-413b-81cb-ace823cc0fbc"
 #&gt; </div><div class='input'>
 <span class='co'># Clear result</span>
 <span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
