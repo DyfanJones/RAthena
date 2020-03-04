@@ -17,4 +17,14 @@
 Implementations of pure virtual functions defined in the `DBI` package
 for AthenaConnection objects.
 }
+\section{Slots}{
+
+\describe{
+\item{\code{ptr}}{a list of connecting objects from the python SDK boto3.}
+
+\item{\code{info}}{a list of metadata objects}
+
+\item{\code{quote}}{syntax to quote sql query when creating Athena ddl}
+}}
+
 \keyword{internal}
