@@ -1,14 +1,5 @@
 ## Release Summary
-This release addresses several bugs identified by the community:
-
-** Bug Fix**
-* `sql_translate_env` now correctly translates `paste`/`paste0` into `AWS Athena` sql
-* `dplyr::sql_escape_string` now has a custom s3 method to take into account `date` classes when translating R code to sql
-* `RAthena_options` will now check if file parser is installed, and if it is a compatible version
-* Dependency `data.table` has been restricted to version (>=1.12.4), due `data.table::fwrite` adding file compression in version (>=1.12.4)
-* `dplyr::db_compute` now lets user to write to different `AWS Athena` schema's
-* `dbListFields` now correctly returns partitioned columns
-* `dbWriteTable` now takes existing `AWS S3` location when appending to existing table
+TBC
 
 **New Features**
 * New function `dbStatistics` returns `AWS Athena` query information 
@@ -35,7 +26,7 @@ This release addresses several bugs identified by the community:
 * Apologies for the fast re-submission of this package. However, this release is to address key bugs that have been identified by the community. Extra unit tests have been created to address highlighted issues.
 
 ## unit tests (using testthat) results
-* OK:       72
+* OK:       104
 * Failed:   0
 * Warnings: 0
 * Skipped:  0
