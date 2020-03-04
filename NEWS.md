@@ -2,6 +2,32 @@
 ## New Feature
 * Inspired by `pyathena`, `RAthena_options` now has a new paramter `cache_size`. This implements local caching in R environments instead of using AWS `list_query_executions`. This is down to `dbClearResult` clearing S3's Athena output when caching isn't disabled
 * `RAthena_options` now has `clear_cache` parameter to clear down all cached data.
+* `dbRemoveTable` now utilise `AWS Glue` to remove tables from `AWS Glue` catalog. This has a performance enhancement:
+
+```
+library(DBI)
+
+con = dbConnect(RAthena::athena())
+
+# upload iris dataframe for removal test
+dbWriteTable(con, "iris2", iris)
+
+# Athena method
+system.time(dbRemoveTable(con, "iris2", confirm = T))
+# user  system elapsed 
+# 0.131   0.037   2.404 
+
+# upload iris dataframe for removal test
+dbWriteTable(con, "iris2", iris)
+
+# Glue method
+system.time(dbRemoveTable(con, "iris2", confirm = T))
+# user  system elapsed 
+# 0.065   0.009   1.303 
+```
+
+## Documentation
+* Added supported environmental variable `AWS_REGION` into `dbConnect`
 
 # RAthena 1.7.1
 ## Bug Fix
