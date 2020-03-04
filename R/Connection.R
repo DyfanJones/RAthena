@@ -5,6 +5,9 @@ NULL
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package
 #' for AthenaConnection objects.
+#' @slot ptr a list of connecting objects from the python SDK boto3.
+#' @slot info a list of metadata objects
+#' @slot quote syntax to quote sql query when creating Athena ddl
 #' @name AthenaConnection
 #' @inheritParams methods::show
 NULL
@@ -599,8 +602,10 @@ setMethod(
                error = function(e) py_error(e))
     }
     
-    res <- dbExecute(conn, paste("DROP TABLE ", paste(dbms.name, Table, sep = "."), ";"))
-    dbClearResult(res)
+    # use glue to remove table from glue catalog
+    tryCatch(glue$delete_table(DatabaseName = dbms.name, Name = Table),
+             error = function(e) py_error(e))
+    
     if (!delete_data) message("Info: Only Athena table has been removed.")
     on_connection_updated(conn, Table)
     invisible(TRUE)
