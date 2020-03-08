@@ -1,9 +1,9 @@
 context("Append to Existing")
 
 # NOTE System variable format returned for Unit tests:
-# Sys.getenv("RAthena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
-# Sys.getenv("RAthena_s3_query"): "s3://path/to/query/bucket/"
-# Sys.getenv("RAthena_s3_tbl"): "s3://path/to/bucket/"
+# Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
+# Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
+# Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
 test_that("Testing if data is appended correctly", {
   skip_if_no_env()
@@ -11,7 +11,7 @@ test_that("Testing if data is appended correctly", {
   
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
-                   s3_staging_dir = Sys.getenv("RAthena_s3_query"))
+                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
   DATE <- Sys.Date()
   dbWriteTable(con, "mtcars", mtcars, overwrite = T, compress = T,
