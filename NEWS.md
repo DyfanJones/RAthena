@@ -26,8 +26,19 @@ system.time(dbRemoveTable(con, "iris2", confirm = T))
 # 0.065   0.009   1.303 
 ```
 
+## Bug Fix
+* `dbWriteTable` appending to existing table compress file type was incorrectly return.
+
 ## Documentation
 * Added supported environmental variable `AWS_REGION` into `dbConnect`
+* Vignettes added:
+  * AWS Athena Query Cache
+  * AWS S3 backend
+  * Changing Backend File Parser
+  * Getting Started
+
+## Unit tests:
+* Increase coverage to + 80%
 
 # RAthena 1.7.1
 ## Bug Fix
