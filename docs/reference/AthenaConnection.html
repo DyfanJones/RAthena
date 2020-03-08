@@ -95,6 +95,15 @@ for AthenaConnection objects." />
     <li>
       <a href="../articles/aws_athena_query_caching.html">AWS Athena Query Caching</a>
     </li>
+    <li>
+      <a href="../articles/aws_s3_backend.html">AWS S3 Backend</a>
+    </li>
+    <li>
+      <a href="../articles/changing_backend_file_parser.html">Changing Backend File Parser</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -143,12 +152,25 @@ for AthenaConnection objects.</p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
+
+    
+
+<dl class='dl-horizontal'>
+<dt><code>ptr</code></dt><dd><p>a list of connecting objects from the python SDK boto3.</p></dd>
+
+<dt><code>info</code></dt><dd><p>a list of metadata objects</p></dd>
+
+<dt><code>quote</code></dt><dd><p>syntax to quote sql query when creating Athena ddl</p></dd>
+
+</dl>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#slots">Slots</a></li>
     </ul>
 
   </div>
