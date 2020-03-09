@@ -30,23 +30,63 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `y` STRING
 )
 ROW FORMAT DELIMITED
-	FIELDS TERMINATED BY '\t'
+	FIELDS TERMINATED BY ','
 	LINES TERMINATED BY ", gsub("_","","'\\_n'"),
            "\nLOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
-TBLPROPERTIES (\"skip.header.line.count\"=\"1\");")), 
+TBLPROPERTIES (\"skip.header.line.count\"=\"1\",
+\t\t'compressionType'='gzip');")),
 tbl3 = 
-  DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+  `x` INT,
+  `y` STRING
+)
+ROW FORMAT DELIMITED
+\tFIELDS TERMINATED BY '	'
+\tLINES TERMINATED BY ", gsub("_","","'\\_n'"),"
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+TBLPROPERTIES (\"skip.header.line.count\"=\"1\");")),
+tbl4 = 
+DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+  `x` INT,
+  `y` STRING
+)
+ROW FORMAT DELIMITED
+\tFIELDS TERMINATED BY '	'
+\tLINES TERMINATED BY ", gsub("_","","'\\_n'"),"
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+TBLPROPERTIES (\"skip.header.line.count\"=\"1\",
+\t\t'compressionType'='gzip');")), 
+tbl5 = 
+DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `x` INT,
   `y` STRING
 )
 STORED AS PARQUET
 LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n;")),
-tbl4 = 
-  DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (\n  `x` INT,\n  `y` STRING\n)
+tbl6 = 
+DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+  `x` INT,
+  `y` STRING
+)
 PARTITIONED BY (timestamp STRING)
 STORED AS PARQUET
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n;")))
-
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+tblproperties (\"parquet.compress\"=\"SNAPPY\");")),
+tbl7 = 
+DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+  `x` INT,
+  `y` STRING
+)
+ROW FORMAT  serde 'org.apache.hive.hcatalog.data.JsonSerDe'
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n")),
+tbl8 = 
+  DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
+  `x` INT,
+  `y` STRING
+)
+PARTITIONED BY (timestamp STRING)
+ROW FORMAT  serde 'org.apache.hive.hcatalog.data.JsonSerDe'
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n")))
 
 # static Athena Query Request Tests
 athena_test_req1 <-
