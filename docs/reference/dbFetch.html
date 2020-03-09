@@ -181,9 +181,10 @@ if entire dataframe is required use <code>n = -1</code> or <code>n = Inf</code>.
 
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbFetch</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; <span class='message'>Info: (Data scanned: 0 Bytes)</span></div><div class='output co'>#&gt;       var1
-#&gt; 1  default
-#&gt; 2 sampledb
-#&gt; 3     temp</div><div class='input'><span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
+#&gt; 1    adhoc
+#&gt; 2  default
+#&gt; 3 sampledb
+#&gt; 4     temp</div><div class='input'><span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
 
 <span class='co'># Disconnect from Athena</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)

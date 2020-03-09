@@ -34,9 +34,9 @@ dbWriteTable(con, "myschema.table", table,
 
 # File Types
 
-Currently `RAthena` supports the following file types `[".tsv", ".csv", ".parquet"]`. For `parquet` files, the package [arrow](https://arrow.apache.org/docs/r/) is used. This package will have to be installed, before data can be sent to `AWS S3` in `parquet` format.
+Currently `RAthena` supports the following file types `[".tsv", ".csv", ".parquet", "json"]`. For `parquet` files, the package [arrow](https://arrow.apache.org/docs/r/) is used. This package will have to be installed, before data can be sent to `AWS S3` in `parquet` format. For `json` files, the package [jsonlite](https://github.com/jeroen/jsonlite) is required before before data can be sent to `AWS S3`.
 
-`RAthena` also supports compression when uploading data to `AWS S3`. For delimited files (`".tsv"` and `".csv"`), [gunzip compression](https://en.wikipedia.org/wiki/Gzip) is used. When using gunzip compression, `RAthena` will split the zipped file into a maximum of 20 equal parts. This is to speed up how `AWS Athena` queries gunzip compressed files ([Default Compression Method for Flat Files](https://github.com/DyfanJones/RAthena/issues/36)). [Snappy](https://en.wikipedia.org/wiki/Snappy_(compression)) compression is used for compressing `parquet` files.
+`RAthena` also supports compression when uploading data to `AWS S3`. For delimited files (`".tsv"` and `".csv"`), [gunzip compression](https://en.wikipedia.org/wiki/Gzip) is used. When using gunzip compression, `RAthena` will split the zipped file into a maximum of 20 equal parts. This is to speed up how `AWS Athena` queries gunzip compressed files ([Default Compression Method for Flat Files](https://github.com/DyfanJones/RAthena/issues/36)). [Snappy](https://en.wikipedia.org/wiki/Snappy_(compression)) compression is used for compressing `parquet` files. Currently `json` format cannot be compressed.
 
 # Useful links
 

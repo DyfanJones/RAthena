@@ -164,6 +164,17 @@ dbWriteTable(con, "iris2", iris)
 system.time(dbRemoveTable(con, "iris2", confirm = T))
 # user  system elapsed 
 # 0.065   0.009   1.303 </a></code></pre>
+<ul>
+<li>
+<code>dbWriteTable</code> now supports uploading json lines (<a href="http://jsonlines.org/" class="uri">http://jsonlines.org/</a>) format up to <code>AWS Athena</code> (<a href='https://github.com/DyfanJones/RAthena/issues/88'>#88</a>).</li>
+</ul>
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+
+con = dbConnect(RAthena::athena())
+
+dbWriteTable(con, "iris2", iris, file.type = "json")
+
+dbGetQuery(con, "select * from iris2")</a></code></pre>
 </div>
 <div id="bug-fix" class="section level2">
 <h2 class="hasAnchor">
@@ -225,7 +236,7 @@ paste("hi", "bye", sep = "-")
 <ul>
 <li>If table exists and parameter <code>append</code> set to <code>TRUE</code> then existing s3.location will be utilised (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>)</li>
 <li>
-<code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">dbplyr::in_schema</a></code>.</li>
+<code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://rdrr.io/pkg/dbplyr/man/in_schema.html">dbplyr::in_schema</a></code>.</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
 library(dplyr)
