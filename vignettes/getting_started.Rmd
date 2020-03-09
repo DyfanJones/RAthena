@@ -37,6 +37,24 @@ Or pip method:
 pip install boto3
 ```
 
+## Python Environments:
+
+As `RAthena` utilises Python for the connection, please make sure that the correct Python environment is enabled before you make a connection to `AWS Athena`:
+
+```r
+library(DBI)
+
+# specifying python conda environment
+reticulate::use_condaenv("RAthena")
+
+# Or specifying python virtual enviroment
+reticulate::use_virtualenv("RAthena")
+
+con <- dbConnect(RAthena::athena())
+```
+
+**Note:** Python enviroments are not required if `boto3` is either in the root Python or if R and Python are in their own enviroment (for example conda enviroment).
+
 # Usage:
 
 ## Low - Level API:
