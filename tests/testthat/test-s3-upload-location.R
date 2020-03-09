@@ -49,4 +49,6 @@ test_that("Check if the S3 upload location is correctly built",{
   expect_equal(s3_4[[2]], s3_loc$exp_s3_4)
   expect_equal(s3_5[[2]], s3_loc$exp_s3_5)
   expect_equal(s3_6[[2]], s3_loc$exp_s3_6)
+  expect_equal(s3_7[[2]], s3_loc$exp_s3_7)
+  expect_equal(s3_8[[2]], s3_loc$exp_s3_8)
 })
