@@ -26,6 +26,18 @@ system.time(dbRemoveTable(con, "iris2", confirm = T))
 # 0.065   0.009   1.303 
 ```
 
+* `dbWriteTable` now supports uploading json lines (http://jsonlines.org/) format up to `AWS Athena` (#88).
+
+```
+library(DBI)
+
+con = dbConnect(RAthena::athena())
+
+dbWriteTable(con, "iris2", iris, file.type = "json")
+
+dbGetQuery(con, "select * from iris2")
+```
+
 ## Bug Fix
 * `dbWriteTable` appending to existing table compress file type was incorrectly return.
 
