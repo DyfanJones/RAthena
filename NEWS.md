@@ -40,6 +40,7 @@ dbGetQuery(con, "select * from iris2")
 
 ## Bug Fix
 * `dbWriteTable` appending to existing table compress file type was incorrectly return.
+* `install_boto` added `numpy` to `RAthena` environment install as `reticulate` appears to favour environments with `numpy` (https://github.com/rstudio/reticulate/issues/216)
 
 ## Documentation
 * Added supported environmental variable `AWS_REGION` into `dbConnect`
