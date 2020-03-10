@@ -11,7 +11,7 @@
 #' @param envname Name of Python environment to install within, by default environment name RAthena.
 #'
 #' @param conda_python_version the python version installed in the created conda
-#'   environment. Python 3.6 is installed by default.
+#'   environment. Python 3.7 is installed by default.
 #'
 #' @param ... other arguments passed to [reticulate::conda_install()] or
 #'   [reticulate::virtualenv_install()].
@@ -23,13 +23,14 @@
 install_boto <- function(method = c("auto", "virtualenv", "conda"),
                          conda = "auto",
                          envname = "RAthena",
-                         conda_python_version = "3.6",
+                         conda_python_version = "3.7",
                          ...) {
   method <- match.arg(method)
   stopifnot(is.character(envname))
   
+  # added numpy to help reticulate bind to environment: https://github.com/rstudio/reticulate/issues/216
   reticulate::py_install(
-    packages       = c("cython","boto3"),
+    packages       = c("cython","boto3","numpy"),
     envname        = envname,
     method         = method,
     conda          = conda,

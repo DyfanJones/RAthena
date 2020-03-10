@@ -8,7 +8,7 @@ install_boto(
   method = c("auto", "virtualenv", "conda"),
   conda = "auto",
   envname = "RAthena",
-  conda_python_version = "3.6",
+  conda_python_version = "3.7",
   ...
 )
 }
@@ -25,7 +25,7 @@ PATH and other conventional install locations).}
 \item{envname}{Name of Python environment to install within, by default environment name RAthena.}
 
 \item{conda_python_version}{the python version installed in the created conda
-environment. Python 3.6 is installed by default.}
+environment. Python 3.7 is installed by default.}
 
 \item{...}{other arguments passed to [reticulate::conda_install()] or
 [reticulate::virtualenv_install()].}
