@@ -126,17 +126,17 @@
 <div id="python-environments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#python-environments" class="anchor"></a>Python Environments:</h2>
-<p>As <code>RAthena</code> utilises Python for the connection, please make sure that the correct Python environment is enabled before you make a connection to <code>AWS Athena</code>:</p>
+<p>If <code>RAthena</code> doesn’t pick up <code>boto3</code> after using <code><a href="../reference/install_boto.html">install_boto()</a></code>, please consider specifying the python environment.<code><a href="../reference/install_boto.html">install_boto()</a></code> creates <code>RAthena</code> environment. This is either a Python virtual environment or a conda environment depending on your system.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co"># specifying python conda environment</span></a>
-<a class="sourceLine" id="cb4-4" title="4">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_condaenv</a></span>(<span class="st">"RAthena"</span>)</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co"># Specify python conda environment and force reticulate to use it</span></a>
+<a class="sourceLine" id="cb4-4" title="4">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_condaenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co"># Or specifying python virtual enviroment</span></a>
-<a class="sourceLine" id="cb4-7" title="7">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_virtualenv</a></span>(<span class="st">"RAthena"</span>)</a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co"># Or specify python virtual environment and force reticulate to use it</span></a>
+<a class="sourceLine" id="cb4-7" title="7">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_virtualenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb4-8" title="8"></a>
 <a class="sourceLine" id="cb4-9" title="9">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a></code></pre></div>
-<p><strong>Note:</strong> Python enviroments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own enviroment (for example conda enviroment).</p>
+<p><strong>Note:</strong> Python environments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own enviroment (for example conda environment).</p>
 </div>
 </div>
 <div id="usage" class="section level1">
@@ -222,12 +222,12 @@
 <a href="#dplyr" class="anchor"></a>dplyr:</h2>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
 <a class="sourceLine" id="cb7-4" title="4"></a>
 <a class="sourceLine" id="cb7-5" title="5">athena_iris <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span>()</a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/compute.html">collect</a></span>()</a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
 <a class="sourceLine" id="cb7-10" title="10"><span class="co"># # A tibble: 10 x 3</span></a>
 <a class="sourceLine" id="cb7-11" title="11"><span class="co"># species  sepal_length sepal_width</span></a>
