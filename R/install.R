@@ -28,8 +28,9 @@ install_boto <- function(method = c("auto", "virtualenv", "conda"),
   method <- match.arg(method)
   stopifnot(is.character(envname))
   
+  # added numpy to help reticulate bind to environment: https://github.com/rstudio/reticulate/issues/216
   reticulate::py_install(
-    packages       = c("cython","boto3"),
+    packages       = c("cython","boto3","numpy"),
     envname        = envname,
     method         = method,
     conda          = conda,
