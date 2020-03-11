@@ -147,8 +147,8 @@ AthenaListColumns.default <- function(connection, table = NULL, view = NULL, dat
     tryCatch(output <- glue$get_table(DatabaseName = database, Name = table %||% view)$Table,
              error = function(e) py_error(e))
     
-    col_names <- sapply(output$StorageDescriptor$Columns, function(x){names(x$Type) = x$Name; x$Type})
-    partition <- unlist(sapply(output$PartitionKeys, function(x){names(x$Type) = x$Name; x$Type}))
+    col_names <- sapply(output$StorageDescriptor$Columns, ColMeta)
+    partition <- unlist(sapply(output$PartitionKeys, ColMeta))
     
     tbl_meta <- c(col_names, partition)
     data.frame(
@@ -171,7 +171,7 @@ AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
   if(is.null(name)){
     tryCatch(output <- lapply(database, function (x) glue$get_tables(DatabaseName = x)$TableList),
              error = function(e) py_error(e))
-    tbl_meta <- unlist(lapply(output, function(x) sapply(x, function(y) {names(y$TableType) = y$Name; y$TableType})))}
+    tbl_meta <- unlist(lapply(output, function(x) sapply(x, TblMeta)))}
   else{
     tryCatch(output <- glue$get_table(DatabaseName = database, Name = name)$Table,
              error = function(e) py_error(e))
@@ -386,3 +386,13 @@ on_connection_opened <- function(connection) {
   )
 }
 # nocov end
+
+TblMeta <- function(x) {
+  tbl_type <- x$TableType %||% ""
+  names(tbl_type) <- x$Name
+  tbl_type}
+
+ColMeta <- function(x){
+  col_type <- x$Type %||% ""
+  names(col_type) <- x$Name
+  col_type}
