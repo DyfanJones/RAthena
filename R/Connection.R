@@ -51,8 +51,6 @@ AthenaConnection <-
     if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
                                       "or when work_group is defined in `create_work_group()`", call. = F)}
     
-    
-    
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group %||% "primary",
                  poll_interval = poll_interval, encryption_option = encryption_option,
