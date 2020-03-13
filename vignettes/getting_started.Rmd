@@ -53,7 +53,7 @@ reticulate::use_virtualenv("RAthena", required = TRUE)
 con <- dbConnect(RAthena::athena())
 ```
 
-**Note:** Python environments are not required if `boto3` is either in the root Python or if R and Python are in their own enviroment (for example conda environment).
+**Note:** Python environments are not required if `boto3` is either in the root Python or if R and Python are in their own environment (for example conda environment).
 
 # Usage:
 

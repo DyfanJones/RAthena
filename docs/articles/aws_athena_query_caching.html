@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -160,7 +160,7 @@
 <div id="cache-memory" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cache-memory" class="anchor"></a>Cache memory</h2>
-<p>The caching method in <code>RAthena</code> will rememeber previous query ids within each R session, even if you stop and start caching in <code>RAthena_options</code>.</p>
+<p>The caching method in <code>RAthena</code> will remember previous query ids within each R session, even if you stop and start caching in <code>RAthena_options</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Start caching</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="dt">cache_size =</span> <span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb3-3" title="3">res1 =<span class="st"> </span><span class="kw">dbExecute</span>(con, <span class="st">"select * from iris"</span>)</a>
