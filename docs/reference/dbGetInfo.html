@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -181,9 +181,9 @@ or a DBIResult</p></td>
 <span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='fu'>dbGetInfo</span>(<span class='no'>con</span>)
 
 <span class='co'># Return metadata from Athena query object</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "d2a8e8d6-ce25-4804-acf4-35991a3241a5"
+#&gt; [1] "b0e55189-2ded-441a-a4e7-f3aff3f5934d"
 #&gt; </div><div class='input'>
 <span class='co'># Clear result</span>
 <span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)

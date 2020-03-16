@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -136,7 +136,7 @@
 <a class="sourceLine" id="cb4-7" title="7">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_virtualenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb4-8" title="8"></a>
 <a class="sourceLine" id="cb4-9" title="9">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a></code></pre></div>
-<p><strong>Note:</strong> Python environments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own enviroment (for example conda environment).</p>
+<p><strong>Note:</strong> Python environments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own environment (for example conda environment).</p>
 </div>
 </div>
 <div id="usage" class="section level1">
@@ -201,7 +201,7 @@
 <a class="sourceLine" id="cb6-39" title="39"><span class="co"># [1] "1.7.1"</span></a>
 <a class="sourceLine" id="cb6-40" title="40"></a>
 <a class="sourceLine" id="cb6-41" title="41"><span class="co"># create table to AWS Athena</span></a>
-<a class="sourceLine" id="cb6-42" title="42"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"iris"</span>, iris)</a>
+<a class="sourceLine" id="cb6-42" title="42"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"iris"</span>, iris)</a>
 <a class="sourceLine" id="cb6-43" title="43"></a>
 <a class="sourceLine" id="cb6-44" title="44"><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris limit 10"</span>)</a>
 <a class="sourceLine" id="cb6-45" title="45"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
@@ -222,12 +222,12 @@
 <a href="#dplyr" class="anchor"></a>dplyr:</h2>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
 <a class="sourceLine" id="cb7-4" title="4"></a>
 <a class="sourceLine" id="cb7-5" title="5">athena_iris <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/compute.html">collect</a></span>()</a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span>()</a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
 <a class="sourceLine" id="cb7-10" title="10"><span class="co"># # A tibble: 10 x 3</span></a>
 <a class="sourceLine" id="cb7-11" title="11"><span class="co"># species  sepal_length sepal_width</span></a>

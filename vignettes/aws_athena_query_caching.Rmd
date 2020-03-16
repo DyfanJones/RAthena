@@ -72,7 +72,7 @@ Sadly the cached query didn't pick up the new data from `iris`.
 
 ## Cache memory
 
-The caching method in `RAthena` will rememeber previous query ids within each R session, even if you stop and start caching in `RAthena_options`.
+The caching method in `RAthena` will remember previous query ids within each R session, even if you stop and start caching in `RAthena_options`.
 
 ```r
 # Start caching
