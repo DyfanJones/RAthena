@@ -32,7 +32,7 @@ Number of updates in past 6 months: 8
 0 errors ✓ | 0 warnings ✓ | 1 note x
 
 **Author's Notes**
-* Apologies for the fast re-submission of this package. This release contains several cost benefits for using AWS Athena. Plus a couple of bug fixes. Unit tests now increase coverage of 80+% of the package.
+* Apologies for the fast re-submission of this package. This release contains several cost benefits for using AWS Athena. Plus a couple of bug fixes. Unit tests now increase coverage +80%.
 
 ## unit tests (using testthat) results
 * OK:       112
