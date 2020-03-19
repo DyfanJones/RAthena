@@ -155,8 +155,7 @@ setMethod(
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
       if (n > 1000){n = 1000L; message("Info: n has been restricted to 1000 due to AWS Athena limitation")}
-      tryCatch(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n),
-               error = function(e) py_error(e))
+      retry_api_call(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = n))
       
       output <- lapply(result$ResultSet$Rows, function(x) (sapply(x$Data, function(x) if(length(x) == 0 ) NA else x)))
       dt <- rbindlist(output, fill = TRUE)
@@ -177,13 +176,11 @@ setMethod(
              error = function(e) py_error(e))
     
     # download athena output
-    tryCatch(s3$Bucket(result_info$bucket)$download_file(result_info$key, File),
-             error = function(e) py_error(e))
+    retry_api_call(s3$Bucket(result_info$bucket)$download_file(result_info$key, File))
     
     # return metadata of athena data types
-    tryCatch(result_class <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId,
-                                                          MaxResults = as.integer(1))$ResultSet$ResultSetMetadata$ColumnInfo,
-             error = function(e) py_error(e))
+    retry_api_call(result_class <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId,
+                                                          MaxResults = as.integer(1))$ResultSet$ResultSetMetadata$ColumnInfo)
     
     if(grepl("\\.csv$",result_info$key)){
       output <- athena_read(athena_option_env$file_parser, File, result_class)

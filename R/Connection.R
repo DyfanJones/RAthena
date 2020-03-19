@@ -231,6 +231,11 @@ setMethod(
     res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     poll_result <- poll(res)
     
+    # if query failed stop
+    if(poll_result$QueryExecution$Status$State == "FAILED") {
+      stop(poll_result$QueryExecution$Status$StateChangeReason, call. = FALSE)
+    }
+    
     # cache query metadata if caching is enabled
     if (athena_option_env$cache_size > 0) cache_query(poll_result)
     
@@ -354,8 +359,7 @@ setMethod(
     glue <- conn@ptr$client("glue")
     
     if(is.null(schema)){
-      tryCatch(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
-               error = function(e) py_error(e))}
+      retry_api_call(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name))}
     tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
              error = function(e) py_error(e))
     unlist(lapply(output, function(x) sapply(x, function(y) y$Name)))
@@ -402,8 +406,7 @@ setMethod("dbGetTables", "AthenaConnection",
     if (!dbIsValid(conn)) {stop("Connection already closed.", call. = FALSE)}
     glue <- conn@ptr$client("glue")
   if(is.null(schema)){
-    tryCatch(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
-             error = function(e) py_error(e))}
+    retry_api_call(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name))}
   tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
            error = function(e) py_error(e))
   rbindlist(lapply(output, function(x) rbindlist(lapply(x, function(y) data.frame(Schema = y$DatabaseName,

@@ -253,8 +253,7 @@ upload_data <- function(con, x, name, partition = NULL, s3.location= NULL,  file
   tryCatch(s3 <- con@ptr$resource("s3"),
            error = function(e) py_error(e))
   for (i in 1:length(x)){
-    tryCatch(s3$Bucket(s3_key[[1]])$upload_file(Filename = x[i], Key = s3_key[[2]][i]),
-             error = function(e) py_error(e))}
+    retry_api_call(s3$Bucket(s3_key[[1]])$upload_file(Filename = x[i], Key = s3_key[[2]][i]))}
   invisible(NULL)
 }
 

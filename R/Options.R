@@ -7,17 +7,21 @@ class(athena_option_env$file_parser) <- "athena_data.table"
 cache_dt = data.table("QueryId" = character(), "Query" = character(), "State"= character(),
                       "StatementType"= character(),"WorkGroup" = character())
 athena_option_env$cache_dt <-  cache_dt
+athena_option_env$retry <- 5
+athena_option_env$retry_quiet <- TRUE
 
 # ==========================================================================
 # Setting file parser method
 
 #' A method to configue RAthena backend options.
 #'
-#' \code{RAthena_options()} provides a method to change the backend. This includes changing the file parser
-#' and whether \code{RAthena} should cache query ids locally.
+#' \code{RAthena_options()} provides a method to change the backend. This includes changing the file parser,
+#' whether \code{RAthena} should cache query ids locally and number of retries on a failed api call.
 #' @param file_parser Method to read and write tables to Athena, currently defaults to data.table
 #' @param cache_size Number of queries to be cached. Currently only support caching up to 100 distinct queries.
 #' @param clear_cache Clears all previous cached query metadata
+#' @param retry Maximum number of requests to attempt.
+#' @param retry_quiet If \code{FALSE}, will print a message from retry displaying how long until the next request.
 #' @return \code{RAthena_options()} returns \code{NULL}, invisibly.
 #' @examples
 #' library(RAthena)
@@ -25,7 +29,7 @@ athena_option_env$cache_dt <-  cache_dt
 #' # change file parser from default data.table to vroom
 #' RAthena_options("vroom")
 #' @export
-RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size = 0, clear_cache = FALSE) {
+RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size = 0, clear_cache = FALSE, retry = 5, retry_quiet = FALSE) {
   file_parser = match.arg(file_parser)
   stopifnot(is.logical(clear_cache))
   
@@ -41,6 +45,8 @@ RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size =
   class(athena_option_env$file_parser) <- paste("athena", file_parser, sep = "_")
   
   athena_option_env$cache_size <- cache_size
+  athena_option_env$retry <- retry
+  athena_option_env$retry_quiet <- retry_quiet
   
   if(clear_cache) athena_option_env$cache_dt <- athena_option_env$cache_dt[0]
   
