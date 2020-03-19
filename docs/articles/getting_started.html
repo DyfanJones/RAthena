@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
       </span>
     </div>
 
@@ -114,28 +114,28 @@
 <h1 class="hasAnchor">
 <a href="#installing-rathena" class="anchor"></a>Installing <code>RAthena</code>:</h1>
 <p>As <code>RAthena</code> utilising the python AWS SDK <code>boto3</code>, Python 3+ is required. Please install Python 3+ either by <a href="https://www.python.org/downloads/">Python</a> or <a href="https://www.anaconda.com/distribution/">Python Anaconda</a>. To install <code>RAthena</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># cran version</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"RAthena"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Dev version</span></a>
-<a class="sourceLine" id="cb1-5" title="5">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"dyfanjones/RAthena"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># cran version</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"RAthena"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Dev version</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"dyfanjones/RAthena"</span>)</a></code></pre></div>
 <p>Next is to install Python <code>boto3</code>. This can be done either by <code>RAthena</code>’s installation method:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/install_boto.html">install_boto</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/install_boto.html">install_boto</a></span>()</a></code></pre></div>
 <p>Or pip method:</p>
 <pre><code>pip install boto3</code></pre>
 <div id="python-environments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#python-environments" class="anchor"></a>Python Environments:</h2>
 <p>If <code>RAthena</code> doesn’t pick up <code>boto3</code> after using <code><a href="../reference/install_boto.html">install_boto()</a></code>, please consider specifying the python environment.<code><a href="../reference/install_boto.html">install_boto()</a></code> creates <code>RAthena</code> environment. This is either a Python virtual environment or a conda environment depending on your system.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co"># Specify python conda environment and force reticulate to use it</span></a>
-<a class="sourceLine" id="cb4-4" title="4">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_condaenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co"># Or specify python virtual environment and force reticulate to use it</span></a>
-<a class="sourceLine" id="cb4-7" title="7">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_virtualenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-8" title="8"></a>
-<a class="sourceLine" id="cb4-9" title="9">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># Specify python conda environment and force reticulate to use it</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_condaenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co"># Or specify python virtual environment and force reticulate to use it</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">reticulate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_virtualenv</a></span>(<span class="st">"RAthena"</span>, <span class="dt">required =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a></code></pre></div>
 <p><strong>Note:</strong> Python environments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own environment (for example conda environment).</p>
 </div>
 </div>
@@ -145,103 +145,103 @@
 <div id="low---level-api" class="section level2">
 <h2 class="hasAnchor">
 <a href="#low---level-api" class="anchor"></a>Low - Level API:</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb5-3" title="3"></a>
-<a class="sourceLine" id="cb5-4" title="4">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="../reference/athena.html">athena</a></span>())</a>
-<a class="sourceLine" id="cb5-5" title="5"></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co"># list all current work groups in AWS Athena</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="kw"><a href="../reference/work_group.html">list_work_groups</a></span>(con)</a>
-<a class="sourceLine" id="cb5-8" title="8"></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="co"># Create a new work group</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="kw"><a href="../reference/work_group.html">create_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group"</span>,</a>
-<a class="sourceLine" id="cb5-11" title="11">                  <span class="dt">tags =</span> <span class="kw"><a href="../reference/work_group.html">tag_options</a></span>(<span class="dt">key=</span> <span class="st">"demo_work_group"</span>, <span class="dt">value =</span> <span class="st">"demo_01"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="../reference/athena.html">athena</a></span>())</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># list all current work groups in AWS Athena</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/work_group.html">list_work_groups</a></span>(con)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># Create a new work group</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw"><a href="../reference/work_group.html">create_work_group</a></span>(con, <span class="st">"demo_work_group"</span>, <span class="dt">description =</span> <span class="st">"This is a demo work group"</span>,</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">                  <span class="dt">tags =</span> <span class="kw"><a href="../reference/work_group.html">tag_options</a></span>(<span class="dt">key=</span> <span class="st">"demo_work_group"</span>, <span class="dt">value =</span> <span class="st">"demo_01"</span>))</a></code></pre></div>
 </div>
 <div id="dbi" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dbi" class="anchor"></a>DBI:</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb6-2" title="2"></a>
-<a class="sourceLine" id="cb6-3" title="3">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a>
-<a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co"># Get metadata </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="kw"><a href="../reference/dbGetInfo.html">dbGetInfo</a></span>(con)</a>
-<a class="sourceLine" id="cb6-7" title="7"></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co"># $profile_name</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co"># [1] "default"</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co"># $s3_staging</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co"># [1] ######## </span><span class="al">NOTE</span><span class="co">: Please don't share your S3 bucket to the public</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co"># $dbms.name</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co"># [1] "default"</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co"># $work_group</span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co"># [1] "primary"</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co"># $poll_interval</span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co"># NULL</span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co"># $encryption_option</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co"># NULL</span></a>
-<a class="sourceLine" id="cb6-25" title="25"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-26" title="26"><span class="co"># $kms_key</span></a>
-<a class="sourceLine" id="cb6-27" title="27"><span class="co"># NULL</span></a>
-<a class="sourceLine" id="cb6-28" title="28"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-29" title="29"><span class="co"># $expiration</span></a>
-<a class="sourceLine" id="cb6-30" title="30"><span class="co"># NULL</span></a>
-<a class="sourceLine" id="cb6-31" title="31"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-32" title="32"><span class="co"># $region_name</span></a>
-<a class="sourceLine" id="cb6-33" title="33"><span class="co"># [1] "eu-west-1"</span></a>
-<a class="sourceLine" id="cb6-34" title="34"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-35" title="35"><span class="co"># $boto3</span></a>
-<a class="sourceLine" id="cb6-36" title="36"><span class="co"># [1] "1.11.5"</span></a>
-<a class="sourceLine" id="cb6-37" title="37"><span class="co"># </span></a>
-<a class="sourceLine" id="cb6-38" title="38"><span class="co"># $RAthena</span></a>
-<a class="sourceLine" id="cb6-39" title="39"><span class="co"># [1] "1.7.1"</span></a>
-<a class="sourceLine" id="cb6-40" title="40"></a>
-<a class="sourceLine" id="cb6-41" title="41"><span class="co"># create table to AWS Athena</span></a>
-<a class="sourceLine" id="cb6-42" title="42"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"iris"</span>, iris)</a>
-<a class="sourceLine" id="cb6-43" title="43"></a>
-<a class="sourceLine" id="cb6-44" title="44"><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris limit 10"</span>)</a>
-<a class="sourceLine" id="cb6-45" title="45"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
-<a class="sourceLine" id="cb6-46" title="46"><span class="co">#  sepal_length sepal_width petal_length petal_width species</span></a>
-<a class="sourceLine" id="cb6-47" title="47"><span class="co"># 1:           5.1         3.5          1.4         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-48" title="48"><span class="co"># 2:           4.9         3.0          1.4         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-49" title="49"><span class="co"># 3:           4.7         3.2          1.3         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-50" title="50"><span class="co"># 4:           4.6         3.1          1.5         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-51" title="51"><span class="co"># 5:           5.0         3.6          1.4         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-52" title="52"><span class="co"># 6:           5.4         3.9          1.7         0.4  setosa</span></a>
-<a class="sourceLine" id="cb6-53" title="53"><span class="co"># 7:           4.6         3.4          1.4         0.3  setosa</span></a>
-<a class="sourceLine" id="cb6-54" title="54"><span class="co"># 8:           5.0         3.4          1.5         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-55" title="55"><span class="co"># 9:           4.4         2.9          1.4         0.2  setosa</span></a>
-<a class="sourceLine" id="cb6-56" title="56"><span class="co"># 10:          4.9         3.1          1.5         0.1  setosa</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(RAthena<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RAthena/man/athena.html">athena</a></span>())</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co"># Get metadata </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw"><a href="../reference/dbGetInfo.html">dbGetInfo</a></span>(con)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co"># $profile_name</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co"># [1] "default"</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co"># $s3_staging</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co"># [1] ######## </span><span class="al">NOTE</span><span class="co">: Please don't share your S3 bucket to the public</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co"># $dbms.name</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co"># [1] "default"</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co"># $work_group</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co"># [1] "primary"</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co"># $poll_interval</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co"># NULL</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co"># $encryption_option</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co"># NULL</span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co"># $kms_key</span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co"># NULL</span></a>
+<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co"># $expiration</span></a>
+<a class="sourceLine" id="cb6-30" data-line-number="30"><span class="co"># NULL</span></a>
+<a class="sourceLine" id="cb6-31" data-line-number="31"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-32" data-line-number="32"><span class="co"># $region_name</span></a>
+<a class="sourceLine" id="cb6-33" data-line-number="33"><span class="co"># [1] "eu-west-1"</span></a>
+<a class="sourceLine" id="cb6-34" data-line-number="34"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-35" data-line-number="35"><span class="co"># $boto3</span></a>
+<a class="sourceLine" id="cb6-36" data-line-number="36"><span class="co"># [1] "1.11.5"</span></a>
+<a class="sourceLine" id="cb6-37" data-line-number="37"><span class="co"># </span></a>
+<a class="sourceLine" id="cb6-38" data-line-number="38"><span class="co"># $RAthena</span></a>
+<a class="sourceLine" id="cb6-39" data-line-number="39"><span class="co"># [1] "1.7.1"</span></a>
+<a class="sourceLine" id="cb6-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb6-41" data-line-number="41"><span class="co"># create table to AWS Athena</span></a>
+<a class="sourceLine" id="cb6-42" data-line-number="42"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"iris"</span>, iris)</a>
+<a class="sourceLine" id="cb6-43" data-line-number="43"></a>
+<a class="sourceLine" id="cb6-44" data-line-number="44"><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris limit 10"</span>)</a>
+<a class="sourceLine" id="cb6-45" data-line-number="45"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
+<a class="sourceLine" id="cb6-46" data-line-number="46"><span class="co">#  sepal_length sepal_width petal_length petal_width species</span></a>
+<a class="sourceLine" id="cb6-47" data-line-number="47"><span class="co"># 1:           5.1         3.5          1.4         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-48" data-line-number="48"><span class="co"># 2:           4.9         3.0          1.4         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-49" data-line-number="49"><span class="co"># 3:           4.7         3.2          1.3         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-50" data-line-number="50"><span class="co"># 4:           4.6         3.1          1.5         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-51" data-line-number="51"><span class="co"># 5:           5.0         3.6          1.4         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-52" data-line-number="52"><span class="co"># 6:           5.4         3.9          1.7         0.4  setosa</span></a>
+<a class="sourceLine" id="cb6-53" data-line-number="53"><span class="co"># 7:           4.6         3.4          1.4         0.3  setosa</span></a>
+<a class="sourceLine" id="cb6-54" data-line-number="54"><span class="co"># 8:           5.0         3.4          1.5         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-55" data-line-number="55"><span class="co"># 9:           4.4         2.9          1.4         0.2  setosa</span></a>
+<a class="sourceLine" id="cb6-56" data-line-number="56"><span class="co"># 10:          4.9         3.1          1.5         0.1  setosa</span></a></code></pre></div>
 </div>
 <div id="dplyr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dplyr" class="anchor"></a>dplyr:</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
-<a class="sourceLine" id="cb7-4" title="4"></a>
-<a class="sourceLine" id="cb7-5" title="5">athena_iris <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span>()</a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co"># # A tibble: 10 x 3</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co"># species  sepal_length sepal_width</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="co"># &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="co"># 1 setosa            5.1         3.5</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co"># 2 setosa            4.9         3  </span></a>
-<a class="sourceLine" id="cb7-15" title="15"><span class="co"># 3 setosa            4.7         3.2</span></a>
-<a class="sourceLine" id="cb7-16" title="16"><span class="co"># 4 setosa            4.6         3.1</span></a>
-<a class="sourceLine" id="cb7-17" title="17"><span class="co"># 5 setosa            5           3.6</span></a>
-<a class="sourceLine" id="cb7-18" title="18"><span class="co"># 6 setosa            5.4         3.9</span></a>
-<a class="sourceLine" id="cb7-19" title="19"><span class="co"># 7 setosa            4.6         3.4</span></a>
-<a class="sourceLine" id="cb7-20" title="20"><span class="co"># 8 setosa            5           3.4</span></a>
-<a class="sourceLine" id="cb7-21" title="21"><span class="co"># 9 setosa            4.4         2.9</span></a>
-<a class="sourceLine" id="cb7-22" title="22"><span class="co"># 10 setosa           4.9         3.1</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">athena_iris &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"iris"</span>)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">athena_iris <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, sepal_length, sepal_width) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span>()</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co"># Info: (Data scanned: 860 Bytes)</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co"># # A tibble: 10 x 3</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co"># species  sepal_length sepal_width</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co"># &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co"># 1 setosa            5.1         3.5</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co"># 2 setosa            4.9         3  </span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co"># 3 setosa            4.7         3.2</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co"># 4 setosa            4.6         3.1</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co"># 5 setosa            5           3.6</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co"># 6 setosa            5.4         3.9</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co"># 7 setosa            4.6         3.4</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co"># 8 setosa            5           3.4</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co"># 9 setosa            4.4         2.9</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co"># 10 setosa           4.9         3.1</span></a></code></pre></div>
 </div>
 </div>
 <div id="useful-links" class="section level1">
