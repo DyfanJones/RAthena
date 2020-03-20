@@ -7,7 +7,9 @@
 RAthena_options(
   file_parser = c("data.table", "vroom"),
   cache_size = 0,
-  clear_cache = FALSE
+  clear_cache = FALSE,
+  retry = 5,
+  retry_quiet = FALSE
 )
 }
 \arguments{
@@ -16,13 +18,17 @@ RAthena_options(
 \item{cache_size}{Number of queries to be cached. Currently only support caching up to 100 distinct queries.}
 
 \item{clear_cache}{Clears all previous cached query metadata}
+
+\item{retry}{Maximum number of requests to attempt.}
+
+\item{retry_quiet}{If \code{FALSE}, will print a message from retry displaying how long until the next request.}
 }
 \value{
 \code{RAthena_options()} returns \code{NULL}, invisibly.
 }
 \description{
-\code{RAthena_options()} provides a method to change the backend. This includes changing the file parser
-and whether \code{RAthena} should cache query ids locally.
+\code{RAthena_options()} provides a method to change the backend. This includes changing the file parser,
+whether \code{RAthena} should cache query ids locally and number of retries on a failed api call.
 }
 \examples{
 library(RAthena)

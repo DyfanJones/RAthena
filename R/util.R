@@ -213,3 +213,32 @@ check_cache = function(query, work_group){
   query_id = athena_option_env$cache_dt[get("Query") == query & get("State") == "SUCCEEDED" & get("StatementType") == "DML" & get("WorkGroup") == work_group, get("QueryId")]
   if(length(query_id) == 0) return(NULL) else return(query_id[1])
 }
+
+# return python error with error class
+retry_error <-
+  function(e) {
+    e <- py_last_error()$value
+    class(e) <- "error"
+    e
+  }
+
+# If api call fails retry call
+retry_api_call <- function(expr){
+  
+  for (i in seq_len(athena_option_env$retry)) {
+    resp <- tryCatch(eval.parent(substitute(expr)), 
+                     error = function(e) retry_error(e))
+    
+    if(inherits(resp, "error")){
+      backoff_len <- runif(n=1, min=0, max=(2^i - 1))
+      
+      if(!athena_option_env$retry_quiet) message(resp[1], "Request failed. Retrying in ", round(backoff_len, 1), " seconds...")
+      
+      Sys.sleep(backoff_len)
+    } else {break}
+  }
+  
+  if (inherits(resp, "error")) stop(resp[1])
+  
+  resp
+}

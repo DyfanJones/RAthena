@@ -1,3 +1,11 @@
+# RAthena 1.8.0.9000
+## New Feature
+* functions that collect or push to AWS S3 now have a retry capability. Meaning if API call fails then the call is retried ([noctua: # 79](https://github.com/DyfanJones/noctua/issues/79))
+* `RAthena_options` contains 2 new parameters to control how `RAthena` handles retries.
+
+## Bug
+* `dbWriteTable` would throw `throttling error` every now and again, `retry_api_call` as been built to handle the parsing of data between R and AWS S3.
+
 # RAthena 1.8.0
 ## New Feature
 * Inspired by `pyathena`, `RAthena_options` now has a new parameter `cache_size`. This implements local caching in R environments instead of using AWS `list_query_executions`. This is down to `dbClearResult` clearing S3's Athena output when caching isn't disabled
