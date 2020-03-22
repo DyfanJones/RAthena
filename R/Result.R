@@ -166,7 +166,7 @@ setMethod(
       # assign token from AthenaResult class
       token <- res@info$NextToken
       for (i in iterate){
-        if(i == iterate[length(iterate)]) chunk <- as.integer(n - (i-1) * chunk)
+        if(i == max(iterate)) chunk <- as.integer(n - (i-1) * chunk)
         
         # get chunk with retry api call if call fails
         if(is.null(token)) {retry_api_call(result <- res@athena$get_query_results(QueryExecutionId = res@info$QueryExecutionId, MaxResults = chunk))
