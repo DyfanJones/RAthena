@@ -155,6 +155,7 @@ setMethod(
     
     if(n >= 0 && n !=Inf){
       n = as.integer(n + 1)
+      chunk = n
       if (n > 1000L) chunk = 1000L
       
       iterate <- 1:ceiling(n/chunk)
