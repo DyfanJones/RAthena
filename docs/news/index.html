@@ -149,6 +149,9 @@
 con &lt;- dbConnect(RAthena::athena())
 res &lt;- dbExecute(con, "select * from some_big_table limit 10000")
 dbFetch(res, 5000)</a></code></pre>
+<ul>
+<li>When creating/appending partitions to a table, <code>dbWriteTable</code> opts to use <code>alter table</code> instead of standard <code>msck repair table</code>. This is to improve performance when appending to tables with high number of existing partitions.</li>
+</ul>
 </div>
 <div id="bug" class="section level2">
 <h2 class="hasAnchor">
@@ -578,7 +581,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <li>RAthena now defaults in using data.table to read and write files when transferring data to and from AWS Athena. Reason for change:
 <ul>
 <li>Increase speed in data transfer</li>
-<li>Data types from AWS Athena can be passed to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread</a></code>. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R</li>
+<li>Data types from AWS Athena can be passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html">data.table::fread</a></code>. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R</li>
 </ul>
 </li>
 </ul>
@@ -587,7 +590,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#minor-change-3" class="anchor"></a>Minor Change</h2>
 <ul>
-<li>Progress bar from <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread</a></code> and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fwrite.html">data.table::fwrite</a></code> have been disabled</li>
+<li>Progress bar from <code><a href="https://rdrr.io/pkg/data.table/man/fread.html">data.table::fread</a></code> and <code><a href="https://rdrr.io/pkg/data.table/man/fwrite.html">data.table::fwrite</a></code> have been disabled</li>
 <li>Removed <code>util</code> functions from namespace: <code>write.table</code>, <code>read.csv</code>
 </li>
 <li>Added <code>data.table</code> to namespace</li>
