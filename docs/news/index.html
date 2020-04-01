@@ -131,9 +131,9 @@
       <small>Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rathena-1-8-0-9000" class="section level1">
+    <div id="rathena-1809000" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-8-0-9000" class="anchor"></a>RAthena 1.8.0.9000<small> Unreleased </small>
+<a href="#rathena-1809000" class="anchor"></a>RAthena 1.8.0.9000<small> Unreleased </small>
 </h1>
 <div id="new-feature" class="section level2">
 <h2 class="hasAnchor">
@@ -151,6 +151,8 @@ res &lt;- dbExecute(con, "select * from some_big_table limit 10000")
 dbFetch(res, 5000)</a></code></pre>
 <ul>
 <li>When creating/appending partitions to a table, <code>dbWriteTable</code> opts to use <code>alter table</code> instead of standard <code>msck repair table</code>. This is to improve performance when appending to tables with high number of existing partitions.</li>
+<li>
+<code>dbWriteTable</code> now allows json to be appended to json ddls created with the Openx-JsonSerDe library.</li>
 </ul>
 </div>
 <div id="bug" class="section level2">
@@ -161,10 +163,19 @@ dbFetch(res, 5000)</a></code></pre>
 <code>dbWriteTable</code> would throw <code>throttling error</code> every now and again, <code>retry_api_call</code> as been built to handle the parsing of data between R and AWS S3.</li>
 </ul>
 </div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<ul>
+<li>
+<code>dbWriteTable</code> added support ddl structures for user who have created ddl’s outside of <code>RAthena</code>
+</li>
+</ul>
 </div>
-    <div id="rathena-1-8-0" class="section level1">
+</div>
+    <div id="rathena-180" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-8-0" class="anchor"></a>RAthena 1.8.0<small> 2020-03-17 </small>
+<a href="#rathena-180" class="anchor"></a>RAthena 1.8.0<small> 2020-03-17 </small>
 </h1>
 <div id="new-feature-1" class="section level2">
 <h2 class="hasAnchor">
@@ -219,9 +230,9 @@ dbGetQuery(con, "select * from iris2")</a></code></pre>
 <code>Rstudio connection tab</code> comes into an issue when Glue Table isn’t stored correctly (<a href='https://github.com/DyfanJones/RAthena/issues/92'>#92</a>)</li>
 </ul>
 </div>
-<div id="documentation" class="section level2">
+<div id="documentation-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<a href="#documentation-1" class="anchor"></a>Documentation</h2>
 <ul>
 <li>Added supported environmental variable <code>AWS_REGION</code> into <code>dbConnect</code>
 </li>
@@ -243,9 +254,9 @@ dbGetQuery(con, "select * from iris2")</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-7-1" class="section level1">
+    <div id="rathena-171" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-7-1" class="anchor"></a>RAthena 1.7.1<small> 2020-02-16 </small>
+<a href="#rathena-171" class="anchor"></a>RAthena 1.7.1<small> 2020-02-16 </small>
 </h1>
 <div id="bug-fix-1" class="section level2">
 <h2 class="hasAnchor">
@@ -335,9 +346,9 @@ user  system elapsed
 </ul>
 </div>
 </div>
-    <div id="rathena-1-7-0" class="section level1">
+    <div id="rathena-170" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-7-0" class="anchor"></a>RAthena 1.7.0<small> 2020-01-07 </small>
+<a href="#rathena-170" class="anchor"></a>RAthena 1.7.0<small> 2020-01-07 </small>
 </h1>
 <div id="new-feature-3" class="section level2">
 <h2 class="hasAnchor">
@@ -363,15 +374,15 @@ RAthena_options("vroom")
 </li>
 </ul>
 </div>
-<div id="documentation-1" class="section level2">
+<div id="documentation-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-1" class="anchor"></a>Documentation</h2>
+<a href="#documentation-2" class="anchor"></a>Documentation</h2>
 <p>Updated R documentation to <code>roxygen2</code> 7.0.2</p>
 </div>
 </div>
-    <div id="rathena-1-6-0" class="section level1">
+    <div id="rathena-160" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-6-0" class="anchor"></a>RAthena 1.6.0<small> 2019-12-19 </small>
+<a href="#rathena-160" class="anchor"></a>RAthena 1.6.0<small> 2019-12-19 </small>
 </h1>
 <div id="major-change" class="section level2">
 <h2 class="hasAnchor">
@@ -420,9 +431,9 @@ RAthena_options("vroom")
 </ul>
 </div>
 </div>
-    <div id="rathena-1-5-0" class="section level1">
+    <div id="rathena-150" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-5-0" class="anchor"></a>RAthena 1.5.0<small> 2019-12-06 </small>
+<a href="#rathena-150" class="anchor"></a>RAthena 1.5.0<small> 2019-12-06 </small>
 </h1>
 <div id="major-change-1" class="section level2">
 <h2 class="hasAnchor">
@@ -501,9 +512,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 </ul>
 </div>
 </div>
-    <div id="rathena-1-4-1" class="section level1">
+    <div id="rathena-141" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-4-1" class="anchor"></a>RAthena 1.4.1<small> 2019-11-28 </small>
+<a href="#rathena-141" class="anchor"></a>RAthena 1.4.1<small> 2019-11-28 </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
@@ -520,9 +531,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 </ul>
 </div>
 </div>
-    <div id="rathena-1-4-0" class="section level1">
+    <div id="rathena-140" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-4-0" class="anchor"></a>RAthena 1.4.0<small> 2019-11-14 </small>
+<a href="#rathena-140" class="anchor"></a>RAthena 1.4.0<small> 2019-11-14 </small>
 </h1>
 <div id="minor-change-2" class="section level2">
 <h2 class="hasAnchor">
@@ -570,9 +581,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-3-0" class="section level1">
+    <div id="rathena-130" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-3-0" class="anchor"></a>RAthena 1.3.0<small> 2019-10-23 </small>
+<a href="#rathena-130" class="anchor"></a>RAthena 1.3.0<small> 2019-10-23 </small>
 </h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -581,7 +592,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <li>RAthena now defaults in using data.table to read and write files when transferring data to and from AWS Athena. Reason for change:
 <ul>
 <li>Increase speed in data transfer</li>
-<li>Data types from AWS Athena can be passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html">data.table::fread</a></code>. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R</li>
+<li>Data types from AWS Athena can be passed to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread</a></code>. This enables data types to be read in correctly and not required a second stage to convert data types once data has been read into R</li>
 </ul>
 </li>
 </ul>
@@ -590,7 +601,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#minor-change-3" class="anchor"></a>Minor Change</h2>
 <ul>
-<li>Progress bar from <code><a href="https://rdrr.io/pkg/data.table/man/fread.html">data.table::fread</a></code> and <code><a href="https://rdrr.io/pkg/data.table/man/fwrite.html">data.table::fwrite</a></code> have been disabled</li>
+<li>Progress bar from <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread</a></code> and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fwrite.html">data.table::fwrite</a></code> have been disabled</li>
 <li>Removed <code>util</code> functions from namespace: <code>write.table</code>, <code>read.csv</code>
 </li>
 <li>Added <code>data.table</code> to namespace</li>
@@ -611,9 +622,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-2-0" class="section level1">
+    <div id="rathena-120" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-2-0" class="anchor"></a>RAthena 1.2.0<small> 2019-10-14 </small>
+<a href="#rathena-120" class="anchor"></a>RAthena 1.2.0<small> 2019-10-14 </small>
 </h1>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -701,9 +712,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-1-0" class="section level1">
+    <div id="rathena-110" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-1-0" class="anchor"></a>RAthena 1.1.0<small> Unreleased </small>
+<a href="#rathena-110" class="anchor"></a>RAthena 1.1.0<small> Unreleased </small>
 </h1>
 <div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
@@ -733,9 +744,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-0-3" class="section level1">
+    <div id="rathena-103" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-0-3" class="anchor"></a>RAthena 1.0.3<small> Unreleased </small>
+<a href="#rathena-103" class="anchor"></a>RAthena 1.0.3<small> Unreleased </small>
 </h1>
 <div id="new-feature-6" class="section level2">
 <h2 class="hasAnchor">
@@ -759,9 +770,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-0-2" class="section level1">
+    <div id="rathena-102" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-0-2" class="anchor"></a>RAthena 1.0.2<small> Unreleased </small>
+<a href="#rathena-102" class="anchor"></a>RAthena 1.0.2<small> Unreleased </small>
 </h1>
 <div id="cran-requirement-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -797,9 +808,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-0-1" class="section level1">
+    <div id="rathena-101" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-0-1" class="anchor"></a>RAthena 1.0.1<small> Unreleased </small>
+<a href="#rathena-101" class="anchor"></a>RAthena 1.0.1<small> Unreleased </small>
 </h1>
 <div id="cran-requirement-changes-1" class="section level2">
 <h2 class="hasAnchor">
@@ -823,9 +834,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-1-0-0" class="section level1">
+    <div id="rathena-100" class="section level1">
 <h1 class="page-header">
-<a href="#rathena-1-0-0" class="anchor"></a>RAthena 1.0.0<small> Unreleased </small>
+<a href="#rathena-100" class="anchor"></a>RAthena 1.0.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>Initial RAthena release</li>
@@ -837,21 +848,21 @@ dbWrite(con, "iris", iris)</a></code></pre>
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rathena-1-8-0-9000">1.8.0.9000</a></li>
-        <li><a href="#rathena-1-8-0">1.8.0</a></li>
-        <li><a href="#rathena-1-7-1">1.7.1</a></li>
-        <li><a href="#rathena-1-7-0">1.7.0</a></li>
-        <li><a href="#rathena-1-6-0">1.6.0</a></li>
-        <li><a href="#rathena-1-5-0">1.5.0</a></li>
-        <li><a href="#rathena-1-4-1">1.4.1</a></li>
-        <li><a href="#rathena-1-4-0">1.4.0</a></li>
-        <li><a href="#rathena-1-3-0">1.3.0</a></li>
-        <li><a href="#rathena-1-2-0">1.2.0</a></li>
-        <li><a href="#rathena-1-1-0">1.1.0</a></li>
-        <li><a href="#rathena-1-0-3">1.0.3</a></li>
-        <li><a href="#rathena-1-0-2">1.0.2</a></li>
-        <li><a href="#rathena-1-0-1">1.0.1</a></li>
-        <li><a href="#rathena-1-0-0">1.0.0</a></li>
+        <li><a href="#rathena-1809000">1.8.0.9000</a></li>
+        <li><a href="#rathena-180">1.8.0</a></li>
+        <li><a href="#rathena-171">1.7.1</a></li>
+        <li><a href="#rathena-170">1.7.0</a></li>
+        <li><a href="#rathena-160">1.6.0</a></li>
+        <li><a href="#rathena-150">1.5.0</a></li>
+        <li><a href="#rathena-141">1.4.1</a></li>
+        <li><a href="#rathena-140">1.4.0</a></li>
+        <li><a href="#rathena-130">1.3.0</a></li>
+        <li><a href="#rathena-120">1.2.0</a></li>
+        <li><a href="#rathena-110">1.1.0</a></li>
+        <li><a href="#rathena-103">1.0.3</a></li>
+        <li><a href="#rathena-102">1.0.2</a></li>
+        <li><a href="#rathena-101">1.0.1</a></li>
+        <li><a href="#rathena-100">1.0.0</a></li>
       </ul>
     </div>
   </div>

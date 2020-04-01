@@ -280,7 +280,7 @@ AWS region codes (region code example: Region = EU (Ireland)     <code> region_n
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Connect to Athena using your aws access keys</span>
  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
- <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='no'>RAthena</span>:<span class='fu'><a href='athena.html'>athena</a></span>(),
+ <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RAthena/man/athena.html'>athena</a></span>(),
                   <span class='kw'>aws_access_key_id</span><span class='kw'>=</span><span class='st'>'YOUR_ACCESS_KEY_ID'</span>, <span class='co'># </span>
                   <span class='kw'>aws_secret_access_key</span><span class='kw'>=</span><span class='st'>'YOUR_SECRET_ACCESS_KEY'</span>,
                   <span class='kw'>s3_staging_dir</span><span class='kw'>=</span><span class='st'>'s3://path/to/query/bucket/'</span>,
