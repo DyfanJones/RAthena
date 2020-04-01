@@ -109,7 +109,7 @@ of supported environment variables:
  dbDisconnect(con)
  
 # Connect to Athena using ARN role
- con <- dbConnect(athena(),
+ con <- dbConnect(RAthena::athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
                   s3_staging_dir = 's3://path/to/query/bucket/')
