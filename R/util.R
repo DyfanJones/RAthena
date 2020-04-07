@@ -230,6 +230,10 @@ retry_api_call <- function(expr){
                      error = function(e) retry_error(e))
     
     if(inherits(resp, "error")){
+      
+      # stop retry if statement is an invalid request
+      if (grepl("InvalidRequestException", resp[1])) {stop(resp[1], call. = FALSE)}
+      
       backoff_len <- runif(n=1, min=0, max=(2^i - 1))
       
       if(!athena_option_env$retry_quiet) message(resp[1], "Request failed. Retrying in ", round(backoff_len, 1), " seconds...")
