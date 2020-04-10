@@ -621,6 +621,7 @@ repair_table <- function(con, name, partition = NULL, s3.location = NULL, append
     query <- SQL(paste0("ALTER TABLE ", table, " ADD IF NOT EXISTS\nPARTITION (", partition, ")\nLOCATION ", s3.location))
     res <- dbSendQuery(con, query)
     poll_result <- poll(res)
+    dbClearResult(res)
     
     # If query failed, due to glue permissions default back to msck repair table
     if(poll_result$QueryExecution$Status$State == "FAILED" && grepl(".*glue.*BatchCreatePartition.*AccessDeniedException", poll_result$QueryExecution$Status$StateChangeReason)) {
