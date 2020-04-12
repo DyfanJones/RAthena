@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -109,7 +113,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DyfanJones/RAthena">
+  <a href="https://github.com/DyfanJones/RAthena/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -127,13 +131,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rathena-1809000" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-1809000" class="anchor"></a>RAthena 1.8.0.9000<small> Unreleased </small>
+    <div id="rathena-1-8-0-9000" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.0.9000">
+<a href="#rathena-1-8-0-9000" class="anchor"></a>RAthena 1.8.0.9000<small> Unreleased </small>
 </h1>
 <div id="new-feature" class="section level2">
 <h2 class="hasAnchor">
@@ -143,9 +147,9 @@
 <li>
 <code>RAthena_options</code> contains 2 new parameters to control how <code>RAthena</code> handles retries.</li>
 <li>
-<code>dbFetch</code> is able to return data from AWS Athena in chunk. This has been achieved by passing <code>NextToken</code> to <code>AthenaResult</code> s4 class. This method won’t be as fast <code>n = -1</code> as each chunk will have to be process into data frame format.</li>
+<code>dbFetch</code> is able to return data from AWS Athena in chunk. This has been achieved by passing <code>NextToken</code> to <code>AthenaResult</code> s4 class. This method wonât be as fast <code>n = -1</code> as each chunk will have to be process into data frame format.</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 con &lt;- dbConnect(RAthena::athena())
 res &lt;- dbExecute(con, "select * from some_big_table limit 10000")
 dbFetch(res, 5000)</a></code></pre>
@@ -161,6 +165,9 @@ dbFetch(res, 5000)</a></code></pre>
 <ul>
 <li>
 <code>dbWriteTable</code> would throw <code>throttling error</code> every now and again, <code>retry_api_call</code> as been built to handle the parsing of data between R and AWS S3.</li>
+<li>
+<code>dbWriteTable</code> did not clear down all metadata when uploading to <code>AWS Athena</code>
+</li>
 </ul>
 </div>
 <div id="documentation" class="section level2">
@@ -168,26 +175,26 @@ dbFetch(res, 5000)</a></code></pre>
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <ul>
 <li>
-<code>dbWriteTable</code> added support ddl structures for user who have created ddl’s outside of <code>RAthena</code>
+<code>dbWriteTable</code> added support ddl structures for user who have created ddlâs outside of <code>RAthena</code>
 </li>
 </ul>
 </div>
 </div>
-    <div id="rathena-180" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-180" class="anchor"></a>RAthena 1.8.0<small> 2020-03-17 </small>
+    <div id="rathena-1-8-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.0">
+<a href="#rathena-1-8-0" class="anchor"></a>RAthena 1.8.0<small> 2020-03-17 </small>
 </h1>
 <div id="new-feature-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-feature-1" class="anchor"></a>New Feature</h2>
 <ul>
-<li>Inspired by <code>pyathena</code>, <code>RAthena_options</code> now has a new parameter <code>cache_size</code>. This implements local caching in R environments instead of using AWS <code>list_query_executions</code>. This is down to <code>dbClearResult</code> clearing S3’s Athena output when caching isn’t disabled</li>
+<li>Inspired by <code>pyathena</code>, <code>RAthena_options</code> now has a new parameter <code>cache_size</code>. This implements local caching in R environments instead of using AWS <code>list_query_executions</code>. This is down to <code>dbClearResult</code> clearing S3âs Athena output when caching isnât disabled</li>
 <li>
 <code>RAthena_options</code> now has <code>clear_cache</code> parameter to clear down all cached data.</li>
 <li>
 <code>dbRemoveTable</code> now utilise <code>AWS Glue</code> to remove tables from <code>AWS Glue</code> catalogue. This has a performance enhancement:</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 
 con = dbConnect(RAthena::athena())
 
@@ -210,7 +217,7 @@ system.time(dbRemoveTable(con, "iris2", confirm = T))
 <li>
 <code>dbWriteTable</code> now supports uploading json lines (<a href="http://jsonlines.org/" class="uri">http://jsonlines.org/</a>) format up to <code>AWS Athena</code> (<a href='https://github.com/DyfanJones/RAthena/issues/88'>#88</a>).</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 
 con = dbConnect(RAthena::athena())
 
@@ -227,7 +234,7 @@ dbGetQuery(con, "select * from iris2")</a></code></pre>
 <li>
 <code>install_boto</code> added <code>numpy</code> to <code>RAthena</code> environment install as <code>reticulate</code> appears to favour environments with <code>numpy</code> (<a href="https://github.com/rstudio/reticulate/issues/216" class="uri">https://github.com/rstudio/reticulate/issues/216</a>)</li>
 <li>
-<code>Rstudio connection tab</code> comes into an issue when Glue Table isn’t stored correctly (<a href='https://github.com/DyfanJones/RAthena/issues/92'>#92</a>)</li>
+<code>Rstudio connection tab</code> comes into an issue when Glue Table isnât stored correctly (<a href='https://github.com/DyfanJones/RAthena/issues/92'>#92</a>)</li>
 </ul>
 </div>
 <div id="documentation-1" class="section level2">
@@ -254,9 +261,9 @@ dbGetQuery(con, "select * from iris2")</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-171" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-171" class="anchor"></a>RAthena 1.7.1<small> 2020-02-16 </small>
+    <div id="rathena-1-7-1" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.1">
+<a href="#rathena-1-7-1" class="anchor"></a>RAthena 1.7.1<small> 2020-02-16 </small>
 </h1>
 <div id="bug-fix-1" class="section level2">
 <h2 class="hasAnchor">
@@ -272,7 +279,7 @@ translate_sql("2019-01-01", con = con) -&gt; '2019-01-01'
 # Now
 translate_sql("2019-01-01", con = con) -&gt; DATE '2019-01-01'</code></pre>
 <ul>
-<li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexible for custom separating values.</li>
+<li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Prestoâs <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexible for custom separating values.</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/paste.html"># R code:
 paste("hi", "bye", sep = "-")
@@ -284,7 +291,7 @@ paste("hi", "bye", sep = "-")
 <li>
 <code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">dbplyr::in_schema</a></code>.</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 library(dplyr)
 
 con &lt;- dbConnect(RAthena::athena())
@@ -293,8 +300,8 @@ tbl(con, "iris") %&gt;%
   compute(name = "temp.iris")</a></code></pre>
 <ul>
 <li>
-<code>dbListFields</code> didn’t display partitioned columns. This has now been fixed with the call to AWS Glue being altered to include more metadata allowing for column names and partitions to be returned.</li>
-<li>RStudio connections tab didn’t display any partitioned columns, this has been fixed in the same manner as <code>dbListFields</code>
+<code>dbListFields</code> didnât display partitioned columns. This has now been fixed with the call to AWS Glue being altered to include more metadata allowing for column names and partitions to be returned.</li>
+<li>RStudio connections tab didnât display any partitioned columns, this has been fixed in the same manner as <code>dbListFields</code>
 </li>
 </ul>
 </div>
@@ -346,9 +353,9 @@ user  system elapsed
 </ul>
 </div>
 </div>
-    <div id="rathena-170" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-170" class="anchor"></a>RAthena 1.7.0<small> 2020-01-07 </small>
+    <div id="rathena-1-7-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.0">
+<a href="#rathena-1-7-0" class="anchor"></a>RAthena 1.7.0<small> 2020-01-07 </small>
 </h1>
 <div id="new-feature-3" class="section level2">
 <h2 class="hasAnchor">
@@ -358,7 +365,7 @@ user  system elapsed
 <li>Added information message of amount of data scanned by AWS Athena</li>
 <li>Added method to change backend file parser so user can change file parser from <code>data.table</code> to <code>vroom</code>. From now on it is possible to change file parser using <code>RAthena_options</code> for example:</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(RAthena)
+<pre><code><a href="https://rdrr.io/pkg/RAthena/man">library(RAthena)
 
 RAthena_options("vroom")
 </a></code></pre>
@@ -380,15 +387,15 @@ RAthena_options("vroom")
 <p>Updated R documentation to <code>roxygen2</code> 7.0.2</p>
 </div>
 </div>
-    <div id="rathena-160" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-160" class="anchor"></a>RAthena 1.6.0<small> 2019-12-19 </small>
+    <div id="rathena-1-6-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.0">
+<a href="#rathena-1-6-0" class="anchor"></a>RAthena 1.6.0<small> 2019-12-19 </small>
 </h1>
 <div id="major-change" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-change" class="anchor"></a>Major Change</h2>
 <ul>
-<li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will receive a warning message:</li>
+<li>Default delimited file uploaded to AWS Athena changed from âcsvâ to âtsvâ this is due to separating value â,â in character variables. By using âtsvâ file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesnât match Athena DDL file type then user will receive a warning message:</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/warning.html">warning('Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "', File.Type,'".', call. = FALSE)</a></code></pre>
 </div>
@@ -431,9 +438,9 @@ RAthena_options("vroom")
 </ul>
 </div>
 </div>
-    <div id="rathena-150" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-150" class="anchor"></a>RAthena 1.5.0<small> 2019-12-06 </small>
+    <div id="rathena-1-5-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.5.0">
+<a href="#rathena-1-5-0" class="anchor"></a>RAthena 1.5.0<small> 2019-12-06 </small>
 </h1>
 <div id="major-change-1" class="section level2">
 <h2 class="hasAnchor">
@@ -443,7 +450,7 @@ RAthena_options("vroom")
 <code>dbWriteTable</code> now will split <code>gzip</code> compressed files to improve AWS Athena performance. By default <code>gzip</code> compressed files will be split into 20.</li>
 </ul>
 <p>Performance results</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 
 X &lt;- 1e8
 
@@ -464,7 +471,7 @@ dbWriteTable(con, "test_split3", df, compress = T, max.batch = 0.1 * nrow(df), o
 <li>test_split2: (Run time: 3.73 seconds, Data scanned: 1.16 GB)</li>
 <li>test_split3: (Run time: 5.47 seconds, Data scanned: 1.16 GB)</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 
 X &lt;- 1e8
 
@@ -512,9 +519,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 </ul>
 </div>
 </div>
-    <div id="rathena-141" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-141" class="anchor"></a>RAthena 1.4.1<small> 2019-11-28 </small>
+    <div id="rathena-1-4-1" class="section level1">
+<h1 class="page-header" data-toc-text="1.4.1">
+<a href="#rathena-1-4-1" class="anchor"></a>RAthena 1.4.1<small> 2019-11-28 </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
@@ -531,9 +538,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 </ul>
 </div>
 </div>
-    <div id="rathena-140" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-140" class="anchor"></a>RAthena 1.4.0<small> 2019-11-14 </small>
+    <div id="rathena-1-4-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.4.0">
+<a href="#rathena-1-4-0" class="anchor"></a>RAthena 1.4.0<small> 2019-11-14 </small>
 </h1>
 <div id="minor-change-2" class="section level2">
 <h2 class="hasAnchor">
@@ -549,9 +556,9 @@ dbWriteTable(con, "test_split1", df, compress = T, overwrite = T) # default will
 <h2 class="hasAnchor">
 <a href="#backend-change" class="anchor"></a>Backend Change</h2>
 <ul>
-<li>helper function <code>upload_data</code> has been rebuilt and removed the old “horrible” if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
+<li>helper function <code>upload_data</code> has been rebuilt and removed the old âhorribleâ if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
 </ul>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(DBI)
+<pre><code><a href="https://dbi.r-dbi.org/reference">library(DBI)
 
 con &lt;- dbConnect(RAthena::athena())
 
@@ -561,7 +568,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#new-feature-5" class="anchor"></a>New Feature</h2>
 <ul>
-<li>GZIP compression is now supported for “csv” and “tsv” file format in <code>dbWriteTable</code>
+<li>GZIP compression is now supported for âcsvâ and âtsvâ file format in <code>dbWriteTable</code>
 </li>
 </ul>
 </div>
@@ -569,7 +576,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#bug-fix-5" class="anchor"></a>Bug Fix</h2>
 <ul>
-<li>Info message wasn’t being return when colnames needed changing for Athena DDL</li>
+<li>Info message wasnât being return when colnames needed changing for Athena DDL</li>
 </ul>
 </div>
 <div id="unit-tests-4" class="section level2">
@@ -581,9 +588,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-130" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-130" class="anchor"></a>RAthena 1.3.0<small> 2019-10-23 </small>
+    <div id="rathena-1-3-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.0">
+<a href="#rathena-1-3-0" class="anchor"></a>RAthena 1.3.0<small> 2019-10-23 </small>
 </h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -622,9 +629,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-120" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-120" class="anchor"></a>RAthena 1.2.0<small> 2019-10-14 </small>
+    <div id="rathena-1-2-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.0">
+<a href="#rathena-1-2-0" class="anchor"></a>RAthena 1.2.0<small> 2019-10-14 </small>
 </h1>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -642,7 +649,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <li>
 <code>dbFetch</code> replaced S3 search for query key with output location from Athena</li>
 <li>
-<code>dbClearResult</code> changed error, to return python error as warning to warn user doesn’t have permission to delete S3 resource</li>
+<code>dbClearResult</code> changed error, to return python error as warning to warn user doesnât have permission to delete S3 resource</li>
 <li>
 <code>dbClearResult</code> replaced S3 search for query key with out location from Athena</li>
 <li>
@@ -668,7 +675,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <li>
 <code>get_work_group</code>: Returns information about the workgroup with the specified name.</li>
 <li>
-<code>update_work_group</code>: Updates the workgroup with the specified name. The workgroup’s name cannot be changed.</li>
+<code>update_work_group</code>: Updates the workgroup with the specified name. The workgroupâs name cannot be changed.</li>
 </ul>
 </li>
 <li>Added lower level api function <code>get_session_token</code> to create temporary session credentials</li>
@@ -712,9 +719,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-110" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-110" class="anchor"></a>RAthena 1.1.0<small> Unreleased </small>
+    <div id="rathena-1-1-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#rathena-1-1-0" class="anchor"></a>RAthena 1.1.0<small> Unreleased </small>
 </h1>
 <div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
@@ -744,9 +751,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-103" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-103" class="anchor"></a>RAthena 1.0.3<small> Unreleased </small>
+    <div id="rathena-1-0-3" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.3">
+<a href="#rathena-1-0-3" class="anchor"></a>RAthena 1.0.3<small> Unreleased </small>
 </h1>
 <div id="new-feature-6" class="section level2">
 <h2 class="hasAnchor">
@@ -770,9 +777,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-102" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-102" class="anchor"></a>RAthena 1.0.2<small> Unreleased </small>
+    <div id="rathena-1-0-2" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.2">
+<a href="#rathena-1-0-2" class="anchor"></a>RAthena 1.0.2<small> Unreleased </small>
 </h1>
 <div id="cran-requirement-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -793,7 +800,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
 <ul>
-<li>fixed bug with field names containing “.”, replace with "_" for Athena tables.</li>
+<li>fixed bug with field names containing â.â, replace with "_" for Athena tables.</li>
 </ul>
 </div>
 <div id="unit-tests-9" class="section level2">
@@ -808,9 +815,9 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </ul>
 </div>
 </div>
-    <div id="rathena-101" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-101" class="anchor"></a>RAthena 1.0.1<small> Unreleased </small>
+    <div id="rathena-1-0-1" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.1">
+<a href="#rathena-1-0-1" class="anchor"></a>RAthena 1.0.1<small> Unreleased </small>
 </h1>
 <div id="cran-requirement-changes-1" class="section level2">
 <h2 class="hasAnchor">
@@ -819,7 +826,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <li>Fixes to description file due to cran submission feedback
 <ul>
 <li>Added link to AWS Athena</li>
-<li>Added description of aliases “AWS”, and “SDK” to description section</li>
+<li>Added description of aliases âAWSâ, and âSDKâ to description section</li>
 <li>Removed generated MIT license from github</li>
 <li>Formatted LICENSE file</li>
 </ul>
@@ -830,13 +837,13 @@ dbWrite(con, "iris", iris)</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#minor-change-4" class="anchor"></a>Minor Change</h2>
 <ul>
-<li>changed helper function <code>waiter</code> to <code>poll</code>, to align with python’s polling</li>
+<li>changed helper function <code>waiter</code> to <code>poll</code>, to align with pythonâs polling</li>
 </ul>
 </div>
 </div>
-    <div id="rathena-100" class="section level1">
-<h1 class="page-header">
-<a href="#rathena-100" class="anchor"></a>RAthena 1.0.0<small> Unreleased </small>
+    <div id="rathena-1-0-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.0">
+<a href="#rathena-1-0-0" class="anchor"></a>RAthena 1.0.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>Initial RAthena release</li>
@@ -844,27 +851,10 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rathena-1809000">1.8.0.9000</a></li>
-        <li><a href="#rathena-180">1.8.0</a></li>
-        <li><a href="#rathena-171">1.7.1</a></li>
-        <li><a href="#rathena-170">1.7.0</a></li>
-        <li><a href="#rathena-160">1.6.0</a></li>
-        <li><a href="#rathena-150">1.5.0</a></li>
-        <li><a href="#rathena-141">1.4.1</a></li>
-        <li><a href="#rathena-140">1.4.0</a></li>
-        <li><a href="#rathena-130">1.3.0</a></li>
-        <li><a href="#rathena-120">1.2.0</a></li>
-        <li><a href="#rathena-110">1.1.0</a></li>
-        <li><a href="#rathena-103">1.0.3</a></li>
-        <li><a href="#rathena-102">1.0.2</a></li>
-        <li><a href="#rathena-101">1.0.1</a></li>
-        <li><a href="#rathena-100">1.0.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -876,7 +866,7 @@ dbWrite(con, "iris", iris)</a></code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
