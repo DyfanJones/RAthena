@@ -225,6 +225,12 @@ retry_error <-
 # If api call fails retry call
 retry_api_call <- function(expr){
   
+  # if number of retries is equal to 0 then retry is skipped
+  if (athena_option_env$retry == 0) {
+    resp <- tryCatch(eval.parent(substitute(expr)), 
+                     error = function(e) retry_error(e))
+  }
+  
   for (i in seq_len(athena_option_env$retry)) {
     resp <- tryCatch(eval.parent(substitute(expr)), 
                      error = function(e) retry_error(e))

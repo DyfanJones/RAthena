@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AWS S3 Backend • RAthena</title>
+<title>How to Retry? • RAthena</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="AWS S3 Backend">
+<script src="../pkgdown.js"></script><meta property="og:title" content="How to Retry?">
 <meta property="og:description" content="RAthena">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -94,43 +94,60 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>AWS S3 Backend</h1>
+      <h1 data-toc-skip>How to Retry?</h1>
                         <h4 class="author">Dyfan Jones</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DyfanJones/RAthena/blob/master/vignettes/aws_s3_backend.Rmd"><code>vignettes/aws_s3_backend.Rmd</code></a></small>
-      <div class="hidden name"><code>aws_s3_backend.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/DyfanJones/RAthena/blob/master/vignettes/how_to_retry.Rmd"><code>vignettes/how_to_retry.Rmd</code></a></small>
+      <div class="hidden name"><code>how_to_retry.Rmd</code></div>
 
     </div>
 
     
     
-<p><code>AWS Athena</code> allows SQL querying to be performed on <a href="https://aws.amazon.com/s3/">AWS S3 buckets</a>. To gain access to this, the correct permission level needs to be enabled.</p>
-<div id="aws-s3-structures" class="section level1">
+<p>With most applications that connect to an API, unnecessary exceptions can be returned back to the caller in the case of transient network or service issues. To avoid this <code>RAthena</code> has implemented a retry method with exponential backoff. This technique increases the reliability of the application with connecting to <code>AWS Athena</code>.</p>
+<div id="how-to-handle-rathenas-retry" class="section level1">
 <h1 class="hasAnchor">
-<a href="#aws-s3-structures" class="anchor"></a>AWS S3 Structures</h1>
-<p><code>RAthena</code> uploads the data into <code>AWS S3</code>, then registers the table in <code>AWS Athena</code>. When appending data to an existing <code>AWS Athena</code> table, <code>RAthena</code> adds the data in the specified <code>AWS S3</code> partition and then repairs the <code>AWS Athena</code> table.</p>
-<p><code>RAthena</code> uses the parameter: <code>s3.location</code> from the function <code>dbWriteTable</code> for the <code>AWS S3</code> location. If <code>s3.location</code> isn’t specified then the location is taken from the initial connection (<code>dbConnect</code>).</p>
-<p><code>RAthena</code> aligns the <code>s3.location</code> to the following <code>AWS S3</code> structure: <code>{s3.location}/{schema}/{table_name}/{partition}/{file}</code> (remember that <code>s3.location</code> has to be in <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">s3 uri format</a>: “s3://bucket-name/key-name”). This is to allow tables with same name to be uploaded to different schemas.</p>
-<p><img src="athena_s3_example.png" width="100%"></p>
-<p><strong>NOTE:</strong> <code>RAthena</code> won’t duplicate the table name or schema if they have been provided in <code>s3.location</code>. For example:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu">dbWriteTable</span>(<span class="no">con</span>, <span class="st">"myschema.table"</span>, <span class="no">table</span>,
-             <span class="kw">s3.location</span> <span class="kw">=</span> <span class="st">"s3://mybucket/myschema/table"</span>,
-             <span class="kw">partition</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"year"</span> <span class="kw">=</span> <span class="st">"2020"</span>))
-<span class="co"># AWS S3 location</span>
-<span class="st">"s3://mybucket/myschema/table/year=2020/table.tsv"</span></pre></body></html></div>
+<a href="#how-to-handle-rathenas-retry" class="anchor"></a>How to handle <code>RAthena</code>’s retry?</h1>
+<p>By default <code>RAthena</code> performs a retry noisily, this means it will report the exception it has encounted and let the user know how long <code>RAthena</code> will wait until it retries again. This is reported in the following format:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r">{expection message} + "Request failed. Retrying in " + {wait time}  + " seconds..."</pre></body></html></div>
+<p>This is to keep the user informed in what <code>RAthena</code> is doing behind the scenes.</p>
+<div id="configure" class="section level2">
+<h2 class="hasAnchor">
+<a href="#configure" class="anchor"></a>Configure</h2>
+<p>By default <code>RAthena</code> retries 5 times and does it noisily. To configure this, <code>RAthena_options</code> has been give 2 extra parameters <code>retry</code> and <code>retry_quiet</code>. <code>retry</code> is the number of retries <code>RAthena</code> will perform. <code>retry_quiet</code> tells <code>RAthena</code> to retry quietly or not.</p>
+<p>We can change the default retry settings so that <code>RAthena</code> will retry 10 times and do it quietly:</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="kw">retry</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">retry_quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<p>If you wish to create your own custom retry function just set the <code>retry</code> to 0:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
+
+<span class="co"># connection to AWS Athena</span>
+<span class="no">con</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="fu"><a href="../reference/athena.html">athena</a></span>())
+
+<span class="co"># Stop RAthena retrying</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="kw">retry</span> <span class="kw">=</span> <span class="fl">0</span>)
+
+<span class="co"># build your own custom retry function</span>
+<span class="no">custom_retry</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>){
+  <span class="co"># your custom retry method</span>
+}
+
+<span class="co"># apply your own retry function</span>
+<span class="fu">custom_retry</span>(<span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(<span class="no">con</span>, <span class="st">"select ..."</span>))</pre></body></html></div>
 </div>
-<div id="file-types" class="section level1">
-<h1 class="hasAnchor">
-<a href="#file-types" class="anchor"></a>File Types</h1>
-<p>Currently <code>RAthena</code> supports the following file types <code>[".tsv", ".csv", ".parquet", "json"]</code>. For <code>parquet</code> files, the package <a href="https://arrow.apache.org/docs/r/">arrow</a> is used. This package will have to be installed, before data can be sent to <code>AWS S3</code> in <code>parquet</code> format. For <code>json</code> files, the package <a href="https://github.com/jeroen/jsonlite">jsonlite</a> is required before before data can be sent to <code>AWS S3</code>.</p>
-<p><code>RAthena</code> also supports compression when uploading data to <code>AWS S3</code>. For delimited files (<code>".tsv"</code> and <code>".csv"</code>), <a href="https://en.wikipedia.org/wiki/Gzip">gunzip compression</a> is used. When using gunzip compression, <code>RAthena</code> will split the zipped file into a maximum of 20 equal parts. This is to speed up how <code>AWS Athena</code> queries gunzip compressed files (<a href="https://github.com/DyfanJones/RAthena/issues/36">Default Compression Method for Flat Files</a>). <a href="https://en.wikipedia.org/wiki/Snappy_(compression)">Snappy</a> compression is used for compressing <code>parquet</code> files. Currently <code>json</code> format cannot be compressed.</p>
 </div>
-<div id="useful-links" class="section level1">
+<div id="requests" class="section level1">
 <h1 class="hasAnchor">
-<a href="#useful-links" class="anchor"></a>Useful links</h1>
+<a href="#requests" class="anchor"></a>Requests</h1>
+<p>If you wish to increase the retry functionality of <code>RAthena</code> for example the use of different backoff algorithms, please raise a ticket at <a href="https://github.com/DyfanJones/RAthena/issues">issues</a> or raise a pull request.</p>
+</div>
+<div id="reading-material" class="section level1">
+<h1 class="hasAnchor">
+<a href="#reading-material" class="anchor"></a>Reading material</h1>
 <ul>
-<li><a href="https://aws.amazon.com/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/">AWS Athena performance tips</a></li>
+<li><a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">Exponential Backoff and Jitter</a></li>
+<li><a href="https://aws.amazon.com/blogs/messaging-and-targeting/how-to-handle-a-throttling-maximum-sending-rate-exceeded-error/">How to handle a “Throttling – Maximum sending rate exceeded” error</a></li>
 </ul>
 </div>
   </div>

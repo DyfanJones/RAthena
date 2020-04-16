@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Changing Backend File Parser • RAthena</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Changing Backend File Parser">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="RAthena">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -65,6 +65,9 @@
     <li>
       <a href="../articles/getting_started.html">Getting Started</a>
     </li>
+    <li>
+      <a href="../articles/how_to_retry.html">How to Retry?</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -73,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/DyfanJones/RAthena">
+  <a href="https://github.com/DyfanJones/RAthena/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -91,7 +94,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Changing Backend File Parser</h1>
+      <h1 data-toc-skip>Changing Backend File Parser</h1>
                         <h4 class="author">Dyfan Jones</h4>
             
       
@@ -106,12 +109,12 @@
 <h1 class="hasAnchor">
 <a href="#intro" class="anchor"></a>Intro</h1>
 <p><code>RAthena</code> is dependent on <code>data.table</code> to read data into <code>R</code>. This is down to the amazing speed <code>data.table</code> offers when reading files into <code>R</code>. However a new package, with equally impressive read speeds, has come onto the scene called <a href="https://github.com/r-lib/vroom"><code>vroom</code></a>. As <code>vroom</code> has been designed to only read data into <code>R</code>, similarly to <code>readr</code>, <code>data.table</code> is still used for all of the heavy lifting. However if a user wishes to use <code>vroom</code> as the file parser, <code>RAthena_options</code> function has been created to enable this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">con =<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="../reference/athena.html">athena</a></span>())</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="dt">file_parser =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"data.table"</span>, <span class="st">"vroom"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
+
+<span class="no">con</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="fu"><a href="../reference/athena.html">athena</a></span>())
+
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="kw">file_parser</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"data.table"</span>, <span class="st">"vroom"</span>))</pre></body></html></div>
 <p>By setting the <code>file_parser</code> to <code>"vroom"</code> then the backend will change to allow <code>vroom</code>’s file parser to be used instead of <code>data.table</code>.</p>
 </div>
 <div id="change-back-to-data-table" class="section level1">
@@ -119,31 +122,31 @@
 <a href="#change-back-to-data-table" class="anchor"></a>Change back to <code>data.table</code>
 </h1>
 <p>To go back to using <code>data.table</code> as the file parser it is a simple as calling the <code>RAthena_options</code> function:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># return to using data.table as file parser</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="../reference/RAthena_options.html">RAthena_options</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># return to using data.table as file parser</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>()</pre></body></html></div>
 </div>
 <div id="swapping-on-the-fly" class="section level1">
 <h1 class="hasAnchor">
 <a href="#swapping-on-the-fly" class="anchor"></a>Swapping on the fly</h1>
 <p>This makes it very felixble to swap between each file parser even between each query execution:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RAthena)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">con =<span class="st"> </span><span class="kw"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw"><a href="../reference/athena.html">athena</a></span>())</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co"># upload data</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"iris"</span>, iris)</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co"># use default data.table file parser</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">df1 =<span class="st"> </span><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris"</span>)</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co"># use vroom as file parser</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="kw"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="st">"vroom"</span>)</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">df2 =<span class="st"> </span><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris"</span>)</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co"># return back to data.table file parser</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="kw"><a href="../reference/RAthena_options.html">RAthena_options</a></span>()</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">df3 =<span class="st"> </span><span class="kw"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(con, <span class="st">"select * from iris"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
+
+<span class="no">con</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="fu"><a href="../reference/athena.html">athena</a></span>())
+
+<span class="co"># upload data</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(<span class="no">con</span>, <span class="st">"iris"</span>, <span class="no">iris</span>)
+
+<span class="co"># use default data.table file parser</span>
+<span class="no">df1</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(<span class="no">con</span>, <span class="st">"select * from iris"</span>)
+
+<span class="co"># use vroom as file parser</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="st">"vroom"</span>)
+<span class="no">df2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(<span class="no">con</span>, <span class="st">"select * from iris"</span>)
+
+<span class="co"># return back to data.table file parser</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>()
+<span class="no">df3</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span>(<span class="no">con</span>, <span class="st">"select * from iris"</span>)</pre></body></html></div>
 </div>
 <div id="why-should-you-consider-vroom" class="section level1">
 <h1 class="hasAnchor">
@@ -194,19 +197,11 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#intro">Intro</a></li>
-      <li><a href="#change-back-to-data-table">Change back to <code>data.table</code></a></li>
-      <li><a href="#swapping-on-the-fly">Swapping on the fly</a></li>
-      <li><a href="#why-should-you-consider-vroom">Why should you consider <code>vroom</code>?</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -217,7 +212,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
