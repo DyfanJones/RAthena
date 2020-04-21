@@ -1,6 +1,8 @@
 context("Testing retry function")
 
 test_that("Check if retry_api is working as intended",{
+  skip_if_no_boto()
+  skip_if_no_env()
   
   con <- dbConnect(athena())
   

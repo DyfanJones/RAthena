@@ -1,15 +1,22 @@
 ## Release Summary
-This is a release being several new features and bug fixes highlighted by the community
+This release brings increase reliability when working with `AWS Athena` with a few bug fixes.
 
 **New Features**
-* Query caching: `RAthena_options` now has a new parameter `cache_size` which allows to cache query meta data for improved performance over repeat queries
-* `dbRemoveTable` now doesn't query `AWS Athena` to remove tables, instead it goes directly to `AWS Glue` and removes the table from `AWS Glue`'s catalogue. This improves performance when deleting tables.
-* `dbWriteTable` now supports uploading `data.frames` in json lines format
+* When working with `AWS Athena`, `AWS` APIs can become overwhelmed and return unnecassary exceptions. To over come this `RAthena` has now been given a retry capability with exponential backoff.
+* Previously `dbFetch` was restricted to only return the entire data.frame or a chunk limited to 1000 from `AWS Athena`. This was due to the restriction in the call to `AWS Athena`. Now `RAthena` uses tokens from `AWS` to iterate over. This allows `dbFetch` to back larger chunks and work similar to other DBI backend packages:
+
+```
+library(DBI)
+con <- dbConnect(RAthena::athena())
+res <- dbExecute(con, "select * from some_big_table limit 10000")
+dbFetch(res, 5000)
+```
+
+* When appending to existing tables `dbWriteTable` now opts to use `ALTER TABLE` instead of `MSCK REPAIR TABLE` this gives an performance increase when appending onto highly partitioned tables.
+* `dbWriteTable` is not compatible with `SerDes` and Data Formats
 
 **Bug Fixes**
-* `dbWriteTable` appending to existing table compress file type was incorrectly return.
-* `install_boto` now installs `numpy` in environment to help `reticulate` bind to the python environment
-* Rstudio Connection tab would fail if `AWS Glue` table information was uploaded incorrectly.
+* 
 
 ## Examples Note:
 * All R examples with `\dontrun` & `\donttest` have been given a note warning users that `AWS credentials` are required to run

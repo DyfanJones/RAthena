@@ -144,8 +144,8 @@ setMethod(
            region_name = NULL,
            botocore_session = NULL, ...) {
     if(!py_module_available("boto3")){
-      stop("Boto3 is not detected please install boto3 using either: `pip install boto3` in terminal or `install_boto()`.
-            Alternatively `reticulate::use_python` or `reticulate::use_condaenv` will have to be used if boto3 is in another environment.",
+      stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
+           "\nIf this doesn't work please set the python you are using with `reticulate::use_python()` or `reticulate::use_condaenv()`",
            call. = FALSE)}
     
     # assert checks on parameters
