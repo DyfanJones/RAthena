@@ -95,9 +95,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Convert and Save Cost.html">Convert and Save Cost</a>
-    </li>
-    <li>
       <a href="../articles/aws_athena_query_caching.html">AWS Athena Query Caching</a>
     </li>
     <li>
@@ -105,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/changing_backend_file_parser.html">Changing Backend File Parser</a>
+    </li>
+    <li>
+      <a href="../articles/convert_and_save_cost.html">Convert and Save Cost</a>
     </li>
     <li>
       <a href="../articles/getting_started.html">Getting Started</a>
@@ -183,19 +183,19 @@
 
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
 <span class='fu'>dbStatistics</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $EngineExecutionTimeInMillis
-#&gt; [1] 240
+#&gt; [1] 289
 #&gt; 
 #&gt; $DataScannedInBytes
 #&gt; [1] 0
 #&gt; 
 #&gt; $TotalExecutionTimeInMillis
-#&gt; [1] 315
+#&gt; [1] 363
 #&gt; 
 #&gt; $QueryQueueTimeInMillis
 #&gt; [1] 47
 #&gt; 
 #&gt; $ServiceProcessingTimeInMillis
-#&gt; [1] 28
+#&gt; [1] 27
 #&gt; </div><div class='input'>
 <span class='co'># Clean up</span>
 <span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
