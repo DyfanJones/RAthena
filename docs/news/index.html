@@ -94,6 +94,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/Convert and Save Cost.html">Convert and Save Cost</a>
+    </li>
+    <li>
       <a href="../articles/aws_athena_query_caching.html">AWS Athena Query Caching</a>
     </li>
     <li>
@@ -162,6 +165,8 @@
 <code>dbWriteTable</code> now allows json to be appended to json ddls created with the Openx-JsonSerDe library.</li>
 <li>
 <code>dbConvertTable</code> brings <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> functionality to base package, allowing <code>RAthena</code> to use the power of AWS Athena to convert tables and queries to more efficient file formats in AWS S3 (<a href='https://github.com/DyfanJones/RAthena/issues/37'>#37</a>).</li>
+<li>Extended <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> to give same functionality of <code>dbConvertTable</code>
+</li>
 </ul>
 </div>
 <div id="bug" class="section level2">

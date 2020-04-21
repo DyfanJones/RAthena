@@ -14,19 +14,19 @@ vignette: >
 >
 >Compressing your data allows Athena to scan less data. Converting your data to columnar formats allows Athena to selectively read only required columns to process the data. Athena supports Apache ORC and Apache Parquet. Partitioning your data also allows Athena to restrict the amount of data scanned. This leads to cost savings and improved performance. You can see the amount of data scanned per query on the Athena console. [link](https://aws.amazon.com/athena/pricing/)
 
-So it becomes more important to compress your data and convert if to the recommended file formats `parquet` or `orc`.
+So it becomes more important to compress your data and convert it to the recommended file formats [Apache Parquet](https://parquet.apache.org/) or [Apache ORC](https://orc.apache.org/).
 
 **DON'T WORRY!!! `RAthena` is here to help!**
 
 # `RAthena`'s help
 
-For alot of users, [apache parquet](https://parquet.apache.org/) or [apache orc](https://orc.apache.org/) are file formats that aren't well known and as a result alot systems don't have the software to create these formats. `RAthena` offers some assists by firstly enabling `apache parquet` format to be uploaded through [`dbWriteTable`](https://dyfanjones.github.io/RAthena/reference/AthenaWriteTables.html), using the R package [`arrow`](https://arrow.apache.org/docs/r/) to create the parquet format.
+For a lot of users, [Apache Parquet](https://parquet.apache.org/) or [Apache ORC](https://orc.apache.org/) are file formats that aren't well known and as a result alto systems don't have the software to create these formats. `RAthena` offers some assists by firstly enabling `apache parquet` format to be uploaded through [`dbWriteTable`](https://dyfanjones.github.io/RAthena/reference/AthenaWriteTables.html), using the R package [`arrow`](https://arrow.apache.org/docs/r/) to create the parquet format.
 
-If uploading apache parquet is not possible or if the file format apache orc is preferred then `RAthena` offers another solution. `RAthena` utilises the power of AWS Athena to convert file formats for you. What this allows you to do is:
+If uploading Apache Parquet is not possible or if the file format Apache ORC is preferred then `RAthena` offers another solution. `RAthena` can utilise the power of AWS Athena to convert file formats for you. What this allows you to do is:
 
 * Upload Data in an easier file format for example delimited format
-* Convert Data into Parquet or Orc
-* Insert into final table with ETL processes
+* Convert Data into Parquet or ORC using AWS Athena to save cost
+* Finally insert into final table with ETL processes
 
 ## Upload Data in delimited format
 
@@ -50,9 +50,9 @@ dbWriteTable(con, "temp.iris_delim", iris2)
 
 However delimited file format isn't the most cost effective when it comes to using AWS Athena. To overcome this we can convert this by using AWS Athena. 
 
-## Convert Data into Parquet or Orc
+## Convert Data into Parquet or ORC
 
-Converting table to a non-partitioned parquet or orc format.
+Converting table to a non-partitioned Parquet or ORC format.
 
 ```r
 # convert to parquet
@@ -68,7 +68,7 @@ dbConvertTable(con,
                file.type = "orc")
 ```
 
-**NOTE:** By default `dbConvertTable` compresses parquet/ orc format using `snappy` compression.
+**NOTE:** By default `dbConvertTable` compresses Parquet/ ORC format using `snappy` compression.
 
 `RAthena` goes a step further by allowing tables to be converted with partitions.
 
@@ -109,11 +109,11 @@ res <-
                   from temp.iris_delim")
 dbClearResult(res)
 ```
-What this all means is that you can create ETL processes by uploading data in basic file format (delimited), and then converting / inserting into them. 
+What this all means is that you can create ETL processes by uploading data in basic file format (delimited), and then converting / inserting into the prefer file format. 
 
 ## `dplyr` method
 
-The good news doesn't stop there, `RAthena` integrates into `dplyr` to allow converting to be done through `dplyr`.
+The good news doesn't stop there, `RAthena` integrates with `dplyr` to allow converting to be done through `dplyr`.
 
 ```r
 library(dplyr)
