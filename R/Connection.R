@@ -830,7 +830,7 @@ setMethod(
 #' @param obj Athena table or \code{SQL} DML query to be converted. For \code{SQL}, the query need to be wrapped with \code{DBI::SQL()} and 
 #'            follow AWS Athena DML format \href{https://docs.aws.amazon.com/athena/latest/ug/select.html}{link}
 #' @param name Name of destination table
-#' @param parition Partition Athena table
+#' @param partition Partition Athena table
 #' @param s3.location location to store output file, must be in s3 uri fromat for example ("s3://mybucket/data/").
 #' @param file.type File type for \code{name}, currently support ["NULL","csv", "tsv", "parquet", "json", "orc"]. 
 #'                  \code{"NULL"} will let Athena set the file type for you.

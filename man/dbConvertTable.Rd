@@ -30,6 +30,8 @@ follow AWS Athena DML format \href{https://docs.aws.amazon.com/athena/latest/ug/
 
 \item{...}{Extra parameters, currently not used}
 
+\item{partition}{Partition Athena table}
+
 \item{s3.location}{location to store output file, must be in s3 uri fromat for example ("s3://mybucket/data/").}
 
 \item{file.type}{File type for \code{name}, currently support ["NULL","csv", "tsv", "parquet", "json", "orc"]. 
@@ -38,8 +40,6 @@ follow AWS Athena DML format \href{https://docs.aws.amazon.com/athena/latest/ug/
 \item{compress}{Compress \code{name}, currently can only compress ["parquet", "orc"] (\href{https://docs.aws.amazon.com/athena/latest/ug/create-table-as.html}{AWS Athena CTAS})}
 
 \item{data}{If \code{name} should be created with data or not.}
-
-\item{parition}{Partition Athena table}
 }
 \value{
 \code{dbConvertTable()} returns \code{TRUE} but invisible.
