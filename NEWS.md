@@ -1,4 +1,4 @@
-# RAthena 1.8.0.9000
+# RAthena 1.9.0
 ## New Feature
 * functions that collect or push to AWS S3 now have a retry capability. Meaning if API call fails then the call is retried ([noctua: # 79](https://github.com/DyfanJones/noctua/issues/79))
 * `RAthena_options` contains 2 new parameters to control how `RAthena` handles retries.
@@ -10,10 +10,18 @@ con <- dbConnect(RAthena::athena())
 res <- dbExecute(con, "select * from some_big_table limit 10000")
 dbFetch(res, 5000)
 ```
+
 * When creating/appending partitions to a table, `dbWriteTable` opts to use `alter table` instead of standard `msck repair table`. This is to improve performance when appending to tables with high number of existing partitions.
 * `dbWriteTable` now allows json to be appended to json ddls created with the Openx-JsonSerDe library.
 * `dbConvertTable` brings `dplyr::compute` functionality to base package, allowing `RAthena` to use the power of AWS Athena to convert tables and queries to more efficient file formats in AWS S3 (#37).
 * Extended `dplyr::compute` to give same functionality of `dbConvertTable`
+* The error message for python's `boto3` not being detected has been updated. This is due to several users not sure how to get `RAthena` setup.
+
+```
+stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
+     "\nIf this doesn't work please set the python you are using with `reticulate::use_python()` or `reticulate::use_condaenv()`",
+     call. = FALSE)
+```
 
 ## Bug
 * `dbWriteTable` would throw `throttling error` every now and again, `retry_api_call` as been built to handle the parsing of data between R and AWS S3.
@@ -92,7 +100,7 @@ dbplyr::translate_sql("2019-01-01", con = con)
 dbplyr::translate_sql("2019-01-01", con = con)
 # DATE '2019-01-01'
 ```
-* R functions `paste`/`paste0` would use default `dplyr:sql-translate-env` (`concat_ws`). `paste0` now uses Presto's `concat` function and `paste` now uses pipes to get extra flexiblity for custom separating values.
+* R functions `paste`/`paste0` would use default `dplyr:sql-translate-env` (`concat_ws`). `paste0` now uses Presto's `concat` function and `paste` now uses pipes to get extra  flexibility for custom separating values.
 
 ```r
 # R code:
@@ -164,7 +172,7 @@ RAthena_options("vroom")
 * new function `dbGetTables` that returns Athena hierarchy as a data.frame
 
 ## Unit tests
-* Added datatransfer unit test for backend file parser `vroom`
+* Added data transfer unit test for backend file parser `vroom`
 
 ## Documentation
 Updated R documentation to `roxygen2` 7.0.2

@@ -13,7 +13,7 @@ athena_option_env$retry_quiet <- FALSE
 # ==========================================================================
 # Setting file parser method
 
-#' A method to configue RAthena backend options.
+#' A method to configure RAthena backend options.
 #'
 #' \code{RAthena_options()} provides a method to change the backend. This includes changing the file parser,
 #' whether \code{RAthena} should cache query ids locally and number of retries on a failed api call.
