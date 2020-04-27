@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -141,9 +141,9 @@
       <small>Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rathena-1809000" class="section level1">
-<h1 class="page-header" data-toc-text="1.8.0.9000">
-<a href="#rathena-1809000" class="anchor"></a>RAthena 1.8.0.9000<small> Unreleased </small>
+    <div id="rathena-190" class="section level1">
+<h1 class="page-header" data-toc-text="1.9.0">
+<a href="#rathena-190" class="anchor"></a>RAthena 1.9.0<small> Unreleased </small>
 </h1>
 <div id="new-feature" class="section level2">
 <h2 class="hasAnchor">
@@ -167,7 +167,11 @@
 <code>dbConvertTable</code> brings <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> functionality to base package, allowing <code>RAthena</code> to use the power of AWS Athena to convert tables and queries to more efficient file formats in AWS S3 (<a href='https://github.com/DyfanJones/RAthena/issues/37'>#37</a>).</li>
 <li>Extended <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> to give same functionality of <code>dbConvertTable</code>
 </li>
+<li>The error message for python’s <code>boto3</code> not being detected has been updated. This is due to several users not sure how to get <code>RAthena</code> setup.</li>
 </ul>
+<pre><code><a href="https://rdrr.io/r/base/stop.html">stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
+     "\nIf this doesn't work please set the python you are using with `reticulate::use_python()` or `reticulate::use_condaenv()`",
+     call. = FALSE)</a></code></pre>
 </div>
 <div id="bug" class="section level2">
 <h2 class="hasAnchor">
@@ -205,7 +209,7 @@
 <li>
 <code>dbRemoveTable</code> now utilise <code>AWS Glue</code> to remove tables from <code>AWS Glue</code> catalogue. This has a performance enhancement:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">con</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
 
@@ -228,7 +232,7 @@
 <li>
 <code>dbWriteTable</code> now supports uploading json lines (<a href="http://jsonlines.org/" class="uri">http://jsonlines.org/</a>) format up to <code>AWS Athena</code> (<a href='https://github.com/DyfanJones/RAthena/issues/88'>#88</a>).</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">con</span> <span class="kw">=</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
 
@@ -284,7 +288,7 @@
 </li>
 <li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for fixing date variables being incorrectly translated by <code>sql_translate_env</code> (<a href='https://github.com/DyfanJones/RAthena/issues/44'>#44</a>)</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="co"># Before</span>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="co"># Before</span>
 <span class="kw pkg">dbplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html">translate_sql</a></span>(<span class="st">"2019-01-01"</span>, <span class="kw">con</span> <span class="kw">=</span> <span class="no">con</span>)
 <span class="co"># '2019-01-01'</span>
 
@@ -292,9 +296,9 @@
 <span class="kw pkg">dbplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html">translate_sql</a></span>(<span class="st">"2019-01-01"</span>, <span class="kw">con</span> <span class="kw">=</span> <span class="no">con</span>)
 <span class="co"># DATE '2019-01-01'</span></pre></div>
 <ul>
-<li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexiblity for custom separating values.</li>
+<li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexibility for custom separating values.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="co"># R code:</span>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="co"># R code:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"hi"</span>, <span class="st">"bye"</span>, <span class="kw">sep</span> <span class="kw">=</span> <span class="st">"-"</span>)
 
 <span class="co"># SQL translation:</span>
@@ -304,7 +308,7 @@
 <li>
 <code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">dbplyr::in_schema</a></code>.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
@@ -337,7 +341,7 @@
 <code>s3.location</code> now follows new syntax <code>s3://bucket/{schema}/{table}/{partition}/{table_file}</code> to align with <code>Pyathena</code> and to allow tables with same name but in different schema to be uploaded to s3 (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>).</li>
 <li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for improving the speed of <code><a href="https://dplyr.tidyverse.org/reference/tbl.html">dplyr::tbl</a></code> when calling Athena when using the ident method (noctua <a href="https://github.com/DyfanJones/noctua/issues/64"># 64</a>):</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
@@ -378,7 +382,7 @@
 <li>Added information message of amount of data scanned by AWS Athena</li>
 <li>Added method to change backend file parser so user can change file parser from <code>data.table</code> to <code>vroom</code>. From now on it is possible to change file parser using <code>RAthena_options</code> for example:</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
 
 <span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span>(<span class="st">"vroom"</span>)</pre></div>
 <ul>
@@ -389,7 +393,7 @@
 <h2 class="hasAnchor">
 <a href="#unit-tests-1" class="anchor"></a>Unit tests</h2>
 <ul>
-<li>Added datatransfer unit test for backend file parser <code>vroom</code>
+<li>Added data transfer unit test for backend file parser <code>vroom</code>
 </li>
 </ul>
 </div>
@@ -409,7 +413,7 @@
 <ul>
 <li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will receive a warning message:</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/warning.html">warning</a></span>(<span class="st">'Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "'</span>, <span class="no">File.Type</span>,<span class="st">'".'</span>, <span class="kw">call.</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
+<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/warning.html">warning</a></span>(<span class="st">'Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "'</span>, <span class="no">File.Type</span>,<span class="st">'".'</span>, <span class="kw">call.</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
 </div>
 <div id="minor-change" class="section level2">
 <h2 class="hasAnchor">
@@ -462,7 +466,7 @@
 <code>dbWriteTable</code> now will split <code>gzip</code> compressed files to improve AWS Athena performance. By default <code>gzip</code> compressed files will be split into 20.</li>
 </ul>
 <p>Performance results</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb11"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">X</span> <span class="kw">&lt;-</span> <span class="fl">1e8</span>
 
@@ -483,7 +487,7 @@
 <li>test_split2: (Run time: 3.73 seconds, Data scanned: 1.16 GB)</li>
 <li>test_split3: (Run time: 5.47 seconds, Data scanned: 1.16 GB)</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb12"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">X</span> <span class="kw">&lt;-</span> <span class="fl">1e8</span>
 
@@ -570,7 +574,7 @@
 <ul>
 <li>helper function <code>upload_data</code> has been rebuilt and removed the old “horrible” if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb13"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
 
@@ -878,7 +882,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
