@@ -378,7 +378,7 @@ setMethod("sqlData", "AthenaConnection",
 #' @return \code{sqlCreateTable} returns data.frame's \code{DDL} in the \code{\link[DBI]{SQL}} format.
 #' @seealso \code{\link[DBI]{sqlCreateTable}}
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation

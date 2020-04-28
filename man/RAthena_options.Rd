@@ -35,4 +35,7 @@ library(RAthena)
 
 # change file parser from default data.table to vroom
 RAthena_options("vroom")
+
+# cache queries locally
+RAthena_options(cache_size = 5)
 }

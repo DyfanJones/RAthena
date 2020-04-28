@@ -15,7 +15,7 @@ dbFetch(res, 5000)
 * `dbWriteTable` now allows json to be appended to json ddls created with the Openx-JsonSerDe library.
 * `dbConvertTable` brings `dplyr::compute` functionality to base package, allowing `RAthena` to use the power of AWS Athena to convert tables and queries to more efficient file formats in AWS S3 (#37).
 * Extended `dplyr::compute` to give same functionality of `dbConvertTable`
-* The error message for python's `boto3` not being detected has been updated. This is due to several users not sure how to get `RAthena` setup.
+* The error message for python's `boto3` not being detected has been updated. This is due to several users not sure how to get `RAthena` set-up.
 
 ```
 stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
@@ -30,6 +30,7 @@ stop("Boto3 is not detected please install boto3 using either: `pip install boto
 ## Documentation
 * `dbWriteTable` added support ddl structures for user who have created ddl's outside of `RAthena`
 * added vignette around how to use `RAthena` retry functionality
+* Moved all examples requiring credentials to `\dontrun` (#108)
 
 # RAthena 1.8.0
 ## New Feature

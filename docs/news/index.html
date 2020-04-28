@@ -167,7 +167,7 @@
 <code>dbConvertTable</code> brings <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> functionality to base package, allowing <code>RAthena</code> to use the power of AWS Athena to convert tables and queries to more efficient file formats in AWS S3 (<a href='https://github.com/DyfanJones/RAthena/issues/37'>#37</a>).</li>
 <li>Extended <code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute</a></code> to give same functionality of <code>dbConvertTable</code>
 </li>
-<li>The error message for python’s <code>boto3</code> not being detected has been updated. This is due to several users not sure how to get <code>RAthena</code> setup.</li>
+<li>The error message for python’s <code>boto3</code> not being detected has been updated. This is due to several users not sure how to get <code>RAthena</code> set-up.</li>
 </ul>
 <pre><code><a href="https://rdrr.io/r/base/stop.html">stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
      "\nIf this doesn't work please set the python you are using with `reticulate::use_python()` or `reticulate::use_condaenv()`",
@@ -192,6 +192,7 @@
 <code>dbWriteTable</code> added support ddl structures for user who have created ddl’s outside of <code>RAthena</code>
 </li>
 <li>added vignette around how to use <code>RAthena</code> retry functionality</li>
+<li>Moved all examples requiring credentials to <code>\dontrun</code> (<a href='https://github.com/DyfanJones/RAthena/issues/108'>#108</a>)</li>
 </ul>
 </div>
 </div>
