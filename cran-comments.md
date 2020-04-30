@@ -24,7 +24,7 @@ dbFetch(res, 5000)
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
 
 ## Test environments
-* local OS X install, R 3.6.1
+* local OS X install, R 4.0.0
 * rhub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
 
 ## R CMD check results (local)
@@ -35,12 +35,12 @@ dbFetch(res, 5000)
 
 Maintainer: 'Dyfan Jones <dyfan.r.jones@gmail.com>'
 
-Number of updates in past 6 months: 8
+Number of updates in past 6 months: 7
 
 0 errors ✓ | 0 warnings ✓ | 1 note x
 
 **Author's Notes**
-* Apologies for the fast re-submission of this package. This release contains several cost benefits for using AWS Athena. Plus a couple of bug fixes. Unit tests now increase coverage +80%.
+* Apologies for the fast re-submission of this package. 
 
 ## unit tests (using testthat) results
 * OK:       121
