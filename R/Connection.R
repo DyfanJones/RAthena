@@ -40,6 +40,10 @@ AthenaConnection <-
                           ...),
       error = function(e) py_error(e))
     
+    # stop connection if region_name is not set in backend or hardcoded
+    if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+                                      "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.", call. = FALSE)
+    
     if(is.null(s3_staging_dir) && !is.null(work_group)){
       Athena <- ptr$client("athena")
       tryCatch(s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
