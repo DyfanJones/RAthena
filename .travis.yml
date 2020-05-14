@@ -4,11 +4,6 @@ cache:
   - packages
   - pip
 
-addons:
-  apt:
-    packages:
-      - python3-pip
-
 before_install:
   - sudo pip install --upgrade pip
   - python3-pip
