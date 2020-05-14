@@ -10,6 +10,7 @@ addons:
       - python3-pip
 
 before_install:
+  - pip install --upgrade pip
   - pip3 install --user boto3
 
 before_deploy: Rscript -e 'install.packages("pkgdown")'
