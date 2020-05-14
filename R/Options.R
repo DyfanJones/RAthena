@@ -13,7 +13,7 @@ athena_option_env$retry_quiet <- FALSE
 # ==========================================================================
 # Setting file parser method
 
-#' A method to configue RAthena backend options.
+#' A method to configure RAthena backend options.
 #'
 #' \code{RAthena_options()} provides a method to change the backend. This includes changing the file parser,
 #' whether \code{RAthena} should cache query ids locally and number of retries on a failed api call.
@@ -28,6 +28,9 @@ athena_option_env$retry_quiet <- FALSE
 #' 
 #' # change file parser from default data.table to vroom
 #' RAthena_options("vroom")
+#' 
+#' # cache queries locally
+#' RAthena_options(cache_size = 5)
 #' @export
 RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size = 0, clear_cache = FALSE, retry = 5, retry_quiet = FALSE) {
   file_parser = match.arg(file_parser)

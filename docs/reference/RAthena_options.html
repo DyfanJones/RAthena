@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A method to configue RAthena backend options. — RAthena_options • RAthena</title>
+<title>A method to configure RAthena backend options. — RAthena_options • RAthena</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="A method to configue RAthena backend options. — RAthena_options" />
+<meta property="og:title" content="A method to configure RAthena backend options. — RAthena_options" />
 <meta property="og:description" content="RAthena_options() provides a method to change the backend. This includes changing the file parser,
 whether RAthena should cache query ids locally and number of retries on a failed api call." />
 
@@ -73,7 +73,7 @@ whether RAthena should cache query ids locally and number of retries on a failed
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@ whether RAthena should cache query ids locally and number of retries on a failed
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A method to configue RAthena backend options.</h1>
+    <h1>A method to configure RAthena backend options.</h1>
     <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Options.R'><code>R/Options.R</code></a></small>
     <div class="hidden name"><code>RAthena_options.Rd</code></div>
     </div>
@@ -190,7 +190,10 @@ whether <code>RAthena</code> should cache query ids locally and number of retrie
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RAthena</span>)
 
 <span class='co'># change file parser from default data.table to vroom</span>
-<span class='fu'>RAthena_options</span>(<span class='st'>"vroom"</span>)</div></pre>
+<span class='fu'>RAthena_options</span>(<span class='st'>"vroom"</span>)
+
+<span class='co'># cache queries locally</span>
+<span class='fu'>RAthena_options</span>(<span class='kw'>cache_size</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -206,7 +209,7 @@ whether <code>RAthena</code> should cache query ids locally and number of retrie
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

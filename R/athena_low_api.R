@@ -55,7 +55,7 @@
 #' }
 #' 
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -216,6 +216,8 @@ update_work_group <- function(conn,
 #' @param profile_name The name of a profile to use. If not given, then the default profile is used.
 #'                     To set profile name, the \href{https://aws.amazon.com/cli/}{AWS Command Line Interface} (AWS CLI) will need to be configured.
 #'                     To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html}{Configuring the AWS CLI}.
+#' @param region_name Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
+#'                    AWS region codes (region code example: Region = EU (Ireland) 	\code{ region_name = "eu-west-1"})
 #' @param serial_number The identification number of the MFA device that is associated with the IAM user who is making the GetSessionToken call.
 #'                      Specify this value if the IAM user has a policy that requires MFA authentication. The value is either the serial number for a hardware device
 #'                      (such as `GAHT12345678`) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).
@@ -249,11 +251,13 @@ update_work_group <- function(conn,
 #' @name session_token
 #' @export
 get_session_token <- function(profile_name = NULL,
+                              region_name = NULL,
                               serial_number = NULL,
                               token_code = NULL,
                               duration_seconds = 3600L,
                               set_env = FALSE){
   stopifnot(is.null(profile_name) || is.character(profile_name),
+            is.null(region_name) || is.character(region_name),
             is.character(serial_number),
             is.null(token_code) || is.character(token_code),
             is.numeric(duration_seconds),
@@ -264,7 +268,14 @@ get_session_token <- function(profile_name = NULL,
   args$TokenCode <- token_code
   args$DurationSeconds <- as.integer(duration_seconds)
   
-  tryCatch({sts <- boto$Session(profile_name = profile_name)$client("sts")
+  tryCatch(ptr <- boto$Session(profile_name = profile_name, region_name = region_name),
+           error = function(e) py_error(e))
+  
+  # stop connection if region_name is not set in backend or hardcoded
+  if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+                                    "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
+  
+  tryCatch({sts <- ptr$client("sts")
             response <- do.call(sts$get_session_token, args)},
            error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
@@ -318,7 +329,14 @@ assume_role <- function(profile_name = NULL,
             is.numeric(duration_seconds),
             is.logical(set_env))
   
-  tryCatch({sts <- boto$Session(profile_name = profile_name, region_name = region_name)$client("sts")
+  tryCatch(ptr <- boto$Session(profile_name = profile_name, region_name = region_name),
+           error = function(e) py_error(e))
+  
+  # stop connection if region_name is not set in backend or hardcoded
+  if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+                                    "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
+  
+  tryCatch({sts <- ptr$client("sts")
   response <- sts$assume_role(RoleArn = role_arn,
                               RoleSessionName = role_session_name,
                               DurationSeconds = as.integer(duration_seconds))},

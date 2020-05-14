@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@
     <p><code>dbStatistics()</code> returns list containing Athena Statistics return from <code>boto3</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Note: </span>
 <span class='co'># - Require AWS Account to run below example.</span>
 <span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
@@ -182,25 +182,12 @@
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dbConnect-AthenaDriver-method.html'>dbConnect</a></span>(<span class='kw pkg'>RAthena</span><span class='kw ns'>::</span><span class='fu'><a href='athena.html'>athena</a></span>())
 
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='fu'>dbStatistics</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $EngineExecutionTimeInMillis
-#&gt; [1] 215
-#&gt; 
-#&gt; $DataScannedInBytes
-#&gt; [1] 0
-#&gt; 
-#&gt; $TotalExecutionTimeInMillis
-#&gt; [1] 294
-#&gt; 
-#&gt; $QueryQueueTimeInMillis
-#&gt; [1] 48
-#&gt; 
-#&gt; $ServiceProcessingTimeInMillis
-#&gt; [1] 31
-#&gt; </div><div class='input'>
+<span class='fu'>dbStatistics</span>(<span class='no'>res</span>)
+
 <span class='co'># Clean up</span>
 <span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
 
-<span class='co'># }</span></div></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -216,7 +203,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

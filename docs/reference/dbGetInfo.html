@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -176,7 +176,7 @@ or a DBIResult</p></td>
     <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbGetInfo.html'>dbGetInfo</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Note: </span>
 <span class='co'># - Require AWS Account to run below example.</span>
 <span class='co'># - Different connection methods can be used please see `RAthena::dbConnect` documnentation</span>
@@ -191,18 +191,14 @@ or a DBIResult</p></td>
 
 <span class='co'># Return metadata from Athena query object</span>
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>con</span>, <span class='st'>"show databases"</span>)
-<span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; $QueryExecutionId
-#&gt; [1] "0200d9be-8469-4858-b5e8-4ce3a241ea8d"
-#&gt; 
-#&gt; $NextToken
-#&gt; NULL
-#&gt; </div><div class='input'>
+<span class='fu'>dbGetInfo</span>(<span class='no'>res</span>)
+
 <span class='co'># Clear result</span>
 <span class='fu'><a href='dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
 
 <span class='co'># disconnect from Athena</span>
 <span class='fu'><a href='dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-<span class='co'># }</span></div></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -218,7 +214,7 @@ or a DBIResult</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

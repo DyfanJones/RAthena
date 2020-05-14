@@ -40,6 +40,10 @@ AthenaConnection <-
                           ...),
       error = function(e) py_error(e))
     
+    # stop connection if region_name is not set in backend or hardcoded
+    if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+                                      "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.", call. = FALSE)
+    
     if(is.null(s3_staging_dir) && !is.null(work_group)){
       Athena <- ptr$client("athena")
       tryCatch(s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
@@ -88,7 +92,7 @@ setMethod(
 #' @return \code{dbDisconnect()} returns \code{TRUE}, invisibly.
 #' @seealso \code{\link[DBI]{dbDisconnect}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -125,7 +129,7 @@ setMethod(
 #' @return \code{dbIsValid()} returns logical scalar, \code{TRUE} if the object (\code{dbObj}) is valid, \code{FALSE} otherwise.
 #' @seealso \code{\link[DBI]{dbIsValid}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -173,7 +177,7 @@ setMethod(
 #' @return Returns \code{AthenaResult} s4 class.
 #' @seealso \code{\link[DBI]{dbSendQuery}}, \code{\link[DBI]{dbSendStatement}}, \code{\link[DBI]{dbExecute}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -263,7 +267,7 @@ setMethod(
 #' vapply(iris, function(x) dbDataType(RAthena::athena(), x),
 #'        FUN.VALUE = character(1), USE.NAMES = TRUE)
 #' 
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -634,7 +638,7 @@ setMethod(
 #' @return \code{dbGetQuery()} returns a dataframe.
 #' @seealso \code{\link[DBI]{dbGetQuery}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -676,7 +680,7 @@ setMethod(
 #' @return a named list
 #' @seealso \code{\link[DBI]{dbGetInfo}}
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
 #' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
@@ -831,7 +835,7 @@ setMethod(
 #'            follow AWS Athena DML format \href{https://docs.aws.amazon.com/athena/latest/ug/select.html}{link}
 #' @param name Name of destination table
 #' @param partition Partition Athena table
-#' @param s3.location location to store output file, must be in s3 uri fromat for example ("s3://mybucket/data/").
+#' @param s3.location location to store output file, must be in s3 uri format for example ("s3://mybucket/data/").
 #' @param file.type File type for \code{name}, currently support ["NULL","csv", "tsv", "parquet", "json", "orc"]. 
 #'                  \code{"NULL"} will let Athena set the file type for you.
 #' @param compress Compress \code{name}, currently can only compress ["parquet", "orc"] (\href{https://docs.aws.amazon.com/athena/latest/ug/create-table-as.html}{AWS Athena CTAS})

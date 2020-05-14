@@ -2,7 +2,7 @@
 % Please edit documentation in R/Options.R
 \name{RAthena_options}
 \alias{RAthena_options}
-\title{A method to configue RAthena backend options.}
+\title{A method to configure RAthena backend options.}
 \usage{
 RAthena_options(
   file_parser = c("data.table", "vroom"),
@@ -35,4 +35,7 @@ library(RAthena)
 
 # change file parser from default data.table to vroom
 RAthena_options("vroom")
+
+# cache queries locally
+RAthena_options(cache_size = 5)
 }

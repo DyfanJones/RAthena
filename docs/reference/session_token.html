@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -149,6 +149,7 @@
 
     <pre class="usage"><span class='fu'>get_session_token</span>(
   <span class='kw'>profile_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>region_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>serial_number</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>token_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>duration_seconds</span> <span class='kw'>=</span> <span class='fl'>3600L</span>,
@@ -163,6 +164,11 @@
       <td><p>The name of a profile to use. If not given, then the default profile is used.
 To set profile name, the <a href='https://aws.amazon.com/cli/'>AWS Command Line Interface</a> (AWS CLI) will need to be configured.
 To configure AWS CLI please refer to: <a href='https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html'>Configuring the AWS CLI</a>.</p></td>
+    </tr>
+    <tr>
+      <th>region_name</th>
+      <td><p>Default region when creating new connections. Please refer to <a href='https://docs.aws.amazon.com/general/latest/gr/rande.html'>link</a> for 
+AWS region codes (region code example: Region = EU (Ireland)     <code> region_name = "eu-west-1"</code>)</p></td>
     </tr>
     <tr>
       <th>serial_number</th>
@@ -224,7 +230,7 @@ from 900 seconds (15 minutes) to 129,600 seconds (36 hours), with 3,600 seconds 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
