@@ -32,10 +32,12 @@ athena_read.athena_vroom <-
   }
 
 
+# Read in .txt files line by line and return them as a data.frame
 athena_read_lines <- function(method, File, athena_types, ...) {
   UseMethod("athena_read_lines")
 }
 
+# Keep data.table formatting
 athena_read_lines.athena_data.table <-
   function(method, File, athena_types, ...){
     Type2 <- Type <- AthenaToRDataType(method, athena_types)
