@@ -1,6 +1,6 @@
 # RAthena 1.9.0.9000
 ## Breaking Change
-* Fixed issue where RAthena would return a `data.frame` regardless of backend file parser. This was down to SQL UTILITY queries and AWS Athena would output a text file that required to be read in line by line. Now `RAthena` will return the correct data format based on file parser set in `RAthena_options` for example: `RAthena_options("vroom")` will return `tibbles`.
+* Fixed issue where `RAthena` would return a `data.frame` for utility `SQL` queries regardless of backend file parser. This is due to `AWS Athena` outputting `SQL UTILITY` queries as a text file that required to be read in line by line. Now `RAthena` will return the correct data format based on file parser set in `RAthena_options` for example: `RAthena_options("vroom")` will return `tibbles`.
 
 # RAthena 1.9.0
 ## New Feature
