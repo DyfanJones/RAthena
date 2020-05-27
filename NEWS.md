@@ -1,3 +1,7 @@
+# RAthena 1.9.0.9000
+## Breaking Change
+* Fixed issue where `RAthena` would return a `data.frame` for utility `SQL` queries regardless of backend file parser. This is due to `AWS Athena` outputting `SQL UTILITY` queries as a text file that required to be read in line by line. Now `RAthena` will return the correct data format based on file parser set in `RAthena_options` for example: `RAthena_options("vroom")` will return `tibbles`.
+
 # RAthena 1.9.0
 ## New Feature
 * functions that collect or push to AWS S3 now have a retry capability. Meaning if API call fails then the call is retried ([noctua: # 79](https://github.com/DyfanJones/noctua/issues/79))
@@ -25,7 +29,7 @@ stop("Boto3 is not detected please install boto3 using either: `pip install boto
 
 * Added `region_name` check before making a connection to AWS Athena (#110)
 
-## Bug
+## Bug Fix
 * `dbWriteTable` would throw `throttling error` every now and again, `retry_api_call` as been built to handle the parsing of data between R and AWS S3.
 * `dbWriteTable` did not clear down all metadata when uploading to `AWS Athena`
 
