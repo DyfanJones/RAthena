@@ -152,6 +152,13 @@
 <li>Fixed issue where <code>RAthena</code> would return a <code>data.frame</code> for utility <code>SQL</code> queries regardless of backend file parser. This is due to <code>AWS Athena</code> outputting <code>SQL UTILITY</code> queries as a text file that required to be read in line by line. Now <code>RAthena</code> will return the correct data format based on file parser set in <code>RAthena_options</code> for example: <code><a href="../reference/RAthena_options.html">RAthena_options("vroom")</a></code> will return <code>tibbles</code>.</li>
 </ul>
 </div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation:</h2>
+<ul>
+<li>Added documentation to highlight behavour <code>dbClearResult</code> when user doesn’t have permission to delete AWS S3 objects ([noctua: # 96]*<a href="https://github.com/DyfanJones/noctua/issues/96" class="uri">https://github.com/DyfanJones/noctua/issues/96</a>))</li>
+</ul>
+</div>
 </div>
     <div id="rathena-1-9-0" class="section level1">
 <h1 class="page-header" data-toc-text="1.9.0">
@@ -199,9 +206,9 @@
 </li>
 </ul>
 </div>
-<div id="documentation" class="section level2">
+<div id="documentation-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<a href="#documentation-1" class="anchor"></a>Documentation</h2>
 <ul>
 <li>
 <code>dbWriteTable</code> added support ddl structures for user who have created ddl’s outside of <code>RAthena</code>
@@ -268,9 +275,9 @@
 <code>Rstudio connection tab</code> comes into an issue when Glue Table isn’t stored correctly (<a href='https://github.com/DyfanJones/RAthena/issues/92'>#92</a>)</li>
 </ul>
 </div>
-<div id="documentation-1" class="section level2">
+<div id="documentation-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-1" class="anchor"></a>Documentation</h2>
+<a href="#documentation-2" class="anchor"></a>Documentation</h2>
 <ul>
 <li>Added supported environmental variable <code>AWS_REGION</code> into <code>dbConnect</code>
 </li>
@@ -413,9 +420,9 @@
 </li>
 </ul>
 </div>
-<div id="documentation-2" class="section level2">
+<div id="documentation-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-2" class="anchor"></a>Documentation</h2>
+<a href="#documentation-3" class="anchor"></a>Documentation</h2>
 <p>Updated R documentation to <code>roxygen2</code> 7.0.2</p>
 </div>
 </div>
