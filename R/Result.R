@@ -33,6 +33,9 @@ setClass(
 #' 
 #' Frees all resources (local and Athena) associated with result set. It does this by removing query output in AWS S3 Bucket,
 #' stopping query execution if still running and removed the connection resource locally.
+#' 
+#' @note If the user does not have permission to remove AWS S3 resource from AWS Athena output location, then an AWS warning will be returned.
+#'       It is better use query caching \code{\link{RAthena_options}} so that the warning doesn't repeatly show.
 #' @name dbClearResult
 #' @inheritParams DBI::dbClearResult
 #' @return \code{dbClearResult()} returns \code{TRUE}, invisibly.
