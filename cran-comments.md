@@ -17,6 +17,9 @@ This release brings increase consistency through out the package.
 ## R devtools::check_rhub() results
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
+**Side note:** ran devtools::check_rhub with following environment variables:
+`devtools::check_rhub(env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always", LIBARROW_BINARY="true"))`
+
 ## unit tests (using testthat) results
 * OK:       121
 * Failed:   0
