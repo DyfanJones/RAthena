@@ -3,7 +3,7 @@
 * Fixed issue where `RAthena` would return a `data.frame` for utility `SQL` queries regardless of backend file parser. This is due to `AWS Athena` outputting `SQL UTILITY` queries as a text file that required to be read in line by line. Now `RAthena` will return the correct data format based on file parser set in `RAthena_options` for example: `RAthena_options("vroom")` will return `tibbles`.
 
 ## Documentation:
-* Added documentation to highlight behavour `dbClearResult` when user doesn't have permission to delete AWS S3 objects ([noctua: # 96]*https://github.com/DyfanJones/noctua/issues/96))
+* Added documentation to highlight behaviour `dbClearResult` when user doesn't have permission to delete AWS S3 objects ([noctua: # 96]*https://github.com/DyfanJones/noctua/issues/96))
 
 # RAthena 1.9.0
 ## New Feature
