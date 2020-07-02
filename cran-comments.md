@@ -2,7 +2,7 @@
 This release brings increase consistency through out the package.
 
 **New Features**
-* Before utility sql queries would return just data.frame format regardless of backend parser. Now utility queries will return data.format format aligned to backend parse i.e. data.table or tibble. This change only affects utility sql queries and makes the package more consistent.
+* Before utility sql queries would return just data.frame format regardless of backend parser.  Now utility queries will return data in the format aligned with the backend parse i.e. data.table or tibble. This change only affects utility sql queries and makes the package more consistent.
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
