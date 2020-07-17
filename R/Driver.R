@@ -94,6 +94,7 @@ setMethod(
 #' @param region_name Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
 #'                    AWS region codes (region code example: Region = EU (Ireland) 	\code{ region_name = "eu-west-1"})
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
+#' @param keyboard_interrupt Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to \code{TRUE}
 #' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @aliases dbConnect
 #' @return \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
@@ -142,7 +143,9 @@ setMethod(
            duration_seconds = 3600L,
            s3_staging_dir = NULL,
            region_name = NULL,
-           botocore_session = NULL, ...) {
+           botocore_session = NULL, 
+           keyboard_interrupt = TRUE,
+           ...) {
     if(!py_module_available("boto3")){
       stop("Boto3 is not detected please install boto3 using either: `pip install boto3 numpy` in terminal or `install_boto()`.",
            "\nIf this doesn't work please set the python you are using with `reticulate::use_python()` or `reticulate::use_condaenv()`",
@@ -161,7 +164,8 @@ setMethod(
               is.null(profile_name) || is.character(profile_name),
               is.null(role_arn) || is.character(role_arn),
               is.character(role_session_name),
-              is.numeric(duration_seconds))
+              is.numeric(duration_seconds),
+              is.logical(keyboard_interrupt))
     
     encryption_option <- switch(encryption_option[1],
                                 "NULL" = NULL,
@@ -203,7 +207,9 @@ setMethod(
                             region_name = region_name,
                             botocore_session = botocore_session,
                             profile_name = profile_name, 
-                            aws_expiration = aws_expiration,...)
+                            aws_expiration = aws_expiration,
+                            keyboard_interrupt = keyboard_interrupt,
+                            ...)
     
     # integrate with RStudio
     on_connection_opened(con)

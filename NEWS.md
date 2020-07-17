@@ -1,3 +1,20 @@
+# RAthena 1.9.1.9000
+## New Feature
+* RAthena now supports Keyboard Interrupt and will stop AWS Athena running the query when the query has been interrupted. To keep the functionality of AWS Athena running when `R` has been interrupt a new parameter has been added to `dbConnect`, `keyboard_interrupt`. Example:
+
+```r
+# Stop AWS Athena when R has been interrupted:
+
+con <- dbConnect(RAthena::athena())
+
+# Let AWS Athena keep running when R has been interrupted:
+
+con <- dbConnect(RAthena::athena(),
+                 keyboard_interrupt = F)
+```
+
+
+
 # RAthena 1.9.1
 ## Minor Change
 * Fixed issue where `RAthena` would return a `data.frame` for utility `SQL` queries regardless of backend file parser. This is due to `AWS Athena` outputting `SQL UTILITY` queries as a text file that required to be read in line by line. Now `RAthena` will return the correct data format based on file parser set in `RAthena_options` for example: `RAthena_options("vroom")` will return `tibbles`.

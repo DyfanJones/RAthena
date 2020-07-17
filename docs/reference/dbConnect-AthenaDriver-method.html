@@ -86,7 +86,7 @@ NOTE: If you have set any environmental variables in .Renviron please restart yo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1.9000</span>
       </span>
     </div>
 
@@ -193,6 +193,7 @@ of supported environment variables:</p><ul>
   <span class='kw'>s3_staging_dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>region_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>botocore_session</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>keyboard_interrupt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -271,6 +272,10 @@ AWS region codes (region code example: Region = EU (Ireland)     <code> region_n
     <tr>
       <th>botocore_session</th>
       <td><p>Use this Botocore session instead of creating a new default one.</p></td>
+    </tr>
+    <tr>
+      <th>keyboard_interrupt</th>
+      <td><p>Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to <code>TRUE</code></p></td>
     </tr>
     <tr>
       <th>...</th>

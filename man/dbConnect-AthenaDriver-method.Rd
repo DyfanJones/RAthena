@@ -22,6 +22,7 @@
   s3_staging_dir = NULL,
   region_name = NULL,
   botocore_session = NULL,
+  keyboard_interrupt = TRUE,
   ...
 )
 }
@@ -66,6 +67,8 @@ This setting can have a value from 1 hour to 12 hours. By default duration is se
 AWS region codes (region code example: Region = EU (Ireland)     \code{ region_name = "eu-west-1"})}
 
 \item{botocore_session}{Use this Botocore session instead of creating a new default one.}
+
+\item{keyboard_interrupt}{Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to \code{TRUE}}
 
 \item{...}{Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}}
 }

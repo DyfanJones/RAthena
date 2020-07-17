@@ -27,8 +27,23 @@ client_athena <- function(botosession){
   botosession@ptr$client("athena")
 }
 
-# holds functions until athena query competed
+# If Query is cancelled by keyboard interrupt stop AWS Athena process
 poll <- function(res){
+  tryCatch(.poll(res),
+           interrupt = function(i){
+             if(res@connection@info$keyboard_interrupt){
+               dbClearResult(res)
+               stop(sprintf("Query '%s' has been cancelled by user.", res@info$QueryExecutionId), call. = F)
+             }
+             else {
+               stop(sprintf("Query '%s' has been cancelled by user but will carry on running in AWS Athena", res@info$QueryExecutionId), call. = F)
+             }
+           }
+  )
+}
+
+# holds functions until athena query competed
+.poll <- function(res){
   class_poll <- res@connection@info$poll_interval
   while (TRUE){
     poll_interval <- class_poll %||% rand_poll()
@@ -227,7 +242,7 @@ retry_api_call <- function(expr){
   
   # if number of retries is equal to 0 then retry is skipped
   if (athena_option_env$retry == 0) {
-    resp <- tryCatch(eval.parent(substitute(expr)), 
+    resp <- tryCatch(eval.parent(substitute(expr)),
                      error = function(e) retry_error(e))
   }
   

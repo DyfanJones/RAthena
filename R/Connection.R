@@ -28,7 +28,9 @@ AthenaConnection <-
     region_name = NULL,
     botocore_session = NULL,
     profile_name = NULL, 
-    aws_expiration = NULL,...){
+    aws_expiration = NULL,
+    keyboard_interrupt = NULL,
+    ...){
     
     tryCatch(
       ptr <- boto$Session(aws_access_key_id = aws_access_key_id,
@@ -58,7 +60,7 @@ AthenaConnection <-
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group %||% "primary",
                  poll_interval = poll_interval, encryption_option = encryption_option,
-                 kms_key = kms_key, expiration = aws_expiration)
+                 kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt)
     
     res <- new("AthenaConnection",  ptr = ptr, info = info, quote = "`")
   }
