@@ -144,6 +144,27 @@
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())</pre></body></html></div>
 <p><strong>Note:</strong> Python environments are not required if <code>boto3</code> is either in the root Python or if R and Python are in their own environment (for example conda environment).</p>
 </div>
+<div id="docker-example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#docker-example" class="anchor"></a>Docker Example:</h2>
+<p>To help with users wishing to run <code>RAthena</code> in a <a href="https://hub.docker.com/">docker</a>, a simple docker file has been created <a href="https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile">here</a>. To set up the docker please refer to <a href="https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-temporary-credentials-docker/">link</a>. For demo purposes we will use the <a href="https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile">example docker</a> and run it locally:</p>
+<pre class="console"><code># build docker image
+docker build . -t rathena
+
+# start container with aws credentials passed from local
+docker run \
+      -e AWS_ACCESS_KEY_ID="$(aws configure get aws_access_key_id)" \
+      -e AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key)" \
+      -e AWS_SESSION_TOKEN="$(aws configure get aws_session_token)" \
+      -e AWS_DEFAULT_REGION="$(aws configure get region)" \
+      -it rathena</code></pre>
+<p>When running <code>RAthena</code> in the docker environment you might be required to let <code>reticulate</code> know what python you are using.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="kw pkg">reticulate</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_python</a></span>(<span class="st">"/usr/bin/python3"</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+
+<span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>(), <span class="kw">s3_staging_dir</span> <span class="kw">=</span> <span class="st">"s3://mybucket/"</span>)</pre></body></html></div>
+</div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
@@ -151,7 +172,7 @@
 <div id="low---level-api" class="section level2">
 <h2 class="hasAnchor">
 <a href="#low---level-api" class="anchor"></a>Low - Level API:</h2>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RAthena</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="fu"><a href="../reference/athena.html">athena</a></span>())
@@ -166,7 +187,7 @@
 <div id="dbi" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dbi" class="anchor"></a>DBI:</h2>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span>(<span class="kw pkg">RAthena</span><span class="kw ns">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span>())
 
@@ -226,7 +247,7 @@
 <div id="dplyr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dplyr" class="anchor"></a>dplyr:</h2>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 
 <span class="no">athena_iris</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(<span class="no">con</span>, <span class="st">"iris"</span>)
 

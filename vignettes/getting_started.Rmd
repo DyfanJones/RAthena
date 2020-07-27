@@ -55,6 +55,33 @@ con <- dbConnect(RAthena::athena())
 
 **Note:** Python environments are not required if `boto3` is either in the root Python or if R and Python are in their own environment (for example conda environment).
 
+## Docker Example:
+
+To help with users wishing to run `RAthena` in a [docker](https://hub.docker.com/), a simple docker file has been created [here](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile). To set up the docker please refer to [link](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-temporary-credentials-docker/). For demo purposes we will use the [example docker](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile) and run it locally:
+
+```console
+# build docker image
+docker build . -t rathena
+
+# start container with aws credentials passed from local
+docker run \
+      -e AWS_ACCESS_KEY_ID="$(aws configure get aws_access_key_id)" \
+      -e AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key)" \
+      -e AWS_SESSION_TOKEN="$(aws configure get aws_session_token)" \
+      -e AWS_DEFAULT_REGION="$(aws configure get region)" \
+      -it rathena
+```
+
+When running `RAthena` in the docker environment you might be required to let `reticulate` know what python you are using.
+
+```r
+reticulate::use_python("/usr/bin/python3")
+
+library(DBI)
+
+con <- dbConnect(RAthena::athena(), s3_staging_dir = "s3://mybucket/")
+```
+
 # Usage:
 
 ## Low - Level API:
