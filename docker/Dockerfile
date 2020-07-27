@@ -5,7 +5,7 @@ FROM rstudio/r-base:4.0.2-centos7
 RUN sudo yum install -y https://repo.ius.io/ius-release-el7.rpm \
    && sudo yum update -y
    
-# Set up docker with aws credentials
+# get aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip awscliv2.zip \
     && sudo ./aws/install
