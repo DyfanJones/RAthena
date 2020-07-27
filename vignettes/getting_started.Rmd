@@ -69,7 +69,7 @@ docker run \
       -e AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key)" \
       -e AWS_SESSION_TOKEN="$(aws configure get aws_session_token)" \
       -e AWS_DEFAULT_REGION="$(aws configure get region)" \
-      -it rathena bash
+      -it rathena
 ```
 
 When running `RAthena` in the docker environment you might be required to let `reticulate` know what python you are using.

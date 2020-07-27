@@ -157,7 +157,7 @@ docker run \
       -e AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key)" \
       -e AWS_SESSION_TOKEN="$(aws configure get aws_session_token)" \
       -e AWS_DEFAULT_REGION="$(aws configure get region)" \
-      -it rathena bash</code></pre>
+      -it rathena</code></pre>
 <p>When running <code>RAthena</code> in the docker environment you might be required to let <code>reticulate</code> know what python you are using.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="kw pkg">reticulate</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/reticulate/man/use_python.html">use_python</a></span>(<span class="st">"/usr/bin/python3"</span>)
 
