@@ -72,7 +72,7 @@ docker run \
       -it rathena bash
 ```
 
-When running `RAthena` in the docker environment you might be required to let `reticulate` know what python you are running.
+When running `RAthena` in the docker environment you might be required to let `reticulate` know what python you are using.
 
 ```r
 reticulate::use_python("/usr/bin/python3")
