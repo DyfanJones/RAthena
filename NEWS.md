@@ -1,4 +1,4 @@
-# RAthena 1.9.1.9000
+# RAthena 1.10.0
 ## New Feature
 * RAthena now supports Keyboard Interrupt and will stop AWS Athena running the query when the query has been interrupted. To keep the functionality of AWS Athena running when `R` has been interrupt a new parameter has been added to `dbConnect`, `keyboard_interrupt`. Example:
 
@@ -12,8 +12,6 @@ con <- dbConnect(RAthena::athena())
 con <- dbConnect(RAthena::athena(),
                  keyboard_interrupt = F)
 ```
-
-
 
 # RAthena 1.9.1
 ## Minor Change
