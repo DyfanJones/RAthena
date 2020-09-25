@@ -169,7 +169,7 @@ AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
     tryCatch(database <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
              error = function(e) py_error(e))}
   if(is.null(name)){
-    tryCatch(output <- lapply(database, function (x) glue$get_tables(DatabaseName = x)$TableList),
+    tryCatch(output <- lapply(database, function (x) tryCatch(glue$get_tables(DatabaseName = x)$TableList, error = function(cond) NULL)),
              error = function(e) py_error(e))
     tbl_meta <- unlist(lapply(output, function(x) sapply(x, TblMeta)))}
   else{

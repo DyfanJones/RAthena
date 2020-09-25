@@ -366,7 +366,7 @@ setMethod(
     
     if(is.null(schema)){
       retry_api_call(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name))}
-    tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
+    tryCatch(output <- lapply(schema, function (x) tryCatch(glue$get_tables(DatabaseName = x)$TableList, error = function(cond) NULL)),
              error = function(e) py_error(e))
     unlist(lapply(output, function(x) sapply(x, function(y) y$Name)))
   }
@@ -413,7 +413,7 @@ setMethod("dbGetTables", "AthenaConnection",
     glue <- conn@ptr$client("glue")
   if(is.null(schema)){
     retry_api_call(schema <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name))}
-  tryCatch(output <- lapply(schema, function (x) glue$get_tables(DatabaseName = x)$TableList),
+  tryCatch(output <- lapply(schema, function (x) tryCatch(glue$get_tables(DatabaseName = x)$TableList, error = function(cond) NULL)),
            error = function(e) py_error(e))
   rbindlist(lapply(output, function(x) rbindlist(lapply(x, function(y) data.frame(Schema = y$DatabaseName,
                                                                                   TableName=y$Name,

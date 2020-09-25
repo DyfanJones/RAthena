@@ -1,8 +1,9 @@
 ## Release Summary
-This release brings new a feature to the package.
+This release brings in bug fixes.
 
-**New Features**
-* RAthena now supports keyboard interrupt. `AWS Athena` queries will now be stop when a keyboard interrupt happens within R.
+**Bug Fix**
+* `RAthena_options` parameter `cache_size` now correctly uses the range [0,100]
+*  Do not abort if a `AWS Glue` `get_tables` api call fails
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
