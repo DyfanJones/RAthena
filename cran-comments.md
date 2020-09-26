@@ -5,6 +5,9 @@ This release brings in bug fixes.
 * `RAthena_options` parameter `cache_size` now correctly uses the range [0,100]
 *  Do not abort if a `AWS Glue` `get_tables` api call fails
 
+**Cran Maintainer Change Request**
+* URL: https://www.anaconda.com/distribution/ (moved to https://www.anaconda.com/products/individual) From: inst/doc/getting_started.html
+
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
 

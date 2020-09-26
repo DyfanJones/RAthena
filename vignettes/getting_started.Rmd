@@ -16,7 +16,7 @@ The `RAthena` package aims to make it easier to work with data stored in [`AWS A
 
 # Installing `RAthena`:
 
-As `RAthena` utilising the python AWS SDK `boto3`, Python 3+ is required. Please install Python 3+ either by [Python](https://www.python.org/downloads/) or [Python Anaconda](https://www.anaconda.com/distribution/). To install `RAthena`:
+As `RAthena` utilising the python AWS SDK `boto3`, Python 3+ is required. Please install Python 3+ either by [Python](https://www.python.org/downloads/) or [Python Anaconda](https://www.anaconda.com/products/individual). To install `RAthena`:
 
 ```r
 # cran version
