@@ -111,5 +111,5 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   expect_equal(t30, data_type2)
   expect_equal(t31, data_type3)
   expect_equal(t32, "date '2020-01-01'")
-  expect_equal(t33, "timestamp '2020-01-01 00:00:00 GMT'")
+  expect_equal(t33, sprintf("timestamp '%s'", strftime("2020-01-01", "%Y-%m-%d %H:%M:%OS %Z")))
 })
