@@ -1,3 +1,7 @@
+# RAthena 1.10.1.9000
+## New Feature
+* Move `sql_escape_date` into `dplyr_integration.R` backend (#121). Thanks to @OssiLehtinen for developing Athena date translation.
+
 # RAthena 1.10.1
 ## Bug Fix
 * Do not abort if a glue::get_tables api call fails (e.g., due to missing permissions to a specific database or an orphaned Lake Formation resource link) when retrieving a list of database tables with dbListTables, dbGetTables or in Rstudio's Connections pane. Thanks to @OssiLehtinen creating solution ([noctua: # 106](https://github.com/DyfanJones/noctua/pull/106))
