@@ -1,6 +1,11 @@
 # RAthena 1.10.1.9000
 ## New Feature
 * Move `sql_escape_date` into `dplyr_integration.R` backend (#121). Thanks to @OssiLehtinen for developing Athena date translation.
+* Allow RAthena to append to a static AWS s3 location using uuid
+
+## Bug Fix
+* parquet file.types now use parameter `use_deprecated_int96_timestamps` set to `TRUE`. This puts POSIXct data type in to `java.sql.Timestamp` compatible format, such as `yyyy-MM-dd HH:mm:ss[.f...]`. Thanks to Christian N Wolz for highlight this issue.
+* `s3_upload_location` simplified how s3 location is built. Now s3.location parameter isn't affected and instead only additional components e.g. name, schema and partition.
 
 # RAthena 1.10.1
 ## Bug Fix

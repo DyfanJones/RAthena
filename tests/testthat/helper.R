@@ -22,7 +22,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
 ROW FORMAT DELIMITED
 	FIELDS TERMINATED BY ','
 	LINES TERMINATED BY ", gsub("_","","'\\_n'"),
-"\nLOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+"\nLOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'
 TBLPROPERTIES (\"skip.header.line.count\"=\"1\");")),
 tbl2 = 
 DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
@@ -32,7 +32,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
 ROW FORMAT DELIMITED
 	FIELDS TERMINATED BY ','
 	LINES TERMINATED BY ", gsub("_","","'\\_n'"),
-           "\nLOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+           "\nLOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'
 TBLPROPERTIES (\"skip.header.line.count\"=\"1\",
 \t\t'compressionType'='gzip');")),
 tbl3 = 
@@ -43,7 +43,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
 ROW FORMAT DELIMITED
 \tFIELDS TERMINATED BY '	'
 \tLINES TERMINATED BY ", gsub("_","","'\\_n'"),"
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'
 TBLPROPERTIES (\"skip.header.line.count\"=\"1\");")),
 tbl4 = 
 DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
@@ -53,7 +53,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
 ROW FORMAT DELIMITED
 \tFIELDS TERMINATED BY '	'
 \tLINES TERMINATED BY ", gsub("_","","'\\_n'"),"
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'
 TBLPROPERTIES (\"skip.header.line.count\"=\"1\",
 \t\t'compressionType'='gzip');")), 
 tbl5 = 
@@ -62,7 +62,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `y` STRING
 )
 STORED AS PARQUET
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n;")),
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'\n;")),
 tbl6 = 
 DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `x` INT,
@@ -70,7 +70,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
 )
 PARTITIONED BY (`timestamp` STRING)
 STORED AS PARQUET
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'
 tblproperties (\"parquet.compress\"=\"SNAPPY\");")),
 tbl7 = 
 DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
@@ -78,7 +78,7 @@ DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `y` STRING
 )
 ROW FORMAT  serde 'org.apache.hive.hcatalog.data.JsonSerDe'
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n")),
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'\n")),
 tbl8 = 
   DBI::SQL(paste0("CREATE EXTERNAL TABLE `default`.`test_df` (
   `x` INT,
@@ -86,7 +86,7 @@ tbl8 =
 )
 PARTITIONED BY (`timestamp` STRING)
 ROW FORMAT  serde 'org.apache.hive.hcatalog.data.JsonSerDe'
-LOCATION '",Sys.getenv("rathena_s3_tbl"),"default/test_df/'\n")))
+LOCATION '",Sys.getenv("rathena_s3_tbl"),"test_df/default/'\n")))
 
 # static Athena Query Request Tests
 athena_test_req1 <-
@@ -113,14 +113,4 @@ athena_test_req4 <-
        ResultConfiguration = list(OutputLocation = Sys.getenv("rathena_s3_query")),
        WorkGroup = "primary")
 
-# static s3 path location
-s3_loc <- list(exp_s3_1 = "path/to/file/test/dummy_file/dummy_file.csv",
-               exp_s3_2 = "path/to/file/YEAR=2000/dummy_file.csv.gz",
-               exp_s3_3 = c("path/to/test/dummy_file/YEAR=2000/dummy_file_1.tsv", "path/to/test/dummy_file/YEAR=2000/dummy_file_2.tsv"),
-               exp_s3_4 = c("path/to/test/dummy_file/YEAR=2000/dummy_file_1.tsv.gz","path/to/test/dummy_file/YEAR=2000/dummy_file_2.tsv.gz"),
-               exp_s3_5 = "path/to/test/dummy_file/dummy_file.parquet",
-               exp_s3_6 = "path/to/dummy_file/YEAR=2000/dummy_file.snappy.parquet",
-               exp_s3_7 = "path/to/test/dummy_file/dummy_file.json",
-               exp_s3_8 = "path/to/dummy_file/YEAR=2000/dummy_file.json")
-
-show_ddl <- SQL('CREATE EXTERNAL TABLE `default.test_df`(\n  `w` timestamp, \n  `x` int, \n  `y` string, \n  `z` boolean)\nPARTITIONED BY ( \n  `timestamp` string)\nROW FORMAT DELIMITED \n  FIELDS TERMINATED BY \'\\t\' \n  LINES TERMINATED BY \'\\n\' \nSTORED AS INPUTFORMAT \n  \'org.apache.hadoop.mapred.TextInputFormat\' \nOUTPUTFORMAT \n  \'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat\'\nLOCATION\n  \'s3://test-rathena/default/test_df\'\nTBLPROPERTIES (\n  \'skip.header.line.count\'=\'1\')')
+show_ddl <- DBI::SQL(paste0('CREATE EXTERNAL TABLE `default.test_df`(\n  `w` timestamp, \n  `x` int, \n  `y` string, \n  `z` boolean)\nPARTITIONED BY ( \n  `timestamp` string)\nROW FORMAT DELIMITED \n  FIELDS TERMINATED BY \'\\t\' \n  LINES TERMINATED BY \'\\n\' \nSTORED AS INPUTFORMAT \n  \'org.apache.hadoop.mapred.TextInputFormat\' \nOUTPUTFORMAT \n  \'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat\'\nLOCATION\n  \'' ,Sys.getenv("rathena_s3_tbl"), 'test_df/default\'\nTBLPROPERTIES (\n  \'skip.header.line.count\'=\'1\')'))
