@@ -14,7 +14,8 @@ Imports:
     methods,
     reticulate (>= 1.13),
     stats,
-    utils
+    utils,
+    uuid
 Suggests: 
     arrow,
     bit64,
