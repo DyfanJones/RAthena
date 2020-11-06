@@ -6,6 +6,7 @@
 ## Bug Fix
 * parquet file.types now use parameter `use_deprecated_int96_timestamps` set to `TRUE`. This puts POSIXct data type in to `java.sql.Timestamp` compatible format, such as `yyyy-MM-dd HH:mm:ss[.f...]`. Thanks to Christian N Wolz for highlight this issue.
 * `s3_upload_location` simplified how s3 location is built. Now s3.location parameter isn't affected and instead only additional components e.g. name, schema and partition.
+* `dbplyr::in_schema` has changed class output from `ident` to `dbplyr_schema`, this breaks `db_query_fields.AthenaConnection`. Now `db_query_fields.AthenaConnection` checks for classes `ident` and `dbplyr_schema` ([noctua: # 117](https://github.com/DyfanJones/noctua/pull/118))
 
 # RAthena 1.10.1
 ## Bug Fix
