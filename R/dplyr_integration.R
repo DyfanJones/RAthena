@@ -214,30 +214,28 @@ db_explain.AthenaConnection <- function(con, sql, ...){
 #' @rdname backend_dbplyr
 db_query_fields.AthenaConnection <- function(con, sql, ...) {
   
-  # check if sql is dbplyr ident
-  is_ident <- inherits(sql, "ident")
+  # check if sql is dbplyr schema
+  in_schema <- inherits(sql, "ident")
   
-  if(is_ident) { # If ident, get the fields from Glue
-    
+  if(in_schema) {
     if (grepl("\\.", sql)) {
-      dbms.name <- gsub("\\..*", "" , sql)
-      Table <- gsub(".*\\.", "" , sql)
+      schema_parts <- gsub('"', "", strsplit(sql, "\\.")[[1]])
     } else {
-      dbms.name <- con@info$dbms.name
-      Table <- sql}
+      schema_parts <- c(con@info$dbms.name, gsub('"', "", sql))}
     
     glue <- con@ptr$client("glue")
     
     tryCatch(
-      output <- glue$get_table(DatabaseName = dbms.name,
-                               Name = Table)$Table,
+      output <- glue$get_table(DatabaseName = schema_parts[1],
+                               Name = schema_parts[2])$Table,
       error = function(e) py_error(e))
     
     col_names = vapply(output$StorageDescriptor$Columns, function(y) y$Name, FUN.VALUE = character(1))
     partitions = vapply(output$PartitionKeys,function(y) y$Name, FUN.VALUE = character(1))
     
     c(col_names, partitions)
-  } else { # If a subquery, query Athena for the fields
+  } else {
+    # If a subquery, query Athena for the fields
     # return dplyr methods
     sql_select <- pkg_method("sql_select", "dplyr")
     sql_subquery <- pkg_method("sql_subquery", "dplyr")
@@ -251,7 +249,6 @@ db_query_fields.AthenaConnection <- function(con, sql, ...) {
     names(res)
   }
 }
-
 
 #' @rdname backend_dbplyr
 sql_escape_date.AthenaConnection <- function(con, x) {
