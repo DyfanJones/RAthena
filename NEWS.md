@@ -1,12 +1,12 @@
-# RAthena 1.10.1.9000
+# RAthena 1.11.0
 ## New Feature
 * Move `sql_escape_date` into `dplyr_integration.R` backend (#121). Thanks to @OssiLehtinen for developing Athena date translation.
-* Allow RAthena to append to a static AWS s3 location using uuid
+* Allow `RAthena` to append to a static AWS s3 location using uuid
 
 ## Bug Fix
 * parquet file.types now use parameter `use_deprecated_int96_timestamps` set to `TRUE`. This puts POSIXct data type in to `java.sql.Timestamp` compatible format, such as `yyyy-MM-dd HH:mm:ss[.f...]`. Thanks to Christian N Wolz for highlight this issue.
 * `s3_upload_location` simplified how s3 location is built. Now s3.location parameter isn't affected and instead only additional components e.g. name, schema and partition.
-* `dbplyr::in_schema` has changed class output from `ident` to `dbplyr_schema`, this breaks `db_query_fields.AthenaConnection`. Now `db_query_fields.AthenaConnection` checks for classes `ident` and `dbplyr_schema` ([noctua: # 117](https://github.com/DyfanJones/noctua/pull/118))
+* `dbplyr v-2.0.0` function `in_schema` now wraps strings in quotes, this breaks `db_query_fields.AthenaConnection`. Now `db_query_fields.AthenaConnection` removes any quotation from the string so that it can search `AWS GLUE` for table metadata. ([noctua: # 117](https://github.com/DyfanJones/noctua/pull/118))
 
 # RAthena 1.10.1
 ## Bug Fix
