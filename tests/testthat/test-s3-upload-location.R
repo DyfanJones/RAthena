@@ -1,6 +1,8 @@
 context("S3 upload location")
 
 test_that("Check if the S3 upload location is correctly built",{
+  skip_if_no_boto()
+  skip_if_no_env()
   # Test connection is using AWS CLI to set profile_name 
   conn <- dbConnect(RAthena::athena(),
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
