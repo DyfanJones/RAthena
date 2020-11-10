@@ -1,12 +1,13 @@
 ## Release Summary
-This release brings in bug fixes.
+This release brings in new features and some bug fixes.
+
+**New Features**
+* Incoraprate `dbplyr` helper function `sql_escape_date` into `RAthena`.
+* Allow Rathena append to a static `AWS S3` location.
 
 **Bug Fix**
-* `RAthena_options` parameter `cache_size` now correctly uses the range [0,100]
-*  Do not abort if a `AWS Glue` `get_tables` api call fails
-
-**Cran Maintainer Change Request**
-* URL: https://www.anaconda.com/distribution/ (moved to https://www.anaconda.com/products/individual) From: inst/doc/getting_started.html
+* Parquet file types now use parameter `use_deprecated_int96_timestamps` to align with AWS Athena `timestamp`.
+* `dbplyr v-2.0.0` function `in_schema` broken `RAthena` function `db_query_fields.AthenaConnection`. This fix removes any quotations added but `in_schema`.
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
