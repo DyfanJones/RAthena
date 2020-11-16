@@ -5,10 +5,12 @@ context("dplyr compute")
 # Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
 # Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
-library(dplyr)
 test_that("Check RAthena s3 dplyr compute method",{
   skip_if_no_boto()
   skip_if_no_env()
+  skip_if_package_not_avialable("dplyr")
+  
+  library(dplyr)
   # Test connection is using AWS CLI to set profile_name 
   con <- dbConnect(athena(),
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
