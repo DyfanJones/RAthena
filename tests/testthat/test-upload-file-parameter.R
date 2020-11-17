@@ -23,7 +23,7 @@ test_that("test file parser parameter setup delimited",{
 })
 
 test_that("test file parser parameter setup parquet",{
-  skip_if_package_not_avialable("vroom")
+  skip_if_package_not_avialable("arrow")
   init_args = list()
   
   arg_1 <- RAthena:::update_args(file.type = "parquet", init_args)
