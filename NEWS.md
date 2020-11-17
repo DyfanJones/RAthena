@@ -1,3 +1,10 @@
+# RAthena 1.11.1
+## Note:
+* Added package checks to unit tests when testing a suggested dependency. This is to fix "CRAN Package Check Results for Package RAthena" for operating system "r-patched-solaris-x86". Error message:
+```
+Error: write_parquet requires the arrow package, please install it first and try again
+```
+
 # RAthena 1.11.0
 ## New Feature
 * Move `sql_escape_date` into `dplyr_integration.R` backend (#121). Thanks to @OssiLehtinen for developing Athena date translation.

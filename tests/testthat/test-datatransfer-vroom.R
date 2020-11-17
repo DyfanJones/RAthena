@@ -11,6 +11,7 @@ s3.location2 <- Sys.getenv("rathena_s3_tbl")
 test_that("Testing data transfer between R and athena vroom", {
   skip_if_no_boto()
   skip_if_no_env()
+  skip_if_package_not_avialable("vroom")
   
   RAthena_options("vroom")
   # Test connection is using AWS CLI to set profile_name 
