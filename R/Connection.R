@@ -783,7 +783,7 @@ setMethod(
     if(.format){
       # ensure returning format is data.table
       dt = as.data.table(dt)
-      dt = dt[, tstrsplit(get("partition"), split =  "/")]
+      dt = dt[, tstrsplit(dt[[1]], split =  "/")]
       partitions = sapply(names(dt), function(x) strsplit(dt[[x]][1], split = "=")[[1]][1])
       for (col in names(dt)) set(dt, j=col, value=tstrsplit(dt[[col]], split =  "=")[2])
       setnames(dt, old = names(dt), new = partitions)
