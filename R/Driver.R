@@ -94,6 +94,9 @@ setMethod(
 #' @param region_name Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
 #'                    AWS region codes (region code example: Region = EU (Ireland) 	\code{ region_name = "eu-west-1"})
 #' @param botocore_session Use this Botocore session instead of creating a new default one.
+#' @param bigint The R type that 64-bit integer types should be mapped to,
+#'   default is [bit64::integer64], which allows the full range of 64 bit
+#'   integers.
 #' @param keyboard_interrupt Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to \code{TRUE}
 #' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
 #' @aliases dbConnect
@@ -144,6 +147,7 @@ setMethod(
            s3_staging_dir = NULL,
            region_name = NULL,
            botocore_session = NULL, 
+           bigint = c("integer64", "integer", "numeric", "character"),
            keyboard_interrupt = TRUE,
            ...) {
     if(!py_module_available("boto3")){
@@ -166,6 +170,8 @@ setMethod(
               is.character(role_session_name),
               is.numeric(duration_seconds),
               is.logical(keyboard_interrupt))
+    
+    athena_option_env$bigint <- big_int(match.arg(bigint))
     
     encryption_option <- switch(encryption_option[1],
                                 "NULL" = NULL,
