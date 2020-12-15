@@ -16,11 +16,11 @@ test_that("Testing data transfer between R and athena datatable", {
   con <- dbConnect(athena(),
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
-  expect_equal(RAthena::athena_option_env$bigint, "integer64")
+  expect_equal(RAthena:::athena_option_env$bigint, "integer64")
   
   RAthena_options("vroom")
   
-  expect_equal(RAthena::athena_option_env$bigint, "I")
+  expect_equal(RAthena:::athena_option_env$bigint, "I")
   
   # big integer as integer
   RAthena_options()
@@ -28,11 +28,11 @@ test_that("Testing data transfer between R and athena datatable", {
                    s3_staging_dir = Sys.getenv("rathena_s3_query"),
                    bigint = "integer")
   
-  expect_equal(RAthena::athena_option_env$bigint, "integer")
+  expect_equal(RAthena:::athena_option_env$bigint, "integer")
   
   RAthena_options("vroom")
   
-  expect_equal(RAthena::athena_option_env$bigint, "i")
+  expect_equal(RAthena:::athena_option_env$bigint, "i")
   
   # big integer as numeric
   RAthena_options()
@@ -40,11 +40,11 @@ test_that("Testing data transfer between R and athena datatable", {
                    s3_staging_dir = Sys.getenv("rathena_s3_query"),
                    bigint = "numeric")
   
-  expect_equal(RAthena::athena_option_env$bigint, "double")
+  expect_equal(RAthena:::athena_option_env$bigint, "double")
   
   RAthena_options("vroom")
   
-  expect_equal(RAthena::athena_option_env$bigint, "d")
+  expect_equal(RAthena:::athena_option_env$bigint, "d")
   
   # big integer as character
   RAthena_options()
@@ -52,10 +52,10 @@ test_that("Testing data transfer between R and athena datatable", {
                    s3_staging_dir = Sys.getenv("rathena_s3_query"),
                    bigint = "character")
   
-  expect_equal(RAthena::athena_option_env$bigint, "character")
+  expect_equal(RAthena:::athena_option_env$bigint, "character")
   
   RAthena_options("vroom")
   
-  expect_equal(RAthena::athena_option_env$bigint, "c")
+  expect_equal(RAthena:::athena_option_env$bigint, "c")
 })
 
