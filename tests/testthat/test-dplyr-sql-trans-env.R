@@ -76,6 +76,7 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   t28 <- grepl("^Athena.*\\[.*/.*\\]", dplyr::db_desc(con))
   t29 <- dbDataType(con, dt)
   t30 <- RAthena:::AthenaToRDataType.athena_data.table(method, data_types)
+  RAthena_options("vroom")
   t31 <- RAthena:::AthenaToRDataType.athena_vroom(method, data_types)
   t32 <- RAthena:::sql_escape_date.AthenaConnection(con, "2020-01-01")
   t33 <- RAthena:::sql_escape_datetime.AthenaConnection(con, "2020-01-01")
