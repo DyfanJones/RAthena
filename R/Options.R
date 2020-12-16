@@ -9,7 +9,7 @@ cache_dt = data.table("QueryId" = character(), "Query" = character(), "State"= c
 athena_option_env$cache_dt <-  cache_dt
 athena_option_env$retry <- 5
 athena_option_env$retry_quiet <- FALSE
-athena_option_env$bigint <- NULL
+athena_option_env$bigint <- "integer64"
 
 # ==========================================================================
 # helper function to handle big integers
@@ -18,7 +18,7 @@ big_int <- function(bigint){
   
   if(fp == "athena_data.table")
     return(switch(bigint,
-                  "I" = "integer64",
+                  "I" = bit64_check("integer64"),
                   "i" = "integer",
                   "d" = "double",
                   "c" = "character",
@@ -27,7 +27,7 @@ big_int <- function(bigint){
     )
   if(fp == "athena_vroom")
     return(switch(bigint,
-                  "integer64" = "I", 
+                  "integer64" = bit64_check("I"), 
                   "integer" = "i",
                   "numeric" = "d",
                   "double" = "d",
@@ -36,6 +36,11 @@ big_int <- function(bigint){
     )
   }
 
+bit64_check <- function(value){
+  if(!requireNamespace("bit64", quietly = TRUE))
+    stop('integer64 is supported by `bit64`. Please install `bit64` package and try again', call. = F)
+  return(value)
+}
 
 # ==========================================================================
 # Setting file parser method
@@ -70,7 +75,7 @@ RAthena_options <- function(file_parser = c("data.table", "vroom"), cache_size =
   if(cache_size < 0 | cache_size > 100) stop("RAthena currently only supports up to 100 queries being cached", call. = F)
   if(retry < 0) stop("Number of retries is required to be greater than 0.")
   
-  if (!requireNamespace(file_parser, quietly = TRUE)) 
+  if (!requireNamespace(file_parser, quietly = TRUE))
     stop('Please install ', file_parser, ' package and try again', call. = F)
   
   switch(file_parser,
