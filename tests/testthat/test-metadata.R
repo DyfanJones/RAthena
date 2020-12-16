@@ -27,7 +27,13 @@ test_that("Returning meta data",{
   con_info_exp = names(dbGetInfo(con))
   list_tbl1 = any(grepl("test_df", dbListTables(con, "default")))
   list_tbl2 = nrow(dbGetTables(con, "default")[TableName == "test_df"]) == 1
-  partition = grepl("timestamp", dbGetPartition(con, "test_df")[[1]])
+  partition1 = grepl("timestamp", dbGetPartition(con, "test_df")[[1]])
+  
+  partition2 = names(dbGetPartition(con, "test_df", .format = T)) == "timestamp"
+  RAthena_options("vroom")
+  partition3 = names(dbGetPartition(con, "test_df", .format = T)) == "timestamp"
+  
+  RAthena_options()
   db_show_ddl = gsub(", \n  'transient_lastDdlTime'.*",")", dbShow(con, "test_df"))
   db_info = dbGetInfo(con)
   dbClearResult(res)
@@ -38,7 +44,9 @@ test_that("Returning meta data",{
   expect_equal(con_info, con_info_exp)
   expect_true(list_tbl1)
   expect_true(list_tbl2)
-  expect_true(partition)
+  expect_true(partition1)
+  expect_true(partition2)
+  expect_true(partition3)
   expect_equal(db_show_ddl, show_ddl)
   expect_warning(RAthena:::time_check(Sys.time() + 10))
   expect_error(RAthena:::pkg_method("made_up", "made_up_pkg"))
