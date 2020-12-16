@@ -1,4 +1,4 @@
-context("bigint")
+context("bigint cache")
 
 # NOTE System variable format returned for Unit tests:
 # Sys.getenv("rathena_arn"): "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name"
@@ -8,7 +8,7 @@ context("bigint")
 s3.location1 <- paste0(Sys.getenv("rathena_s3_tbl"),"test_df/")
 s3.location2 <- Sys.getenv("rathena_s3_tbl")
 
-test_that("Testing data transfer between R and athena datatable", {
+test_that("Testing if bigint are set correctly in cache", {
   skip_if_no_boto()
   skip_if_no_env()
 
@@ -58,4 +58,3 @@ test_that("Testing data transfer between R and athena datatable", {
   
   expect_equal(RAthena:::athena_option_env$bigint, "c")
 })
-
