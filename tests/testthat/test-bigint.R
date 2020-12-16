@@ -12,15 +12,15 @@ test_that("Testing if bigint are set correctly in cache", {
   skip_if_no_boto()
   skip_if_no_env()
 
+  RAthena_options("vroom")
+  
   # default big integer as integer64
   con <- dbConnect(athena(),
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
-  
-  expect_equal(RAthena:::athena_option_env$bigint, "integer64")
-  
-  RAthena_options("vroom")
-  
   expect_equal(RAthena:::athena_option_env$bigint, "I")
+  
+  RAthena_options()
+  expect_equal(RAthena:::athena_option_env$bigint, "integer64")
   
   # big integer as integer
   RAthena_options()
@@ -31,7 +31,6 @@ test_that("Testing if bigint are set correctly in cache", {
   expect_equal(RAthena:::athena_option_env$bigint, "integer")
   
   RAthena_options("vroom")
-  
   expect_equal(RAthena:::athena_option_env$bigint, "i")
   
   # big integer as numeric
@@ -43,7 +42,6 @@ test_that("Testing if bigint are set correctly in cache", {
   expect_equal(RAthena:::athena_option_env$bigint, "double")
   
   RAthena_options("vroom")
-  
   expect_equal(RAthena:::athena_option_env$bigint, "d")
   
   # big integer as character
@@ -55,6 +53,5 @@ test_that("Testing if bigint are set correctly in cache", {
   expect_equal(RAthena:::athena_option_env$bigint, "character")
   
   RAthena_options("vroom")
-  
   expect_equal(RAthena:::athena_option_env$bigint, "c")
 })
