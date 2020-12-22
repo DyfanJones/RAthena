@@ -555,6 +555,7 @@ setMethod(
 #' @param confirm Allows for S3 files to be deleted without the prompt check. It is recommend to leave this set to \code{FALSE}
 #'                   to avoid deleting other S3 files when the table's definition points to the root of S3 bucket.
 #' @seealso \code{\link[DBI]{dbRemoveTable}}
+#' @note If you are having difficulty removing AWS S3 files please check if the AWS S3 location following AWS best practises: \href{https://docs.aws.amazon.com/athena/latest/ug/tables-location-format.html}{Table Location in Amazon S3}
 #' @examples
 #' \dontrun{
 #' # Note: 
@@ -608,6 +609,10 @@ setMethod(
                                                Name = Table)$Table$StorageDescriptor$Location),
         error = function(e) py_error(e))
       
+      # Detect if key ends with "/" or if it has ".": https://github.com/DyfanJones/noctua/issues/125
+      if(!grepl("\\.|/$", s3_path$key))
+        s3_path$key <- sprintf("%s/", s3_path$key)
+      
       message(paste0("Info: The S3 objects in prefix will be deleted:\n",
                      paste0("s3://", s3_path$bucket, "/", s3_path$key)))
       
@@ -619,7 +624,7 @@ setMethod(
       }
       
       # Remove objects in prefix of AWS Athena table
-      tryCatch(s3$Bucket(s3_path$bucket)$objects$filter(Prefix = paste0(s3_path$key, "/"))$delete(),
+      tryCatch(s3$Bucket(s3_path$bucket)$objects$filter(Prefix = s3_path$key)$delete(),
                error = function(e) py_error(e))
     }
     
