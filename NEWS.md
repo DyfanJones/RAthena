@@ -1,4 +1,4 @@
-# RAthena 1.11.999
+# RAthena 1.12.0
 ## New Feature
 * Added optional formatting to `dbGetPartition`. This simply tidies up the default AWS Athena partition format.
 ```
