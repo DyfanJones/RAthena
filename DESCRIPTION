@@ -1,7 +1,7 @@
 Package: RAthena
 Type: Package
 Title: Connect to 'AWS Athena' using 'Boto3' ('DBI' Interface)
-Version: 1.11.9999
+Version: 1.12.0
 Authors@R: person("Dyfan", "Jones", email="dyfan.r.jones@gmail.com", 
                   role= c("aut", "cre"))
 Description: Designed to be compatible with the R package 'DBI' (Database Interface)
@@ -15,7 +15,7 @@ Imports:
     reticulate (>= 1.13),
     stats,
     utils,
-    uuid
+    uuid (>= 0.1-4)
 Suggests: 
     arrow,
     bit64,

@@ -1,4 +1,4 @@
-# RAthena 1.11.999
+# RAthena 1.12.0
 ## New Feature
 * Added optional formatting to `dbGetPartition`. This simply tidies up the default AWS Athena partition format.
 ```
@@ -27,8 +27,9 @@ con <- dbConnect(RAthena::athena(), bigint = "numeric")
 ```
 When switching between the different file parsers the `bigint` to be represented according to the file parser i.e. `data.table`: "integer64" -> `vroom`: "I".
 
-# Bug Fix:
+## Bug Fix:
 * `dbRemoveTable`: Check if key has "." or ends with "/" before adding "/" to the end ([# 125](https://github.com/DyfanJones/noctua/issues/125))
+* Added uuid minimum version to fix issue ([# 128](https://github.com/DyfanJones/noctua/issues/128))
 
 ## Documentation:
 * Added note to dbRemoveTable doc string around aws athena table Location in Amazon S3.
