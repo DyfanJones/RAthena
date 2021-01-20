@@ -1,6 +1,12 @@
-## Resubmission
-This is a resubmission. In this version I have:
-* Ensure all Packages in Suggests should be used conditionally within unit tests, this is to fix: https://cran.r-project.org/web/checks/check_results_RAthena.html
+## Submission
+This release contains a couple of new features
+
+### New Features:
+* `dbGetPartition` has an optional formatting option to return tidy output instead of default `AWS Athena` output
+* `dbConnect` now supports different options for `bigint`, this is to align with other `DBI` backend packages, that already support this feature.
+
+### Bug Fix:
+* `dbRemoveTable` now checks the `AWS S3` path returned from `AWS Glue` before modifying to remove `AWS S3` objects.
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
@@ -13,15 +19,10 @@ This is a resubmission. In this version I have:
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 ## R devtools::check_rhub() results
-*  Days since last update: 6
-0 errors ✓ | 0 warnings ✓ | 1 note x
-
-**Notes**
-Apologises for the fast resubmission. This is to fix "CRAN Package Check Results for Package RAthena"
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 **Side note:** ran devtools::check_rhub with following environment variables:
 `devtools::check_rhub(env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always", LIBARROW_BINARY="true"))`
-
 
 ## unit tests (using testthat) results
 * OK:       121
