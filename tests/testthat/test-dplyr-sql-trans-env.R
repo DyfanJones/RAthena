@@ -20,16 +20,17 @@ data_type1 = c("BOOLEAN", "INT", "BIGINT", "DOUBLE", "DOUBLE",
 names(data_type1) = c("Logicial", "Integer", "Integer64", "Numeric", "Double", "Factor", "Character", "List", "Date", "Posixct")
 method <- "file_method"
 type_names <- sapply(1:12, function(x) paste0("var_", x))
-data_types <- list(list(Name = type_names,
-                        Type = c("boolean", "int",
-                                 "integer", "tinyint",
-                                 "smallint", "bigint",
-                                 "float", "decimal",
-                                 "string", "varchar",
-                                 "date", "timestamp")))
+data_types <- c("boolean", "int",
+                "integer", "tinyint",
+                "smallint", "bigint",
+                "float", "real",
+                "decimal",
+                "string", "varchar",
+                "date", "timestamp")
+names(data_types) <- type_names
 data_type2 = c("logical", "integer", "integer", "integer", "integer", "integer64", "double", "double", 
-               "character", "character","Date","POSIXct")
-data_type3 = c("l", "i", "i", "i", "i", "I", "d", "d", "c", "c", "D", "T")
+               "double", "character", "character","Date","POSIXct")
+data_type3 = c("l", "i", "i", "i", "i", "I", "d", "d", "d", "c", "c", "D", "T")
 names(data_type2) = type_names
 names(data_type3) = type_names
 
@@ -110,7 +111,8 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   expect_equal(t26, sql("\"iris\"['sepal_length']"))
   expect_equal(t27, sql('"iris"[1]'))
   expect_true(t28)
-  expect_error(explain(tbl(con, "iris")))
+  # suppress information messages
+  suppressMessages(expect_error(explain(tbl(con, "iris"))))
   expect_equal(t29, data_type1)
   expect_equal(t30, data_type2)
   expect_equal(t31, data_type3)

@@ -70,14 +70,8 @@ db_compute.AthenaConnection <- function(con,
   in_schema <- pkg_method("in_schema", "dbplyr")
   
   table <- db_save_query(con, sql, table, ...)
-  if (grepl("\\.", table)) {
-    schema <- gsub("\\..*", "" , table)
-    table <- gsub(".*\\.", "" , table)
-  } else {
-    schema <- con@info$dbms.name
-    table <- table}
-  
-  in_schema(schema, table)
+  ll <- db_detect(con, table)
+  in_schema(ll[["dbms.name"]], ll[["table"]])
 }
 
 #' Athena S3 implementation of dbplyr backend functions

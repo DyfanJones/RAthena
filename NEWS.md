@@ -1,7 +1,63 @@
+# RAthena 1.12.999
+## New Feature:
+* Added support to `AWS Athena` data types `[array, row, map, json, binary, ipaddress]` ([#135](https://github.com/DyfanJones/noctua/issues/135)). Conversion types can be changed through `dbConnect` and `noctua_options`.
+```r
+library(DBI)
+library(RAthena)
+# default conversion methods
+con <- dbConnect(RAthena::athena())
+# change json conversion method
+RAthena_options(json = "character")
+RAthena:::athena_option_env$json
+# [1] "character"
+# change json conversion to custom method
+RAthena_options(json = jsonify::from_json)
+RAthena:::athena_option_env$json
+# function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) 
+# {
+#   json_to_r(json, simplify, fill_na, buffer_size)
+# }
+# <bytecode: 0x7f823b9f6830>
+#   <environment: namespace:jsonify>
+# change bigint conversion without affecting custom json conversion methods
+RAthena_options(bigint = "numeric")
+RAthena:::athena_option_env$json
+# function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) 
+# {
+#   json_to_r(json, simplify, fill_na, buffer_size)
+# }
+# <bytecode: 0x7f823b9f6830>
+#   <environment: namespace:jsonify>
+RAthena:::athena_option_env$bigint
+# [1] "numeric"
+# change binary conversion without affect, bigint or json methods
+RAthena_options(binary = "character")
+RAthena:::athena_option_env$json
+# function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) 
+# {
+#   json_to_r(json, simplify, fill_na, buffer_size)
+# }
+# <bytecode: 0x7f823b9f6830>
+#   <environment: namespace:jsonify>
+RAthena:::athena_option_env$bigint
+# [1] "numeric"
+RAthena:::athena_option_env$binary
+# [1] "character"
+# no conversion for json objects
+con2 <- dbConnect(RAthena::athena(), json = "character")
+# use custom json parser
+con <- dbConnect(RAthena::athena(), json = jsonify::from_json)
+```
+* Allow users to turn off RStudio Connection Tab when working in RStudio ([#136](https://github.com/DyfanJones/noctua/issues/136)). This can be done through parameter `rstudio_conn_tab` within `dbConnect`.
+
+## Bug Fix:
+* `AWS Athena` uses `float` data type for the DDL only, `noctua` was wrongly parsing `float` data type back to R. Instead `AWS Athena` uses data type `real` in SQL functions like `select cast` https://docs.aws.amazon.com/athena/latest/ug/data-types.html. `noctua` now correctly parses `real` to R's data type `double` ([#133](https://github.com/DyfanJones/noctua/issues/133))
+* Iterate through each token `AWS` returns to get all results from `AWS Glue` catalogue ([#137](https://github.com/DyfanJones/noctua/issues/137))
+
 # RAthena 1.12.0
 ## New Feature
 * Added optional formatting to `dbGetPartition`. This simply tidies up the default AWS Athena partition format.
-```
+```r
 library(DBI)
 library(RAthena)
 
