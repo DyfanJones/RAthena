@@ -162,29 +162,27 @@ AthenaListColumns.default <- function(connection, table = NULL, view = NULL, dat
 }
 
 AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
-  if (!dbIsValid(connection)) {stop("Connection already closed.", call. = FALSE)}
+  con_error_msg(connection, "Connection already closed.")
   glue <- connection@ptr$client("glue")
   
-  if(is.null(database)){
-    tryCatch(database <- sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
-             error = function(e) py_error(e))}
+  if(is.null(database)) 
+    database <- unlist(get_databases(glue))
   if(is.null(name)){
-    tryCatch(output <- lapply(database, function (x) tryCatch(glue$get_tables(DatabaseName = x)$TableList, error = function(cond) NULL)),
-             error = function(e) py_error(e))
-    tbl_meta <- unlist(lapply(output, function(x) sapply(x, TblMeta)))}
-  else{
+    tryCatch({output <- lapply(database, function(i) get_table_list(glue = glue, schema = i))},
+             error = function(cond) NULL)
+    tbl_meta <- sapply(unlist(output, recursive = F), function(x) TblMeta(x))
+  } else {
     tryCatch(output <- glue$get_table(DatabaseName = database, Name = name)$Table,
              error = function(e) py_error(e))
     tbl_meta <- output$TableType
     names(tbl_meta) <- output$Name}
-  tbl_meta
+  return(tbl_meta)
 }
 
 AthenaDatabase <- function(connection, ...) {
-  if (!dbIsValid(connection)) {stop("Connection already closed.", call. = FALSE)}
+  con_error_msg(connection, "Connection already closed.")
   glue <- connection@ptr$client("glue")
-  tryCatch(sapply(glue$get_databases()$DatabaseList,function(x) x$Name),
-           error = function(e) py_error(e))
+  return(unlist(get_databases(glue)))
 }
 
 # Preview the data in an object.
@@ -314,6 +312,9 @@ on_connection_closed <- function(con) {
   if (is.null(observer))
     return(invisible(NULL))
   
+  if(!athena_option_env$rstudio_conn_tab)
+    return(invisible(NULL))
+  
   type <- "Athena"
   host <- computeHostName(con)
   observer$connectionClosed(type, host)
@@ -325,6 +326,9 @@ on_connection_updated <- function(con, hint) {
   if (is.null(observer))
     return(invisible(NULL))
   
+  if(!athena_option_env$rstudio_conn_tab)
+    return(invisible(NULL))
+  
   type <- "Athena"
   host <- computeHostName(con)
   observer$connectionUpdated(type, host, hint = hint)
@@ -334,6 +338,9 @@ on_connection_opened <- function(connection) {
   # make sure we have an observer
   observer <- getOption("connectionObserver")
   if (is.null(observer))
+    return(invisible(NULL))
+  
+  if(!athena_option_env$rstudio_conn_tab)
     return(invisible(NULL))
   
   # find an icon for this DBMS
