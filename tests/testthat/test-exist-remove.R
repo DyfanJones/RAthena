@@ -14,6 +14,9 @@ test_that("Check a table exist and remove table",{
   con <- dbConnect(athena(),
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
+  if(dbExistsTable(con, "removable_table"))
+    dbRemoveTable(con, "removable_table", confirm = TRUE)
+  
   table_exist1 <- dbExistsTable(con, "removable_table")
   
   df <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = F)
