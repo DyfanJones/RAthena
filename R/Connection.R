@@ -33,7 +33,7 @@ AthenaConnection <-
     ...){
     
     tryCatch(
-      ptr <- boto$Session(aws_access_key_id = aws_access_key_id,
+      boto3 <- boto$Session(aws_access_key_id = aws_access_key_id,
                           aws_secret_access_key = aws_secret_access_key,
                           aws_session_token = aws_session_token,
                           region_name = region_name,
@@ -43,12 +43,15 @@ AthenaConnection <-
       error = function(e) py_error(e))
     
     # stop connection if region_name is not set in backend or hardcoded
-    if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+    if(is.null(boto3$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
                                       "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.", call. = FALSE)
     
+    ptr_ll <- list(Athena = boto3$client("athena"),
+                   S3 = boto3$client("s3"),
+                   glue = boto3$client("glue"))
+    
     if(is.null(s3_staging_dir) && !is.null(work_group)){
-      Athena <- ptr$client("athena")
-      tryCatch(s3_staging_dir <- Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
+      tryCatch(s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
                error = function(e) py_error(e))
     }
     
@@ -60,9 +63,10 @@ AthenaConnection <-
     info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                  dbms.name = schema_name, work_group = work_group %||% "primary",
                  poll_interval = poll_interval, encryption_option = encryption_option,
-                 kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt)
+                 kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt,
+                 region_name = boto3$region_name)
     
-    res <- new("AthenaConnection",  ptr = ptr, info = info, quote = "`")
+    res <- new("AthenaConnection",  ptr = list2env(ptr_ll, parent = emptyenv()), info = list2env(info, parent = emptyenv()), quote = "`")
   }
 
 #' @rdname AthenaConnection
@@ -72,8 +76,8 @@ setClass(
   "AthenaConnection",
   contains = "DBIConnection",
   slots = list(
-    ptr = "ANY",
-    info = "list",
+    ptr = "environment",
+    info = "environment",
     quote = "character" )
 )
 
@@ -119,7 +123,7 @@ setMethod(
       warning("Connection already closed.", call. = FALSE)
     } else {
       on_connection_closed(conn)
-      eval.parent(substitute(conn@ptr <- NULL))}
+      rm(list = ls(all.names = TRUE, envir = conn@ptr), envir = conn@ptr)}
     invisible(NULL)
   })
 
@@ -208,8 +212,9 @@ setMethod(
            statement = NULL, ...){
     con_error_msg(conn, msg = "Connection already closed.")
     s3_staging_dir <- conn@info$s3_staging
-    res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
-    res
+    res <- AthenaResult(
+      conn=conn, statement= statement, s3_staging_dir = s3_staging_dir)
+    return(res)
   }
 )
 
@@ -221,8 +226,9 @@ setMethod(
            statement = NULL, ...){
     con_error_msg(conn, msg = "Connection already closed.")
     s3_staging_dir <- conn@info$s3_staging
-    res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
-    res
+    res <- AthenaResult(
+      conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
+    return(res)
   }
 )
 
@@ -234,18 +240,19 @@ setMethod(
            statement = NULL, ...){
     con_error_msg(conn, msg = "Connection already closed.")
     s3_staging_dir <- conn@info$s3_staging
-    res <- AthenaResult(conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
-    poll_result <- poll(res)
+    res <- AthenaResult(
+      conn=conn, statement= statement, s3_staging_dir = s3_staging_dir)
+    poll(res)
     
     # if query failed stop
-    if(poll_result$QueryExecution$Status$State == "FAILED") {
-      stop(poll_result$QueryExecution$Status$StateChangeReason, call. = FALSE)
-    }
+    if(res@info$Status == "FAILED")
+      stop(res@info$StateChangeReason, call. = FALSE)
     
     # cache query metadata if caching is enabled
-    if (athena_option_env$cache_size > 0) cache_query(poll_result)
+    if (athena_option_env$cache_size > 0)
+      cache_query(res)
     
-    res
+    return(res)
   }
 )
 
@@ -362,7 +369,7 @@ setMethod(
   "dbListTables", "AthenaConnection",
   function(conn, schema = NULL,...){
     con_error_msg(conn, msg = "Connection already closed.")
-    glue <- conn@ptr$client("glue")
+    glue <- conn@ptr$glue
     if(is.null(schema))
       schema <- get_databases(glue)
     tryCatch({output <- lapply(schema, function(i) get_table_list(glue = glue, schema = i))},
@@ -414,7 +421,7 @@ setMethod(
   "dbGetTables", "AthenaConnection",
   function(conn, schema = NULL, ...){
     con_error_msg(conn, msg = "Connection already closed.")
-    glue <- conn@ptr$client("glue")
+    glue <- conn@ptr$glue
     if(is.null(schema))
       schema <- get_databases(glue)
     tryCatch({output <- lapply(schema, function(i) get_table_list(glue = glue, schema = i))},
@@ -462,10 +469,9 @@ setMethod(
   "dbListFields", c("AthenaConnection", "character") ,
   function(conn, name, ...) {
     con_error_msg(conn, msg = "Connection already closed.")
-    glue <- conn@ptr$client("glue")
     ll <- db_detect(conn, name)
     retry_api_call(
-      output <- glue$get_table(
+      output <- conn@ptr$glue$get_table(
         DatabaseName = ll[["dbms.name"]],
         Name = ll[["table"]])$Table)
     
@@ -513,11 +519,9 @@ setMethod(
   function(conn, name, ...) {
     con_error_msg(conn, msg = "Connection already closed.")
     ll <- db_detect(conn, name)
-    
-    glue <- conn@ptr$client("glue")
 
     for (i in seq_len(athena_option_env$retry)) {
-      resp <- tryCatch(glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]), 
+      resp <- tryCatch(conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]), 
                        error = function(e) retry_error(e))
       
       # exponential step back if error and not expected error
@@ -583,39 +587,49 @@ setMethod(
               is.logical(confirm))
     ll <- db_detect(conn, name)
     
-    glue <- conn@ptr$client("glue")
-    s3 <- conn@ptr$resource("s3")
-    
-    tryCatch(TableType <- glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]])[["Table"]][["TableType"]],
+    tryCatch(TableType <- conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]])[["Table"]][["TableType"]],
              error = function(e) py_error(e))
     
     if (delete_data && TableType == "EXTERNAL_TABLE") {
       tryCatch(
-        s3_path <- split_s3_uri(glue$get_table(DatabaseName = ll[["dbms.name"]],
-                                               Name = ll[["table"]])[["Table"]][["StorageDescriptor"]][["Location"]]),
+        s3_path <- split_s3_uri(
+          conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]])[["Table"]][["StorageDescriptor"]][["Location"]]),
         error = function(e) py_error(e))
-      
       # Detect if key ends with "/" or if it has ".": https://github.com/DyfanJones/noctua/issues/125
       if(!grepl("\\.|/$", s3_path$key))
         s3_path$key <- sprintf("%s/", s3_path$key)
-      
+      all_keys <- list()
+      # Get all s3 objects linked to table
+      kwargs <- list(Bucket=s3_path$bucket, Prefix=s3_path$key)
+      while(is.null(kwargs$ContinuationToken)) {
+        objects <- do.call(conn@ptr$S3$list_objects_v2, kwargs)
+        all_keys <- c(all_keys, lapply(objects$Contents, function(x) list(Key=x$Key)))
+        if(identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(token) == 0) break
+        kwargs[["ContinuationToken"]] <- objects$NextContinuationToken
+      }
       message(paste0("Info: The S3 objects in prefix will be deleted:\n",
                      paste0("s3://", s3_path$bucket, "/", s3_path$key)))
-      
       if (!confirm) {
         confirm <- readline(prompt = "Delete files (y/n)?: ")
         if (tolower(confirm) != "y") {
           message("Info: Table deletion aborted.")
           return(NULL)}
       }
-      
-      # Remove objects in prefix of AWS Athena table
-      tryCatch(s3$Bucket(s3_path$bucket)$objects$filter(Prefix = s3_path$key)$delete(),
-               error = function(e) py_error(e))
+
+      # Only remove if files are found
+      if(length(all_keys) > 0){
+        # Delete S3 files in batch size 1000
+        key_parts <- split_vec(all_keys, 1000)
+        for(i in seq_along(key_parts))
+          conn@ptr$S3$delete_objects(Bucket = s3_path$bucket, Delete = list(Objects = key_parts[[i]]))
+      } else {
+        warning(sprintf('Failed to remove AWS S3 files from: "s3://%s/%s/". Please check if AWS S3 files exist.',
+                        s3_path$bucket, s3_path$key), call. = F)
+      }
     }
     
     # use glue to remove table from glue catalog
-    tryCatch(glue$delete_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]),
+    tryCatch(conn@ptr$glue$delete_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]),
              error = function(e) py_error(e))
     
     if (!delete_data) message("Info: Only Athena table has been removed.")
@@ -707,12 +721,11 @@ setMethod(
   "dbGetInfo", "AthenaConnection",
   function(dbObj, ...) {
     con_error_msg(dbObj, msg = "Connection already closed.")
-    info <- dbObj@info
-    RegionName <- dbObj@ptr$region_name
+    info <- as.list(dbObj@info)
     Boto <- as.character(boto_verison())
     rathena <- as.character(packageVersion("RAthena"))
-    info <- c(info, region_name = RegionName, boto3 = Boto, RAthena = rathena)
-    info
+    info <- c(info, boto3 = Boto, RAthena = rathena)
+    return(info)
   })
 
 #' Athena table partitions
@@ -763,7 +776,6 @@ setMethod(
   function(conn, name, ..., .format = FALSE) {
     con_error_msg(conn, msg = "Connection already closed.")
     stopifnot(is.logical(.format))
-    
     ll <- db_detect(conn, name)
     dt = dbGetQuery(conn, paste0("SHOW PARTITIONS ", ll[["dbms.name"]],".",ll[["table"]]))
     
