@@ -11,13 +11,13 @@ test_that("Check if retry_api is working as intended",{
   fail_env$i <- 1
   
   # two made up boto clients followed by s3
-  boto_client <- c("boo","ah","s3")
+  s3_obj <- c("copy","ah","copy_object")
   
   fail_function <- function(i, j){
     if (i > j) i <- 1
     result <- (i == j)
     fail_env$i <- i + 1
-    con@ptr$client(boto_client[i])
+    con@ptr$S3[[s3_obj[i]]]
     return(TRUE)
   }
   
