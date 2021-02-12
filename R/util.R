@@ -22,35 +22,40 @@ is.s3_uri <- function(x) {
   grepl(regex, x)
 }
 
-# basic wrapper to get boto session to athena
-client_athena <- function(botosession){
-  botosession@ptr$client("athena")
-}
-
 # If Query is cancelled by keyboard interrupt stop AWS Athena process
 poll <- function(res){
-  tryCatch(.poll(res),
-           interrupt = function(i){
-             if(res@connection@info$keyboard_interrupt){
-               dbClearResult(res)
-               stop(sprintf("Query '%s' has been cancelled by user.", res@info$QueryExecutionId), call. = F)
-             }
-             else {
-               stop(sprintf("Query '%s' has been cancelled by user but will carry on running in AWS Athena", res@info$QueryExecutionId), call. = F)
-             }
-           }
+  tryCatch(
+    .poll(res),
+    interrupt = function(i){
+      if(res@connection@info$keyboard_interrupt){
+        dbClearResult(res)
+        stop(sprintf("Query '%s' has been cancelled by user.", res@info[["QueryExecutionId"]]), call. = F)
+      } else {
+        stop(
+          sprintf("Query '%s' has been cancelled by user but will carry on running in AWS Athena",
+                  res@info[["QueryExecutionId"]]), call. = F)
+      }
+    }
   )
 }
 
 # holds functions until athena query competed
 .poll <- function(res){
-  class_poll <- res@connection@info$poll_interval
+  class_poll <- res@connection@info[["poll_interval"]]
   while (TRUE){
     poll_interval <- class_poll %||% rand_poll()
-    tryCatch(query_execution <- res@athena$get_query_execution(QueryExecutionId = res@info$QueryExecutionId),
+    tryCatch(query_execution <- res@connection@ptr$Athena$get_query_execution(QueryExecutionId = res@info[["QueryExecutionId"]]),
              error = function(e) py_error(e))
     if (query_execution$QueryExecution$Status$State %in% c("SUCCEEDED", "FAILED", "CANCELLED")){
-      return (query_execution)
+      # update info environment
+      res@info[["Query"]] <- query_execution[["QueryExecution"]][["Query"]]
+      res@info[["Status"]] <- query_execution[["QueryExecution"]][["Status"]][["State"]]
+      res@info[["StateChangeReason"]] <- query_execution[["QueryExecution"]][["Status"]][["StateChangeReason"]]
+      res@info[["StatementType"]] <- query_execution[["QueryExecution"]][["StatementType"]]
+      res@info[["WorkGroup"]] <- query_execution[["QueryExecution"]][["WorkGroup"]]
+      res@info[["OutputLocation"]] <- query_execution[["QueryExecution"]][["ResultConfiguration"]][["OutputLocation"]]
+      res@info[["Statistics"]] <- query_execution[["QueryExecution"]][["Statistics"]]
+      break
     } else {Sys.sleep(poll_interval)}
   }
 }
@@ -78,17 +83,21 @@ resource_active <- function(dbObj){
 
 # checks is dbObj is active
 resource_active.AthenaConnection <- function(dbObj){
-  if(!is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) return(TRUE) 
-  else if(is.null(dbObj@ptr) && !inherits(dbObj@ptr,  "boto3.session.Session")) {return(FALSE)}
-  if(!py_is_null_xptr(dbObj@ptr)) TRUE else FALSE
+  if(length(dbObj@ptr) !=0 &&
+     !py_is_null_xptr(dbObj@ptr$Athena)) {
+    TRUE
+  } else {
+    FALSE
+  }
 }
 
 resource_active.AthenaResult <- function(dbObj){
-  if(!is.null(dbObj@connection@ptr) && !is.null(dbObj@athena) &&
-     !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(TRUE)
-  else if(is.null(dbObj@connection@ptr) && is.null(dbObj@athena) &&
-          !inherits(dbObj@connection@ptr,  "boto3.session.Session")) return(FALSE)
-  if(!py_is_null_xptr(dbObj@connection@ptr) && !py_is_null_xptr(dbObj@athena)) TRUE else FALSE
+  if(length(dbObj@info) !=0 &&
+     !py_is_null_xptr(dbObj@connection@ptr$Athena)){
+    TRUE
+  } else {
+    FALSE
+  }
 }
 
 # set up athena request call
@@ -211,21 +220,27 @@ data_scanned <-
   }
 
 # caching function to added metadata to cache data.table
-cache_query = function(poll_result){
-  cache_append = data.table("QueryId" = poll_result$QueryExecution$QueryExecutionId,
-                            "Query" = poll_result$QueryExecution$Query,
-                            "State"= poll_result$QueryExecution$Status$State,
-                            "StatementType"= poll_result$QueryExecution$StatementType,
-                            "WorkGroup" = poll_result$QueryExecution$WorkGroup)
-  new_query = fsetdiff(cache_append, athena_option_env$cache_dt, all = TRUE)
-  
-  # As Athena doesn't scanned data with Failed queries. Failed queries wont be cached: https://aws.amazon.com/athena/pricing/
-  if(nrow(new_query[get("State") != "FAILED"]) > 0) athena_option_env$cache_dt = head(rbind(cache_append, athena_option_env$cache_dt), athena_option_env$cache_size)
+cache_query = function(res){
+  if(res@info$Status != "FAILED") {
+    cache_append = data.table("QueryId" = res@info[["QueryExecutionId"]],
+                              "Query" = res@info[["Query"]],
+                              "State"= res@info[["Status"]],
+                              "StatementType"= res@info[["StatementType"]],
+                              "WorkGroup" = res@info[["WorkGroup"]])
+    new_query = fsetdiff(cache_append, athena_option_env[["cache_dt"]], all = TRUE)
+    athena_option_env$cache_dt = head(
+      rbind(new_query, athena_option_env[["cache_dt"]]),
+      athena_option_env[["cache_size"]])
+  }
 }
 
 # check cached query ids
 check_cache = function(query, work_group){
-  query_id = athena_option_env$cache_dt[get("Query") == query & get("State") == "SUCCEEDED" & get("StatementType") == "DML" & get("WorkGroup") == work_group, get("QueryId")]
+  query_id = athena_option_env$cache_dt[(get("Query") == query &
+                                           get("State") == "SUCCEEDED" &
+                                           get("StatementType") == "DML" &
+                                           get("WorkGroup") == work_group),
+                                        get("QueryId")]
   if(length(query_id) == 0) return(NULL) else return(query_id[1])
 }
 
@@ -253,11 +268,13 @@ retry_api_call <- function(expr){
     if(inherits(resp, "error")){
       
       # stop retry if statement is an invalid request
-      if (grepl("InvalidRequestException", resp[1])) {stop(resp[1], call. = FALSE)}
+      if (grepl("InvalidRequestException", resp[1])) 
+        stop(resp[1], call. = FALSE)
       
       backoff_len <- runif(n=1, min=0, max=(2^i - 1))
       
-      if(!athena_option_env$retry_quiet) message(resp[1], "Request failed. Retrying in ", round(backoff_len, 1), " seconds...")
+      if(!athena_option_env$retry_quiet) 
+        message(resp[1], "Request failed. Retrying in ", round(backoff_len, 1), " seconds...")
       
       Sys.sleep(backoff_len)
     } else {break}
@@ -265,7 +282,7 @@ retry_api_call <- function(expr){
   
   if (inherits(resp, "error")) stop(resp[1])
   
-  resp
+  return(resp)
 }
 
 # Create table With parameters
@@ -329,9 +346,9 @@ get_databases <- function(glue){
     retry_api_call(response <- glue$get_databases(NextToken = token))
     data_list <- c(
       data_list,
-      vapply(response$DatabaseList,function(x) x$Name, FUN.VALUE = character(1))
+      vapply(response[["DatabaseList"]],function(x) x[["Name"]], FUN.VALUE = character(1))
       )
-    token <- response$NextToken
+    token <- response[["NextToken"]]
   }
   return(data_list)
 }
@@ -344,12 +361,12 @@ get_table_list <- function(glue, schema){
     retry_api_call(response <- glue$get_tables(DatabaseName = schema, NextToken = token))
     table_list <- c(
       table_list, 
-      lapply(response$TableList,
-             function(x) {list(DatabaseName = x$DatabaseName,
-                               Name = x$Name, 
-                               TableType = x$TableType)})
+      lapply(response[["TableList"]],
+             function(x) {list(DatabaseName = x[["DatabaseName"]],
+                               Name = x[["Name"]],
+                               TableType = x[["TableType"]])})
     )
-    token <- response$NextToken
+    token <- response[["NextToken"]]
   }
   return(table_list)
 }
@@ -367,7 +384,7 @@ db_detect <- function(conn, name){
     ll[["dbms.name"]] <- gsub("\\..*", "" , name)
     ll[["table"]] <- gsub(".*\\.", "" , name)
   } else {
-    ll[["dbms.name"]] <- conn@info$dbms.name
+    ll[["dbms.name"]] <- conn@info[["dbms.name"]]
     ll[["table"]] <- name}
   return(ll)
 }

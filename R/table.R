@@ -137,9 +137,8 @@ Athena_write_table <-
     
     # Check file format if appending
     if(found && append){
-      glue <- conn@ptr$client("glue")
       tryCatch(
-              tbl_info <- glue$get_table(DatabaseName = ll[["dbms.name"]],
+              tbl_info <- conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]],
                                          Name = ll[["table"]])$Table,
               error = function(e) py_error(e))
       
@@ -245,10 +244,9 @@ upload_data <- function(conn, x, name, partition = NULL, s3.location= NULL,  fil
   FileName <- paste(uuid::UUIDgenerate(n = length(x)),  FileType, sep = ".")
   s3_key <- paste(s3_key, FileName, sep = "/")
   
-  tryCatch(s3 <- conn@ptr$resource("s3"),
-           error = function(e) py_error(e))
   for (i in 1:length(x)){
-    retry_api_call(s3$Bucket(Bucket)$upload_file(Filename = x[i], Key = s3_key[i]))}
+    retry_api_call(
+      conn@ptr$S3$upload_file(x[i], Bucket, s3_key[i]))}
   
   invisible(NULL)
 }
@@ -572,17 +570,19 @@ repair_table <- function(con, name, partition = NULL, s3.location = NULL, append
     
     query <- SQL(paste0("ALTER TABLE ", table, " ADD IF NOT EXISTS\nPARTITION (", partition, ")\nLOCATION ", s3_location))
     res <- dbSendQuery(con, query)
-    poll_result <- poll(res)
-    dbClearResult(res)
+    poll(res)
+    on.exit(dbClearResult(res))
     
     # If query failed, due to glue permissions default back to msck repair table
-    if(poll_result$QueryExecution$Status$State == "FAILED" && 
-       grepl(".*glue.*BatchCreatePartition.*AccessDeniedException", 
-             poll_result$QueryExecution$Status$StateChangeReason)) {
-      query <- SQL(paste0("MSCK REPAIR TABLE ", table))
-      res <- dbExecute(con, query)
-      dbClearResult(res)
-    } else if (poll_result$QueryExecution$Status$State == "FAILED")
-        stop(poll_result$QueryExecution$Status$StateChangeReason, call. = FALSE)
+    if(res@info[["Status"]] == "FAILED") {
+      
+      if(grepl(".*glue.*BatchCreatePartition.*AccessDeniedException", 
+               res@info[["StateChangeReason"]])){
+        query <- SQL(paste0("MSCK REPAIR TABLE ", table))
+        rs <- dbExecute(con, query)
+        return(dbClearResult(rs))}
+      
+      stop(res@info[["StateChangeReason"]], call. = FALSE)
+    }
   }
 }
