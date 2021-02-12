@@ -143,7 +143,7 @@ AthenaListColumns <- function(connection, ...) UseMethod("AthenaListColumns")
 
 AthenaListColumns.default <- function(connection, table = NULL, view = NULL, database = NULL, ...) {
   if (dbIsValid(connection)) {
-    tryCatch(glue <- connection@ptr$client("glue"), error = function(e) py_error(e))
+    glue <- connection@ptr$glue
     tryCatch(output <- glue$get_table(DatabaseName = database, Name = table %||% view)$Table,
              error = function(e) py_error(e))
     
@@ -163,8 +163,7 @@ AthenaListColumns.default <- function(connection, table = NULL, view = NULL, dat
 
 AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
   con_error_msg(connection, "Connection already closed.")
-  glue <- connection@ptr$client("glue")
-  
+  glue <- connection@ptr$glue
   if(is.null(database)) 
     database <- unlist(get_databases(glue))
   if(is.null(name)){
@@ -181,7 +180,7 @@ AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
 
 AthenaDatabase <- function(connection, ...) {
   con_error_msg(connection, "Connection already closed.")
-  glue <- connection@ptr$client("glue")
+  glue <- connection@ptr$glue
   return(unlist(get_databases(glue)))
 }
 
