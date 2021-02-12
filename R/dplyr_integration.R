@@ -110,7 +110,7 @@ db_save_query.AthenaConnection <- function(con, sql, name ,
                    sql, ";"))
   res <- dbExecute(con, tt_sql)
   dbClearResult(res)
-  name
+  return(name)
 }
 
 #' S3 implementation of \code{db_copy_to} for Athena
@@ -217,10 +217,8 @@ db_query_fields.AthenaConnection <- function(con, sql, ...) {
     } else {
       schema_parts <- c(con@info$dbms.name, gsub('"', "", sql))}
     
-    glue <- con@ptr$client("glue")
-    
     tryCatch(
-      output <- glue$get_table(DatabaseName = schema_parts[1],
+      output <- con@ptr$glue$get_table(DatabaseName = schema_parts[1],
                                Name = schema_parts[2])$Table,
       error = function(e) py_error(e))
     
