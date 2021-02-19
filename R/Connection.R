@@ -604,7 +604,7 @@ setMethod(
       while(is.null(kwargs$ContinuationToken)) {
         objects <- do.call(conn@ptr$S3$list_objects_v2, kwargs)
         all_keys <- c(all_keys, lapply(objects$Contents, function(x) list(Key=x$Key)))
-        if(identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(token) == 0) break
+        if(identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(objects$NextContinuationToken) == 0) break
         kwargs[["ContinuationToken"]] <- objects$NextContinuationToken
       }
       message(paste0("Info: The S3 objects in prefix will be deleted:\n",
