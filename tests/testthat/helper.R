@@ -4,6 +4,11 @@ skip_if_no_boto <- function() {
   if(!have_boto) skip("boto3 not available for testing")
 }
 
+skip_if_no_python <- function() {
+  if (!py_available(initialize = TRUE))
+    skip("Python bindings not available for testing")
+}
+
 # helper function to skip test if rathena unit test environment variables not set
 skip_if_no_env <- function(){
   have_arn <- Sys.getenv("rathena_arn") != "" 

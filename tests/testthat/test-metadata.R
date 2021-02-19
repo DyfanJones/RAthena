@@ -18,11 +18,13 @@ test_that("Returning meta data",{
   con <- dbConnect(RAthena::athena(),
                    s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
-  res = dbExecute(con, "select * from test_df")
-  res_out = dbHasCompleted(res)
-  res_info = dbGetInfo(res)
-  res_stat = dbStatistics(res)
-  column_info1 = dbColumnInfo(res)
+  res1 = dbExecute(con, "select * from test_df")
+  res2 = dbSendStatement(con, "select * from test_df")
+  res_out2 = dbHasCompleted(res2)
+  res_out1 = dbHasCompleted(res1)
+  res_info = dbGetInfo(res1)
+  res_stat = dbStatistics(res1)
+  column_info1 = dbColumnInfo(res1)
   column_info2 = dbListFields(con, "test_df")
   con_info_exp = names(dbGetInfo(con))
   list_tbl1 = any(grepl("test_df", dbListTables(con, "default")))
@@ -42,7 +44,7 @@ test_that("Returning meta data",{
   name1 <- db_detect(con, "table1")
   name2 <- db_detect(con, "mydatabase.table1")
   
-  dbClearResult(res)
+  dbClearResult(res1)
   dbDisconnect(con)
   
   expect_equal(column_info1, df_col_info)
@@ -61,13 +63,14 @@ test_that("Returning meta data",{
   expect_false(RAthena:::is.s3_uri(NULL))
   expect_true(is.list(db_info))
   expect_error(dbGetInfo(con))
-  expect_true(res_out)
+  expect_true(res_out1)
+  expect_true(inherits(res_out2, "logical"))
   expect_equal(
     names(res_info), 
     c("WorkGroup", "StateChangeReason", "OutputLocation", "StatementType",
       "Query", "Status", "QueryExecutionId", "Statistics"))
   expect_true(is.list(res_stat))
-  expect_error(con_error_msg(res, "dummy message"), "dummy message")
+  expect_error(con_error_msg(res1, "dummy message"), "dummy message")
   expect_equal(name1, list("dbms.name" = "default", "table" = "table1"))
   expect_equal(name2, list("dbms.name" = "mydatabase", "table" = "table1"))
 })
