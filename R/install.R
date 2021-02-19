@@ -40,4 +40,4 @@ install_boto <- function(method = c("auto", "virtualenv", "conda"),
   )
   cat("\nInstallation complete. Please restart R.\n\n")
   invisible(NULL)
-  }
+}
