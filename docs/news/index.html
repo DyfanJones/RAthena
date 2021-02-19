@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -141,32 +141,168 @@
       <small>Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rathena-1120" class="section level1">
-<h1 class="page-header" data-toc-text="1.12.0">
-<a href="#rathena-1120" class="anchor"></a>RAthena 1.12.0<small> Unreleased </small>
+    <div id="rathena-200" class="section level1">
+<h1 class="page-header" data-toc-text="2.0.0">
+<a href="#rathena-200" class="anchor"></a>RAthena 2.0.0<small> Unreleased </small>
 </h1>
+<div id="api-change" class="section level2">
+<h2 class="hasAnchor">
+<a href="#api-change" class="anchor"></a>API Change</h2>
+<ul>
+<li>
+<code>AthenaConnection</code> class: <code>ptr</code> and <code>info</code> slots changed from <code>list</code> to <code>environment</code> with in <code>AthenaConnect</code> class. Allows class to be updated by reference. Simplifies notation when viewing class from RStudio environment tab.</li>
+<li>
+<code>AthenaResult</code> class: <code>info</code> slot changed from <code>list</code> to <code>environment</code>. Allows class to be updated by reference.</li>
+</ul>
+<p>By utilising environments for <code>AthenaConnection</code> and <code>AthenaResult</code>, all <code>AthenaResult</code> classes created from <code>AthenaConnection</code> will point to the same <code>ptr</code> and <code>info</code> environments for it’s connection. Previously <code>ptr</code> and <code>info</code> would make a copy. This means if it was modified it would not affect the child or parent class for example:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Old Method</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span>,
+                 rstudio_conn_tab <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
+
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"select 'helloworld'"</span><span class="op">)</span>
+
+<span class="co"># modifying parent class to influence child</span>
+<span class="va">con</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span> <span class="op">&lt;-</span> <span class="st">"helloworld"</span>
+
+<span class="co"># nothing happened</span>
+<span class="va">res</span><span class="op">@</span><span class="va">connection</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span>
+<span class="co"># &gt; NULL</span>
+
+<span class="co"># modifying child class to influence parent</span>
+<span class="va">res</span><span class="op">@</span><span class="va">connection</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span> <span class="op">&lt;-</span> <span class="st">"oh no!"</span>
+
+<span class="co"># nothing happened</span>
+<span class="va">con</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span>
+<span class="co"># &gt; "helloworld"</span>
+
+<span class="co"># New Method</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span>,
+                 rstudio_conn_tab <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
+
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"select 'helloworld'"</span><span class="op">)</span>
+
+<span class="co"># modifying parent class to influence child</span>
+<span class="va">con</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span> <span class="op">&lt;-</span> <span class="st">"helloworld"</span>
+
+<span class="co"># picked up change</span>
+<span class="va">res</span><span class="op">@</span><span class="va">connection</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span>
+<span class="co"># &gt; "helloworld"</span>
+
+<span class="co"># modifying child class to influence parent</span>
+<span class="va">res</span><span class="op">@</span><span class="va">connection</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span> <span class="op">&lt;-</span> <span class="st">"oh no!"</span>
+
+<span class="co"># picked up change</span>
+<span class="va">con</span><span class="op">@</span><span class="va">info</span><span class="op">$</span><span class="va">made_up</span>
+<span class="co"># &gt; "oh no!"</span></code></pre></div>
+</div>
 <div id="new-feature" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-feature" class="anchor"></a>New Feature</h2>
 <ul>
+<li>Added support to <code>AWS Athena</code> data types <code>[array, row, map, json, binary, ipaddress]</code> (<a href="https://github.com/DyfanJones/noctua/issues/135">noctua: # 135</a>). Conversion types can be changed through <code>dbConnect</code> and <code>noctua_options</code>.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena">RAthena</a></span><span class="op">)</span>
+
+<span class="co"># default conversion methods</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># change json conversion method</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span><span class="op">(</span>json <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">json</span>
+<span class="co"># [1] "character"</span>
+
+<span class="co"># change json conversion to custom method</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span><span class="op">(</span>json <span class="op">=</span> <span class="fu">jsonify</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/jsonify/man/from_json.html">from_json</a></span><span class="op">)</span>
+
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">json</span>
+<span class="co"># function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) </span>
+<span class="co"># {</span>
+<span class="co">#   json_to_r(json, simplify, fill_na, buffer_size)</span>
+<span class="co"># }</span>
+<span class="co"># &lt;bytecode: 0x7f823b9f6830&gt;</span>
+<span class="co">#   &lt;environment: namespace:jsonify&gt;</span>
+
+<span class="co"># change bigint conversion without affecting custom json conversion methods</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span><span class="op">(</span>bigint <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span>
+
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">json</span>
+<span class="co"># function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) </span>
+<span class="co"># {</span>
+<span class="co">#   json_to_r(json, simplify, fill_na, buffer_size)</span>
+<span class="co"># }</span>
+<span class="co"># &lt;bytecode: 0x7f823b9f6830&gt;</span>
+<span class="co">#   &lt;environment: namespace:jsonify&gt;</span>
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">bigint</span>
+<span class="co"># [1] "numeric"</span>
+
+<span class="co"># change binary conversion without affect, bigint or json methods</span>
+<span class="fu"><a href="../reference/RAthena_options.html">RAthena_options</a></span><span class="op">(</span>binary <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>
+
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">json</span>
+<span class="co"># function (json, simplify = TRUE, fill_na = FALSE, buffer_size = 1024) </span>
+<span class="co"># {</span>
+<span class="co">#   json_to_r(json, simplify, fill_na, buffer_size)</span>
+<span class="co"># }</span>
+<span class="co"># &lt;bytecode: 0x7f823b9f6830&gt;</span>
+<span class="co">#   &lt;environment: namespace:jsonify&gt;</span>
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">bigint</span>
+<span class="co"># [1] "numeric"</span>
+<span class="fu">RAthena</span><span class="fu">:::</span><span class="va">athena_option_env</span><span class="op">$</span><span class="va">binary</span>
+<span class="co"># [1] "character"</span>
+
+<span class="co"># no conversion for json objects</span>
+<span class="va">con2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span>, json <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>
+<span class="co"># use custom json parser</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span>, json <span class="op">=</span> <span class="fu">jsonify</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/jsonify/man/from_json.html">from_json</a></span><span class="op">)</span></code></pre></div>
+<ul>
+<li>Allow users to turn off RStudio Connection Tab when working in RStudio (<a href="https://github.com/DyfanJones/noctua/issues/136">noctua: # 136</a>). This can be done through parameter <code>rstudio_conn_tab</code> within <code>dbConnect</code>.</li>
+</ul>
+</div>
+<div id="bug-fix" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fix" class="anchor"></a>Bug Fix:</h2>
+<ul>
+<li>
+<code>AWS Athena</code> uses <code>float</code> data type for the DDL only, <code>noctua</code> was wrongly parsing <code>float</code> data type back to R. Instead <code>AWS Athena</code> uses data type <code>real</code> in SQL functions like <code>select cast</code> <a href="https://docs.aws.amazon.com/athena/latest/ug/data-types.html" class="uri">https://docs.aws.amazon.com/athena/latest/ug/data-types.html</a>. <code>noctua</code> now correctly parses <code>real</code> to R’s data type <code>double</code> (<a href="https://github.com/DyfanJones/noctua/issues/133">noctua: # 133</a>)</li>
+<li>Iterate through each token <code>AWS</code> returns to get all results from <code>AWS Glue</code> catalogue (<a href="https://github.com/DyfanJones/noctua/issues/137">noctua: # 137</a>)</li>
+</ul>
+</div>
+</div>
+    <div id="rathena-1120" class="section level1">
+<h1 class="page-header" data-toc-text="1.12.0">
+<a href="#rathena-1120" class="anchor"></a>RAthena 1.12.0<small> 2021-01-20 </small>
+</h1>
+<div id="new-feature-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-feature-1" class="anchor"></a>New Feature</h2>
+<ul>
 <li>Added optional formatting to <code>dbGetPartition</code>. This simply tidies up the default AWS Athena partition format.</li>
 </ul>
-<pre><code><a href="https://dbi.r-dbi.org">library(DBI)
-library(RAthena)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena">RAthena</a></span><span class="op">)</span>
 
-con &lt;- dbConnect(athena())
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
-dbGetPartition(con, "test_df2", .format = T)
+<span class="fu"><a href="../reference/dbGetPartition.html">dbGetPartition</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"test_df2"</span>, .format <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 
-# Info: (Data scanned: 0 Bytes)
-#    year month day
-# 1: 2020    11  17
+<span class="co"># Info: (Data scanned: 0 Bytes)</span>
+<span class="co">#    year month day</span>
+<span class="co"># 1: 2020    11  17</span>
 
-dbGetPartition(con, "test_df2")
+<span class="fu"><a href="../reference/dbGetPartition.html">dbGetPartition</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"test_df2"</span><span class="op">)</span>
 
-# Info: (Data scanned: 0 Bytes)
-#                    partition
-# 1: year=2020/month=11/day=17</a></code></pre>
+<span class="co"># Info: (Data scanned: 0 Bytes)</span>
+<span class="co">#                    partition</span>
+<span class="co"># 1: year=2020/month=11/day=17</span></code></pre></div>
 <ul>
 <li>Support different formats for returning <code>bigint</code>, this is to align with other DBI interfaces i.e. <code>RPostgres</code>. Now <code>bigint</code> can be return in the possible formats: [“integer64”, “integer”, “numeric”, “character”]</li>
 </ul>
@@ -175,13 +311,13 @@ dbGetPartition(con, "test_df2")
 con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <p>When switching between the different file parsers the <code>bigint</code> to be represented according to the file parser i.e. <code>data.table</code>: “integer64” -&gt; <code>vroom</code>: “I”.</p>
 </div>
-<div id="bug-fix" class="section level2">
+<div id="bug-fix-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix" class="anchor"></a>Bug Fix:</h2>
+<a href="#bug-fix-1" class="anchor"></a>Bug Fix:</h2>
 <ul>
 <li>
-<code>dbRemoveTable</code>: Check if key has “.” or ends with “/” before adding “/” to the end (<a href="https://github.com/DyfanJones/noctua/issues/125"># 125</a>)</li>
-<li>Added uuid minimum version to fix issue (<a href="https://github.com/DyfanJones/noctua/issues/128"># 128</a>)</li>
+<code>dbRemoveTable</code>: Check if key has “.” or ends with “/” before adding “/” to the end (<a href="https://github.com/DyfanJones/noctua/issues/125">noctua: # 125</a>)</li>
+<li>Added uuid minimum version to fix issue (<a href="https://github.com/DyfanJones/noctua/issues/128">noctua: # 128</a>)</li>
 </ul>
 </div>
 <div id="documentation" class="section level2">
@@ -209,17 +345,17 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.11.0">
 <a href="#rathena-1110" class="anchor"></a>RAthena 1.11.0<small> 2020-11-11 </small>
 </h1>
-<div id="new-feature-1" class="section level2">
+<div id="new-feature-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-1" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-2" class="anchor"></a>New Feature</h2>
 <ul>
 <li>Move <code>sql_escape_date</code> into <code>dplyr_integration.R</code> backend (<a href='https://github.com/DyfanJones/RAthena/issues/121'>#121</a>). Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for developing Athena date translation.</li>
 <li>Allow <code>RAthena</code> to append to a static AWS s3 location using uuid</li>
 </ul>
 </div>
-<div id="bug-fix-1" class="section level2">
+<div id="bug-fix-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-1" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-2" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>parquet file.types now use parameter <code>use_deprecated_int96_timestamps</code> set to <code>TRUE</code>. This puts POSIXct data type in to <code>java.sql.Timestamp</code> compatible format, such as <code>yyyy-MM-dd HH:mm:ss[.f...]</code>. Thanks to Christian N Wolz for highlight this issue.</li>
 <li>
@@ -233,9 +369,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.10.1">
 <a href="#rathena-1101" class="anchor"></a>RAthena 1.10.1<small> 2020-09-26 </small>
 </h1>
-<div id="bug-fix-2" class="section level2">
+<div id="bug-fix-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-2" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-3" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Do not abort if a glue::get_tables api call fails (e.g., due to missing permissions to a specific database or an orphaned Lake Formation resource link) when retrieving a list of database tables with dbListTables, dbGetTables or in Rstudio’s Connections pane. Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> creating solution (<a href="https://github.com/DyfanJones/noctua/pull/106">noctua: # 106</a>)</li>
 <li>Allowed cache_size to equal 100</li>
@@ -246,13 +382,13 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.10.0">
 <a href="#rathena-1100" class="anchor"></a>RAthena 1.10.0<small> 2020-08-06 </small>
 </h1>
-<div id="new-feature-2" class="section level2">
+<div id="new-feature-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-2" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-3" class="anchor"></a>New Feature</h2>
 <ul>
 <li>RAthena now supports Keyboard Interrupt and will stop AWS Athena running the query when the query has been interrupted. To keep the functionality of AWS Athena running when <code>R</code> has been interrupt a new parameter has been added to <code>dbConnect</code>, <code>keyboard_interrupt</code>. Example:</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Stop AWS Athena when R has been interrupted:</span>
 
@@ -287,9 +423,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.9.0">
 <a href="#rathena-190" class="anchor"></a>RAthena 1.9.0<small> 2020-05-14 </small>
 </h1>
-<div id="new-feature-3" class="section level2">
+<div id="new-feature-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-3" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-4" class="anchor"></a>New Feature</h2>
 <ul>
 <li>functions that collect or push to AWS S3 now have a retry capability. Meaning if API call fails then the call is retried (<a href="https://github.com/DyfanJones/noctua/issues/79">noctua: # 79</a>)</li>
 <li>
@@ -297,7 +433,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>
 <code>dbFetch</code> is able to return data from AWS Athena in chunk. This has been achieved by passing <code>NextToken</code> to <code>AthenaResult</code> s4 class. This method won’t be as fast <code>n = -1</code> as each chunk will have to be process into data frame format.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect,AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -320,9 +456,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>Added <code>region_name</code> check before making a connection to AWS Athena (<a href='https://github.com/DyfanJones/RAthena/issues/110'>#110</a>)</li>
 </ul>
 </div>
-<div id="bug-fix-3" class="section level2">
+<div id="bug-fix-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-3" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-4" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>
 <code>dbWriteTable</code> would throw <code>throttling error</code> every now and again, <code>retry_api_call</code> as been built to handle the parsing of data between R and AWS S3.</li>
@@ -347,9 +483,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.8.0">
 <a href="#rathena-180" class="anchor"></a>RAthena 1.8.0<small> 2020-03-17 </small>
 </h1>
-<div id="new-feature-4" class="section level2">
+<div id="new-feature-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-4" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-5" class="anchor"></a>New Feature</h2>
 <ul>
 <li>Inspired by <code>pyathena</code>, <code>RAthena_options</code> now has a new parameter <code>cache_size</code>. This implements local caching in R environments instead of using AWS <code>list_query_executions</code>. This is down to <code>dbClearResult</code> clearing S3’s Athena output when caching isn’t disabled</li>
 <li>
@@ -357,7 +493,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>
 <code>dbRemoveTable</code> now utilise <code>AWS Glue</code> to remove tables from <code>AWS Glue</code> catalogue. This has a performance enhancement:</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
@@ -382,7 +518,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>
 <code>dbWriteTable</code> now supports uploading json lines (<a href="http://jsonlines.org/" class="uri">http://jsonlines.org/</a>) format up to <code>AWS Athena</code> (<a href='https://github.com/DyfanJones/RAthena/issues/88'>#88</a>).</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
@@ -392,9 +528,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 
 <span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"select * from iris2"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="bug-fix-4" class="section level2">
+<div id="bug-fix-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-4" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-5" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>
 <code>dbWriteTable</code> appending to existing table compress file type was incorrectly return.</li>
@@ -432,15 +568,15 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.7.1">
 <a href="#rathena-171" class="anchor"></a>RAthena 1.7.1<small> 2020-02-16 </small>
 </h1>
-<div id="bug-fix-5" class="section level2">
+<div id="bug-fix-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-5" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-6" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Dependency data.table now restricted to (&gt;=1.12.4) due to file compression being added to <code>fwrite</code> (&gt;=1.12.4) <a href="https://github.com/Rdatatable/data.table/blob/master/NEWS.md" class="uri">https://github.com/Rdatatable/data.table/blob/master/NEWS.md</a>
 </li>
 <li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for fixing date variables being incorrectly translated by <code>sql_translate_env</code> (<a href='https://github.com/DyfanJones/RAthena/issues/44'>#44</a>)</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Before</span>
 <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
@@ -452,7 +588,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <ul>
 <li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexibility for custom separating values.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># R code:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"hi"</span>, <span class="st">"bye"</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>
@@ -464,7 +600,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>
 <code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">dbplyr::in_schema</a></code>.</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -480,9 +616,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 </li>
 </ul>
 </div>
-<div id="new-feature-5" class="section level2">
+<div id="new-feature-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-5" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-6" class="anchor"></a>New Feature</h2>
 <ul>
 <li>
 <code>RAthena_options</code>
@@ -499,7 +635,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <code>s3.location</code> now follows new syntax <code>s3://bucket/{schema}/{table}/{partition}/{table_file}</code> to align with <code>Pyathena</code> and to allow tables with same name but in different schema to be uploaded to s3 (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>).</li>
 <li>Thanks to <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> for improving the speed of <code><a href="https://dplyr.tidyverse.org/reference/tbl.html">dplyr::tbl</a></code> when calling Athena when using the ident method (noctua <a href="https://github.com/DyfanJones/noctua/issues/64"># 64</a>):</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -534,15 +670,15 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.7.0">
 <a href="#rathena-170" class="anchor"></a>RAthena 1.7.0<small> 2020-01-07 </small>
 </h1>
-<div id="new-feature-6" class="section level2">
+<div id="new-feature-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-6" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-7" class="anchor"></a>New Feature</h2>
 <ul>
 <li>Added integration into Rstudio connections tab</li>
 <li>Added information message of amount of data scanned by AWS Athena</li>
 <li>Added method to change backend file parser so user can change file parser from <code>data.table</code> to <code>vroom</code>. From now on it is possible to change file parser using <code>RAthena_options</code> for example:</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena">RAthena</a></span><span class="op">)</span>
 
@@ -575,7 +711,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <ul>
 <li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will receive a warning message:</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/warning.html">warning</a></span><span class="op">(</span><span class="st">'Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "'</span>, <span class="va">File.Type</span>,<span class="st">'".'</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
@@ -587,16 +723,16 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>Removed <code>tolower</code> conversion due to request <a href='https://github.com/DyfanJones/RAthena/issues/41'>#41</a></li>
 </ul>
 </div>
-<div id="new-feature-7" class="section level2">
+<div id="new-feature-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-7" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-8" class="anchor"></a>New Feature</h2>
 <ul>
 <li>Due to help from <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a>, <code>dbRemoveTable</code> can now remove S3 files for AWS Athena table being removed.</li>
 </ul>
 </div>
-<div id="bug-fix-6" class="section level2">
+<div id="bug-fix-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-6" class="anchor"></a>Bug fix</h2>
+<a href="#bug-fix-7" class="anchor"></a>Bug fix</h2>
 <ul>
 <li>Due to issue highlighted by <a href='https://github.com/OssiLehtinen'>@OssiLehtinen</a> in <a href='https://github.com/DyfanJones/RAthena/issues/50'>#50</a>, special characters have issue being processed when using flat file in the backend.</li>
 <li>Fixed issue where <code>as.character</code> was getting wrongly translated <a href='https://github.com/DyfanJones/RAthena/issues/45'>#45</a></li>
@@ -630,7 +766,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <code>dbWriteTable</code> now will split <code>gzip</code> compressed files to improve AWS Athena performance. By default <code>gzip</code> compressed files will be split into 20.</li>
 </ul>
 <p>Performance results</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
@@ -653,7 +789,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>test_split2: (Run time: 3.73 seconds, Data scanned: 1.16 GB)</li>
 <li>test_split3: (Run time: 5.47 seconds, Data scanned: 1.16 GB)</li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
@@ -678,9 +814,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 </li>
 </ul>
 </div>
-<div id="bug-fix-7" class="section level2">
+<div id="bug-fix-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-7" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-8" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Fixed bug in regards to Athena DDL being created incorrectly when passed from <code>dbWriteTable</code>
 </li>
@@ -714,9 +850,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>Parquet file type can now be compress using snappy compression when writing data to S3.</li>
 </ul>
 </div>
-<div id="bug-fix-8" class="section level2">
+<div id="bug-fix-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-8" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-9" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Older versions of R are returning errors when function <code>dbWriteTable</code> is called. The bug is due to function <code>sqlCreateTable</code> which <code>dbWriteTable</code> calls. Parameters <code>table</code> and <code>fields</code> were set to <code>NULL</code>. This has now been fixed.</li>
 </ul>
@@ -742,7 +878,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <ul>
 <li>helper function <code>upload_data</code> has been rebuilt and removed the old “horrible” if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
@@ -750,17 +886,17 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 
 <span class="fu">dbWrite</span><span class="op">(</span><span class="va">con</span>, <span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="new-feature-8" class="section level2">
+<div id="new-feature-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-8" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-9" class="anchor"></a>New Feature</h2>
 <ul>
 <li>GZIP compression is now supported for “csv” and “tsv” file format in <code>dbWriteTable</code>
 </li>
 </ul>
 </div>
-<div id="bug-fix-9" class="section level2">
+<div id="bug-fix-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-9" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-10" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Info message wasn’t being return when colnames needed changing for Athena DDL</li>
 </ul>
@@ -883,9 +1019,9 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <li>Created s3 method for function <code>db_copy_to</code> for better integration with dplyr</li>
 </ul>
 </div>
-<div id="bug-fix-10" class="section level2">
+<div id="bug-fix-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-10" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-11" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>
 <code>dbFetch</code> Athena data type miss alignment</li>
@@ -941,16 +1077,16 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <h1 class="page-header" data-toc-text="1.0.3">
 <a href="#rathena-103" class="anchor"></a>RAthena 1.0.3<small> Unreleased </small>
 </h1>
-<div id="new-feature-9" class="section level2">
+<div id="new-feature-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-feature-9" class="anchor"></a>New Feature</h2>
+<a href="#new-feature-10" class="anchor"></a>New Feature</h2>
 <ul>
 <li>Added <code>stop_query_execution</code> to <code>dbClearResult</code> if the query is still running</li>
 </ul>
 </div>
-<div id="bug-fix-11" class="section level2">
+<div id="bug-fix-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fix-11" class="anchor"></a>Bug Fix</h2>
+<a href="#bug-fix-12" class="anchor"></a>Bug Fix</h2>
 <ul>
 <li>Fixed bug of miss-alignment of s3 location and Athena table on lower level folder structures, when writing data.frame to Athena (using <code>dbWriteTable</code>)</li>
 </ul>
