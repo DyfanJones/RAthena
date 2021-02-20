@@ -50,7 +50,7 @@ con@info$made_up
 ```
 
 ## New Feature
-* Added support to `AWS Athena` data types `[array, row, map, json, binary, ipaddress]` ([noctua: # 135](https://github.com/DyfanJones/noctua/issues/135)). Conversion types can be changed through `dbConnect` and `noctua_options`.
+* Added support to `AWS Athena` data types `[array, row, map, json, binary, ipaddress]` ([noctua: # 135](https://github.com/DyfanJones/noctua/issues/135)). Conversion types can be changed through `dbConnect` and `RAthena_options`.
 ```r
 library(DBI)
 library(RAthena)
@@ -110,7 +110,7 @@ con <- dbConnect(RAthena::athena(), json = jsonify::from_json)
 * Allow users to turn off RStudio Connection Tab when working in RStudio ([noctua: # 136](https://github.com/DyfanJones/noctua/issues/136)). This can be done through parameter `rstudio_conn_tab` within `dbConnect`.
 
 ## Bug Fix:
-* `AWS Athena` uses `float` data type for the DDL only, `noctua` was wrongly parsing `float` data type back to R. Instead `AWS Athena` uses data type `real` in SQL functions like `select cast` https://docs.aws.amazon.com/athena/latest/ug/data-types.html. `noctua` now correctly parses `real` to R's data type `double` ([noctua: # 133](https://github.com/DyfanJones/noctua/issues/133))
+* `AWS Athena` uses `float` data type for the DDL only, `RAthena` was wrongly parsing `float` data type back to R. Instead `AWS Athena` uses data type `real` in SQL functions like `select cast` https://docs.aws.amazon.com/athena/latest/ug/data-types.html. `RAthena` now correctly parses `real` to R's data type `double` ([noctua: # 133](https://github.com/DyfanJones/noctua/issues/133))
 * Iterate through each token `AWS` returns to get all results from `AWS Glue` catalogue ([noctua: # 137](https://github.com/DyfanJones/noctua/issues/137))
 
 # RAthena 1.12.0
