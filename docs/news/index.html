@@ -203,7 +203,7 @@
 <h2 class="hasAnchor">
 <a href="#new-feature" class="anchor"></a>New Feature</h2>
 <ul>
-<li>Added support to <code>AWS Athena</code> data types <code>[array, row, map, json, binary, ipaddress]</code> (<a href="https://github.com/DyfanJones/noctua/issues/135">noctua: # 135</a>). Conversion types can be changed through <code>dbConnect</code> and <code>noctua_options</code>.</li>
+<li>Added support to <code>AWS Athena</code> data types <code>[array, row, map, json, binary, ipaddress]</code> (<a href="https://github.com/DyfanJones/noctua/issues/135">noctua: # 135</a>). Conversion types can be changed through <code>dbConnect</code> and <code>RAthena_options</code>.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -270,7 +270,7 @@
 <a href="#bug-fix" class="anchor"></a>Bug Fix:</h2>
 <ul>
 <li>
-<code>AWS Athena</code> uses <code>float</code> data type for the DDL only, <code>noctua</code> was wrongly parsing <code>float</code> data type back to R. Instead <code>AWS Athena</code> uses data type <code>real</code> in SQL functions like <code>select cast</code> <a href="https://docs.aws.amazon.com/athena/latest/ug/data-types.html" class="uri">https://docs.aws.amazon.com/athena/latest/ug/data-types.html</a>. <code>noctua</code> now correctly parses <code>real</code> to R’s data type <code>double</code> (<a href="https://github.com/DyfanJones/noctua/issues/133">noctua: # 133</a>)</li>
+<code>AWS Athena</code> uses <code>float</code> data type for the DDL only, <code>RAthena</code> was wrongly parsing <code>float</code> data type back to R. Instead <code>AWS Athena</code> uses data type <code>real</code> in SQL functions like <code>select cast</code> <a href="https://docs.aws.amazon.com/athena/latest/ug/data-types.html" class="uri">https://docs.aws.amazon.com/athena/latest/ug/data-types.html</a>. <code>RAthena</code> now correctly parses <code>real</code> to R’s data type <code>double</code> (<a href="https://github.com/DyfanJones/noctua/issues/133">noctua: # 133</a>)</li>
 <li>Iterate through each token <code>AWS</code> returns to get all results from <code>AWS Glue</code> catalogue (<a href="https://github.com/DyfanJones/noctua/issues/137">noctua: # 137</a>)</li>
 </ul>
 </div>
