@@ -11,7 +11,7 @@ test_that("Check if Athena query has been successfully been cancelled",{
   
   con <- dbConnect(athena(), keyboard_interrupt = T)
   
-  res <- dbSendQuery(con, "select 'helloworld'")
+  res <- dbSendQuery(con, "SHOW TABLES IN default")
   query_id <- res@info[["QueryExecutionId"]]
   err_msg <- sprintf(
     "Query '%s' has been cancelled by user.",
@@ -31,7 +31,7 @@ test_that("Check if Athena query has not been cancelled",{
   
   con <- dbConnect(athena(), keyboard_interrupt = F)
   
-  res <- dbSendQuery(con, "select 'helloworld'")
+  res <- dbSendQuery(con, "SHOW TABLES IN default")
   query_id <- res@info[["QueryExecutionId"]]
   err_msg <- sprintf(
     "Query '%s' has been cancelled by user but will carry on running in AWS Athena",
