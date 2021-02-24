@@ -28,12 +28,16 @@ poll <- function(res){
     .poll(res),
     interrupt = function(i){
       if(res@connection@info$keyboard_interrupt){
+        msg = sprintf(
+          "Query '%s' has been cancelled by user.",
+          res@info[["QueryExecutionId"]])
         dbClearResult(res)
-        stop(sprintf("Query '%s' has been cancelled by user.", res@info[["QueryExecutionId"]]), call. = F)
+        stop(msg, call. = F)
       } else {
-        stop(
-          sprintf("Query '%s' has been cancelled by user but will carry on running in AWS Athena",
-                  res@info[["QueryExecutionId"]]), call. = F)
+        msg = sprintf(
+          "Query '%s' has been cancelled by user but will carry on running in AWS Athena",
+          res@info[["QueryExecutionId"]])
+        stop(msg, call. = F)
       }
     }
   )
