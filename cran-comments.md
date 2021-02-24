@@ -4,6 +4,9 @@ This is hot fix to fix issue of keyboard interrupt failing to raise interrupt er
 ### Bug Fix:
 * fix issue were keyboard interrupt didn't raise interrupt error due to 2.0.0 release
 
+### Unit test:
+* check if interrupt function successfully interrupts Athena when user manually triggers a keyboard interrupt
+
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
 
@@ -28,4 +31,4 @@ Apologises for the quick re-release, this is a hot fix to fix "keyboard interrup
 `devtools::check_rhub(env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always", LIBARROW_BINARY="true"))`
 
 ## unit tests (using testthat) results
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 219 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 223 ]

@@ -86,7 +86,10 @@ setClass(
 setMethod(
   "show", "AthenaConnection",
   function(object){
-    cat("AthenaConnection \n")
+    cat("<AthenaConnection>\n")
+    if (!dbIsValid(object)) {
+      cat("  DISCONNECTED\n")
+    }
 })
 
 #' Disconnect (close) an Athena connection
