@@ -87,8 +87,7 @@ setMethod(
   "show", "AthenaConnection",
   function(object){
     cat("AthenaConnection \n")
-  }
-)
+})
 
 #' Disconnect (close) an Athena connection
 #' 
@@ -125,7 +124,7 @@ setMethod(
       on_connection_closed(conn)
       rm(list = ls(all.names = TRUE, envir = conn@ptr), envir = conn@ptr)}
     invisible(NULL)
-  })
+})
 
 #' Is this DBMS object still valid?
 #' 
@@ -169,9 +168,7 @@ setMethod(
   "dbIsValid", "AthenaConnection",
   function(dbObj, ...){
     resource_active(dbObj)
-  }
-)
-
+})
 
 #' Execute a query on Athena
 #' 
@@ -215,8 +212,7 @@ setMethod(
     res <- AthenaResult(
       conn=conn, statement= statement, s3_staging_dir = s3_staging_dir)
     return(res)
-  }
-)
+})
 
 #' @rdname Query
 #' @export
@@ -229,8 +225,7 @@ setMethod(
     res <- AthenaResult(
       conn =conn, statement= statement, s3_staging_dir = s3_staging_dir)
     return(res)
-  }
-)
+})
 
 #' @rdname Query
 #' @export
@@ -253,8 +248,7 @@ setMethod(
       cache_query(res)
     
     return(res)
-  }
-)
+})
 
 #' Determine SQL data type of object
 #' 
@@ -301,13 +295,11 @@ setMethod("dbDataType", "AthenaConnection", function(dbObj, obj, ...) {
   dbDataType(athena(), obj, ...)
 })
 
-
 #' @rdname dbDataType
 #' @export
 setMethod("dbDataType", c("AthenaConnection", "data.frame"), function(dbObj, obj, ...) {
   vapply(obj, AthenaDataType, FUN.VALUE = character(1), USE.NAMES = TRUE)
 })
-
 
 #' Quote Identifiers
 #' 
@@ -326,7 +318,7 @@ setMethod(
   function(conn, x, ...) {
     # Optional
     getMethod("dbQuoteString", c("DBIConnection", "character"), asNamespace("DBI"))(conn, x, ...)
-  })
+})
 
 #' @rdname dbQuote
 #' @export
@@ -538,8 +530,7 @@ setMethod(
     if (inherits(resp, "error") && !grepl(".*table.*not.*found.*", resp, ignore.case = T)) stop(resp)
     
     !grepl(".*table.*not.*found.*", resp[1], ignore.case = T)
-  })
-
+})
 
 #' Remove table from Athena
 #' 
@@ -635,7 +626,7 @@ setMethod(
     if (!delete_data) message("Info: Only Athena table has been removed.")
     on_connection_updated(conn, ll[["table"]])
     invisible(TRUE)
-  })
+})
 
 #' Send query, retrieve results and then clear result set
 #'
@@ -676,11 +667,11 @@ setMethod(
     con_error_msg(conn, msg = "Connection already closed.")
     stopifnot(is.logical(statistics))
     rs <- dbSendQuery(conn, statement = statement)
-    on.exit(dbClearResult(rs))
     if(statistics) print(dbStatistics(rs))
-    dbFetch(res = rs, n = -1, ...)
-  })
-
+    out <- dbFetch(res = rs, n = -1, ...)
+    dbClearResult(rs)
+    return(out)
+})
 
 #' Get DBMS metadata
 #' 
@@ -726,7 +717,7 @@ setMethod(
     rathena <- as.character(packageVersion("RAthena"))
     info <- c(info, boto3 = Boto, RAthena = rathena)
     return(info)
-  })
+})
 
 #' Athena table partitions
 #' 
@@ -793,7 +784,7 @@ setMethod(
         dt <- as_tibble(dt)}
     }
     return(dt)
-  })
+})
 
 #' Show Athena table's DDL
 #' 
@@ -843,7 +834,7 @@ setMethod(
     con_error_msg(conn, msg = "Connection already closed.")
     ll <- db_detect(conn, name)
     SQL(paste0(dbGetQuery(conn, paste0("SHOW CREATE TABLE ", ll[["dbms.name"]],".",ll[["table"]]))[[1]], collapse = "\n"))
-  })
+})
 
 #' Simple wrapper to convert Athena backend file types
 #' 
@@ -938,4 +929,4 @@ setMethod(
      res <- dbExecute(conn, tt_sql)
      dbClearResult(res)
      return(invisible(TRUE))
-  })
+})
