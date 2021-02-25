@@ -97,6 +97,7 @@ resource_active.AthenaConnection <- function(dbObj){
 
 resource_active.AthenaResult <- function(dbObj){
   if(length(dbObj@info) !=0 &&
+     length(dbObj@connection@ptr) != 0 &&
      !py_is_null_xptr(dbObj@connection@ptr$Athena)){
     TRUE
   } else {
