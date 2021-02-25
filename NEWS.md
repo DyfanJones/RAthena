@@ -1,3 +1,7 @@
+# RAthena 2.0.1.999
+## Bug Fix:
+* `dbIsValid` wrongly stated connection is valid for result class when connection class was disconnected. 
+
 # RAthena 2.0.1
 ## Bug Fix:
 * Fix issue of keyboard interrupt failing to raise interrupt error.
