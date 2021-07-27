@@ -238,6 +238,8 @@ setMethod(
                             keyboard_interrupt = keyboard_interrupt,
                             ...)
     if (is.null(timezone)) {
+      # set empty timezone initially
+      con@info$timezone = ""
       timezone <- dbGetQuery(con, "select current_timezone()")[[1]]
     }
     # check if timezone is valid 
@@ -247,7 +249,7 @@ setMethod(
     
     # integrate with RStudio
     on_connection_opened(con)
-    con
+    return(con)
 })
 
 check_timezone <- function(timezone) {
