@@ -5,7 +5,6 @@
 
 ## Feature:
 * `sql_translate_env`: add support for `stringr`/`lubridate` style functions, similar to [Postgres backend](https://github.com/tidyverse/dbplyr/blob/master/R/backend-postgres.R).
-* `write_bin` now doesn't chunk writeBin if R version is greater than 4.0.0 https://github.com/HenrikBengtsson/Wishlist-for-R/issues/97
 * `dbConnect` add `timezone` parameter so that time zone between `R` and `AWS Athena` is consistent [noctua # 149](https://github.com/DyfanJones/noctua/issues/149).
 
 # RAthena 2.0.1
