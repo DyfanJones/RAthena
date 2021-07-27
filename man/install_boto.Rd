@@ -19,8 +19,9 @@ a specific installation method. Note that the "virtualenv" method is not
 available on Windows. Note also that since this command runs without privilege
 the "system" method is available only on Windows.}
 
-\item{conda}{The path to a \code{conda} executable. Use \code{"auto"} to allow \code{reticulate} to
-automatically find an appropriate \code{conda} binary. See \strong{Finding Conda} for more details.}
+\item{conda}{The path to a \code{conda} executable. Use \code{"auto"} to allow
+\code{reticulate} to automatically find an appropriate \code{conda} binary. See
+\strong{Finding Conda} for more details.}
 
 \item{envname}{Name of Python environment to install within, by default environment name RAthena.}
 

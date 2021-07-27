@@ -8,7 +8,7 @@ context("Athena Metadata")
 df_col_info <- data.frame(field_name = c("w","x","y", "z", "timestamp"),
                           type = c("timestamp", "integer", "varchar", "boolean", "varchar"), stringsAsFactors = F)
 
-con_info = c("profile_name", "s3_staging","dbms.name","work_group", "poll_interval","encryption_option","kms_key","expiration", "keyboard_interrupt","region_name", "boto3", "RAthena")
+con_info = c("profile_name", "s3_staging","dbms.name","work_group", "poll_interval","encryption_option","kms_key","expiration", "keyboard_interrupt","region_name", "boto3", "RAthena", "timezone")
 col_info_exp = c("w","x","y", "z", "timestamp")
 
 test_that("Returning meta data",{
