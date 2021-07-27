@@ -331,7 +331,7 @@ setMethod("sqlData", "AthenaConnection",
     # preprosing proxict format
     posixct_cols <- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
     # create timestamp in athena format: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
-    for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%OS3"))
+    for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%OS3", tz=con@info$timezone))
   }
   
   # preprosing list format
@@ -348,7 +348,7 @@ setMethod("sqlData", "AthenaConnection",
                 for (col in special_char) set(Value, j=col, value=gsub("\t" , " ", Value[[col]]))
                 message("Info: Special characters \"\\t\" has been converted to \" \" to help with Athena reading file format tsv")})
   
-  Value
+  return(Value)
 })
 
 #' Creates query to create a simple Athena table
