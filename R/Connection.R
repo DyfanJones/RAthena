@@ -14,60 +14,64 @@ NULL
 
 class_cache <- new.env(parent = emptyenv())
 
-AthenaConnection <-
-  function(
-    aws_access_key_id = NULL,
-    aws_secret_access_key = NULL ,
-    aws_session_token = NULL,
-    schema_name = NULL,
-    work_group = NULL,
-    poll_interval = NULL,
-    encryption_option = NULL,
-    kms_key = NULL,
-    s3_staging_dir = NULL,
-    region_name = NULL,
-    botocore_session = NULL,
-    profile_name = NULL, 
-    aws_expiration = NULL,
-    keyboard_interrupt = NULL,
-    ...){
-    
-    tryCatch(
-      boto3 <- boto$Session(aws_access_key_id = aws_access_key_id,
+AthenaConnection <- function(aws_access_key_id = NULL,
+                             aws_secret_access_key = NULL ,
+                             aws_session_token = NULL,
+                             schema_name = NULL,
+                             work_group = NULL,
+                             poll_interval = NULL,
+                             encryption_option = NULL,
+                             kms_key = NULL,
+                             s3_staging_dir = NULL,
+                             region_name = NULL,
+                             botocore_session = NULL,
+                             profile_name = NULL, 
+                             aws_expiration = NULL,
+                             keyboard_interrupt = NULL,
+                             ...){
+  tryCatch(
+    boto3 <- boto$Session(aws_access_key_id = aws_access_key_id,
                           aws_secret_access_key = aws_secret_access_key,
                           aws_session_token = aws_session_token,
                           region_name = region_name,
                           botocore_session = botocore_session,
                           profile_name = profile_name,
                           ...),
-      error = function(e) py_error(e))
+    error = function(e) py_error(e)
+  )
+  
+  # stop connection if region_name is not set in backend or hardcoded
+  if(is.null(boto3$region_name))
+    stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
+         "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
+         call. = FALSE)
     
-    # stop connection if region_name is not set in backend or hardcoded
-    if(is.null(boto3$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
-                                      "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.", call. = FALSE)
+  ptr_ll <- list(Athena = boto3$client("athena"),
+                 S3 = boto3$client("s3"),
+                 glue = boto3$client("glue"))
     
-    ptr_ll <- list(Athena = boto3$client("athena"),
-                   S3 = boto3$client("s3"),
-                   glue = boto3$client("glue"))
-    
-    if(is.null(s3_staging_dir) && !is.null(work_group)){
-      tryCatch(s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
-               error = function(e) py_error(e))
-    }
+  if(is.null(s3_staging_dir) && !is.null(work_group)){
+    tryCatch(s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
+             error = function(e) py_error(e))
+  }
     
     s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
     
     if(is.null(s3_staging_dir)) {stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
                                       "or when work_group is defined in `create_work_group()`", call. = F)}
     
-    info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
-                 dbms.name = schema_name, work_group = work_group %||% "primary",
-                 poll_interval = poll_interval, encryption_option = encryption_option,
-                 kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt,
-                 region_name = boto3$region_name)
-    
-    res <- new("AthenaConnection",  ptr = list2env(ptr_ll, parent = emptyenv()), info = list2env(info, parent = emptyenv()), quote = "`")
-  }
+  info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
+               dbms.name = schema_name, work_group = work_group %||% "primary",
+               poll_interval = poll_interval, encryption_option = encryption_option,
+               kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt,
+               region_name = boto3$region_name)
+  
+  res <- new(
+    "AthenaConnection",
+    ptr = list2env(ptr_ll, parent = emptyenv()),
+    info = list2env(info, parent = emptyenv()),
+    quote = "`")
+}
 
 #' @rdname AthenaConnection
 #' @keywords internal
