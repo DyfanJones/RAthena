@@ -1,4 +1,4 @@
-# RAthena 2.0.1.999
+# RAthena 2.1.0
 ## Bug Fix:
 * `dbIsValid` wrongly stated connection is valid for result class when connection class was disconnected.
 * `sql_translate_env.paste` broke with latest version of `dbplyr`. New method is compatible with `dbplyr>=1.4.3` [noctua # 149](https://github.com/DyfanJones/noctua/issues/149).
