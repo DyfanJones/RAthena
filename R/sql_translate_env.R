@@ -15,6 +15,8 @@ NULL
 #' @name sql_translate_env
 NULL
 
+#' @rdname sql_translate_env
+#' @export
 sql_translate_env.AthenaConnection <- function(con) {
   # base methods
   sql_variant <- pkg_method("sql_variant", "dbplyr")
