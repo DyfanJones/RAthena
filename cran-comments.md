@@ -23,7 +23,7 @@ This is hot fix to fix issue of keyboard interrupt failing to raise interrupt er
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 ## R devtools::check_rhub() results
-0 errors ✓ | 0 warnings ✓ | 1 note x
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 **Side note:** ran devtools::check_rhub with following environment variables:
 `devtools::check_rhub(env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always", LIBARROW_BINARY="true"))`
