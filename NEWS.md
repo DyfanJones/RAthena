@@ -1,15 +1,18 @@
 # RAthena 2.1.0.9999
+## Bug Fix:
+* `sql_translate_env` correctly translates R functions `quantile` and `median` to `AWS Athena` equivalents ([noctua # 153](https://github.com/DyfanJones/noctua/issues/153)). Thanks to @ellmanj for spotting issue.
+
 ## Feature:
 * support `AWS Athena` `timestamp with time zone` data type
 
 # RAthena 2.1.0
 ## Bug Fix:
 * `dbIsValid` wrongly stated connection is valid for result class when connection class was disconnected.
-* `sql_translate_env.paste` broke with latest version of `dbplyr`. New method is compatible with `dbplyr>=1.4.3` [noctua # 149](https://github.com/DyfanJones/noctua/issues/149).
+* `sql_translate_env.paste` broke with latest version of `dbplyr`. New method is compatible with `dbplyr>=1.4.3` ([noctua # 149](https://github.com/DyfanJones/noctua/issues/149)).
 
 ## Feature:
 * `sql_translate_env`: add support for `stringr`/`lubridate` style functions, similar to [Postgres backend](https://github.com/tidyverse/dbplyr/blob/master/R/backend-postgres.R).
-* `dbConnect` add `timezone` parameter so that time zone between `R` and `AWS Athena` is consistent [noctua # 149](https://github.com/DyfanJones/noctua/issues/149).
+* `dbConnect` add `timezone` parameter so that time zone between `R` and `AWS Athena` is consistent ([noctua # 149](https://github.com/DyfanJones/noctua/issues/149)).
 
 # RAthena 2.0.1
 ## Bug Fix:

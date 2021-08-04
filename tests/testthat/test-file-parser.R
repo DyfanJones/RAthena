@@ -227,3 +227,8 @@ test_that("Check accepted json options",{
   expect_invisible(RAthena::RAthena_options(json=jsonlite::fromJSON))
   expect_error(RAthena::RAthena_options(json=1))
 })
+
+test_that("Raise error for unexpected json parser.", {
+  RAthena_options(json = "character")
+  expect_error(json_parser(iris, "raise_error"))
+})
