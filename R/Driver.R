@@ -247,6 +247,10 @@ setMethod(
     
     con@info$timezone <- timezone
     
+    # align expiration time to dbConnection timezone
+    if(!is.null(con@info$expiration))
+      attr(con@info$expiration, "tzone") <- timezone
+    
     # integrate with RStudio
     on_connection_opened(con)
     return(con)
