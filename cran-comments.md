@@ -1,22 +1,18 @@
 ## Submission
-This is hot fix to fix issue of keyboard interrupt failing to raise interrupt error
+This release contains a few new features and bug fixes.
 
 ### Bug Fix:
-* `sql_translate_env` `paste` method broke due to latest `dbplyr` release. `sql_translate_env` `paste` method now works intended from version `1.4.3` + 
+  * `sql_translate_env` correctly translates R functions `quantile` and `median` to `AWS Athena`
 
 ### Feature:
-* `sql_translate_env` add support for `lubridate` / `stringr` functions
-* `sql_translate_env` add support to base `R` `grepl`.
-* `dbConnect` add `timezone` parameter so that time zone between `R` and `AWS Athena` is consistent.
-
-### Unit test:
-* check if interrupt function successfully interrupts Athena when user manually triggers a keyboard interrupt
+  * Support `AWS Athena` `timestamp with time zone` data type.
+  * Properly support data type `list` when converting data to `AWS Athena` `SQL` format.
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
 
 ## Test environments
-* local OS X install, 4.1.0
+* local OS X install, 4.1.1
 * rhub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
 
 ## R CMD check results (local)
