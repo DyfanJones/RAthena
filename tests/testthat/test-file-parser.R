@@ -232,3 +232,20 @@ test_that("Raise error for unexpected json parser.", {
   RAthena_options(json = "character")
   expect_error(json_parser(iris, "raise_error"))
 })
+
+test_that("Cehck if column is correctly parsed.", {
+  skip_if_not_installed("jsonify")
+  skip_if_no_env()
+  
+  con <- dbConnect(RAthena::athena())
+  
+  dt = data.table(
+    var2 = list(list("var3"= 1:3, "var4" = list("var5"= letters[1:5]))),
+    var3 = list(list(as.Date("2000-01-01"), as.Date("2000-01-01")+1, as.Date("2000-01-01") + 2))
+  )
+  
+  result = sqlData(con, dt, file.type="json")
+  
+  expect_equal(result[[1]][1], "{\"var3\":[1,2,3],\"var4\":{\"var5\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}}")
+  expect_equal(result[[2]][1],  "[\"2000-01-01\",\"2000-01-02\",\"2000-01-03\"]")
+})

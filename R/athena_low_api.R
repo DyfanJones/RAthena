@@ -339,6 +339,5 @@ assume_role <- function(profile_name = NULL,
   error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
-  response$Credentials
+  return(response$Credentials)
 }
-
