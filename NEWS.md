@@ -1,6 +1,6 @@
 # RAthena 2.2.0
 ## Bug Fix:
-* `sql_translate_env` correctly translates R functions `quantile` and `median` to `AWS Athena` equivalents (#153). Thanks to @ellmanj for spotting issue.
+* `sql_translate_env` correctly translates R functions `quantile` and `median` to `AWS Athena` equivalents ([noctua # 153](https://github.com/DyfanJones/noctua/issues/153)). Thanks to @ellmanj for spotting issue.
 
 ## Feature:
 * Support `AWS Athena` `timestamp with time zone` data type.
@@ -47,7 +47,7 @@ sqlData(con, dt)
 # 5:    5 1:3|list(var5 = c("a", "b", "c", "d", "e"))
 ```
 
-v-2.2.0 now converts lists into json lines format so that AWS Athena can parse with `sql` `array`/`mapping`/`json` functions. Small down side a s3 method conflict occurs when `jsonify` is called to convert lists into json lines. `jsonify` was choose in favor to `jsonlite` due to the performance improvements (#156).
+v-2.2.0 now converts lists into json lines format so that AWS Athena can parse with `sql` `array`/`mapping`/`json` functions. Small down side a s3 method conflict occurs when `jsonify` is called to convert lists into json lines. `jsonify` was choose in favor to `jsonlite` due to the performance improvements ([noctua # 156](https://github.com/DyfanJones/noctua/issues/156)).
 
 # RAthena 2.1.0
 ## Bug Fix:

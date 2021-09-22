@@ -150,7 +150,7 @@
 <a href="#bug-fix" class="anchor"></a>Bug Fix:</h2>
 <ul>
 <li>
-<code>sql_translate_env</code> correctly translates R functions <code>quantile</code> and <code>median</code> to <code>AWS Athena</code> equivalents (<a href='https://github.com/DyfanJones/RAthena/issues/153'>#153</a>). Thanks to <a href='https://github.com/ellmanj'>@ellmanj</a> for spotting issue.</li>
+<code>sql_translate_env</code> correctly translates R functions <code>quantile</code> and <code>median</code> to <code>AWS Athena</code> equivalents (<a href="https://github.com/DyfanJones/noctua/issues/153">noctua # 153</a>). Thanks to <a href='https://github.com/ellmanj'>@ellmanj</a> for spotting issue.</li>
 </ul>
 </div>
 <div id="feature" class="section level2">
@@ -200,7 +200,7 @@
 <span class="co"># 3:    3 1:3|list(var5 = c("a", "b", "c", "d", "e"))</span>
 <span class="co"># 4:    4 1:3|list(var5 = c("a", "b", "c", "d", "e"))</span>
 <span class="co"># 5:    5 1:3|list(var5 = c("a", "b", "c", "d", "e"))</span></code></pre></div>
-<p>v-2.2.0 now converts lists into json lines format so that AWS Athena can parse with <code>sql</code> <code>array</code>/<code>mapping</code>/<code>json</code> functions. Small down side a s3 method conflict occurs when <code>jsonify</code> is called to convert lists into json lines. <code>jsonify</code> was choose in favor to <code>jsonlite</code> due to the performance improvements (<a href='https://github.com/DyfanJones/RAthena/issues/156'>#156</a>).</p>
+<p>v-2.2.0 now converts lists into json lines format so that AWS Athena can parse with <code>sql</code> <code>array</code>/<code>mapping</code>/<code>json</code> functions. Small down side a s3 method conflict occurs when <code>jsonify</code> is called to convert lists into json lines. <code>jsonify</code> was choose in favor to <code>jsonlite</code> due to the performance improvements (<a href="https://github.com/DyfanJones/noctua/issues/156">noctua # 156</a>).</p>
 </div>
 </div>
     <div id="rathena-210" class="section level1">
