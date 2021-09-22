@@ -328,15 +328,15 @@ setMethod("sqlData", "AthenaConnection",
   
   # leave POSIXct format for parquet file types
   if(file.type != "parquet"){
-    # preprosing proxict format
+    # prepossessing proxict format
     posixct_cols <- names(Value)[sapply(col_types, function(x) "POSIXct" %in% x)]
     # create timestamp in athena format: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
     for (col in posixct_cols) set(Value, j=col, value=strftime(Value[[col]], format="%Y-%m-%d %H:%M:%OS3", tz=con@info$timezone))
   }
   
-  # preprosing list format
+  # prepossessing list format
   list_cols <- names(Value)[sapply(col_types, function(x) "list" %in% x)]
-  for (col in list_cols) set(Value, j=col, value=sapply(Value[[col]], paste, collapse = "|"))
+  for (col in list_cols) set(Value, j=col, value=col_to_ndjson(Value, col))
   
   # handle special characters in character and factor column types
   special_char <- names(Value)[col_types %in% c("character", "factor")]
