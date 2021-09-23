@@ -203,7 +203,7 @@ sql_translate_env.AthenaConnection <- function(con) {
       },
       floor_date = function(x, unit = "second"){
        unit <- match.arg(unit,
-                         c("second", "minute", "hour", "day", "week", "month", "quarter", "year")
+         c("second", "minute", "hour", "day", "week", "month", "quarter", "year")
        )
        build_sql("date_trunc(", unit, ", ",  x, ")")
       },
