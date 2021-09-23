@@ -65,7 +65,9 @@ AthenaConnection <- function(aws_access_key_id = NULL,
   info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
                dbms.name = schema_name, work_group = work_group %||% "primary",
                poll_interval = poll_interval, encryption_option = encryption_option,
-               kms_key = kms_key, expiration = aws_expiration, keyboard_interrupt = keyboard_interrupt,
+               kms_key = kms_key, expiration = aws_expiration,
+               timezone = character(),
+               keyboard_interrupt = keyboard_interrupt,
                region_name = boto3$region_name)
   
   res <- new(
