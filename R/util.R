@@ -264,7 +264,7 @@ check_cache = function(query, work_group){
                                            get("StatementType") == "DML" &
                                            get("WorkGroup") == work_group),
                                         list(get("QueryId"),get("UnloadDir"))]
-  if(length(query_id) == 0) return(list(NULL, NULL)) else return(list(query_id[[1]], query_id[[2]]))
+  if(nrow(query_id) == 0) return(list(NULL, NULL)) else return(list(query_id[[1]], query_id[[2]]))
 }
 
 # return python error with error class
