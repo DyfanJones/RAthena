@@ -20,10 +20,25 @@ jobs:
       rathena_arn: ${{ secrets.rathena_arn }}
       rathena_s3_query: ${{ secrets.rathena_s3_query }}
       rathena_s3_tbl: ${{ secrets.rathena_s3_tbl }}
-      RETICULATE_PYTHON: ${{ secrets.RETICULATE_PYTHON }}
       R_KEEP_PKG_SOURCE: yes
+      
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r boto3 numpy
 
       - uses: r-lib/actions/setup-r@v1
         with:
@@ -34,17 +49,6 @@ jobs:
           extra-packages: |
             rcmdcheck
             covr
-            
-      - name: Install Miniconda
-        run: |
-          reticulate::install_miniconda()
-        shell: Rscript {0}
-        
-      - name: Install Python boto3
-        run: |
-          RAthena::install_boto("conda")
-        shell: Rscript {0}
-
 
       - uses: r-lib/actions/check-r-package@v1
 
