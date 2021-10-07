@@ -527,7 +527,7 @@ s3_upload_location <- function(con, s3.location = NULL, name = NULL, partition =
   partition <- if(partition == "") NULL else partition
   
   # Leave s3 location if appending to table:
-  # Existing tables may not follow noctua s3 location schema
+  # Existing tables may not follow RAthena s3 location schema
   if (!append){
     schema <- if(schema %in% tolower(split_key)) NULL else schema
     name <- if(name %in% tolower(split_key)) NULL else name
