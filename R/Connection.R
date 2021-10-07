@@ -619,7 +619,7 @@ setMethod(
         s3_path[["key"]] <- sprintf("%s/", s3_path[["key"]])
       all_keys <- list()
       # Get all s3 objects linked to table
-      kwargs <- list(Bucket=s3_path$bucket, Prefix=s3_path[["key"]])
+      kwargs <- list(Bucket=s3_path[["bucket"]], Prefix=s3_path[["key"]])
       while(is.null(kwargs[["ContinuationToken"]])) {
         objects <- do.call(conn@ptr$S3$list_objects_v2, kwargs)
         all_keys <- c(all_keys, lapply(objects$Contents, function(x) list(Key=x$Key)))
