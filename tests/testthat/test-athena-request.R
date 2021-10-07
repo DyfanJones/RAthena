@@ -27,10 +27,10 @@ test_that("Check if Athena Request created correctly",{
   con4 <- dbConnect(athena(),
                     s3_staging_dir = Sys.getenv("rathena_s3_query"))
   
-  R1 <- RAthena:::request(con1, "select * from test_query")
-  R2 <- RAthena:::request(con2, "select * from test_query")
-  R3 <- RAthena:::request(con3, "select * from test_query")
-  R4 <- RAthena:::request(con4, "select * from test_query")
+  R1 <- RAthena:::ResultConfiguration(con1)
+  R2 <- RAthena:::ResultConfiguration(con2)
+  R3 <- RAthena:::ResultConfiguration(con3)
+  R4 <- RAthena:::ResultConfiguration(con4)
   
   expect_equal(R1, athena_test_req1)
   expect_equal(R2, athena_test_req2)
