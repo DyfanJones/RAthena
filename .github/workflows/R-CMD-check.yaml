@@ -44,7 +44,7 @@ jobs:
         if: runner.os == 'macOS'
         run: echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
 
-      - name: Install python-chess
+      - name: Install python-boto3
         run: |
           reticulate::conda_create('r-reticulate', python_version = '3.7')
           remotes::install_local()
