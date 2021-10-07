@@ -106,11 +106,7 @@ resource_active.AthenaResult <- function(dbObj){
 }
 
 # set up athena request call
-request <- function(conn, statement){
-  # creating QueryString and QueryExecutionContext
-  request = list(QueryString = statement,
-                 QueryExecutionContext = list(Database = conn@info$dbms.name))
-  
+ResultConfiguration <- function(conn){
   # creating ResultConfiguration 
   ResultConfiguration = list(OutputLocation = conn@info$s3_staging)
   
@@ -121,13 +117,7 @@ request <- function(conn, statement){
     ResultConfiguration["EncryptionConfiguration"] <- list(EncryptionConfiguration)
   }
   
-  # adding ResultConfiguration
-  request["ResultConfiguration"] <- list(ResultConfiguration)
-  
-  # adding WorkGroup
-  request["WorkGroup"] = conn@info$work_group
-  
-  request
+  return(ResultConfiguration)
 }
 
 # set up work group configuration
@@ -227,11 +217,14 @@ data_scanned <-
 # caching function to added metadata to cache data.table
 cache_query = function(res){
   if(res@info$Status != "FAILED") {
-    cache_append = data.table("QueryId" = res@info[["QueryExecutionId"]],
-                              "Query" = res@info[["Query"]],
-                              "State"= res@info[["Status"]],
-                              "StatementType"= res@info[["StatementType"]],
-                              "WorkGroup" = res@info[["WorkGroup"]])
+    cache_append = data.table(
+      "QueryId" = res@info[["QueryExecutionId"]],
+      "Query" = res@info[["Query"]],
+      "State"= res@info[["Status"]],
+      "StatementType"= res@info[["StatementType"]],
+      "WorkGroup" = res@info[["WorkGroup"]],
+      "UnloadDir" = res@info[["UnloadDir"]] %||% character(1)
+    )
     new_query = fsetdiff(cache_append, athena_option_env[["cache_dt"]], all = TRUE)
     athena_option_env$cache_dt = head(
       rbind(new_query, athena_option_env[["cache_dt"]]),
@@ -245,8 +238,8 @@ check_cache = function(query, work_group){
                                            get("State") == "SUCCEEDED" &
                                            get("StatementType") == "DML" &
                                            get("WorkGroup") == work_group),
-                                        get("QueryId")]
-  if(length(query_id) == 0) return(NULL) else return(query_id[1])
+                                        list(get("QueryId"),get("UnloadDir"))]
+  if(nrow(query_id) == 0) return(list(NULL, NULL)) else return(list(query_id[[1]], query_id[[2]]))
 }
 
 # return python error with error class

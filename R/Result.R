@@ -1,23 +1,44 @@
 #' @include Connection.R
+#' @include util.R
+#' @include fetch_utils.R
 NULL
 
 AthenaResult <- function(conn,
                          statement = NULL,
-                         s3_staging_dir = NULL){
+                         s3_staging_dir = NULL,
+                         unload=FALSE){
   
   stopifnot(is.character(statement))
-  Request <- request(conn, statement)
-  
   response <- new.env(parent = emptyenv())
   response[["Query"]] <- statement
-  if (athena_option_env$cache_size > 0) 
-    response[["QueryExecutionId"]] = check_cache(statement, conn@info$work_group)
+  
+  s3_file = NULL
+  
+  if (athena_option_env$cache_size > 0){
+    ll = check_cache(statement, conn@info$work_group)
+    response[["QueryExecutionId"]] <- ll[[1]]
+    s3_file <- if(identical(ll[[2]], "")) NULL else ll[[2]]
+  }
+  # modify sql statement if user requests AWS Athena unload
+  if(unload){
+    s3_file = s3_file %||% uuid::UUIDgenerate()
+    statement <- sprintf(
+      "UNLOAD (\n%s)\nTO '%s'\nWITH (format = 'PARQUET',compression = 'SNAPPY')",
+      statement, file.path(gsub("/$", "", s3_staging_dir), s3_file)
+    )
+  }
+  
   if (is.null(response$QueryExecutionId)) {
     retry_api_call(
-      response[["QueryExecutionId"]] <- do.call(
-        conn@ptr$Athena$start_query_execution,
-        Request, quote = T)$QueryExecutionId)}
+      response[["QueryExecutionId"]] <- conn@ptr$Athena$start_query_execution(
+        ClientRequestToken = uuid::UUIDgenerate(),
+        QueryString = statement,
+        QueryExecutionContext = list(Database = conn@info$dbms.name),
+        ResultConfiguration = ResultConfiguration(conn),
+        WorkGroup = conn@info$work_group)$QueryExecutionId)}
   on.exit(if(!is.null(conn@info$expiration)) time_check(conn@info$expiration))
+  
+  response[["UnloadDir"]] = s3_file
   new("AthenaResult", connection = conn, info = response)
 }
 
@@ -71,13 +92,12 @@ setMethod(
     if (!dbIsValid(res)) {
       warning("Result already cleared", call. = FALSE)
     } else {
-      
       # stops resource if query is still running
       retry_api_call(res@connection@ptr$Athena$stop_query_execution(
         QueryExecutionId = res@info[["QueryExecutionId"]]))
       
+      # checks status of query
       if(is.null(res@info[["Status"]])){
-        # checks status of query
         retry_api_call(query_execution <- res@connection@ptr$Athena$get_query_execution(
           QueryExecutionId = res@info$QueryExecutionId))
         res@info[["OutputLocation"]] <- 
@@ -91,25 +111,60 @@ setMethod(
         result_info <- split_s3_uri(res@info[["OutputLocation"]])
         
         # Output Python error as warning if s3 resource can't be dropped
-        tryCatch(res@connection@ptr$S3$delete_object(
-          Bucket = result_info[["bucket"]], Key = paste0(result_info[["key"]], ".metadata")),
-                 error = function(e) py_warning(e))
-        tryCatch(res@connection@ptr$S3$delete_object(
-          Bucket = result_info[["bucket"]], Key = result_info[["key"]]),
-                 error = function(e) cat(""))
+        tryCatch(
+          res@connection@ptr$S3$delete_object(
+            Bucket = result_info[["bucket"]], Key = paste0(result_info[["key"]], ".metadata")),
+          error = function(e) py_warning(e)
+        )
+        
         # remove manifest csv created with CTAS statements 
-        if (res@info[["StatementType"]] == "DDL")
+        if (res@info[["StatementType"]] == "DDL" || !is.null(res@info[["UnloadDir"]])){
           tryCatch({
             res@connection@ptr$S3$delete_object(
               Bucket = result_info[["bucket"]],
               Key = paste0(result_info[["key"]], "-manifest.csv"))},
-            error = function(e) cat(""))
+            error = function(e) NULL)
         }
-      
+        # remove AWS Athena results
+        if(is.null(res@info[["UnloadDir"]])){
+          
+          tryCatch(
+            res@connection@ptr$S3$delete_object(
+              Bucket = result_info[["bucket"]], Key = result_info[["key"]]),
+            error = function(e) NULL)
+          
+        } else {
+          # Check S3 Prefix for AWS Athena results
+          result_info <- split_s3_uri(res@connection@info[["s3_staging"]])
+          result_info$key <- file.path(gsub("/$", "", result_info$key), res@info$UnloadDir)
+          all_keys <- list()
+          # Get all s3 objects linked to table
+          kwargs <- list(Bucket=result_info[["bucket"]], Prefix=result_info[["key"]])
+          while(is.null(kwargs[["ContinuationToken"]])) {
+            obj <- do.call(res@connection@ptr$S3$list_objects_v2, kwargs)
+            all_keys <- c(all_keys, lapply(obj$Contents, function(x) list(Key=x$Key)))
+            if(identical(obj$NextContinuationToken, kwargs$ContinuationToken) || length(obj$NextContinuationToken) == 0) break
+            kwargs[["ContinuationToken"]] <- obj$NextContinuationToken
+          }
+          
+          # Only remove if files are found
+          if(length(all_keys) > 0){
+            # Delete S3 files in batch size 1000
+            key_parts <- split_vec(all_keys, 1000)
+            for(i in seq_along(key_parts)){
+              tryCatch(
+                res@connection@ptr$S3$delete_objects(
+                  Bucket = result_info[["bucket"]],
+                  Delete = list(Objects = key_parts[[i]])),
+                error = function(e) NULL)
+            }
+          }
+        }
+      }
       # remove query information
       rm(list = ls(all.names = TRUE, envir = res@info), envir = res@info)
     }
-    invisible(TRUE)
+    return(invisible(TRUE))
 })
 
 #' Fetch records from previously executed query
@@ -162,108 +217,24 @@ setMethod(
     if (athena_option_env[["cache_size"]] > 0)
       cache_query(res)
     
-    result_info <- split_s3_uri(res@info[["OutputLocation"]])
-    
     # return metadata of athena data types
     retry_api_call(result_class <- res@connection@ptr$Athena$get_query_results(
       QueryExecutionId = res@info$QueryExecutionId,
       MaxResults = as.integer(1))[["ResultSet"]][["ResultSetMetadata"]][["ColumnInfo"]])
     
     if(n >= 0 && n !=Inf){
-      # assign token from AthenaResult class
-      token <- res@info[["NextToken"]]
-      
-      if(length(token) == 0) n <- as.integer(n + 1)
-      chunk = as.integer(n)
-      if (n > 1000L) chunk = 1000L
-      
-      iterate <- 1:ceiling(n/chunk)
-      
-      # create empty list shell
-      dt_list <- list()
-      length(dt_list) <- max(iterate)
-      
-      for (i in iterate){
-        if(i == max(iterate)) chunk <- as.integer(n - (i-1) * chunk)
-        
-        # get chunk with retry api call if call fails
-        if(length(token) == 0) {
-          retry_api_call(result <- res@connection@ptr$Athena$get_query_results(
-            QueryExecutionId = res@info[["QueryExecutionId"]],
-            MaxResults = chunk))
-        } else {
-            retry_api_call(result <- res@athena$get_query_results(
-              QueryExecutionId = res@info[["QueryExecutionId"]],
-              NextToken = token, 
-              MaxResults = chunk))
-        }
-        
-        # process returned list
-        output <- lapply(
-          result[["ResultSet"]][["Rows"]],
-          function(x) (sapply(x$Data, function(x) if(length(x) == 0 ) NA else x)))
-        suppressWarnings(staging_dt <- rbindlist(output, use.names = FALSE))
-        
-        # remove colnames from first row
-        if (i == 1 && length(token) == 0){
-          staging_dt <- staging_dt[-1,]
-        }
-        
-        # ensure rownames are not set
-        rownames(staging_dt) <- NULL
-        
-        # added staging data.table to list
-        dt_list[[i]] <- staging_dt
-        
-        # if token hasn't changed or if no more tokens are available then break loop
-        if ((length(token) != 0 &&
-             token == result[["NextToken"]]) ||
-            length(result[["NextToken"]]) == 0) {
-          break
-        } else {
-            token <- result[["NextToken"]]}
-      }
-      # combined all lists together
-      dt <- rbindlist(dt_list, use.names = FALSE)
-      
-      # Update last token in s4 class
-      res@info[["NextToken"]] <- result[["NextToken"]]
-      
-      # replace names with actual names
-      Names <- sapply(result_class, function(x) x$Name)
-      colnames(dt) <- Names
-      
-      # convert data.table to tibble if using vroom as backend
-      if(inherits(athena_option_env[["file_parser"]], "athena_vroom")) {
-        as_tibble <- pkg_method("as_tibble", "tibble")
-        dt <- as_tibble(dt)}
-      
-      return(dt)
+      .fetch_n(res, result_class, n) 
     }
     
     # Added data scan information when returning data from athena
     message("Info: (Data scanned: ", data_scanned(
       res@info[["Statistics"]][["DataScannedInBytes"]]),")")
     
-    #create temp file
-    File <- tempfile()
-    on.exit(unlink(File))
-    
-    # download athena output
-    retry_api_call(res@connection@ptr$S3$download_file(
-      result_info[["bucket"]],
-      result_info[["key"]],
-      File))
-    
-    if(grepl("\\.csv$",result_info[["key"]])){
-      output <- athena_read(
-        athena_option_env[["file_parser"]], File, result_class, res@connection)
-    } else{
-      output <- athena_read_lines(
-        athena_option_env[["file_parser"]], File, result_class, res@connection)
+    if (!is.null(res@info[["UnloadDir"]])){
+      .fetch_unload(res)
+    } else {
+      .fetch_file(res, result_class)
     }
-    
-    return(output)
 })
 
 #' Completion status
