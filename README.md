@@ -5,7 +5,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/RAthena)](https://CRAN.R-project.org/package=RAthena)
 ![downloads](https://cranlogs.r-pkg.org/badges/RAthena)
-[![Codecov test coverage](https://codecov.io/gh/DyfanJones/rathena/branch/master/graph/badge.svg)](https://codecov.io/gh/DyfanJones/rathena?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/DyfanJones/rathena/branch/master/graph/badge.svg)](https://app.codecov.io/gh/DyfanJones/rathena?branch=master)
 [![R-CMD-check](https://github.com/DyfanJones/RAthena/workflows/R-CMD-check/badge.svg)](https://github.com/DyfanJones/RAthena/actions)
 
 The goal of the `RAthena` package is to provide a DBI-compliant interface

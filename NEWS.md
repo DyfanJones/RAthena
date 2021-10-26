@@ -1,4 +1,4 @@
-# RAthena 2.2.0.9000
+# RAthena 2.3.0
 ## Feature:
 * Add support to [`AWS Athena UNLOAD`](https://docs.aws.amazon.com/athena/latest/ug/unload.html) ([noctua: # 160](https://github.com/DyfanJones/noctua/issues/160)). This is to take advantage of read/write speed `parquet` has to offer.
 
