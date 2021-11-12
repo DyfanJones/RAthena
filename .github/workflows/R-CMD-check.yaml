@@ -20,6 +20,7 @@ jobs:
       rathena_arn: ${{ secrets.rathena_arn }}
       rathena_s3_query: ${{ secrets.rathena_s3_query }}
       rathena_s3_tbl: ${{ secrets.rathena_s3_tbl }}
+      ARROW_WITH_SNAPPY: ON
       R_KEEP_PKG_SOURCE: yes
     steps:
       - uses: actions/checkout@v2
