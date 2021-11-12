@@ -1,3 +1,7 @@
+# RAthena (development version)
+## Bug Fix:
+* Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of ([noctua # 170](https://github.com/DyfanJones/noctua/issues/170))
+
 # RAthena 2.3.0
 ## Feature:
 * Add support to [`AWS Athena UNLOAD`](https://docs.aws.amazon.com/athena/latest/ug/unload.html) ([noctua: # 160](https://github.com/DyfanJones/noctua/issues/160)). This is to take advantage of read/write speed `parquet` has to offer.
