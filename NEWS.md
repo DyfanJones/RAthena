@@ -1,4 +1,6 @@
 # RAthena (development version)
+## Bug Fix:
+* Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of ([noctua # 170](https://github.com/DyfanJones/noctua/issues/170))
 
 # RAthena 2.3.0
 ## Feature:
