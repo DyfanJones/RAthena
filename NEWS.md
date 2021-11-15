@@ -1,6 +1,7 @@
 # RAthena (development version)
 ## Bug Fix:
-* Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of ([noctua # 170](https://github.com/DyfanJones/noctua/issues/170))
+* Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of `R` ([noctua # 170](https://github.com/DyfanJones/noctua/issues/170)). Thanks to @tyner for identifying issue.
+* Caching would fail when statement wasn't a character ([noctua # 171](https://github.com/DyfanJones/noctua/issues/171)). Thanks to @ramnathv for identifying issue.
 
 # RAthena 2.3.0
 ## Feature:
