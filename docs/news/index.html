@@ -148,6 +148,13 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#rathena-development-version" class="anchor"></a>RAthena (development version)<small> Unreleased </small>
 </h1>
+<div id="feature" class="section level2">
+<h2 class="hasAnchor">
+<a href="#feature" class="anchor"></a>Feature:</h2>
+<ul>
+<li>Add support <code>dbplyr</code> 2.0.0 backend API.</li>
+</ul>
+</div>
 <div id="bug-fix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fix" class="anchor"></a>Bug Fix:</h2>
@@ -161,9 +168,9 @@
 <h1 class="page-header" data-toc-text="2.3.0">
 <a href="#rathena-230" class="anchor"></a>RAthena 2.3.0<small> 2021-10-26 </small>
 </h1>
-<div id="feature" class="section level2">
+<div id="feature-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature" class="anchor"></a>Feature:</h2>
+<a href="#feature-1" class="anchor"></a>Feature:</h2>
 <ul>
 <li>Add support to <a href="https://docs.aws.amazon.com/athena/latest/ug/unload.html"><code>AWS Athena UNLOAD</code></a> (<a href="https://github.com/DyfanJones/noctua/issues/160">noctua: # 160</a>). This is to take advantage of read/write speed <code>parquet</code> has to offer.</li>
 </ul>
@@ -238,9 +245,9 @@
 <code>sql_translate_env</code> correctly translates R functions <code>quantile</code> and <code>median</code> to <code>AWS Athena</code> equivalents (<a href="https://github.com/DyfanJones/noctua/issues/153">noctua # 153</a>). Thanks to <a href='https://github.com/ellmanj'>@ellmanj</a> for spotting issue.</li>
 </ul>
 </div>
-<div id="feature-1" class="section level2">
+<div id="feature-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature-1" class="anchor"></a>Feature:</h2>
+<a href="#feature-2" class="anchor"></a>Feature:</h2>
 <ul>
 <li>Support <code>AWS Athena</code> <code>timestamp with time zone</code> data type.</li>
 <li>Properly support data type <code>list</code> when converting data to <code>AWS Athena</code> <code>SQL</code> format.</li>
@@ -302,9 +309,9 @@
 <code>sql_translate_env.paste</code> broke with latest version of <code>dbplyr</code>. New method is compatible with <code>dbplyr&gt;=1.4.3</code> (<a href="https://github.com/DyfanJones/noctua/issues/149">noctua # 149</a>).</li>
 </ul>
 </div>
-<div id="feature-2" class="section level2">
+<div id="feature-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature-2" class="anchor"></a>Feature:</h2>
+<a href="#feature-3" class="anchor"></a>Feature:</h2>
 <ul>
 <li>
 <code>sql_translate_env</code>: add support for <code>stringr</code>/<code>lubridate</code> style functions, similar to <a href="https://github.com/tidyverse/dbplyr/blob/master/R/backend-postgres.R">Postgres backend</a>.</li>
@@ -763,11 +770,11 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Before</span>
-<span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dbplyr/man/translate_sql.html">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
+<span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
 <span class="co"># '2019-01-01'</span>
 
 <span class="co"># Now</span>
-<span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dbplyr/man/translate_sql.html">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
+<span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
 <span class="co"># DATE '2019-01-01'</span></code></pre></div>
 <ul>
 <li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexibility for custom separating values.</li>
@@ -782,7 +789,7 @@ con &lt;- dbConnect(RAthena::athena(), bigint = "numeric")</a></code></pre>
 <ul>
 <li>If table exists and parameter <code>append</code> set to <code>TRUE</code> then existing s3.location will be utilised (<a href='https://github.com/DyfanJones/RAthena/issues/73'>#73</a>)</li>
 <li>
-<code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://rdrr.io/pkg/dbplyr/man/in_schema.html">dbplyr::in_schema</a></code>.</li>
+<code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href='https://github.com/DyfanJones/RAthena/issues/74'>#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">dbplyr::in_schema</a></code>.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">

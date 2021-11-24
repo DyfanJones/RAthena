@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 implementation of db_compute for Athena — db_compute • RAthena</title>
+<title>S3 implementation of db_compute for Athena
+
+This is a backend function for dplyr's compute function. Users won't be required to access and run this function. — db_compute • RAthena</title>
 
 
 <!-- jquery -->
@@ -39,8 +41,11 @@
 
 
 
-<meta property="og:title" content="S3 implementation of db_compute for Athena — db_compute" />
-<meta property="og:description" content="This is a backend function for dplyr's compute function. Users won't be required to access and run this function." />
+<meta property="og:title" content="S3 implementation of db_compute for Athena
+
+This is a backend function for dplyr's compute function. Users won't be required to access and run this function. — db_compute" />
+<meta property="og:description" content="S3 implementation of db_compute for Athena
+This is a backend function for dplyr's compute function. Users won't be required to access and run this function." />
 
 
 
@@ -141,13 +146,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>S3 implementation of <code>db_compute</code> for Athena</h1>
+    <h1>S3 implementation of <code>db_compute</code> for Athena
+
+This is a backend function for dplyr's <code>compute</code> function. Users won't be required to access and run this function.</h1>
     <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/dplyr_integration.R'><code>R/dplyr_integration.R</code></a></small>
     <div class="hidden name"><code>db_compute.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a backend function for dplyr's <code>compute</code> function. Users won't be required to access and run this function.</p>
+    <p>S3 implementation of <code>db_compute</code> for Athena</p>
+<p>This is a backend function for dplyr's <code>compute</code> function. Users won't be required to access and run this function.</p>
     </div>
 
     <pre class="usage"><span class='fu'>db_compute.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>table</span>, <span class='va'>sql</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -183,7 +191,7 @@
     <p><code>db_compute</code> returns table name</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='backend_dbplyr.html'>backend_dbplyr</a></code></p></div>
+    <div class='dont-index'><p><code><a href='AthenaWriteTables.html'>AthenaWriteTables</a></code> <code><a href='backend_dbplyr_v2.html'>backend_dbplyr_v2</a></code> <code><a href='backend_dbplyr_v1.html'>backend_dbplyr_v1</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
@@ -205,11 +213,11 @@
 <span class='r-in'><span class='va'>athena_mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>mtcars_filter</span> <span class='op'>&lt;-</span> <span class='va'>athena_mtcars</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>gear</span> <span class='op'>&gt;=</span><span class='fl'>4</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># create Athena with unique table name</span></span>
+<span class='r-in'><span class='co'># create athena with unique table name</span></span>
 <span class='r-in'><span class='va'>mtcars_filer</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># create Athena with specified name and s3 location</span></span>
+<span class='r-in'><span class='co'># create athena with specified name and s3 location</span></span>
 <span class='r-in'><span class='va'>mtcars_filer</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span class='r-in'>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='st'>"mtcars_filer"</span>,</span>
 <span class='r-in'>            s3_location <span class='op'>=</span> <span class='st'>"s3://mybucket/mtcars_filer/"</span><span class='op'>)</span></span>
