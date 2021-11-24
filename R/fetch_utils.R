@@ -1,4 +1,4 @@
-#' @include util.R
+#' @include utils.R
 
 .fetch_n <- function(res, result_class, n) {
   

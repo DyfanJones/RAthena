@@ -1,5 +1,5 @@
 #' @include Connection.R
-#' @include util.R
+#' @include utils.R
 #' @include fetch_utils.R
 NULL
 
