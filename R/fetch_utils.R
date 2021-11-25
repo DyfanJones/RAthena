@@ -1,4 +1,4 @@
-#' @include util.R
+#' @include utils.R
 
 .fetch_n <- function(res, result_class, n) {
   
@@ -24,7 +24,7 @@
         QueryExecutionId = res@info[["QueryExecutionId"]],
         MaxResults = chunk))
     } else {
-      retry_api_call(result <- res@athena$get_query_results(
+      retry_api_call(result <- res@connection@ptr$Athena$get_query_results(
         QueryExecutionId = res@info[["QueryExecutionId"]],
         NextToken = token, 
         MaxResults = chunk))

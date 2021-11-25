@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quote Identifiers — dbQuote • RAthena</title>
+<title>S3 implementation of db_connection_describe for Athena (api version 2). — db_connection_describe • RAthena</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Quote Identifiers — dbQuote" />
-<meta property="og:description" content="Call this method to generate string that is suitable for use in a query as a column or table name." />
+<meta property="og:title" content="S3 implementation of db_connection_describe for Athena (api version 2). — db_connection_describe" />
+<meta property="og:description" content="This is a backend function for dplyr to retrieve meta data about Athena queries. Users won't be required to access and run this function." />
 
 
 
@@ -141,51 +141,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quote Identifiers</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Connection.R'><code>R/Connection.R</code></a></small>
-    <div class="hidden name"><code>dbQuote.Rd</code></div>
+    <h1>S3 implementation of <code>db_connection_describe</code> for Athena (api version 2).</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/dplyr_integration.R'><code>R/dplyr_integration.R</code></a></small>
+    <div class="hidden name"><code>db_connection_describe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Call this method to generate string that is suitable for use in a query as a column or table name.</p>
+    <p>This is a backend function for dplyr to retrieve meta data about Athena queries. Users won't be required to access and run this function.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for AthenaConnection,POSIXct</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for AthenaConnection,Date</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for AthenaConnection,SQL</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>db_connection_describe.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>conn</th>
-      <td><p>A <a href='https://dbi.r-dbi.org/reference/DBIConnection-class.html'>DBIConnection</a> object, as returned by
-<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>A character vector to quote as string.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments passed on to methods.</p></td>
+      <th>con</th>
+      <td><p>A <code><a href='dbConnect,AthenaDriver-method.html'>dbConnect</a></code> object, as returned by <code><a href='dbConnect,AthenaDriver-method.html'>dbConnect()</a></code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a character object, for more information please check out: <code><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p></div>
+    <p>Character variable containing Meta Data about query sent to Athena. The Meta Data is returned in the following format:</p>
+<p><code>"Athena &lt;paws version&gt; [&lt;profile_name&gt;@region/database]"</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

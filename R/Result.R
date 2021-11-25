@@ -1,5 +1,5 @@
 #' @include Connection.R
-#' @include util.R
+#' @include utils.R
 #' @include fetch_utils.R
 NULL
 
@@ -223,7 +223,7 @@ setMethod(
       MaxResults = as.integer(1))[["ResultSet"]][["ResultSetMetadata"]][["ColumnInfo"]])
     
     if(n >= 0 && n !=Inf){
-      .fetch_n(res, result_class, n) 
+      return(.fetch_n(res, result_class, n))
     }
     
     # Added data scan information when returning data from athena

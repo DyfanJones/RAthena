@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quote Identifiers — dbQuote • RAthena</title>
+<title>Athena S3 implementation of dbplyr backend functions (api version 2). — backend_dbplyr_v2 • RAthena</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Quote Identifiers — dbQuote" />
-<meta property="og:description" content="Call this method to generate string that is suitable for use in a query as a column or table name." />
+<meta property="og:title" content="Athena S3 implementation of dbplyr backend functions (api version 2). — backend_dbplyr_v2" />
+<meta property="og:description" content="These functions are used to build the different types of SQL queries. 
+The AWS Athena implementation give extra parameters to allow access the to standard DBI Athena methods. They also
+utilise AWS Glue to speed up sql query execution." />
 
 
 
@@ -141,51 +143,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quote Identifiers</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/Connection.R'><code>R/Connection.R</code></a></small>
-    <div class="hidden name"><code>dbQuote.Rd</code></div>
+    <h1>Athena S3 implementation of dbplyr backend functions (api version 2).</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DyfanJones/RAthena/blob/master/R/dplyr_integration.R'><code>R/dplyr_integration.R</code></a></small>
+    <div class="hidden name"><code>backend_dbplyr_v2.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Call this method to generate string that is suitable for use in a query as a column or table name.</p>
+    <p>These functions are used to build the different types of SQL queries. 
+The AWS Athena implementation give extra parameters to allow access the to standard DBI Athena methods. They also
+utilise AWS Glue to speed up sql query execution.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for AthenaConnection,character</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>sql_query_explain.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>sql</span>, format <span class='op'>=</span> <span class='st'>"text"</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S4 method for AthenaConnection,POSIXct</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>sql_query_fields.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>sql</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S4 method for AthenaConnection,Date</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>sql_escape_date.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>x</span><span class='op'>)</span>
 
-<span class='co'># S4 method for AthenaConnection,SQL</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>sql_escape_datetime.AthenaConnection</span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>conn</th>
-      <td><p>A <a href='https://dbi.r-dbi.org/reference/DBIConnection-class.html'>DBIConnection</a> object, as returned by
-<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect()</a></code>.</p></td>
+      <th>con</th>
+      <td><p>A <code><a href='dbConnect,AthenaDriver-method.html'>dbConnect</a></code> object, as returned by <code><a href='dbConnect,AthenaDriver-method.html'>dbConnect()</a></code></p></td>
     </tr>
     <tr>
-      <th>x</th>
-      <td><p>A character vector to quote as string.</p></td>
+      <th>sql</th>
+      <td><p>SQL code to be sent to AWS Athena</p></td>
+    </tr>
+    <tr>
+      <th>format</th>
+      <td><p>returning format for explain queries, default set to `"text"`. Other formats can be found: <a href='https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html'>https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html</a></p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>return plan for explain queries, default set to `NULL`. Other type can be found: <a href='https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html'>https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html</a></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed on to methods.</p></td>
+      <td><p>other parameters, currently not implemented</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>R object to be transformed into athena equivalent</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a character object, for more information please check out: <code><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    
+<dl>
+<dt>sql_query_explain</dt><dd><p>Returns sql query for <a href='https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html'>AWS Athena explain statement</a></p></dd>
+<dt>sql_query_fields</dt><dd><p>Returns sql query column names</p></dd>
+<dt>sql_escape_date</dt><dd><p>Returns sql escaping from dates</p></dd>
+<dt>sql_escape_datetime</dt><dd><p>Returns sql escaping from date times</p></dd>
 
-    <div class='dont-index'><p><code><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></code>, <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></code></p></div>
+</dl>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

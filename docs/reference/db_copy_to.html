@@ -184,7 +184,7 @@ just any valid bare table name.</p></td>
     </tr>
     <tr>
       <th>overwrite</th>
-      <td><p>Allow overwriting the destination table. Cannot be <code>TRUE</code> if <code>append</code> is also <code>TRUE</code>.</p></td>
+      <td><p>Allows overwriting the destination table. Cannot be <code>TRUE</code> if <code>append</code> is also <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>append</th>
@@ -207,8 +207,8 @@ notifying user and <code>RAthena</code> will use the file type for the Athena DD
     <tr>
       <th>file_type</th>
       <td><p>What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"]. Default delimited file type is "tsv", in previous versions
-of <code>RAthena (=&lt; 1.6.0)</code> file type "csv" was used as default. The reason for the change is that columns containing <code>Array/JSON</code> format cannot be written to 
-Athena due to the separating value ",". This would cause issues with AWS Athena.                  
+of <code>RAthena (=&lt; 1.4.0)</code> file type "csv" was used as default. The reason for the change is that columns containing <code>Array/JSON</code> format cannot be written to 
+Athena due to the separating value ",". This would cause issues with AWS Athena. 
 <strong>Note:</strong> "parquet" format is supported by the <code>arrow</code> package and it will need to be installed to utilise the "parquet" format.</p></td>
     </tr>
     <tr>

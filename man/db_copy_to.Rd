@@ -29,7 +29,7 @@ just any valid bare table name.}
 
 \item{values}{A data.frame to write to the database.}
 
-\item{overwrite}{Allow overwriting the destination table. Cannot be \code{TRUE} if \code{append} is also \code{TRUE}.}
+\item{overwrite}{Allows overwriting the destination table. Cannot be \code{TRUE} if \code{append} is also \code{TRUE}.}
 
 \item{append}{Allow appending to the destination table. Cannot be \code{TRUE} if \code{overwrite} is also \code{TRUE}. Existing Athena DDL file type will be retained
 and used when uploading data to AWS Athena. If parameter \code{file.type} doesn't match AWS Athena DDL file type a warning message will be created 
@@ -42,8 +42,8 @@ notifying user and \code{RAthena} will use the file type for the Athena DDL.}
 \item{s3_location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/")}
 
 \item{file_type}{What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet"]. Default delimited file type is "tsv", in previous versions
-of \code{RAthena (=< 1.6.0)} file type "csv" was used as default. The reason for the change is that columns containing \code{Array/JSON} format cannot be written to 
-Athena due to the separating value ",". This would cause issues with AWS Athena.                  
+of \code{RAthena (=< 1.4.0)} file type "csv" was used as default. The reason for the change is that columns containing \code{Array/JSON} format cannot be written to 
+Athena due to the separating value ",". This would cause issues with AWS Athena. 
 \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.}
 
 \item{compress}{\code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 

@@ -3,7 +3,9 @@
 \name{db_compute}
 \alias{db_compute}
 \alias{db_compute.AthenaConnection}
-\title{S3 implementation of \code{db_compute} for Athena}
+\title{S3 implementation of \code{db_compute} for Athena
+
+This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.}
 \usage{
 db_compute.AthenaConnection(con, table, sql, ...)
 }
@@ -25,6 +27,8 @@ db_compute.AthenaConnection(con, table, sql, ...)
 \code{db_compute} returns table name
 }
 \description{
+S3 implementation of \code{db_compute} for Athena
+
 This is a backend function for dplyr's \code{compute} function. Users won't be required to access and run this function.
 }
 \examples{
@@ -47,11 +51,11 @@ copy_to(con, mtcars,
 athena_mtcars <- tbl(con, "mtcars")
 mtcars_filter <- athena_mtcars \%>\% filter(gear >=4)
 
-# create Athena with unique table name
+# create athena with unique table name
 mtcars_filer \%>\% 
   compute()
 
-# create Athena with specified name and s3 location
+# create athena with specified name and s3 location
 mtcars_filer \%>\% 
     compute("mtcars_filer",
             s3_location = "s3://mybucket/mtcars_filer/")
@@ -61,5 +65,5 @@ dbDisconnect(con)
 }
 }
 \seealso{
-\code{\link{backend_dbplyr}}
+\code{\link{AthenaWriteTables}} \code{\link{backend_dbplyr_v2}} \code{\link{backend_dbplyr_v1}}
 }
