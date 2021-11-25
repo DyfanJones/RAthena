@@ -84,3 +84,11 @@ test_that("test if dbGetQuery statistics returns named list correctly", {
     expect_true(any(grepl(i, stat_out)))
   }
 })
+
+test_that("test athena unload",{
+  
+  RAthena_options(unload = T)
+  
+  expect_true(athena_unload())
+  RAthena_options()
+})

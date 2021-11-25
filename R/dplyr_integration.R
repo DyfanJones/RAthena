@@ -58,6 +58,12 @@ db_compute.AthenaConnection <- function(con,
                                         sql,
                                         ...) {
   in_schema <- pkg_method("in_schema", "dbplyr")
+  if(athena_unload()){
+    stop(
+      "Unable to create table when `RAthena_options(unload = TRUE)`. Please run `RAthena_options(unload = FALSE)` and try again.",
+      call. = FALSE
+    )
+  }
   table <- athena_query_save(con, sql, table, ...)
   ll <- db_detect(con, table)
   in_schema(ll[["dbms.name"]], ll[["table"]])
@@ -222,6 +228,12 @@ db_connection_describe.AthenaConnection <- function(con) {
 NULL
 
 athena_explain <- function(con, sql, format = "text", type=NULL, ...){
+  if(athena_unload()){
+    stop(
+      "Unable to create table when `RAthena_options(unload = TRUE)`. Please run `RAthena_options(unload = FALSE)` and try again.",
+      call. = FALSE
+    )
+  }
   # AWS Athena now supports explain: https://docs.aws.amazon.com/athena/latest/ug/athena-explain-statement.html
   format <- match.arg(format, c("text", "json"))
   if(!is.null(type)) {

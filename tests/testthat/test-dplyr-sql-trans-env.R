@@ -285,7 +285,7 @@ test_that("Raise error for unknown data types", {
   expect_error(AthenaDataType(obj))
 })
 
-test_that("Explain Plan default", {
+test_that("test explain Plan default", {
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
   
@@ -296,7 +296,7 @@ test_that("Explain Plan default", {
   expect_equal(dplyr::sql(expected), actual)
 })
 
-test_that("Explain Plan type set to IO", {
+test_that("test explain Plan type set to IO", {
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
   
@@ -307,6 +307,15 @@ test_that("Explain Plan type set to IO", {
   expect_equal(dplyr::sql(expected), actual)
 })
 
+test_that("test explain plan type set to IO", {
+  skip_if_no_env()
+  skip_if_package_not_avialable("dplyr")
+  
+  sql = "select * from iris"
+  RAthena_options(unload = T)
+  expect_error(RAthena:::sql_query_explain.AthenaConnection(con, sql))
+  RAthena_options()
+})
 
 test_that("dbplyr v2 db_connection_describe", {
   skip_if_no_env()
