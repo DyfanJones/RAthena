@@ -244,12 +244,11 @@ check_cache = function(query, work_group){
 }
 
 # return python error with error class
-retry_error <-
-  function(e) {
-    e <- py_last_error()$value
-    class(e) <- "error"
-    e
-  }
+retry_error <- function(e) {
+  e <- py_last_error()$value
+  class(e) <- "error"
+  return(e)
+}
 
 # If api call fails retry call
 retry_api_call <- function(expr){
