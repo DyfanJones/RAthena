@@ -186,13 +186,13 @@ dbplyr_edition.AthenaConnection <- function(con) 2L
 #' @return
 #' Character variable containing Meta Data about query sent to Athena. The Meta Data is returned in the following format:
 #' 
-#' \code{"Athena <paws version> [<profile_name>@region/database]"}
+#' \code{"Athena <boto3 version> [<profile_name>@region/database]"}
 NULL
 
 athena_conn_desc <- function(con){
   info <- dbGetInfo(con)
   profile <- if(!is.null(info$profile_name)) paste0(info$profile_name, "@")
-  paste0("Athena ",info$paws," [",profile,info$region_name,"/", info$dbms.name,"]")
+  paste0("Athena ",info$boto," [",profile,info$region_name,"/", info$dbms.name,"]")
 }
 
 #' @rdname db_connection_describe
@@ -283,7 +283,7 @@ sql_escape_datetime.AthenaConnection <- function(con, x) {
 #' @return
 #' Character variable containing Meta Data about query sent to Athena. The Meta Data is returned in the following format:
 #' 
-#' \code{"Athena <paws version> [<profile_name>@region/database]"}
+#' \code{"Athena <boto3 version> [<profile_name>@region/database]"}
 db_desc.AthenaConnection <- function(x) {
   return(athena_conn_desc(x))
 }
