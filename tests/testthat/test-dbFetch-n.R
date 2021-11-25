@@ -7,6 +7,7 @@ con <- dbConnect(athena())
 
 test_that("fetch athena table in batch 100 data.table", {
   skip_if_no_env()
+  skip_if_no_boto()
   
   RAthena_options()
   res = dbExecute(con, "select * from iris")
@@ -25,6 +26,7 @@ test_that("fetch athena table in batch 100 data.table", {
 
 test_that("fetch athena table in batch 100 tibble", {
   skip_if_no_env()
+  skip_if_no_boto()
   
   RAthena_options("vroom")
   
@@ -45,6 +47,7 @@ test_that("fetch athena table in batch 100 tibble", {
 
 test_that("fetch athena table on closed connection", {
   skip_if_no_env()
+  skip_if_no_boto()
   
   res = dbExecute(con, "select * from iris")
   
@@ -58,6 +61,7 @@ test_that("fetch athena table on closed connection", {
 
 test_that("test dbGetQuery dbplyr ident", {
   skip_if_no_env()
+  skip_if_no_boto()
   skip_if_package_not_avialable("dbplyr")
   library(dbplyr)
   
@@ -72,6 +76,7 @@ test_that("test dbGetQuery dbplyr ident", {
 
 test_that("test if dbGetQuery statistics returns named list correctly", {
   skip_if_no_env()
+  skip_if_no_boto()
   
   stat_out = utils::capture.output({exp = dbGetQuery(con, "select * from iris", statistics = T)})
   
