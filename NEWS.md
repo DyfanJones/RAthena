@@ -1,6 +1,7 @@
 # RAthena (development version)
 ## Feature:
 * Add support `dbplyr` 2.0.0 backend API.
+* Add method to set unload on a package level to allow `dplyr` to benefit from `AWS Athena unload` methods ([noctua # 174](https://github.com/DyfanJones/noctua/issues/174)).
 
 ## Bug Fix:
 * Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of `R` ([noctua # 170](https://github.com/DyfanJones/noctua/issues/170)). Thanks to @tyner for identifying issue.

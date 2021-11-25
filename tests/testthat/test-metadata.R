@@ -76,3 +76,9 @@ test_that("Returning meta data",{
   expect_equal(name1, list("dbms.name" = "default", "table" = "table1"))
   expect_equal(name2, list("dbms.name" = "mydatabase", "table" = "table1"))
 })
+
+test_that("test connection when timezone is NULL", {
+  con <- dbConnect(athena(), timezone = NULL)
+  
+  expect_equal(con@info$timezone, "UTC")
+})
