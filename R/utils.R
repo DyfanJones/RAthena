@@ -386,3 +386,7 @@ db_detect <- function(conn, name){
     ll[["table"]] <- name}
   return(ll)
 }
+
+athena_unload = function(){
+  return(athena_option_env$athena_unload)
+}
