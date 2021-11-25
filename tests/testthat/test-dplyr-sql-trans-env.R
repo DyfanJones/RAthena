@@ -313,7 +313,7 @@ test_that("dbplyr v2 db_connection_describe", {
   
   actual = RAthena:::db_connection_describe.AthenaConnection(con)
   
-  expect_true(grepl("Athena [0-9.]+ \\[.*@.*/.*\\]", actual))
+  expect_true(grepl("Athena [0-9.]+ \\[.*/.*\\]", actual))
 })
 
 #####################################################################
