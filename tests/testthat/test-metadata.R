@@ -78,6 +78,9 @@ test_that("Returning meta data",{
 })
 
 test_that("test connection when timezone is NULL", {
+  skip_if_no_boto()
+  skip_if_no_env()
+  
   con <- dbConnect(athena(), timezone = NULL)
   
   expect_equal(con@info$timezone, "UTC")

@@ -1,4 +1,4 @@
-# RAthena (development version)
+# RAthena 2.4.0
 ## Feature:
 * Add support `dbplyr` 2.0.0 backend API.
 * Add method to set unload on a package level to allow `dplyr` to benefit from `AWS Athena unload` methods ([noctua # 174](https://github.com/DyfanJones/noctua/issues/174)).

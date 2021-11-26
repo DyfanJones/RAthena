@@ -1,8 +1,13 @@
 ## Submission
-This release contains a few new features.
+This release contains a few new features and bug fixes.
 
 ### Feature:
-  * Support `AWS Athena UNLOAD` within `DBI` methods.
+  * Support `dbplyr` 2+
+  * Support `AWS Athena unload` functionality for `dplyr`
+
+## Bugf fix:
+  * Ensure `dbGetQuery`, `dbExecute`, `dbSendQuery`, `dbSendStatement` work on older versions of `R`
+  * Caching would fail when statement wasn't a character
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
@@ -21,4 +26,4 @@ This release contains a few new features.
 `devtools::check_rhub(env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always", LIBARROW_BINARY="true"))`
 
 ## unit tests (using testthat) results
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 290 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 324 ]
