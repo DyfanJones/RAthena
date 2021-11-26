@@ -50,12 +50,6 @@ data_type3 = c("l", "i", "i", "i", "i", "I", "d",
 names(data_type2) = type_names
 names(data_type3) = type_names
 
-# Test connection is using AWS CLI to set profile_name 
-con <- dbConnect(
-  athena(),
-  s3_staging_dir = Sys.getenv("rathena_s3_query")
-)
-
 test_that("Check RAthena s3 dplyr sql_translate_env method",{
   skip_if_no_boto()
   skip_if_no_env()
@@ -63,6 +57,11 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
   skip_if_package_not_avialable("dbplyr")
   
   library(dbplyr)
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   test_date <- as.Date("2020-01-01")
   
@@ -278,16 +277,31 @@ test_that("Check RAthena s3 dplyr sql_translate_env method",{
 })
 
 test_that("Raise error for unknown data types", {
+  skip_if_no_boto()
+  skip_if_no_env()
   obj <- "dummy"
   class(obj) <- "dummy"
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   expect_error(dbDataType(con, obj))
   expect_error(AthenaDataType(obj))
 })
 
 test_that("test explain Plan default", {
+  skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   sql = "select * from iris"
   actual = RAthena:::sql_query_explain.AthenaConnection(con, sql)
@@ -297,8 +311,15 @@ test_that("test explain Plan default", {
 })
 
 test_that("test explain Plan type set to IO", {
+  skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   sql = "select * from iris"
   actual = RAthena:::sql_query_explain.AthenaConnection(con, sql, type = "IO")
@@ -308,8 +329,15 @@ test_that("test explain Plan type set to IO", {
 })
 
 test_that("test explain plan type set to IO", {
+  skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   sql = "select * from iris"
   RAthena_options(unload = T)
@@ -318,7 +346,14 @@ test_that("test explain plan type set to IO", {
 })
 
 test_that("dbplyr v2 db_connection_describe", {
+  skip_if_no_boto()
   skip_if_no_env()
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   actual = RAthena:::db_connection_describe.AthenaConnection(con)
   
@@ -330,9 +365,16 @@ test_that("dbplyr v2 db_connection_describe", {
 #####################################################################
 
 test_that("dbplyr v1 db_explain", {
+  skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dbplyr")
   library(dbplyr)
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   RAthena::RAthena_options()
   actual = RAthena:::db_explain.AthenaConnection(con, "select * from iris")
@@ -341,9 +383,16 @@ test_that("dbplyr v1 db_explain", {
 })
 
 test_that("dbplyr v1 db_query_fields", {
+  skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dbplyr")
   library(dbplyr)
+  
+  # Test connection is using AWS CLI to set profile_name 
+  con <- dbConnect(
+    athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
   
   actual1 = RAthena:::db_query_fields.AthenaConnection(con, dbplyr::ident("iris"))
   actual2 = RAthena:::db_query_fields.AthenaConnection(con, dbplyr::sql("select * from iris"))
