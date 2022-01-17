@@ -29,5 +29,6 @@ test_that("Check if retry_api is working as intended",{
   expect_error(retry_api_call(fail_function(fail_env$i, 3)))
   
   expect_error(RAthena_options(retry = - 10))
-  expect_error(RAthena_options(retry_quiet = "blah"))
+  expect_warning(RAthena_options(retry_quiet = "blah"))
+  expect_error(RAthena_options(verbose = "blah"))
 })
