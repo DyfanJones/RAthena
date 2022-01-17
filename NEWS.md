@@ -1,4 +1,4 @@
-# noctua 2.4.0.9000
+# RAthena 2.5.0
 ## Feature:
 * Allow all information messages to be turned off ([noctua # 178](https://github.com/DyfanJones/noctua/issues/178)).
 * Allow `RAthena_options` to change 1 parameter at a time without affecting other pre-configured settings

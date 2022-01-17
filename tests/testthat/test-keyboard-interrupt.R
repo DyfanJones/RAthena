@@ -39,11 +39,12 @@ test_that("Check if Athena query has not been cancelled",{
   
   expect_error(RAthena:::interrupt_athena(res), err_msg)
   
-  status <- res@connection@ptr$Athena$get_query_execution(
-    QueryExecutionId = query_id)$QueryExecution$Status$State
-  
   # give AWS Athena a chance to start query
   Sys.sleep(5)
+  
+  status <- res@connection@ptr$Athena$get_query_execution(
+    QueryExecutionId = query_id)$QueryExecution$Status$State
+
   expect_true(status %in% c("RUNNING", "SUCCEEDED"))
   
   # tidy up query
