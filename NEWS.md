@@ -1,3 +1,7 @@
+# RAthena 2.5.1
+## Bug Fix:
+* Fixed unit test helper function `test_data` to use `size` parameter explicitly.
+
 # RAthena 2.5.0
 ## Feature:
 * Allow all information messages to be turned off ([noctua # 178](https://github.com/DyfanJones/noctua/issues/178)).
