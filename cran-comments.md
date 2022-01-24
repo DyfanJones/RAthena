@@ -15,12 +15,7 @@ This release is a patch release addressing cran build.
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 ## R devtools::check_rhub() results
-0 errors ✓ | 0 warnings ✓ | 1 notes ✓
-
-> checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Dyfan Jones <dyfan.r.jones@gmail.com>'
-  
-  Days since last update: 4
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
   
 ## Maintainers Comments:
 Apologises for this fast turn around. This release is to address issues regarding cran build. To prevent this from happening in the future,
