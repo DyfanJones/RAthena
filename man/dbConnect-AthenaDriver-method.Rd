@@ -94,11 +94,11 @@ If `NULL` then no timezone is set, which defaults to the server's time zone.
 \item{rstudio_conn_tab}{Optional to get AWS Athena Schema and display it in RStudio's Connections Tab.
 Default set to \code{TRUE}.}
 
-\item{...}{Passes parameters to Boto3 Session and Client.
+\item{...}{Passes parameters to \code{boto3.session.Session} and \code{client}.
 \itemize{
     \item{\strong{boto3.session.Session}}
     \itemize{
-        \item{\strong{botocore_session}}{(botocore.session.Session): Use this Botocore session instead
+        \item{\strong{botocore_session}} {(botocore.session.Session): Use this Botocore session instead
             of creating a new default one.
         }
     }
@@ -110,14 +110,14 @@ Default set to \code{TRUE}.}
             See \href{https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html}{botocore config documentation}
             for more details.
         }
-        \item{\strong{api_version}}{(string) -- The API version to use. By default, botocore will use the latest
+        \item{\strong{api_version}} {(string) -- The API version to use. By default, botocore will use the latest
             API version when creating a client. You only need to specify this parameter if you want to
             use a previous API version of the client.
         }
-        \item{\strong{use_ssl}}{(boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
+        \item{\strong{use_ssl}} {(boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
             not all services support non-ssl connections.
         }
-        \item{\strong{verify}}{(boolean/string) -- Whether or not to verify SSL certificates. By default
+        \item{\strong{verify}} {(boolean/string) -- Whether or not to verify SSL certificates. By default
             SSL certificates are verified. You can provide the following values:
             \itemize{
                 \item{False - do not validate SSL certificates. SSL will still be used (unless use_ssl is False),
@@ -128,7 +128,7 @@ Default set to \code{TRUE}.}
                }
             }
          }
-         \item{\strong{endpoint_url}}{(string) -- The complete URL to use for the constructed client. Normally,
+         \item{\strong{endpoint_url}} {(string) -- The complete URL to use for the constructed client. Normally,
              botocore will automatically construct the appropriate URL to use when communicating with a
              service. You can specify a complete URL (including the "http/https" scheme) to override this
              behaviour. If this value is provided, then `use_ssl` is ignored.
