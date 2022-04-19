@@ -109,7 +109,47 @@ setMethod(
 #' @param keyboard_interrupt Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to \code{TRUE}
 #' @param rstudio_conn_tab Optional to get AWS Athena Schema and display it in RStudio's Connections Tab.
 #'   Default set to \code{TRUE}.
-#' @param ... Any other parameter for Boto3 session: \href{https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html}{Boto3 session documentation}
+#' @param ... Passes parameters to \code{boto3.session.Session} and \code{client}.
+#' \itemize{
+#'     \item{\strong{boto3.session.Session}}
+#'     \itemize{
+#'         \item{\strong{botocore_session}} {(botocore.session.Session): Use this Botocore session instead
+#'             of creating a new default one.
+#'         }
+#'     }
+#'     \item{\strong{client}}
+#'     \itemize{
+#'         \item{\strong{config}} {(botocore.client.Config) -- Advanced client configuration options. If region_name
+#'             is specified in the client config, its value will take precedence over environment variables
+#'             and configuration values, but not over a region_name value passed explicitly to the method.
+#'             See \href{https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html}{botocore config documentation}
+#'             for more details.
+#'         }
+#'         \item{\strong{api_version}} {(string) -- The API version to use. By default, botocore will use the latest
+#'             API version when creating a client. You only need to specify this parameter if you want to
+#'             use a previous API version of the client.
+#'         }
+#'         \item{\strong{use_ssl}} {(boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
+#'             not all services support non-ssl connections.
+#'         }
+#'         \item{\strong{verify}} {(boolean/string) -- Whether or not to verify SSL certificates. By default
+#'             SSL certificates are verified. You can provide the following values:
+#'             \itemize{
+#'                 \item{False - do not validate SSL certificates. SSL will still be used (unless use_ssl is False),
+#'                     but SSL certificates will not be verified.
+#'                 }
+#'                 \item{path/to/cert/bundle.pem - A filename of the CA cert bundle to uses. You can specify this
+#'                     argument if you want to use a different CA cert bundle than the one used by botocore.
+#'                }
+#'             }
+#'          }
+#'          \item{\strong{endpoint_url}} {(string) -- The complete URL to use for the constructed client. Normally,
+#'              botocore will automatically construct the appropriate URL to use when communicating with a
+#'              service. You can specify a complete URL (including the "http/https" scheme) to override this
+#'              behaviour. If this value is provided, then `use_ssl` is ignored.
+#'          }
+#'     }
+#'  }
 #' @aliases dbConnect
 #' @return \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 #' @examples
