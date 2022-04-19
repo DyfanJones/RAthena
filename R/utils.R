@@ -397,3 +397,18 @@ info_msg = function(...){
   if (athena_option_env$verbose)
     message("INFO: ", ...)
 }
+
+.boto_param = function(param, default_param){
+  return(param[tolower(names(param)) %in% default_param])
+}
+.SESSION_PASSING_ARGS = c(
+  "botocore_session"
+)
+
+.CLIENT_PASSING_ARGS = c(
+  "config",
+  "api_version",
+  "use_ssl",
+  "verify",
+  "endpoint_url"
+)

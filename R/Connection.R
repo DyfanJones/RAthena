@@ -30,14 +30,19 @@ AthenaConnection <- function(aws_access_key_id = NULL,
                              aws_expiration = NULL,
                              keyboard_interrupt = NULL,
                              ...){
+  kwargs = list(...)
+  sess_kwargs =  c(
+    aws_access_key_id = aws_access_key_id,
+    aws_secret_access_key = aws_secret_access_key,
+    aws_session_token = aws_session_token,
+    region_name = region_name,
+    botocore_session = botocore_session,
+    profile_name = profile_name,
+    .boto_param(kwargs, .SESSION_PASSING_ARGS)
+  )
+  
   tryCatch(
-    boto3 <- boto$Session(aws_access_key_id = aws_access_key_id,
-                          aws_secret_access_key = aws_secret_access_key,
-                          aws_session_token = aws_session_token,
-                          region_name = region_name,
-                          botocore_session = botocore_session,
-                          profile_name = profile_name,
-                          ...),
+    boto3 <- do.call(boto$Session, sess_kwargs),
     error = function(e) py_error(e)
   )
   
@@ -47,10 +52,11 @@ AthenaConnection <- function(aws_access_key_id = NULL,
          "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
          call. = FALSE)
     
-  ptr_ll <- list(Athena = boto3$client("athena"),
-                 S3 = boto3$client("s3"),
-                 glue = boto3$client("glue"))
-    
+  ptr_ll <- list(
+    Athena = do.call(boto3$client, c(service_name="athena", .boto_param(kwargs, .CLIENT_PASSING_ARGS))),
+    S3 = do.call(boto3$client, c(service_name="s3", .boto_param(kwargs, .CLIENT_PASSING_ARGS))),
+    glue = do.call(boto3$client, c(service_name="glue", .boto_param(kwargs, .CLIENT_PASSING_ARGS)))
+  )
   if(is.null(s3_staging_dir) && !is.null(work_group)){
     tryCatch(s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
              error = function(e) py_error(e))
