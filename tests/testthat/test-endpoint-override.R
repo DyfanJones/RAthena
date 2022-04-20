@@ -12,3 +12,14 @@ test_that("Test set aws service endpoints", {
     list(athena="dummy.athena", s3="dummy.s3", glue = "dummy.glue")
   )
 })
+
+test_that("Test unsupported aws services", {
+  expect_error(
+    set_endpoints(list(dummy="dummy")), 
+    "The named list"
+  )
+  expect_error(
+    set_endpoints(list()), 
+    "The list needed to be a named list"
+  )
+})
