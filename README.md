@@ -7,6 +7,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 ![downloads](https://cranlogs.r-pkg.org/badges/RAthena)
 [![Codecov test coverage](https://codecov.io/gh/DyfanJones/rathena/branch/master/graph/badge.svg)](https://app.codecov.io/gh/DyfanJones/rathena?branch=master)
 [![R-CMD-check](https://github.com/DyfanJones/RAthena/workflows/R-CMD-check/badge.svg)](https://github.com/DyfanJones/RAthena/actions)
+[![RAthena status badge](https://dyfanjones.r-universe.dev/badges/RAthena)](https://dyfanjones.r-universe.dev)
 
 The goal of the `RAthena` package is to provide a DBI-compliant interface
 to Amazon’s Athena (<https://aws.amazon.com/athena/>) using `Boto3` SDK.

@@ -397,3 +397,45 @@ info_msg = function(...){
   if (athena_option_env$verbose)
     message("INFO: ", ...)
 }
+
+set_endpoints = function(endpoint_override){
+  if (is.null(endpoint_override)){
+    return(list())
+  }
+  if (is.character(endpoint_override)){
+    return(list(
+      athena = endpoint_override
+    ))
+  }
+  if (is.list(endpoint_override)){
+    if(length(names(endpoint_override)) == 0){
+      stop("endpoint_override needed to be a named list or character", call.=F)
+    }
+    if(any(!(tolower(names(endpoint_override)) %in% c("athena", "s3", "glue")))){
+      stop(
+        "The named list can only have the following names ['athena', 's3', glue']",
+        call.=F
+      )
+    }
+    names(endpoint_override) = tolower(names(endpoint_override))
+    endpoint_list = list()
+    endpoint_list$athena = endpoint_override$athena
+    endpoint_list$s3 = endpoint_override$s3
+    endpoint_list$glue = endpoint_override$glue
+    return(endpoint_list)
+  }
+}
+
+.boto_param = function(param, default_param){
+  return(param[tolower(names(param)) %in% default_param])
+}
+.SESSION_PASSING_ARGS = c(
+  "botocore_session"
+)
+
+.CLIENT_PASSING_ARGS = c(
+  "config",
+  "api_version",
+  "use_ssl",
+  "verify"
+)
