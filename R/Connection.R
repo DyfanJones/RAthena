@@ -29,6 +29,7 @@ AthenaConnection <- function(aws_access_key_id = NULL,
                              profile_name = NULL, 
                              aws_expiration = NULL,
                              keyboard_interrupt = NULL,
+                             endpoint_override = NULL,
                              ...){
   kwargs = list(...)
   sess_kwargs =  c(
@@ -51,15 +52,25 @@ AthenaConnection <- function(aws_access_key_id = NULL,
     stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
          "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
          call. = FALSE)
-    
+  
+  endpoints = set_endpoints(endpoint_override)
+  
   ptr_ll <- list(
-    Athena = do.call(boto3$client, c(service_name="athena", .boto_param(kwargs, .CLIENT_PASSING_ARGS))),
-    S3 = do.call(boto3$client, c(service_name="s3", .boto_param(kwargs, .CLIENT_PASSING_ARGS))),
-    glue = do.call(boto3$client, c(service_name="glue", .boto_param(kwargs, .CLIENT_PASSING_ARGS)))
+    Athena = do.call(boto3$client,
+      c(service_name="athena", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$athena)), .CLIENT_PASSING_ARGS))
+    ),
+    S3 = do.call(boto3$client,
+      c(service_name="s3", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$s3)), .CLIENT_PASSING_ARGS))
+    ),
+    glue = do.call(boto3$client,
+      c(service_name="glue", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$glue)), .CLIENT_PASSING_ARGS))
+    )
   )
   if(is.null(s3_staging_dir) && !is.null(work_group)){
-    tryCatch(s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation,
-             error = function(e) py_error(e))
+    tryCatch({
+      s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation
+      }, error = function(e) py_error(e)
+    )
   }
     
   s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
@@ -75,7 +86,8 @@ AthenaConnection <- function(aws_access_key_id = NULL,
                kms_key = kms_key, expiration = aws_expiration,
                timezone = character(),
                keyboard_interrupt = keyboard_interrupt,
-               region_name = boto3$region_name)
+               region_name = boto3$region_name,
+               endpoint_override = endpoints)
   
   res <- new(
     "AthenaConnection",

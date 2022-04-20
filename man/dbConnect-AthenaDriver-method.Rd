@@ -28,6 +28,7 @@
   timezone = "UTC",
   keyboard_interrupt = TRUE,
   rstudio_conn_tab = TRUE,
+  endpoint_override = NULL,
   ...
 )
 }
@@ -94,6 +95,13 @@ If `NULL` then no timezone is set, which defaults to the server's time zone.
 \item{rstudio_conn_tab}{Optional to get AWS Athena Schema and display it in RStudio's Connections Tab.
 Default set to \code{TRUE}.}
 
+\item{endpoint_override}{(character/list) The complete URL to use for the constructed client. Normally,
+\code{botocore} will automatically construct the appropriate URL to use when communicating with a
+service. You can specify a complete URL (including the "http/https" scheme) to override this
+behaviour. If \code{endpoint_override} is a character then AWS Athena endpoint is overridden. To override
+AWS S3 or AWS Glue endpoints a named list needs to be provided. The list can only have the following names ['athena', 's3', glue']
+for example \code{list(glue = "https://glue.eu-west-1.amazonaws.com")}}
+
 \item{...}{Passes parameters to \code{boto3.session.Session} and \code{client}.
 \itemize{
     \item{\strong{boto3.session.Session}}
@@ -127,11 +135,6 @@ Default set to \code{TRUE}.}
                     argument if you want to use a different CA cert bundle than the one used by botocore.
                }
             }
-         }
-         \item{\strong{endpoint_url}} {(string) -- The complete URL to use for the constructed client. Normally,
-             botocore will automatically construct the appropriate URL to use when communicating with a
-             service. You can specify a complete URL (including the "http/https" scheme) to override this
-             behaviour. If this value is provided, then `use_ssl` is ignored.
          }
     }
  }}
