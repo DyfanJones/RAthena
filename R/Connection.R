@@ -41,18 +41,18 @@ AthenaConnection <- function(aws_access_key_id = NULL,
     profile_name = profile_name,
     .boto_param(kwargs, .SESSION_PASSING_ARGS)
   )
-  
   tryCatch(
     boto3 <- do.call(boto$Session, sess_kwargs),
     error = function(e) py_error(e)
   )
-  
   # stop connection if region_name is not set in backend or hardcoded
   if(is.null(boto3$region_name))
-    stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
-         "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
-         call. = FALSE)
-  
+    stop(
+      "AWS `region_name` is required to be set. Please set `region` in .config file, ",
+      "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
+      call. = FALSE
+    )
+  # set up any endpoint url for each aws service: athena, s3, glue
   endpoints = set_endpoints(endpoint_override)
   
   ptr_ll <- list(
@@ -72,23 +72,24 @@ AthenaConnection <- function(aws_access_key_id = NULL,
       }, error = function(e) py_error(e)
     )
   }
-    
   s3_staging_dir <- s3_staging_dir %||% get_aws_env("AWS_ATHENA_S3_STAGING_DIR")
   
   if(is.null(s3_staging_dir)) {
-    stop("Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
-         "or when work_group is defined in `create_work_group()`", call. = F)
+    stop(
+      "Please set `s3_staging_dir` either in parameter `s3_staging_dir`, environmental varaible `AWS_ATHENA_S3_STAGING_DIR`",
+      "or when work_group is defined in `create_work_group()`", call. = F
+    )
   }
-  
-  info <- list(profile_name = profile_name, s3_staging = s3_staging_dir,
-               dbms.name = schema_name, work_group = work_group %||% "primary",
-               poll_interval = poll_interval, encryption_option = encryption_option,
-               kms_key = kms_key, expiration = aws_expiration,
-               timezone = character(),
-               keyboard_interrupt = keyboard_interrupt,
-               region_name = boto3$region_name,
-               endpoint_override = endpoints)
-  
+  info <- list(
+    profile_name = profile_name, s3_staging = s3_staging_dir,
+    dbms.name = schema_name, work_group = work_group %||% "primary",
+    poll_interval = poll_interval, encryption_option = encryption_option,
+    kms_key = kms_key, expiration = aws_expiration,
+    timezone = character(),
+    keyboard_interrupt = keyboard_interrupt,
+    region_name = boto3$region_name,
+    endpoint_override = endpoints
+  )
   res <- new(
     "AthenaConnection",
     ptr = list2env(ptr_ll, parent = emptyenv()),
