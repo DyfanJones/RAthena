@@ -1,3 +1,8 @@
+# RAthena 2.5.1.9000
+## Feature:
+* Support extra boto3 parameters for `boto3.session.Session` class and `client` method (#169)
+* Support `endpoint_override` parameter allow default endpoints for each service to be overridden accordingly (#169)
+
 # RAthena 2.5.1
 ## Bug Fix:
 * Fixed unit test helper function `test_data` to use `size` parameter explicitly.
