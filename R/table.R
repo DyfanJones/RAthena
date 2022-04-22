@@ -137,10 +137,12 @@ Athena_write_table <-
     
     # Check file format if appending
     if(found && append){
-      tryCatch(
-              tbl_info <- conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]],
-                                         Name = ll[["table"]])$Table,
-              error = function(e) py_error(e))
+      tryCatch({
+        tbl_info <- py_to_r(
+          conn@ptr$glue$get_table(
+            DatabaseName = ll[["dbms.name"]],
+            Name = ll[["table"]])$Table)
+      }, error = function(e) py_error(e))
       
       # Return correct file format when appending onto existing AWS Athena table
       File.Type <- switch(tbl_info$StorageDescriptor$SerdeInfo$SerializationLibrary, 

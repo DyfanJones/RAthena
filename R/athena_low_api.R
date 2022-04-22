@@ -117,16 +117,19 @@ create_work_group <- function(conn,
             is.character(description))
   
   request <- list(Name = work_group)
-  request["Configuration"] <- list(work_group_config(conn,
-                                                     EnforceWorkGroupConfiguration = enforce_work_group_config,
-                                                     PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
-                                                     BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
-                                                     RequesterPaysEnabled = requester_pays))
+  request["Configuration"] <- list(
+    work_group_config(
+      conn,
+      EnforceWorkGroupConfiguration = enforce_work_group_config,
+      PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
+      BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
+      RequesterPaysEnabled = requester_pays)
+  )
   request["Description"] <- list(description)
   request["Tags"] <- tags
   
-  tryCatch(do.call(conn@ptr$Athena$create_work_group, request, quote = T),
-           error = function(e) py_error(e))
+  tryCatch({do.call(conn@ptr$Athena$create_work_group, request, quote = T)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
@@ -144,8 +147,9 @@ delete_work_group <- function(conn, work_group = NULL, recursive_delete_option =
   con_error_msg(conn, "Connection already closed.")
   stopifnot(is.character(work_group),
             is.logical(recursive_delete_option))
-  tryCatch(conn@ptr$Athena$delete_work_group(WorkGroup = work_group, RecursiveDeleteOption = recursive_delete_option),
-           error = function(e) py_error(e))
+  tryCatch({conn@ptr$Athena$delete_work_group(
+    WorkGroup = work_group, RecursiveDeleteOption = recursive_delete_option)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
@@ -153,8 +157,9 @@ delete_work_group <- function(conn, work_group = NULL, recursive_delete_option =
 #' @export
 list_work_groups <- function(conn){
   con_error_msg(conn, "Connection already closed.")
-  tryCatch(response <- conn@ptr$Athena$list_work_groups(),
-           error = function(e) py_error(e))
+  tryCatch({
+    response <- py_to_r(conn@ptr$Athena$list_work_groups())
+  }, error = function(e) py_error(e))
   response[["WorkGroups"]]
 }
 
@@ -163,8 +168,8 @@ list_work_groups <- function(conn){
 get_work_group <- function(conn, work_group = NULL){
   con_error_msg(conn, "Connection already closed.")
   stopifnot(is.character(work_group))
-  tryCatch(response <- conn@ptr$Athena$get_work_group(WorkGroup = work_group),
-           error = function(e) py_error(e))
+  tryCatch({response <- py_to_r(conn@ptr$Athena$get_work_group(WorkGroup = work_group))
+  }, error = function(e) py_error(e))
   response[["WorkGroup"]]
 }
 
@@ -192,15 +197,17 @@ update_work_group <- function(conn,
   request <- list(WorkGroup = work_group,
                   Description = description,
                   State = state)
-  request["ConfigurationUpdates"] <- list(work_group_config_update(conn,
-                                                            RemoveOutputLocation = remove_output_location,
-                                                            EnforceWorkGroupConfiguration = enforce_work_group_config,
-                                                            PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
-                                                            BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
-                                                            RequesterPaysEnabled = requester_pays))
-  
-  tryCatch(do.call(conn@ptr$Athena$update_work_group, request, quote = T),
-           error = function(e) py_error(e))
+  request["ConfigurationUpdates"] <- list(
+    work_group_config_update(
+      conn,
+      RemoveOutputLocation = remove_output_location,
+      EnforceWorkGroupConfiguration = enforce_work_group_config,
+      PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
+      BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
+      RequesterPaysEnabled = requester_pays)
+  )
+  tryCatch({do.call(conn@ptr$Athena$update_work_group, request, quote = T)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
