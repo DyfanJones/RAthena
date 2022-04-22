@@ -69,7 +69,8 @@ bit64_check <- function(value){
 #' @param retry Maximum number of requests to attempt (default: \code{5}).
 #' @param retry_quiet This method is deprecated please use verbose instead.
 #' @param unload set AWS Athena unload functionality globally (default: \code{FALSE})
-#' @param clear_s3 
+#' @param clear_s3 Clear down AWS Athena `s3_staging_dir` location. This is useful if users
+#'    AWS IAM role doesn't have permission to Delete from `s3_staging_dir` (default: \code{TRUE})
 #' @param verbose print package info messages (default: \code{TRUE})
 #' @return \code{RAthena_options()} returns \code{NULL}, invisibly.
 #' @examples
@@ -90,6 +91,7 @@ RAthena_options <- function(file_parser,
                             retry,
                             retry_quiet,
                             unload,
+                            clear_s3,
                             verbose) {
   # Reset to defaults
   if(missing(file_parser) & missing(bigint)
