@@ -106,8 +106,8 @@ setMethod(
           query_execution[["QueryExecution"]][["StatementType"]]
       }
       
-      # Dont clear S3 resource for caching or skipping
-      if (athena_option_env$cache_size == 0 || athena_option_env$clear_s3){
+      # Don't clear S3 resource for caching or skipping
+      if (athena_option_env$cache_size == 0 && athena_option_env$clear_s3){
         result_info <- split_s3_uri(res@info[["OutputLocation"]])
         
         # Output Python error as warning if s3 resource can't be dropped
