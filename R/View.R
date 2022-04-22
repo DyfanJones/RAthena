@@ -51,7 +51,7 @@ AthenaListObjectTypes.default <- function(connection) {
     obj_types <- list(database = list(contains = obj_types))
   }
   
-  obj_types
+  return(obj_types)
 }
 
 # List objects in a connection.
@@ -136,17 +136,24 @@ validateObjectName <- function(table, view) {
     stop("`table` and `view` can not both be `NULL`", call. = FALSE)
   }
   
-  table %||% view
+  return(table %||% view)
 }
 
 AthenaListColumns <- function(connection, ...) UseMethod("AthenaListColumns")
 
-AthenaListColumns.default <- function(connection, table = NULL, view = NULL, database = NULL, ...) {
+AthenaListColumns.default <- function(connection,
+                                      table = NULL,
+                                      view = NULL,
+                                      database = NULL,
+                                      ...) {
   if (dbIsValid(connection)) {
     glue <- connection@ptr$glue
-    tryCatch(output <- glue$get_table(DatabaseName = database, Name = table %||% view)$Table,
-             error = function(e) py_error(e))
-    
+    tryCatch({
+      output <- py_to_r(glue$get_table(
+        DatabaseName = database, Name = table %||% view)$Table
+      )
+    }, error = function(e) py_error(e)
+    )
     col_names <- sapply(output$StorageDescriptor$Columns, ColMeta)
     partition <- unlist(sapply(output$PartitionKeys, ColMeta))
     
@@ -167,12 +174,14 @@ AthenaTableTypes <- function(connection, database = NULL, name = NULL, ...) {
   if(is.null(database)) 
     database <- unlist(get_databases(glue))
   if(is.null(name)){
-    tryCatch({output <- lapply(database, function(i) get_table_list(glue = glue, schema = i))},
-             error = function(cond) NULL)
+    tryCatch({
+      output <- lapply(database, function(i) get_table_list(glue = glue, schema = i))
+    }, error = function(cond) NULL)
     tbl_meta <- sapply(unlist(output, recursive = F), function(x) TblMeta(x))
   } else {
-    tryCatch(output <- glue$get_table(DatabaseName = database, Name = name)$Table,
-             error = function(e) py_error(e))
+    tryCatch({
+      output <- py_to_r(glue$get_table(DatabaseName = database, Name = name)$Table)
+    }, error = function(e) py_error(e))
     tbl_meta <- output$TableType
     names(tbl_meta) <- output$Name}
   return(tbl_meta)
@@ -199,20 +208,24 @@ AthenaDatabase <- function(connection, ...) {
 
 AthenaPreviewObject <- function(connection, rowLimit, ...) UseMethod("AthenaPreviewObject")
 
-AthenaPreviewObject <- 
-  function(connection, rowLimit, table = NULL, 
-           view = NULL, database = NULL, ...) {
-    # extract object name from arguments
-    name <- validateObjectName(table, view)
-    
-    # prepend database if specified
-    if (!is.null(database)) {
-      name <- paste(dbQuoteIdentifier(connection, database),
-                    dbQuoteIdentifier(connection, name), sep = ".")
-    }
-    
-    dbGetQuery(connection, paste("SELECT * FROM", name, "LIMIT", rowLimit))
+AthenaPreviewObject <- function(connection,
+                                rowLimit,
+                                table = NULL,
+                                view = NULL,
+                                database = NULL,
+                                ...) {
+  # extract object name from arguments
+  name <- validateObjectName(table, view)
+  
+  # prepend database if specified
+  if (!is.null(database)) {
+    name <- paste(
+      dbQuoteIdentifier(connection, database),
+      dbQuoteIdentifier(connection, name), sep = ".")
   }
+  
+  return(dbGetQuery(connection, paste("SELECT * FROM", name, "LIMIT", rowLimit)))
+}
 
 # Get an icon representing a connection.
 #
@@ -266,8 +279,8 @@ AthenaConnectionActions <- function(connection) {
           callback = function() {
             varname <- Filter(
               function(e) identical(get(e, envir = .GlobalEnv), connection),
-              ls(envir = .GlobalEnv))
-            
+              ls(envir = .GlobalEnv)
+            )
             tables <- dbListTables(connection)
             
             contents <- paste(
@@ -282,7 +295,6 @@ AthenaConnectionActions <- function(connection) {
               "",
               sep = "\n"
             )
-            
             documentNew("sql", contents, row = 2, column = 15, execute = FALSE)
           }
         )
@@ -396,9 +408,11 @@ on_connection_opened <- function(connection) {
 TblMeta <- function(x) {
   tbl_type <- x$TableType %||% ""
   names(tbl_type) <- x$Name
-  tbl_type}
+  tbl_type
+}
 
 ColMeta <- function(x){
   col_type <- x$Type %||% ""
   names(col_type) <- x$Name
-  col_type}
+  col_type
+}

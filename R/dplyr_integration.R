@@ -332,9 +332,9 @@ athena_query_fields_ident <- function(con, sql){
   }
   # If dbplyr schema, get the fields from Glue
   tryCatch(
-    output <- con@ptr$glue$get_table(
+    output <- py_to_r(con@ptr$glue$get_table(
       DatabaseName = schema_parts[1],
-      Name = schema_parts[2])$Table
+      Name = schema_parts[2]))$Table
   )
   col_names = vapply(output$StorageDescriptor$Columns, function(y) y$Name, FUN.VALUE = character(1))
   partitions = vapply(output$PartitionKeys,function(y) y$Name, FUN.VALUE = character(1))

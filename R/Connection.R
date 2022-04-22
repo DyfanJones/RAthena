@@ -551,10 +551,10 @@ setMethod(
     con_error_msg(conn, msg = "Connection already closed.")
     ll <- db_detect(conn, name)
     retry_api_call(
-      output <- conn@ptr$glue$get_table(
+      output <- py_to_r(conn@ptr$glue$get_table(
         DatabaseName = ll[["dbms.name"]],
         Name = ll[["table"]])$Table)
-    
+    )
     col_names = vapply(output$StorageDescriptor$Columns, function(y) y$Name, FUN.VALUE = character(1))
     partitions = vapply(output$PartitionKeys,function(y) y$Name, FUN.VALUE = character(1))
     c(col_names, partitions)
@@ -601,8 +601,11 @@ setMethod(
     ll <- db_detect(conn, name)
 
     for (i in seq_len(athena_option_env$retry)) {
-      resp <- tryCatch(conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]), 
-                       error = function(e) retry_error(e))
+      resp <- tryCatch({
+        py_to_r(conn@ptr$glue$get_table(
+          DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]
+        ))
+      }, error = function(e) retry_error(e))
       
       # exponential step back if error and not expected error
       if(inherits(resp, "error") && !grepl(".*table.*not.*found.*", resp, ignore.case = T)){
@@ -613,11 +616,11 @@ setMethod(
         Sys.sleep(backoff_len)
       } else {break}
     }
-    
-    
-    if (inherits(resp, "error") && !grepl(".*table.*not.*found.*", resp, ignore.case = T)) stop(resp)
-    
-    !grepl(".*table.*not.*found.*", resp[1], ignore.case = T)
+    if (inherits(resp, "error") &&
+        !grepl(".*table.*not.*found.*", resp, ignore.case = T)){
+      stop(resp)
+    }
+    return(!grepl(".*table.*not.*found.*", resp[1], ignore.case = T))
 })
 
 #' Remove table from Athena
@@ -681,7 +684,7 @@ setMethod(
       # Get all s3 objects linked to table
       kwargs <- list(Bucket=s3_path[["bucket"]], Prefix=s3_path[["key"]])
       while(is.null(kwargs[["ContinuationToken"]])) {
-        objects <- do.call(conn@ptr$S3$list_objects_v2, kwargs)
+        objects <- py_to_r(do.call(conn@ptr$S3$list_objects_v2, kwargs))
         all_keys <- c(all_keys, lapply(objects$Contents, function(x) list(Key=x$Key)))
         if(identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(objects$NextContinuationToken) == 0) break
         kwargs[["ContinuationToken"]] <- objects$NextContinuationToken

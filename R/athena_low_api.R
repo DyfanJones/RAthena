@@ -278,11 +278,11 @@ get_session_token <- function(profile_name = NULL,
                                     "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
   sts <- ptr$client("sts")
   
-  tryCatch({response <- do.call(sts$get_session_token, args)},
+  tryCatch({response <- py_to_r(do.call(sts$get_session_token, args))},
            error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
-  response$Credentials
+  return(response$Credentials)
 }
 
 #' Assume AWS ARN Role
@@ -335,14 +335,17 @@ assume_role <- function(profile_name = NULL,
            error = function(e) py_error(e))
   
   # stop connection if region_name is not set in backend or hardcoded
-  if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
-                                    "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
-  
+  if(is.null(ptr$region_name)) 
+    stop(
+      "AWS `region_name` is required to be set. Please set `region` in .config file, ",
+      "`AWS_REGION` in environment variables or `region_name` hard coded in function.",
+      call. = FALSE
+    )
   sts <- ptr$client("sts")
   tryCatch({
-    response <- sts$assume_role(RoleArn = role_arn,
+    response <- py_to_r(sts$assume_role(RoleArn = role_arn,
                               RoleSessionName = role_session_name,
-                              DurationSeconds = as.integer(duration_seconds))},
+                              DurationSeconds = as.integer(duration_seconds)))},
   error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}

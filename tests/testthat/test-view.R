@@ -19,7 +19,7 @@ test_that("Check if Athena list object types is formatted correctly",{
       contains = list(
         table = list(contains = "data"),
         view = list(contains = "data"))
-    )
+      )
     )
   )
 })
