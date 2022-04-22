@@ -725,7 +725,8 @@ setMethod(
 #'
 #' @note If the user does not have permission to remove AWS S3 resource from AWS Athena output location, then an AWS warning will be returned.
 #'       For example \code{AccessDenied (HTTP 403). Access Denied}.
-#'       It is better use query caching \code{\link{RAthena_options}} so that the warning doesn't repeatedly show.
+#'       It is better use query caching or optionally prevent clear AWS S3 resource using \code{\link{RAthena_options}}
+#'       so that the warning doesn't repeatedly show.
 #' @name dbGetQuery
 #' @inheritParams DBI::dbGetQuery
 #' @param statistics If set to \code{TRUE} will print out AWS Athena statistics of query.
