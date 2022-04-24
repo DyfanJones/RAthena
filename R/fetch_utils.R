@@ -20,14 +20,14 @@
     
     # get chunk with retry api call if call fails
     if(length(token) == 0) {
-      retry_api_call(result <- res@connection@ptr$Athena$get_query_results(
+      retry_api_call(result <- py_to_r(res@connection@ptr$Athena$get_query_results(
         QueryExecutionId = res@info[["QueryExecutionId"]],
-        MaxResults = chunk))
+        MaxResults = chunk)))
     } else {
-      retry_api_call(result <- res@connection@ptr$Athena$get_query_results(
+      retry_api_call(result <- py_to_r(res@connection@ptr$Athena$get_query_results(
         QueryExecutionId = res@info[["QueryExecutionId"]],
         NextToken = token, 
-        MaxResults = chunk))
+        MaxResults = chunk)))
     }
     
     # process returned list
@@ -81,7 +81,7 @@
   # Get all s3 objects linked to table
   kwargs <- list(Bucket=result_info[["bucket"]], Prefix=result_info[["key"]])
   while(is.null(kwargs[["ContinuationToken"]])) {
-    obj <- do.call(res@connection@ptr$S3$list_objects_v2, kwargs)
+    obj <- py_to_r(do.call(res@connection@ptr$S3$list_objects_v2, kwargs))
     all_keys <- c(all_keys, lapply(obj$Contents, function(x) x$Key))
     if(identical(obj$NextContinuationToken, kwargs$ContinuationToken) || length(obj$NextContinuationToken) == 0) break
     kwargs[["ContinuationToken"]] <- obj$NextContinuationToken

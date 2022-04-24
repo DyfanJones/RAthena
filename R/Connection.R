@@ -11,6 +11,7 @@ NULL
 #' @slot quote syntax to quote sql query when creating Athena ddl
 #' @name AthenaConnection
 #' @inheritParams methods::show
+#' @importFrom utils modifyList
 NULL
 
 class_cache <- new.env(parent = emptyenv())
@@ -42,11 +43,11 @@ AthenaConnection <- function(aws_access_key_id = NULL,
     .boto_param(kwargs, .SESSION_PASSING_ARGS)
   )
   tryCatch(
-    boto3 <- do.call(boto$Session, sess_kwargs),
+    sess <- do.call(boto$Session, sess_kwargs),
     error = function(e) py_error(e)
   )
   # stop connection if region_name is not set in backend or hardcoded
-  if(is.null(boto3$region_name))
+  if(is.null(sess$region_name))
     stop(
       "AWS `region_name` is required to be set. Please set `region` in .config file, ",
       "`AWS_REGION` in environment variables or `region_name` hard coded in `dbConnect()`.",
@@ -56,19 +57,21 @@ AthenaConnection <- function(aws_access_key_id = NULL,
   endpoints = set_endpoints(endpoint_override)
   
   ptr_ll <- list(
-    Athena = do.call(boto3$client,
+    Athena = do.call(sess$client,
       c(service_name="athena", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$athena)), .CLIENT_PASSING_ARGS))
     ),
-    S3 = do.call(boto3$client,
+    S3 = do.call(sess$client,
       c(service_name="s3", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$s3)), .CLIENT_PASSING_ARGS))
     ),
-    glue = do.call(boto3$client,
+    glue = do.call(sess$client,
       c(service_name="glue", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$glue)), .CLIENT_PASSING_ARGS))
     )
   )
   if(is.null(s3_staging_dir) && !is.null(work_group)){
     tryCatch({
-      s3_staging_dir <- ptr_ll$Athena$get_work_group(WorkGroup = work_group)$WorkGroup$Configuration$ResultConfiguration$OutputLocation
+      s3_staging_dir <- reticulate::py_to_r(ptr_ll$Athena$get_work_group(
+        WorkGroup = work_group
+      )$WorkGroup$Configuration$ResultConfiguration$OutputLocation)
       }, error = function(e) py_error(e)
     )
   }
@@ -87,7 +90,7 @@ AthenaConnection <- function(aws_access_key_id = NULL,
     kms_key = kms_key, expiration = aws_expiration,
     timezone = character(),
     keyboard_interrupt = keyboard_interrupt,
-    region_name = boto3$region_name,
+    region_name = sess$region_name,
     endpoint_override = endpoints
   )
   res <- new(
@@ -549,10 +552,10 @@ setMethod(
     con_error_msg(conn, msg = "Connection already closed.")
     ll <- db_detect(conn, name)
     retry_api_call(
-      output <- conn@ptr$glue$get_table(
+      output <- py_to_r(conn@ptr$glue$get_table(
         DatabaseName = ll[["dbms.name"]],
         Name = ll[["table"]])$Table)
-    
+    )
     col_names = vapply(output$StorageDescriptor$Columns, function(y) y$Name, FUN.VALUE = character(1))
     partitions = vapply(output$PartitionKeys,function(y) y$Name, FUN.VALUE = character(1))
     c(col_names, partitions)
@@ -599,8 +602,11 @@ setMethod(
     ll <- db_detect(conn, name)
 
     for (i in seq_len(athena_option_env$retry)) {
-      resp <- tryCatch(conn@ptr$glue$get_table(DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]), 
-                       error = function(e) retry_error(e))
+      resp <- tryCatch({
+        py_to_r(conn@ptr$glue$get_table(
+          DatabaseName = ll[["dbms.name"]], Name = ll[["table"]]
+        ))
+      }, error = function(e) retry_error(e))
       
       # exponential step back if error and not expected error
       if(inherits(resp, "error") && !grepl(".*table.*not.*found.*", resp, ignore.case = T)){
@@ -611,11 +617,11 @@ setMethod(
         Sys.sleep(backoff_len)
       } else {break}
     }
-    
-    
-    if (inherits(resp, "error") && !grepl(".*table.*not.*found.*", resp, ignore.case = T)) stop(resp)
-    
-    !grepl(".*table.*not.*found.*", resp[1], ignore.case = T)
+    if (inherits(resp, "error") &&
+        !grepl(".*table.*not.*found.*", resp, ignore.case = T)){
+      stop(resp)
+    }
+    return(!grepl(".*table.*not.*found.*", resp[1], ignore.case = T))
 })
 
 #' Remove table from Athena
@@ -679,7 +685,7 @@ setMethod(
       # Get all s3 objects linked to table
       kwargs <- list(Bucket=s3_path[["bucket"]], Prefix=s3_path[["key"]])
       while(is.null(kwargs[["ContinuationToken"]])) {
-        objects <- do.call(conn@ptr$S3$list_objects_v2, kwargs)
+        objects <- py_to_r(do.call(conn@ptr$S3$list_objects_v2, kwargs))
         all_keys <- c(all_keys, lapply(objects$Contents, function(x) list(Key=x$Key)))
         if(identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(objects$NextContinuationToken) == 0) break
         kwargs[["ContinuationToken"]] <- objects$NextContinuationToken
@@ -716,10 +722,12 @@ setMethod(
     invisible(TRUE)
 })
 
-#' Send query, retrieve results and then clear result set
+#' @title Send query, retrieve results and then clear result set
 #'
 #' @note If the user does not have permission to remove AWS S3 resource from AWS Athena output location, then an AWS warning will be returned.
-#'       It is better use query caching \code{\link{RAthena_options}} so that the warning doesn't repeatedly show.
+#'       For example \code{AccessDenied (HTTP 403). Access Denied}.
+#'       It is better use query caching or optionally prevent clear AWS S3 resource using \code{\link{RAthena_options}}
+#'       so that the warning doesn't repeatedly show.
 #' @name dbGetQuery
 #' @inheritParams DBI::dbGetQuery
 #' @param statistics If set to \code{TRUE} will print out AWS Athena statistics of query.

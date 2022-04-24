@@ -30,14 +30,14 @@ AthenaResult <- function(conn,
   
   if (is.null(response$QueryExecutionId)) {
     retry_api_call(
-      response[["QueryExecutionId"]] <- conn@ptr$Athena$start_query_execution(
+      response[["QueryExecutionId"]] <- py_to_r(conn@ptr$Athena$start_query_execution(
         ClientRequestToken = uuid::UUIDgenerate(),
         QueryString = statement,
         QueryExecutionContext = list(Database = conn@info$dbms.name),
         ResultConfiguration = ResultConfiguration(conn),
-        WorkGroup = conn@info$work_group)$QueryExecutionId)}
+        WorkGroup = conn@info$work_group)$QueryExecutionId)
+  )}
   on.exit(if(!is.null(conn@info$expiration)) time_check(conn@info$expiration))
-  
   response[["UnloadDir"]] = s3_file
   new("AthenaResult", connection = conn, info = response)
 }
@@ -59,7 +59,8 @@ setClass(
 #' stopping query execution if still running and removed the connection resource locally.
 #' 
 #' @note If the user does not have permission to remove AWS S3 resource from AWS Athena output location, then an AWS warning will be returned.
-#'       It is better use query caching \code{\link{RAthena_options}} so that the warning doesn't repeatedly show.
+#'       It is better use query caching or optionally prevent clear AWS S3 resource using \code{\link{RAthena_options}}
+#'       so that the warning doesn't repeatedly show.
 #' @name dbClearResult
 #' @inheritParams DBI::dbClearResult
 #' @return \code{dbClearResult()} returns \code{TRUE}, invisibly.
@@ -98,16 +99,16 @@ setMethod(
       
       # checks status of query
       if(is.null(res@info[["Status"]])){
-        retry_api_call(query_execution <- res@connection@ptr$Athena$get_query_execution(
-          QueryExecutionId = res@info$QueryExecutionId))
+        retry_api_call(query_execution <- py_to_r(res@connection@ptr$Athena$get_query_execution(
+          QueryExecutionId = res@info$QueryExecutionId)))
         res@info[["OutputLocation"]] <- 
           query_execution[["QueryExecution"]][["ResultConfiguration"]][["OutputLocation"]]
         res@info[["StatementType"]] <- 
           query_execution[["QueryExecution"]][["StatementType"]]
       }
       
-      # for caching s3 data is still required
-      if (athena_option_env$cache_size == 0){
+      # Don't clear S3 resource for caching or skipping
+      if (athena_option_env$cache_size == 0 & athena_option_env$clear_s3_resource){
         result_info <- split_s3_uri(res@info[["OutputLocation"]])
         
         # Output Python error as warning if s3 resource can't be dropped
@@ -141,7 +142,7 @@ setMethod(
           # Get all s3 objects linked to table
           kwargs <- list(Bucket=result_info[["bucket"]], Prefix=result_info[["key"]])
           while(is.null(kwargs[["ContinuationToken"]])) {
-            obj <- do.call(res@connection@ptr$S3$list_objects_v2, kwargs)
+            obj <- py_to_r(do.call(res@connection@ptr$S3$list_objects_v2, kwargs))
             all_keys <- c(all_keys, lapply(obj$Contents, function(x) list(Key=x$Key)))
             if(identical(obj$NextContinuationToken, kwargs$ContinuationToken) || length(obj$NextContinuationToken) == 0) break
             kwargs[["ContinuationToken"]] <- obj$NextContinuationToken
@@ -152,11 +153,11 @@ setMethod(
             # Delete S3 files in batch size 1000
             key_parts <- split_vec(all_keys, 1000)
             for(i in seq_along(key_parts)){
-              tryCatch(
+              tryCatch({
                 res@connection@ptr$S3$delete_objects(
                   Bucket = result_info[["bucket"]],
-                  Delete = list(Objects = key_parts[[i]])),
-                error = function(e) NULL)
+                  Delete = list(Objects = key_parts[[i]]))
+              }, error = function(e) NULL)
             }
           }
         }
@@ -218,10 +219,10 @@ setMethod(
       cache_query(res)
     
     # return metadata of athena data types
-    retry_api_call(result_class <- res@connection@ptr$Athena$get_query_results(
+    retry_api_call(result_class <- py_to_r(res@connection@ptr$Athena$get_query_results(
       QueryExecutionId = res@info$QueryExecutionId,
       MaxResults = as.integer(1))[["ResultSet"]][["ResultSetMetadata"]][["ColumnInfo"]])
-    
+    )
     if(n >= 0 && n !=Inf){
       return(.fetch_n(res, result_class, n))
     }
@@ -280,9 +281,9 @@ setMethod(
       return(output)
     
     # get status of query
-    retry_api_call(query_execution <- res@connection@ptr$Athena$get_query_execution(
+    retry_api_call(query_execution <- py_to_r(res@connection@ptr$Athena$get_query_execution(
       QueryExecutionId = res@info[["QueryExecutionId"]]))
-    
+    )
     if (query_execution[["QueryExecution"]][["Status"]][["State"]] %in% c("RUNNING", "QUEUED"))
       output <- FALSE
     
@@ -353,10 +354,10 @@ setMethod(
     if(res@info[["Status"]] == "FAILED")
       stop(res@info[["StateChangeReason"]], call. = FALSE)
     
-    retry_api_call(result <- res@connection@ptr$Athena$get_query_results(
+    retry_api_call(result <- py_to_r(res@connection@ptr$Athena$get_query_results(
       QueryExecutionId = res@info[["QueryExecutionId"]],
       MaxResults = as.integer(1)))
-    
+    )
     Name <- vapply(result[["ResultSet"]][["ResultSetMetadata"]][["ColumnInfo"]],
                    function(x) x$Name, FUN.VALUE = character(1))
     Type <- vapply(result[["ResultSet"]][["ResultSetMetadata"]][["ColumnInfo"]], 
@@ -412,7 +413,6 @@ setMethod(
     # if query failed stop
     if(res@info[["Status"]] == "FAILED")
       stop(res@info[["StateChangeReason"]], call. = FALSE)
-    
     return(res@info[["Statistics"]])
 })
 

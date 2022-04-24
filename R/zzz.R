@@ -1,7 +1,9 @@
 boto <- NULL
+builtins <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  boto <<- reticulate::import("boto3", delay_load = T)
+  boto <<- reticulate::import("boto3", delay_load = T, convert = F)
+  builtins <<- import("builtins", delay_load = T)
   dbplyr_version()
   if(identical(dbplyr_env$major, 1L)){
     register_s3_method("dplyr", "db_desc", "AthenaConnection")

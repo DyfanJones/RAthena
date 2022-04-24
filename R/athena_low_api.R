@@ -117,16 +117,19 @@ create_work_group <- function(conn,
             is.character(description))
   
   request <- list(Name = work_group)
-  request["Configuration"] <- list(work_group_config(conn,
-                                                     EnforceWorkGroupConfiguration = enforce_work_group_config,
-                                                     PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
-                                                     BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
-                                                     RequesterPaysEnabled = requester_pays))
+  request["Configuration"] <- list(
+    work_group_config(
+      conn,
+      EnforceWorkGroupConfiguration = enforce_work_group_config,
+      PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
+      BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
+      RequesterPaysEnabled = requester_pays)
+  )
   request["Description"] <- list(description)
   request["Tags"] <- tags
   
-  tryCatch(do.call(conn@ptr$Athena$create_work_group, request, quote = T),
-           error = function(e) py_error(e))
+  tryCatch({do.call(conn@ptr$Athena$create_work_group, request, quote = T)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
@@ -144,8 +147,9 @@ delete_work_group <- function(conn, work_group = NULL, recursive_delete_option =
   con_error_msg(conn, "Connection already closed.")
   stopifnot(is.character(work_group),
             is.logical(recursive_delete_option))
-  tryCatch(conn@ptr$Athena$delete_work_group(WorkGroup = work_group, RecursiveDeleteOption = recursive_delete_option),
-           error = function(e) py_error(e))
+  tryCatch({conn@ptr$Athena$delete_work_group(
+    WorkGroup = work_group, RecursiveDeleteOption = recursive_delete_option)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
@@ -153,8 +157,9 @@ delete_work_group <- function(conn, work_group = NULL, recursive_delete_option =
 #' @export
 list_work_groups <- function(conn){
   con_error_msg(conn, "Connection already closed.")
-  tryCatch(response <- conn@ptr$Athena$list_work_groups(),
-           error = function(e) py_error(e))
+  tryCatch({
+    response <- py_to_r(conn@ptr$Athena$list_work_groups())
+  }, error = function(e) py_error(e))
   response[["WorkGroups"]]
 }
 
@@ -163,8 +168,8 @@ list_work_groups <- function(conn){
 get_work_group <- function(conn, work_group = NULL){
   con_error_msg(conn, "Connection already closed.")
   stopifnot(is.character(work_group))
-  tryCatch(response <- conn@ptr$Athena$get_work_group(WorkGroup = work_group),
-           error = function(e) py_error(e))
+  tryCatch({response <- py_to_r(conn@ptr$Athena$get_work_group(WorkGroup = work_group))
+  }, error = function(e) py_error(e))
   response[["WorkGroup"]]
 }
 
@@ -192,15 +197,17 @@ update_work_group <- function(conn,
   request <- list(WorkGroup = work_group,
                   Description = description,
                   State = state)
-  request["ConfigurationUpdates"] <- list(work_group_config_update(conn,
-                                                            RemoveOutputLocation = remove_output_location,
-                                                            EnforceWorkGroupConfiguration = enforce_work_group_config,
-                                                            PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
-                                                            BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
-                                                            RequesterPaysEnabled = requester_pays))
-  
-  tryCatch(do.call(conn@ptr$Athena$update_work_group, request, quote = T),
-           error = function(e) py_error(e))
+  request["ConfigurationUpdates"] <- list(
+    work_group_config_update(
+      conn,
+      RemoveOutputLocation = remove_output_location,
+      EnforceWorkGroupConfiguration = enforce_work_group_config,
+      PublishCloudWatchMetricsEnabled = publish_cloud_watch_metrics,
+      BytesScannedCutoffPerQuery = bytes_scanned_cut_off,
+      RequesterPaysEnabled = requester_pays)
+  )
+  tryCatch({do.call(conn@ptr$Athena$update_work_group, request, quote = T)
+  }, error = function(e) py_error(e))
   invisible(NULL)
 }
 
@@ -271,11 +278,11 @@ get_session_token <- function(profile_name = NULL,
                                     "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
   sts <- ptr$client("sts")
   
-  tryCatch({response <- do.call(sts$get_session_token, args)},
+  tryCatch({response <- py_to_r(do.call(sts$get_session_token, args))},
            error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
-  response$Credentials
+  return(response$Credentials)
 }
 
 #' Assume AWS ARN Role
@@ -328,14 +335,17 @@ assume_role <- function(profile_name = NULL,
            error = function(e) py_error(e))
   
   # stop connection if region_name is not set in backend or hardcoded
-  if(is.null(ptr$region_name)) stop("AWS `region_name` is required to be set. Please set `region` in .config file, ",
-                                    "`AWS_REGION` in environment variables or `region_name` hard coded in function.", call. = FALSE)
-  
+  if(is.null(ptr$region_name)) 
+    stop(
+      "AWS `region_name` is required to be set. Please set `region` in .config file, ",
+      "`AWS_REGION` in environment variables or `region_name` hard coded in function.",
+      call. = FALSE
+    )
   sts <- ptr$client("sts")
   tryCatch({
-    response <- sts$assume_role(RoleArn = role_arn,
+    response <- py_to_r(sts$assume_role(RoleArn = role_arn,
                               RoleSessionName = role_session_name,
-                              DurationSeconds = as.integer(duration_seconds))},
+                              DurationSeconds = as.integer(duration_seconds)))},
   error = function(e) py_error(e))
   response$Credentials$Expiration <- py_to_r(response$Credentials$Expiration)
   if(set_env) {set_aws_env(response)}
