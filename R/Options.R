@@ -15,7 +15,7 @@ athena_option_env$json <- "auto"
 athena_option_env$rstudio_conn_tab <- TRUE
 athena_option_env$athena_unload <- FALSE
 athena_option_env$verbose <- TRUE
-athena_option_env$clear_s3 <- TRUE
+athena_option_env$clear_s3_resource <- TRUE
 
 # ==========================================================================
 # helper function to handle big integers
