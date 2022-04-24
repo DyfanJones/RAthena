@@ -11,6 +11,7 @@ NULL
 #' @slot quote syntax to quote sql query when creating Athena ddl
 #' @name AthenaConnection
 #' @inheritParams methods::show
+#' @importFrom utils modifyList
 NULL
 
 class_cache <- new.env(parent = emptyenv())
