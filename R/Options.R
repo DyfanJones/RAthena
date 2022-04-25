@@ -99,7 +99,8 @@ RAthena_options <- function(file_parser,
      & missing(binary) & missing(json)
      & missing(cache_size) & missing(clear_cache)
      & missing(retry) & missing(retry_quiet)
-     & missing(unload) & missing(verbose)){
+     & missing(unload) & missing(clear_s3_resource)
+     & missing(verbose)){
     file_parser <- "data.table"
     bigint <- "integer64"
     binary <- "raw"
@@ -107,6 +108,7 @@ RAthena_options <- function(file_parser,
     cache_size <- 0
     retry <- 5
     unload <- FALSE
+    clear_s3_resource <- TRUE
     verbose <- TRUE
   }
   if(!missing(file_parser)){
