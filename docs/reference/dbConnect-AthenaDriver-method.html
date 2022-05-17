@@ -31,7 +31,7 @@ NOTE: If you have set any environmental variables in .Renviron please restart yo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@ NOTE: If you have set any environmental variables in .Renviron please restart yo
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -130,6 +130,7 @@ of supported environment variables:</p><ul><li><p><strong>AWS_ACCESS_KEY_ID:</st
   timezone <span class="op">=</span> <span class="st">"UTC"</span>,
   keyboard_interrupt <span class="op">=</span> <span class="cn">TRUE</span>,
   rstudio_conn_tab <span class="op">=</span> <span class="cn">TRUE</span>,
+  endpoint_override <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -196,10 +197,38 @@ If `NULL` then no timezone is set, which defaults to the server's time zone.
 <dt>keyboard_interrupt</dt>
 <dd><p>Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to <code>TRUE</code></p></dd>
 <dt>rstudio_conn_tab</dt>
-<dd><p>Optional to get AWS Athena Schema and display it in RStudio's Connections Tab.
-Default set to <code>TRUE</code>.</p></dd>
+<dd><p>Optional to get AWS Athena Schema from AWS Glue Catalogue and display it in RStudio's Connections Tab.
+Default set to <code>TRUE</code>. For large `AWS Glue Catalogue` it is recommended to set `rstudio_conn_tab=FALSE` to ensure a fast connection.</p></dd>
+<dt>endpoint_override</dt>
+<dd><p>(character/list) The complete URL to use for the constructed client. Normally,
+<code>botocore</code> will automatically construct the appropriate URL to use when communicating with a
+service. You can specify a complete URL (including the "http/https" scheme) to override this
+behaviour. If <code>endpoint_override</code> is a character then AWS Athena endpoint is overridden. To override
+AWS S3 or AWS Glue endpoints a named list needs to be provided. The list can only have the following names ['athena', 's3', glue']
+for example <code>list(glue = "https://glue.eu-west-1.amazonaws.com")</code></p></dd>
 <dt>...</dt>
-<dd><p>Any other parameter for Boto3 session: <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html" class="external-link">Boto3 session documentation</a></p></dd>
+<dd><p>Passes parameters to <code>boto3.session.Session</code> and <code>client</code>.</p><ul><li><p><strong>boto3.session.Session</strong></p><ul><li><p><strong>botocore_session</strong> (botocore.session.Session): Use this Botocore session instead
+            of creating a new default one.</p></li>
+</ul></li>
+<li><p><strong>client</strong></p><ul><li><p><strong>config</strong> (botocore.client.Config) -- Advanced client configuration options. If region_name
+            is specified in the client config, its value will take precedence over environment variables
+            and configuration values, but not over a region_name value passed explicitly to the method.
+            See <a href="https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html" class="external-link">botocore config documentation</a>
+            for more details.</p></li>
+<li><p><strong>api_version</strong> (string) -- The API version to use. By default, botocore will use the latest
+            API version when creating a client. You only need to specify this parameter if you want to
+            use a previous API version of the client.</p></li>
+<li><p><strong>use_ssl</strong> (boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
+            not all services support non-ssl connections.</p></li>
+<li><p><strong>verify</strong> (boolean/string) -- Whether or not to verify SSL certificates. By default
+            SSL certificates are verified. You can provide the following values:
+            </p><ul><li><p>False - do not validate SSL certificates. SSL will still be used (unless use_ssl is False),
+                    but SSL certificates will not be verified.</p></li>
+<li><p>path/to/cert/bundle.pem - A filename of the CA cert bundle to uses. You can specify this
+                    argument if you want to use a different CA cert bundle than the one used by botocore.</p></li>
+</ul></li>
+</ul></li>
+</ul></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -251,7 +280,7 @@ Default set to <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

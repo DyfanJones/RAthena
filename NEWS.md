@@ -1,4 +1,4 @@
-# RAthena 2.5.1.9001
+# RAthena 2.6.0
 ## Bug Fix:
 *  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer (#168) causing the follow bug in Data Scan info message
 ```
