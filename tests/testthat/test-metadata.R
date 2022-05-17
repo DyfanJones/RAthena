@@ -122,7 +122,7 @@ test_that("test endpoints", {
     )
   )
 
-  expect_equal(con1@ptr$Athena$meta$endpoint_url, "https://athena.eu-west-2.amazonaws.com/")
+  expect_equal(as.character(con1@ptr$Athena$meta$endpoint_url), "https://athena.eu-west-2.amazonaws.com/")
   expect_equal(as.character(con2@ptr$Athena$meta$endpoint_url), "https://athena-fips.us-east-2.amazonaws.com/")
   expect_equal(as.character(con2@ptr$S3$meta$endpoint_url), "https://s3-fips.us-east-2.amazonaws.com/")
   expect_equal(as.character(con2@ptr$glue$meta$endpoint_url), "https://glue-fips.us-east-2.amazonaws.com/")
