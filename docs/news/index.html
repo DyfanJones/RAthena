@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAthena</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,7 +76,27 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.5.1" id="rathena-251">RAthena 2.5.1<a class="anchor" aria-label="anchor" href="#rathena-251"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.0" id="rathena-260">RAthena 2.6.0<a class="anchor" aria-label="anchor" href="#rathena-260"></a></h2>
+<div class="section level3">
+<h3 id="bug-fix-2-6-0">Bug Fix:<a class="anchor" aria-label="anchor" href="#bug-fix-2-6-0"></a></h3>
+<ul><li>Delay Python to R conversion to prevent 64 bit integer mapping to R’s base 32 bit integer (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>) causing the follow bug in Data Scan info message</li>
+</ul><pre><code>INFO: (Data scanned: -43839744 Bytes)</code></pre>
+</div>
+<div class="section level3">
+<h3 id="feature-2-6-0">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-6-0"></a></h3>
+<ul><li>Add <code>clear_s3_resource</code> parameter to <code>RAthena_options</code> to prevent AWS Athena output AWS S3 resource being cleared up by <code>dbClearResult</code> (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.5.1.9000" id="rathena-2519000">RAthena 2.5.1.9000<a class="anchor" aria-label="anchor" href="#rathena-2519000"></a></h2>
+<div class="section level3">
+<h3 id="feature-2-5-1-9000">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-5-1-9000"></a></h3>
+<ul><li>Support extra boto3 parameters for <code>boto3.session.Session</code> class and <code>client</code> method (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>)</li>
+<li>Support <code>endpoint_override</code> parameter allow default endpoints for each service to be overridden accordingly (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.5.1" id="rathena-251">RAthena 2.5.1<small>2022-01-26</small><a class="anchor" aria-label="anchor" href="#rathena-251"></a></h2>
 <div class="section level3">
 <h3 id="bug-fix-2-5-1">Bug Fix:<a class="anchor" aria-label="anchor" href="#bug-fix-2-5-1"></a></h3>
 <ul><li>Fixed unit test helper function <code>test_data</code> to use <code>size</code> parameter explicitly.</li>
@@ -109,33 +129,33 @@
 <div class="section level3">
 <h3 id="feature-2-3-0">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-3-0"></a></h3>
 <ul><li>Add support to <a href="https://docs.aws.amazon.com/athena/latest/ug/unload.html" class="external-link"><code>AWS Athena UNLOAD</code></a> (<a href="https://github.com/DyfanJones/noctua/issues/160" class="external-link">noctua: # 160</a>). This is to take advantage of read/write speed <code>parquet</code> has to offer.</li>
-</ul><div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> awswrangler <span class="im">as</span> wr</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> getpass</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> getpass.getpass()</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="ss">f"s3://</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/data/"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"awswrangler_test"</span> <span class="kw">not</span> <span class="kw">in</span> wr.catalog.databases().values:</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    wr.catalog.create_database(<span class="st">"awswrangler_test"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"id"</span>, <span class="st">"dt"</span>, <span class="st">"element"</span>, <span class="st">"value"</span>, <span class="st">"m_flag"</span>, <span class="st">"q_flag"</span>, <span class="st">"s_flag"</span>, <span class="st">"obs_time"</span>]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> wr.s3.read_csv(</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    path<span class="op">=</span><span class="st">"s3://noaa-ghcn-pds/csv/189"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>cols,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"dt"</span>, <span class="st">"obs_time"</span>])  <span class="co"># Read 10 files from the 1890 decade (~1GB)</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>wr.s3.to_parquet(</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    df<span class="op">=</span>df,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    path<span class="op">=</span>path,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    dataset<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">"overwrite"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    database<span class="op">=</span><span class="st">"awswrangler_test"</span>,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    table<span class="op">=</span><span class="st">"noaa"</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>wr.catalog.table(database<span class="op">=</span><span class="st">"awswrangler_test"</span>, table<span class="op">=</span><span class="st">"noaa"</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> awswrangler <span class="im">as</span> wr</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> getpass</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> getpass.getpass()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="ss">f"s3://</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/data/"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"awswrangler_test"</span> <span class="kw">not</span> <span class="kw">in</span> wr.catalog.databases().values:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    wr.catalog.create_database(<span class="st">"awswrangler_test"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"id"</span>, <span class="st">"dt"</span>, <span class="st">"element"</span>, <span class="st">"value"</span>, <span class="st">"m_flag"</span>, <span class="st">"q_flag"</span>, <span class="st">"s_flag"</span>, <span class="st">"obs_time"</span>]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> wr.s3.read_csv(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    path<span class="op">=</span><span class="st">"s3://noaa-ghcn-pds/csv/189"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>cols,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"dt"</span>, <span class="st">"obs_time"</span>])  <span class="co"># Read 10 files from the 1890 decade (~1GB)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>wr.s3.to_parquet(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    df<span class="op">=</span>df,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    path<span class="op">=</span>path,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    dataset<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">"overwrite"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    database<span class="op">=</span><span class="st">"awswrangler_test"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    table<span class="op">=</span><span class="st">"noaa"</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>wr.catalog.table(database<span class="op">=</span><span class="st">"awswrangler_test"</span>, table<span class="op">=</span><span class="st">"noaa"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -179,7 +199,7 @@
 <h3 id="feature-2-2-0">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-2-0"></a></h3>
 <ul><li>Support <code>AWS Athena</code> <code>timestamp with time zone</code> data type.</li>
 <li>Properly support data type <code>list</code> when converting data to <code>AWS Athena</code> <code>SQL</code> format.</li>
-</ul><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
@@ -255,7 +275,7 @@
 <li>
 <code>AthenaResult</code> class: <code>info</code> slot changed from <code>list</code> to <code>environment</code>. Allows class to be updated by reference.</li>
 </ul><p>By utilising environments for <code>AthenaConnection</code> and <code>AthenaResult</code>, all <code>AthenaResult</code> classes created from <code>AthenaConnection</code> will point to the same <code>ptr</code> and <code>info</code> environments for it’s connection. Previously <code>ptr</code> and <code>info</code> would make a copy. This means if it was modified it would not affect the child or parent class for example:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Old Method</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
@@ -302,7 +322,7 @@
 <div class="section level3">
 <h3 id="new-feature-2-0-0">New Feature<a class="anchor" aria-label="anchor" href="#new-feature-2-0-0"></a></h3>
 <ul><li>Added support to <code>AWS Athena</code> data types <code>[array, row, map, json, binary, ipaddress]</code> (<a href="https://github.com/DyfanJones/noctua/issues/135" class="external-link">noctua: # 135</a>). Conversion types can be changed through <code>dbConnect</code> and <code>RAthena_options</code>.</li>
-</ul><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena" class="external-link">RAthena</a></span><span class="op">)</span>
@@ -372,7 +392,7 @@
 <div class="section level3">
 <h3 id="new-feature-1-12-0">New Feature<a class="anchor" aria-label="anchor" href="#new-feature-1-12-0"></a></h3>
 <ul><li>Added optional formatting to <code>dbGetPartition</code>. This simply tidies up the default AWS Athena partition format.</li>
-</ul><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena" class="external-link">RAthena</a></span><span class="op">)</span>
@@ -444,7 +464,7 @@
 <div class="section level3">
 <h3 id="new-feature-1-10-0">New Feature<a class="anchor" aria-label="anchor" href="#new-feature-1-10-0"></a></h3>
 <ul><li>RAthena now supports Keyboard Interrupt and will stop AWS Athena running the query when the query has been interrupted. To keep the functionality of AWS Athena running when <code>R</code> has been interrupt a new parameter has been added to <code>dbConnect</code>, <code>keyboard_interrupt</code>. Example:</li>
-</ul><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Stop AWS Athena when R has been interrupted:</span>
 
@@ -476,7 +496,7 @@
 <code>RAthena_options</code> contains 2 new parameters to control how <code>RAthena</code> handles retries.</li>
 <li>
 <code>dbFetch</code> is able to return data from AWS Athena in chunk. This has been achieved by passing <code>NextToken</code> to <code>AthenaResult</code> s4 class. This method won’t be as fast <code>n = -1</code> as each chunk will have to be process into data frame format.</li>
-</ul><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dbConnect-AthenaDriver-method.html">dbConnect</a></span><span class="op">(</span><span class="fu">RAthena</span><span class="fu">::</span><span class="fu"><a href="../reference/athena.html">athena</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -521,7 +541,7 @@
 <code>RAthena_options</code> now has <code>clear_cache</code> parameter to clear down all cached data.</li>
 <li>
 <code>dbRemoveTable</code> now utilise <code>AWS Glue</code> to remove tables from <code>AWS Glue</code> catalogue. This has a performance enhancement:</li>
-</ul><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 
@@ -544,7 +564,7 @@
 <span class="co"># 0.065   0.009   1.303 </span></code></pre></div>
 <ul><li>
 <code>dbWriteTable</code> now supports uploading json lines (<a href="http://jsonlines.org/" class="external-link uri">http://jsonlines.org/</a>) format up to <code>AWS Athena</code> (<a href="https://github.com/DyfanJones/RAthena/issues/88" class="external-link">#88</a>).</li>
-</ul><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 
@@ -586,7 +606,7 @@
 <ul><li>Dependency data.table now restricted to (&gt;=1.12.4) due to file compression being added to <code>fwrite</code> (&gt;=1.12.4) <a href="https://github.com/Rdatatable/data.table/blob/master/NEWS.md" class="external-link uri">https://github.com/Rdatatable/data.table/blob/master/NEWS.md</a>
 </li>
 <li>Thanks to <a href="https://github.com/OssiLehtinen" class="external-link">@OssiLehtinen</a> for fixing date variables being incorrectly translated by <code>sql_translate_env</code> (<a href="https://github.com/DyfanJones/RAthena/issues/44" class="external-link">#44</a>)</li>
-</ul><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Before</span>
 <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html" class="external-link">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
@@ -596,7 +616,7 @@
 <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/translate_sql.html" class="external-link">translate_sql</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>, con <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
 <span class="co"># DATE '2019-01-01'</span></code></pre></div>
 <ul><li>R functions <code>paste</code>/<code>paste0</code> would use default <code>dplyr:sql-translate-env</code> (<code>concat_ws</code>). <code>paste0</code> now uses Presto’s <code>concat</code> function and <code>paste</code> now uses pipes to get extra flexibility for custom separating values.</li>
-</ul><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># R code:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"hi"</span>, <span class="st">"bye"</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>
@@ -606,7 +626,7 @@
 <ul><li>If table exists and parameter <code>append</code> set to <code>TRUE</code> then existing s3.location will be utilised (<a href="https://github.com/DyfanJones/RAthena/issues/73" class="external-link">#73</a>)</li>
 <li>
 <code>db_compute</code> returned table name, however when a user wished to write table to another location (<a href="https://github.com/DyfanJones/RAthena/issues/74" class="external-link">#74</a>). An error would be raised: <code>Error: SYNTAX_ERROR: line 2:6: Table awsdatacatalog.default.temp.iris does not exist</code> This has now been fixed with db_compute returning <code><a href="https://dbplyr.tidyverse.org/reference/in_schema.html" class="external-link">dbplyr::in_schema</a></code>.</li>
-</ul><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
@@ -634,7 +654,7 @@
 <li>
 <code>s3.location</code> now follows new syntax <code>s3://bucket/{schema}/{table}/{partition}/{table_file}</code> to align with <code>Pyathena</code> and to allow tables with same name but in different schema to be uploaded to s3 (<a href="https://github.com/DyfanJones/RAthena/issues/73" class="external-link">#73</a>).</li>
 <li>Thanks to <a href="https://github.com/OssiLehtinen" class="external-link">@OssiLehtinen</a> for improving the speed of <code><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">dplyr::tbl</a></code> when calling Athena when using the ident method (noctua <a href="https://github.com/DyfanJones/noctua/issues/64" class="external-link"># 64</a>):</li>
-</ul><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
@@ -669,7 +689,7 @@
 <ul><li>Added integration into Rstudio connections tab</li>
 <li>Added information message of amount of data scanned by AWS Athena</li>
 <li>Added method to change backend file parser so user can change file parser from <code>data.table</code> to <code>vroom</code>. From now on it is possible to change file parser using <code>RAthena_options</code> for example:</li>
-</ul><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DyfanJones/RAthena" class="external-link">RAthena</a></span><span class="op">)</span>
 
@@ -691,7 +711,7 @@
 <div class="section level3">
 <h3 id="major-change-1-6-0">Major Change<a class="anchor" aria-label="anchor" href="#major-change-1-6-0"></a></h3>
 <ul><li>Default delimited file uploaded to AWS Athena changed from “csv” to “tsv” this is due to separating value “,” in character variables. By using “tsv” file type JSON/Array objects can be passed to Athena through character types. To prevent this becoming a breaking change <code>dbWriteTable</code> <code>append</code> parameter checks and uses existing AWS Athena DDL file type. If <code>file.type</code> doesn’t match Athena DDL file type then user will receive a warning message:</li>
-</ul><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="st">'Appended `file.type` is not compatible with the existing Athena DDL file type and has been converted to "'</span>, <span class="va">File.Type</span>,<span class="st">'".'</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
@@ -729,7 +749,7 @@
 <ul><li>
 <code>dbWriteTable</code> now will split <code>gzip</code> compressed files to improve AWS Athena performance. By default <code>gzip</code> compressed files will be split into 20.</li>
 </ul><p>Performance results</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 
@@ -750,7 +770,7 @@
 <ul><li>test_split1: (Run time: 38.4 seconds, Data scanned: 1.16 GB)</li>
 <li>test_split2: (Run time: 3.73 seconds, Data scanned: 1.16 GB)</li>
 <li>test_split3: (Run time: 5.47 seconds, Data scanned: 1.16 GB)</li>
-</ul><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 
@@ -814,7 +834,7 @@
 <div class="section level3">
 <h3 id="backend-change-1-4-0">Backend Change<a class="anchor" aria-label="anchor" href="#backend-change-1-4-0"></a></h3>
 <ul><li>helper function <code>upload_data</code> has been rebuilt and removed the old “horrible” if statement with <code>paste</code> now the function relies on <code>sprintf</code> to construct the s3 location path. This method now is a lot clearer in how the s3 location is created plus it enables a <code>dbWriteTable</code> to be simplified. <code>dbWriteTable</code> can now upload data to the default s3_staging directory created in <code>dbConnect</code> this simplifies <code>dbWriteTable</code> to :</li>
-</ul><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 
@@ -1032,7 +1052,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
