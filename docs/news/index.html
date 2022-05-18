@@ -79,20 +79,14 @@
 <h2 class="page-header" data-toc-text="2.6.0" id="rathena-260">RAthena 2.6.0<a class="anchor" aria-label="anchor" href="#rathena-260"></a></h2>
 <div class="section level3">
 <h3 id="bug-fix-2-6-0">Bug Fix:<a class="anchor" aria-label="anchor" href="#bug-fix-2-6-0"></a></h3>
-<ul><li>Delay Python to R conversion to prevent 64 bit integer mapping to R’s base 32 bit integer (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>) causing the follow bug in Data Scan info message</li>
+<ul><li>Delay Python to R conversion to prevent 64 bit integer mapping to R’s base 32 bit integer (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>) causing the follow bug in Data Scan info message. Thanks to <a href="https://github.com/juhoautio" class="external-link">@juhoautio</a> for identifying issue.</li>
 </ul><pre><code>INFO: (Data scanned: -43839744 Bytes)</code></pre>
 </div>
 <div class="section level3">
 <h3 id="feature-2-6-0">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-6-0"></a></h3>
-<ul><li>Add <code>clear_s3_resource</code> parameter to <code>RAthena_options</code> to prevent AWS Athena output AWS S3 resource being cleared up by <code>dbClearResult</code> (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>)</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="2.5.1.9000" id="rathena-2519000">RAthena 2.5.1.9000<a class="anchor" aria-label="anchor" href="#rathena-2519000"></a></h2>
-<div class="section level3">
-<h3 id="feature-2-5-1-9000">Feature:<a class="anchor" aria-label="anchor" href="#feature-2-5-1-9000"></a></h3>
-<ul><li>Support extra boto3 parameters for <code>boto3.session.Session</code> class and <code>client</code> method (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>)</li>
-<li>Support <code>endpoint_override</code> parameter allow default endpoints for each service to be overridden accordingly (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>)</li>
+<ul><li>Add <code>clear_s3_resource</code> parameter to <code>RAthena_options</code> to prevent AWS Athena output AWS S3 resource being cleared up by <code>dbClearResult</code> (<a href="https://github.com/DyfanJones/RAthena/issues/168" class="external-link">#168</a>). Thanks to <a href="https://github.com/juhoautio" class="external-link">@juhoautio</a> for the request.</li>
+<li>Support extra boto3 parameters for <code>boto3.session.Session</code> class and <code>client</code> method (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>)</li>
+<li>Support <code>endpoint_override</code> parameter allow default endpoints for each service to be overridden accordingly (<a href="https://github.com/DyfanJones/RAthena/issues/169" class="external-link">#169</a>). Thanks to <a href="https://github.com/aoyh" class="external-link">@aoyh</a> for the request and checking the package in development.</li>
 </ul></div>
 </div>
     <div class="section level2">

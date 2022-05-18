@@ -58,13 +58,13 @@ AthenaConnection <- function(aws_access_key_id = NULL,
   
   ptr_ll <- list(
     Athena = do.call(sess$client,
-      c(service_name="athena", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$athena)), .CLIENT_PASSING_ARGS))
+      c(service_name="athena", modifyList(.boto_param(kwargs, .CLIENT_PASSING_ARGS), list(endpoint_url = endpoints$athena)))
     ),
     S3 = do.call(sess$client,
-      c(service_name="s3", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$s3)), .CLIENT_PASSING_ARGS))
+      c(service_name="s3", modifyList(.boto_param(kwargs, .CLIENT_PASSING_ARGS), list(endpoint_url = endpoints$s3)))
     ),
     glue = do.call(sess$client,
-      c(service_name="glue", .boto_param(modifyList(kwargs, list(endpoint_url = endpoints$glue)), .CLIENT_PASSING_ARGS))
+      c(service_name="glue", modifyList(.boto_param(kwargs, .CLIENT_PASSING_ARGS), list(endpoint_url = endpoints$glue)))
     )
   )
   if(is.null(s3_staging_dir) && !is.null(work_group)){
