@@ -1,17 +1,14 @@
 # RAthena 2.6.0
 ## Bug Fix:
-*  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer (#168) causing the follow bug in Data Scan info message
+*  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer (#168) causing the follow bug in Data Scan info message. Thanks to @juhoautio for identifying issue.
 ```
 INFO: (Data scanned: -43839744 Bytes)
 ```
 
 ## Feature:
-* Add `clear_s3_resource` parameter to `RAthena_options` to prevent AWS Athena output AWS S3 resource being cleared up by `dbClearResult` (#168)
-
-# RAthena 2.5.1.9000
-## Feature:
+* Add `clear_s3_resource` parameter to `RAthena_options` to prevent AWS Athena output AWS S3 resource being cleared up by `dbClearResult` (#168). Thanks to @juhoautio for the request.
 * Support extra boto3 parameters for `boto3.session.Session` class and `client` method (#169)
-* Support `endpoint_override` parameter allow default endpoints for each service to be overridden accordingly (#169)
+* Support `endpoint_override` parameter allow default endpoints for each service to be overridden accordingly (#169). Thanks to @aoyh for the request and checking the package in development.
 
 # RAthena 2.5.1
 ## Bug Fix:
