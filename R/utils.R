@@ -442,6 +442,5 @@ set_endpoints = function(endpoint_override){
   "config",
   "api_version",
   "use_ssl",
-  "verify",
-  "endpoint_url"
+  "verify"
 )
