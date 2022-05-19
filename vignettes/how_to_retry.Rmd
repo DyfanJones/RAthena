@@ -58,4 +58,4 @@ If you wish to increase the retry functionality of `RAthena` for example the use
 # Reading material
 
 - [Exponential Backoff and Jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)
-- [How to handle a "Throttling – Maximum sending rate exceeded" error](https://aws.amazon.com/blogs/messaging-and-targeting/how-to-handle-a-throttling-maximum-sending-rate-exceeded-error/)
+- [How to handle a "Throttling - Maximum sending rate exceeded" error](https://aws.amazon.com/blogs/messaging-and-targeting/how-to-handle-a-throttling-maximum-sending-rate-exceeded-error/)

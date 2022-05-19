@@ -165,7 +165,7 @@ tbl_noaa = tbl(con, dbplyr::in_schema("awswrangler_test", "noaa"))
 
 tbl_noaa %>% collect()
 
-#> # A tibble: 29,554,197 × 8
+#> # A tibble: 29,554,197 x 8
 #>    id          dt                  element value m_flag q_flag s_flag obs_time
 #>    <chr>       <dttm>              <chr>   <int> <chr>  <chr>  <chr>  <chr>   
 #>  1 ASN00074198 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      
@@ -178,10 +178,10 @@ tbl_noaa %>% collect()
 #>  8 ASN00075013 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      
 #>  9 ASN00075014 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      
 #> 10 ASN00075018 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      
-#> # … with 29,554,187 more rows
+#> # ... with 29,554,187 more rows
 
 noaa %>% filter(element == "PRCP") %>% collect()
-#> # A tibble: 15,081,580 × 8
+#> # A tibble: 15,081,580 x 8
 #>    id          dt                  element value m_flag q_flag s_flag obs_time
 #>    <chr>       <dttm>              <chr>   <int> <chr>  <chr>  <chr>  <chr>   
 #>  1 SWE00140492 1890-01-06 00:00:00 PRCP        0 NA     NA     E      NA      
@@ -194,6 +194,5 @@ noaa %>% filter(element == "PRCP") %>% collect()
 #>  8 TSE00147769 1890-01-06 00:00:00 PRCP       33 NA     NA     E      NA      
 #>  9 TSE00147775 1890-01-06 00:00:00 PRCP      150 NA     NA     E      NA      
 #> 10 UK000047811 1890-01-06 00:00:00 PRCP       49 NA     NA     E      NA      
-# … with 15,081,570 more rows
+#> # ... with 15,081,570 more rows
 ```
-
