@@ -1,5 +1,5 @@
 ## Submission
-This release is a patch release addressing cran build.
+This release contains a couple of new features.
 
 ## Bug Fix:
 *  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer
