@@ -301,14 +301,14 @@ will use it when applicable.</p>
 <span class="va">dbi_noaa</span> <span class="op">=</span> <span class="fu"><a href="../reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"select * from awswrangler_test.noaa"</span><span class="op">)</span></code></pre></div>
 <p>This also give benefits for when using <code>dplyr</code>
 functionality. When setting <code>RAthena_options(unload=TRUE)</code>
-all <code>dplyr</code> lazy evaluation will start using <code>AWS Athena
-unload</code>.</p>
+all <code>dplyr</code> lazy evaluation will start using
+<code>AWS Athena unload</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl_noaa</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/in_schema.html" class="external-link">in_schema</a></span><span class="op">(</span><span class="st">"awswrangler_test"</span>, <span class="st">"noaa"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">tbl_noaa</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu">in_schema</span><span class="op">(</span><span class="st">"awswrangler_test"</span>, <span class="st">"noaa"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">tbl_noaa</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="co">#&gt; # A tibble: 29,554,197 × 8</span>
+<span class="co">#&gt; # A tibble: 29,554,197 x 8</span>
 <span class="co">#&gt;    id          dt                  element value m_flag q_flag s_flag obs_time</span>
 <span class="co">#&gt;    &lt;chr&gt;       &lt;dttm&gt;              &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   </span>
 <span class="co">#&gt;  1 ASN00074198 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      </span>
@@ -321,10 +321,10 @@ unload</code>.</p>
 <span class="co">#&gt;  8 ASN00075013 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      </span>
 <span class="co">#&gt;  9 ASN00075014 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      </span>
 <span class="co">#&gt; 10 ASN00075018 1890-01-05 00:00:00 PRCP        0 NA     NA     a      NA      </span>
-<span class="co">#&gt; # … with 29,554,187 more rows</span>
+<span class="co">#&gt; # ... with 29,554,187 more rows</span>
 
 <span class="va">noaa</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">element</span> <span class="op">==</span> <span class="st">"PRCP"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 15,081,580 × 8</span>
+<span class="co">#&gt; # A tibble: 15,081,580 x 8</span>
 <span class="co">#&gt;    id          dt                  element value m_flag q_flag s_flag obs_time</span>
 <span class="co">#&gt;    &lt;chr&gt;       &lt;dttm&gt;              &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   </span>
 <span class="co">#&gt;  1 SWE00140492 1890-01-06 00:00:00 PRCP        0 NA     NA     E      NA      </span>
@@ -337,7 +337,7 @@ unload</code>.</p>
 <span class="co">#&gt;  8 TSE00147769 1890-01-06 00:00:00 PRCP       33 NA     NA     E      NA      </span>
 <span class="co">#&gt;  9 TSE00147775 1890-01-06 00:00:00 PRCP      150 NA     NA     E      NA      </span>
 <span class="co">#&gt; 10 UK000047811 1890-01-06 00:00:00 PRCP       49 NA     NA     E      NA      </span>
-<span class="co"># … with 15,081,570 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 15,081,570 more rows</span></code></pre></div>
 </div>
   </div>
 
