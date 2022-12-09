@@ -36,7 +36,6 @@ jobs:
           extra-packages: |
             rcmdcheck
             covr
-          needs: check
             
       - name: Install Miniconda
         run: |
