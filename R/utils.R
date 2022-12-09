@@ -444,3 +444,7 @@ set_endpoints = function(endpoint_override){
   "use_ssl",
   "verify"
 )
+
+str_count <- function(str, pattern) {
+  return(lengths(regmatches(str, gregexpr(pattern, str))))
+}
