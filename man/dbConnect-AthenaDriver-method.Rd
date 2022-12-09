@@ -151,7 +151,6 @@ of supported environment variables:
 \item{\strong{AWS_ACCESS_KEY_ID:} is equivalent to the \code{dbConnect} parameter - \code{aws_access_key_id}}
 \item{\strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the \code{dbConnect} parameter - \code{aws_secret_access_key}}
 \item{\strong{AWS_SESSION_TOKEN:} is equivalent to the \code{dbConnect} parameter - \code{aws_session_token}}
-\item{\strong{AWS_ROLE_ARN:} is equivalent to the \code{dbConnect} parameter - \code{role_arn}}
 \item{\strong{AWS_EXPIRATION:} is equivalent to the \code{dbConnect} parameter - \code{duration_seconds}}
 \item{\strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the \code{dbConnect} parameter - \code{s3_staging_dir}}
 \item{\strong{AWS_ATHENA_WORK_GROUP:} is equivalent to \code{dbConnect} parameter - \code{work_group}}
