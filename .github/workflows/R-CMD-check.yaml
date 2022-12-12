@@ -48,7 +48,7 @@ jobs:
 
       - name: Install python-boto3
         run: |
-          reticulate::reticulate::py_install(
+          reticulate::py_install(
             packages       = c("cython","boto3","numpy"),
             envname        = 'r-reticulate',
             method         = "conda",
