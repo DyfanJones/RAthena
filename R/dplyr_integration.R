@@ -326,7 +326,6 @@ db_explain.AthenaConnection <- function(con, sql, ...){
 # NOTE: dbplyr v2 integration has to use this in dbGetQuery
 athena_query_fields_ident <- function(con, sql){
   if (str_count(sql, "\\.") < 2) {
-    print("woohoo")
     if (grepl("\\.", sql)) {
       schema_parts <- gsub('"', "", strsplit(sql, "\\.")[[1]])
     } else {
