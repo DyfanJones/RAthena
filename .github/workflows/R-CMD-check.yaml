@@ -48,7 +48,14 @@ jobs:
 
       - name: Install python-boto3
         run: |
-          RAthena::install_boto(method = "conda", envname = 'r-reticulate')
+          reticulate::reticulate::py_install(
+            packages       = c("cython","boto3","numpy"),
+            envname        = 'r-reticulate',
+            method         = "conda",
+            conda          = "auto",
+            python_version = "3.7",
+            pip            = TRUE
+          )
         shell: Rscript {0}
       
       - uses: r-lib/actions/check-r-package@v2
