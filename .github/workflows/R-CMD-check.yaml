@@ -34,8 +34,8 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            rcmdcheck
-            covr
+            any::rcmdcheck
+            any::covr
             
       - name: Install Miniconda
         run: |
