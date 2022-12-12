@@ -15,13 +15,13 @@ AthenaResult <- function(conn,
   s3_file = NULL
   
   if (athena_option_env$cache_size > 0){
-    ll = check_cache(statement, conn@info$work_group)
+    ll <- check_cache(statement, conn@info$work_group)
     response[["QueryExecutionId"]] <- ll[[1]]
     s3_file <- if(identical(ll[[2]], "")) NULL else ll[[2]]
   }
   # modify sql statement if user requests AWS Athena unload
   if(unload){
-    s3_file = s3_file %||% uuid::UUIDgenerate()
+    s3_file <- s3_file %||% uuid::UUIDgenerate()
     statement <- sprintf(
       "UNLOAD (\n%s)\nTO '%s'\nWITH (format = 'PARQUET',compression = 'SNAPPY')",
       statement, file.path(gsub("/$", "", s3_staging_dir), s3_file)
@@ -139,14 +139,18 @@ setMethod(
           result_info <- split_s3_uri(res@connection@info[["s3_staging"]])
           result_info$key <- file.path(gsub("/$", "", result_info$key), res@info$UnloadDir)
           all_keys <- list()
+          i <- 1
           # Get all s3 objects linked to table
           kwargs <- list(Bucket=result_info[["bucket"]], Prefix=result_info[["key"]])
           while(is.null(kwargs[["ContinuationToken"]])) {
             obj <- py_to_r(do.call(res@connection@ptr$S3$list_objects_v2, kwargs))
-            all_keys <- c(all_keys, lapply(obj$Contents, function(x) list(Key=x$Key)))
+            all_keys[[i]] <- lapply(obj$Contents, function(x) list(Key=x$Key))
             if(identical(obj$NextContinuationToken, kwargs$ContinuationToken) || length(obj$NextContinuationToken) == 0) break
             kwargs[["ContinuationToken"]] <- obj$NextContinuationToken
+            i <- i + 1
           }
+          
+          all_keys <- unlist(all_keys, recursive = FALSE, use.names = FALSE)
           
           # Only remove if files are found
           if(length(all_keys) > 0){

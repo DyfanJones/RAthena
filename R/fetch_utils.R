@@ -79,13 +79,16 @@
   
   all_keys <- list()
   # Get all s3 objects linked to table
+  i <- 1
   kwargs <- list(Bucket=result_info[["bucket"]], Prefix=result_info[["key"]])
   while(is.null(kwargs[["ContinuationToken"]])) {
     obj <- py_to_r(do.call(res@connection@ptr$S3$list_objects_v2, kwargs))
-    all_keys <- c(all_keys, lapply(obj$Contents, function(x) x$Key))
+    all_keys[[i]] <- lapply(obj$Contents, function(x) x$Key)
     if(identical(obj$NextContinuationToken, kwargs$ContinuationToken) || length(obj$NextContinuationToken) == 0) break
     kwargs[["ContinuationToken"]] <- obj$NextContinuationToken
+    i <- i + 1
   }
+  all_keys <- unlist(all_keys, recursive = FALSE, use.names = FALSE)
   
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop('unload methods requires the `arrow` package, please install it first and try again',
