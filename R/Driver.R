@@ -62,7 +62,6 @@ setMethod(
 #' \item{\strong{AWS_ACCESS_KEY_ID:} is equivalent to the \code{dbConnect} parameter - \code{aws_access_key_id}}
 #' \item{\strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the \code{dbConnect} parameter - \code{aws_secret_access_key}}
 #' \item{\strong{AWS_SESSION_TOKEN:} is equivalent to the \code{dbConnect} parameter - \code{aws_session_token}}
-#' \item{\strong{AWS_ROLE_ARN:} is equivalent to the \code{dbConnect} parameter - \code{role_arn}}
 #' \item{\strong{AWS_EXPIRATION:} is equivalent to the \code{dbConnect} parameter - \code{duration_seconds}}
 #' \item{\strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the \code{dbConnect} parameter - \code{s3_staging_dir}}
 #' \item{\strong{AWS_ATHENA_WORK_GROUP:} is equivalent to \code{dbConnect} parameter - \code{work_group}}
@@ -193,7 +192,7 @@ setMethod(
            encryption_option = c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"),
            kms_key = NULL,
            profile_name = NULL,
-           role_arn= NULL,
+           role_arn = NULL,
            role_session_name= sprintf("RAthena-session-%s", as.integer(Sys.time())),
            duration_seconds = 3600L,
            s3_staging_dir = NULL,
@@ -243,7 +242,6 @@ setMethod(
     aws_access_key_id <- aws_access_key_id %||% get_aws_env("AWS_ACCESS_KEY_ID")
     aws_secret_access_key <- aws_secret_access_key %||% get_aws_env("AWS_SECRET_ACCESS_KEY")
     aws_session_token <- aws_session_token %||% get_aws_env("AWS_SESSION_TOKEN")
-    role_arn <- role_arn %||% get_aws_env("AWS_ROLE_ARN")
     work_group <- work_group %||% get_aws_env("AWS_ATHENA_WORK_GROUP")
     region_name <- region_name %||% get_aws_env("AWS_REGION")
     
