@@ -740,11 +740,12 @@ setMethod(
       # Get all s3 objects linked to table
       i <- 1
       kwargs <- list(Bucket = s3_path[["bucket"]], Prefix = s3_path[["key"]])
-      while (is.null(kwargs[["ContinuationToken"]])) {
+      token <- ""
+      while (!is.null(token)) {
+        kwargs[["ContinuationToken"]] <- (if (!nzchar(token)) NULL else token)
         objects <- py_to_r(do.call(conn@ptr$S3$list_objects_v2, kwargs))
         all_keys[[i]] <- lapply(objects$Contents, function(x) list(Key = x$Key))
-        if (identical(objects$NextContinuationToken, kwargs$ContinuationToken) || length(objects$NextContinuationToken) == 0) break
-        kwargs[["ContinuationToken"]] <- objects$NextContinuationToken
+        token <- objects$NextContinuationToken
         i <- i + 1
       }
       info_msg(
