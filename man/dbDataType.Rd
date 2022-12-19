@@ -42,16 +42,17 @@ dbDataType(athena(), c("x", "abc"))
 dbDataType(athena(), list(raw(10), raw(20)))
 
 vapply(iris, function(x) dbDataType(RAthena::athena(), x),
-       FUN.VALUE = character(1), USE.NAMES = TRUE)
+  FUN.VALUE = character(1), USE.NAMES = TRUE
+)
 
 \dontrun{
-# Note: 
+# Note:
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
 
 library(DBI)
 
-# Demo connection to Athena using profile name 
+# Demo connection to Athena using profile name
 con <- dbConnect(RAthena::athena())
 
 # Sending Queries to Athena

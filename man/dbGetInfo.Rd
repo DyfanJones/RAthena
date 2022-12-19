@@ -26,15 +26,15 @@ Get DBMS metadata
 }
 \examples{
 \dontrun{
-# Note: 
+# Note:
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
 
 library(DBI)
 
-# Demo connection to Athena using profile name 
+# Demo connection to Athena using profile name
 con <- dbConnect(RAthena::athena())
-                 
+
 # Returns metadata from connnection object
 metadata <- dbGetInfo(con)
 

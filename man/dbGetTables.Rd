@@ -26,16 +26,16 @@ Method to get Athena schema, tables and table types return as a data.frame
 }
 \examples{
 \dontrun{
-# Note: 
+# Note:
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
 
 library(DBI)
 library(RAthena)
 
-# Demo connection to Athena using profile name 
+# Demo connection to Athena using profile name
 con <- dbConnect(RAthena::athena())
-             
+
 # Return hierarchy of tables in Athena
 dbGetTables(con)
 

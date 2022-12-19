@@ -24,7 +24,7 @@
 #' \dontrun{
 #' # Note: 
 #' # - Require AWS Account to run below example.
-#' # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
+#' # - Different connection methods can be used please see `RAthena::dbConnect` documentation
 #' 
 #' library(DBI)
 #' library(dplyr)
