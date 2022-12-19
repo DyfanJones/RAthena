@@ -2,8 +2,8 @@
 This release contains a couple of bug fixes.
 
 ## Bug Fix:
-* Prevent assuming role from `AWS_ROLE_ARN`. This caused confusing when connecting through web identity (#177)
-* Support `dbplyr::in_catalog` when working with `dplyr::tbl` (#178)
+* Prevent assuming role from `AWS_ROLE_ARN`. This caused confusing when connecting through web identity
+* Support `dbplyr::in_catalog` when working with `dplyr::tbl`
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
