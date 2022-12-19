@@ -89,7 +89,7 @@
   while (!is.null(token)) {
     kwargs[["ContinuationToken"]] <- (if (!nzchar(token)) NULL else token)
     objects <- py_to_r(do.call(res@connection@ptr$S3$list_objects_v2, kwargs))
-    all_keys[[i]] <- lapply(objects$Contents, function(x) list(Key = x$Key))
+    all_keys[[i]] <- lapply(objects$Contents, function(x) x$Key)
     token <- objects$NextContinuationToken
     i <- i + 1
   }
