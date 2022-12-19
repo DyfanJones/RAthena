@@ -1,3 +1,8 @@
+# RAthena 2.6.1
+## Bug Fix:
+* Prevent assuming role from `AWS_ROLE_ARN`. This caused confusing when connecting through web identity (#177)
+* Support `dbplyr::in_catalog` when working with `dplyr::tbl` (#178)
+
 # RAthena 2.6.0
 ## Bug Fix:
 *  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer (#168) causing the follow bug in Data Scan info message. Thanks to @juhoautio for identifying issue.

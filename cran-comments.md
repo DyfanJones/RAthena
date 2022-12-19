@@ -1,13 +1,9 @@
 ## Submission
-This release contains a couple of new features.
+This release contains a couple of bug fixes.
 
 ## Bug Fix:
-*  Delay Python to R conversion to prevent 64 bit integer mapping to R's base 32 bit integer
-
-## Feature:
-* Add `clear_s3_resource` parameter to `RAthena_options` to prevent `Amazon Web Service Athena` output `Amazon Web Service S3`
-* Support extra `boto3` parameters for `boto3.session.Session` class and `client` method
-* Support `endpoint_override` parameter allow default endpoints for each service to be overridden
+* Prevent assuming role from `AWS_ROLE_ARN`. This caused confusing when connecting through web identity (#177)
+* Support `dbplyr::in_catalog` when working with `dplyr::tbl` (#178)
 
 ## Examples Note:
 * All R examples with `\dontrun` have been given a note warning users that `AWS credentials` are required to run
