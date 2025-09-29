@@ -35,6 +35,7 @@ without needing hard code any credentials.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://dyfanjones.github.io/RAthena/}
   \item \url{https://github.com/DyfanJones/RAthena}
   \item Report bugs at \url{https://github.com/DyfanJones/RAthena/issues}
 }

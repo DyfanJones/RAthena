@@ -11,7 +11,7 @@
 #' @param envname Name of Python environment to install within, by default environment name RAthena.
 #'
 #' @param conda_python_version the python version installed in the created conda
-#'   environment. Python 3.7 is installed by default.
+#'   environment. Python 3.13 is installed by default.
 #'
 #' @param ... other arguments passed to [reticulate::conda_install()] or
 #'   [reticulate::virtualenv_install()].
