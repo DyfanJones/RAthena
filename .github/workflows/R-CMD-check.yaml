@@ -42,6 +42,8 @@ jobs:
         run: |
           reticulate::py_require(packages = c("boto3","numpy"))
           print(reticulate::py_config())
+          print(reticulate::py_require())
+          print(reticulate::py_list_packages())
         shell: Rscript {0}
       
       - uses: r-lib/actions/check-r-package@v2
