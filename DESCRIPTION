@@ -36,7 +36,7 @@ Depends: R (>= 3.2.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.3
-URL: https://github.com/DyfanJones/RAthena
+URL: https://dyfanjones.github.io/RAthena/, https://github.com/DyfanJones/RAthena
 BugReports: https://github.com/DyfanJones/RAthena/issues
 Collate: 
     'utils.R'
