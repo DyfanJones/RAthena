@@ -1,14 +1,14 @@
 #' @include utils.R
 
-sql_quantile <- function(x, probs){
+sql_quantile <- function(x, probs) {
   build_sql <- pkg_method("build_sql", "dbplyr")
   check_probs(probs)
-  build_sql("APPROX_PERCENTILE(",x,", ",probs,")")
+  build_sql("APPROX_PERCENTILE(", x, ", ", probs, ")")
 }
 
-sql_median <- function(){
+sql_median <- function() {
   warned <- FALSE
-  function(x, na.rm = FALSE){
+  function(x, na.rm = FALSE) {
     warned <<- check_na_rm(na.rm, warned)
     sql_quantile(x, 0.5)
   }
@@ -16,14 +16,16 @@ sql_median <- function(){
 
 # mimic check_na_rm from dbplyr
 # https://github.com/tidyverse/dbplyr/blob/master/R/translate-sql-helpers.R#L213-L225
-check_na_rm <- function(na.rm, warned){
-  if(warned || identical(na.rm, TRUE))
+check_na_rm <- function(na.rm, warned) {
+  if (warned || identical(na.rm, TRUE)) {
     return(warned)
+  }
   warning(
-    "Missing values are always removed in SQL.\n", "Use `", 
+    "Missing values are always removed in SQL.\n Use `",
     "median(x, na.rm = TRUE)` to silence this warning\n",
-    "This warning is displayed only once per session.", 
-    call. = FALSE)
+    "This warning is displayed only once per session.",
+    call. = FALSE
+  )
   return(TRUE)
 }
 
@@ -33,9 +35,12 @@ check_probs <- function(probs) {
   if (!is.numeric(probs)) {
     stop("`probs` must be numeric", call. = FALSE)
   }
-  
+
   if (length(probs) > 1) {
-    stop("SQL translation only supports single value for `probs`.", call. = FALSE)
+    stop(
+      "SQL translation only supports single value for `probs`.",
+      call. = FALSE
+    )
   }
 }
 
@@ -48,16 +53,22 @@ athena_paste <- function(..., sep = " ", con) {
   sql(paste(pieces, collapse = paste0('||', sep, '||')))
 }
 
-athena_regexpr <- function(pattern, text, ignore.case = FALSE, perl = FALSE, fixed = FALSE, 
-                           useBytes = FALSE){
+athena_regexpr <- function(
+  pattern,
+  text,
+  ignore.case = FALSE,
+  perl = FALSE,
+  fixed = FALSE,
+  useBytes = FALSE
+) {
   if (any(c(perl, fixed, useBytes))) {
     stop("`perl`, `fixed` and `useBytes` parameters are unsupported", call. = F)
   }
   build_sql <- pkg_method('build_sql', "dbplyr")
-  if(!ignore.case){
-    build_sql('REGEXP_LIKE(', text,",", pattern, ')')
+  if (!ignore.case) {
+    build_sql('REGEXP_LIKE(', text, ",", pattern, ')')
   } else {
     pattern <- paste0("(?i)", pattern)
-    build_sql('REGEXP_LIKE(', text,",", pattern, ')')
+    build_sql('REGEXP_LIKE(', text, ",", pattern, ')')
   }
 }

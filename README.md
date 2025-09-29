@@ -21,10 +21,10 @@ access to aws account with permissions allowing you to use Athena.*
 
 Before installing `RAthena` ensure that `Python 3+` is installed onto your
 machine: <https://www.python.org/downloads/>. To install `Boto3` either it
-can installed the pip command or using `RAthena` installation function:
+can be installed via pip command or using `RAthena` installation function:
 
 ```
-pip install boto3
+pip install boto3>=1.14.0
 ```
 RAthena Method (after `RAthena` has been installed this method can be used)
 ``` r
@@ -70,7 +70,7 @@ RAthena is compatible with AWS CLI. This allows your aws credentials to
 be stored and not be hard coded in your connection.
 
 To install AWS CLI please refer to:
-<https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html>,
+<https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html>,
 to configure AWS CLI please refer to:
 <https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html>
 

@@ -10,6 +10,7 @@
   aws_access_key_id = NULL,
   aws_secret_access_key = NULL,
   aws_session_token = NULL,
+  catalog_name = "AwsDataCatalog",
   schema_name = "default",
   work_group = NULL,
   poll_interval = NULL,
@@ -33,9 +34,7 @@
 )
 }
 \arguments{
-\item{drv}{an object that inherits from \linkS4class{DBIDriver},
-or an existing \linkS4class{DBIConnection}
-object (in order to clone an existing connection).}
+\item{drv}{A object inheriting from \link[DBI:DBIDriver-class]{DBI::DBIDriver}.}
 
 \item{aws_access_key_id}{AWS access key ID}
 
@@ -43,17 +42,19 @@ object (in order to clone an existing connection).}
 
 \item{aws_session_token}{AWS temporary session token}
 
+\item{catalog_name}{The catalog_name to which the connection belongs}
+
 \item{schema_name}{The schema_name to which the connection belongs}
 
 \item{work_group}{The name of the \href{https://aws.amazon.com/about-aws/whats-new/2019/02/athena_workgroups/}{work group} to run Athena queries , Currently defaulted to \code{NULL}.}
 
 \item{poll_interval}{Amount of time took when checking query execution status. Default set to a random interval between 0.5 - 1 seconds.}
 
-\item{encryption_option}{Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}. 
-Supported Amazon S3 Encryption Options ["NULL", "SSE_S3", "SSE_KMS", "CSE_KMS"]. Connection will default to NULL,
+\item{encryption_option}{Athena encryption at rest \href{https://docs.aws.amazon.com/athena/latest/ug/encryption.html}{link}.
+Supported Amazon S3 Encryption Options \code{c("NULL", "SSE_S3", "SSE_KMS", "CSE_KMS")}. Connection will default to NULL,
 usually changing this option is not required.}
 
-\item{kms_key}{\href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service}, 
+\item{kms_key}{\href{https://docs.aws.amazon.com/kms/latest/developerguide/overview.html}{AWS Key Management Service},
 please refer to \href{https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html}{link} for more information around the concept.}
 
 \item{profile_name}{The name of a profile to use. If not given, then the default profile is used.
@@ -62,99 +63,91 @@ To configure AWS CLI please refer to: \href{https://docs.aws.amazon.com/cli/late
 
 \item{role_arn}{The Amazon Resource Name (ARN) of the role to assume (such as \code{arn:aws:sts::123456789012:assumed-role/role_name/role_session_name})}
 
-\item{role_session_name}{An identifier for the assumed role session. By default `RAthena` creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}}
+\item{role_session_name}{An identifier for the assumed role session. By default \code{RAthena} creates a session name \code{sprintf("RAthena-session-\%s", as.integer(Sys.time()))}}
 
-\item{duration_seconds}{The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role. 
+\item{duration_seconds}{The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role.
 This setting can have a value from 1 hour to 12 hours. By default duration is set to 3600 seconds (1 hour).}
 
 \item{s3_staging_dir}{The location in Amazon S3 where your query results are stored, such as \code{s3://path/to/query/bucket/}}
 
-\item{region_name}{Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for 
+\item{region_name}{Default region when creating new connections. Please refer to \href{https://docs.aws.amazon.com/general/latest/gr/rande.html}{link} for
 AWS region codes (region code example: Region = EU (Ireland)     \code{ region_name = "eu-west-1"})}
 
 \item{botocore_session}{Use this Botocore session instead of creating a new default one.}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
-default is [bit64::integer64], which allows the full range of 64 bit
+default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 
-\item{binary}{The R type that [binary/varbinary] types should be mapped to,
-default is [raw]. If the mapping fails R will resort to [character] type.
-To ignore data type conversion set to ["character"].}
+\item{binary}{The R type that "binary/varbinary" types should be mapped to,
+default is \link{raw}. If the mapping fails R will resort to \verb{character`` type. To ignore data type conversion set to }character`.}
 
-\item{json}{Attempt to converts AWS Athena data types [arrays, json] using \code{jsonlite:parse_json}. If the mapping fails R will resort to [character] type.
+\item{json}{Attempt to converts AWS Athena data types arrays, json using \code{jsonlite:parse_json}. If the mapping fails R will resort to \link{character} type.
 Custom Json parsers can be provide by using a function with data frame parameter.
-To ignore data type conversion set to ["character"].}
+To ignore data type conversion set to \code{"character"}.}
 
-\item{timezone}{Sets the timezone for the connection. The default is `UTC`.
-If `NULL` then no timezone is set, which defaults to the server's time zone.
-`AWS Athena` accepted time zones: \url{https://docs.aws.amazon.com/athena/latest/ug/athena-supported-time-zones.html}.}
+\item{timezone}{Sets the timezone for the connection. The default is \code{UTC}.
+If \code{NULL} then no timezone is set, which defaults to the server's time zone.
+\verb{AWS Athena} accepted time zones: \url{https://docs.aws.amazon.com/athena/latest/ug/athena-supported-time-zones.html}.}
 
 \item{keyboard_interrupt}{Stops AWS Athena process when R gets a keyboard interrupt, currently defaults to \code{TRUE}}
 
 \item{rstudio_conn_tab}{Optional to get AWS Athena Schema from AWS Glue Catalogue and display it in RStudio's Connections Tab.
-Default set to \code{TRUE}. For large `AWS Glue Catalogue` it is recommended to set `rstudio_conn_tab=FALSE` to ensure a fast connection.}
+Default set to \code{TRUE}. For large \verb{AWS Glue Catalogue} it is recommended to set \code{rstudio_conn_tab=FALSE} to ensure a fast connection.}
 
 \item{endpoint_override}{(character/list) The complete URL to use for the constructed client. Normally,
 \code{botocore} will automatically construct the appropriate URL to use when communicating with a
 service. You can specify a complete URL (including the "http/https" scheme) to override this
 behaviour. If \code{endpoint_override} is a character then AWS Athena endpoint is overridden. To override
-AWS S3 or AWS Glue endpoints a named list needs to be provided. The list can only have the following names ['athena', 's3', glue']
+AWS S3 or AWS Glue endpoints a named list needs to be provided. The list can only have the following names \verb{c('athena', 's3', glue')}
 for example \code{list(glue = "https://glue.eu-west-1.amazonaws.com")}}
 
 \item{...}{Passes parameters to \code{boto3.session.Session} and \code{client}.
 \itemize{
-    \item{\strong{boto3.session.Session}}
-    \itemize{
-        \item{\strong{botocore_session}} {(botocore.session.Session): Use this Botocore session instead
-            of creating a new default one.
-        }
-    }
-    \item{\strong{client}}
-    \itemize{
-        \item{\strong{config}} {(botocore.client.Config) -- Advanced client configuration options. If region_name
-            is specified in the client config, its value will take precedence over environment variables
-            and configuration values, but not over a region_name value passed explicitly to the method.
-            See \href{https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html}{botocore config documentation}
-            for more details.
-        }
-        \item{\strong{api_version}} {(string) -- The API version to use. By default, botocore will use the latest
-            API version when creating a client. You only need to specify this parameter if you want to
-            use a previous API version of the client.
-        }
-        \item{\strong{use_ssl}} {(boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
-            not all services support non-ssl connections.
-        }
-        \item{\strong{verify}} {(boolean/string) -- Whether or not to verify SSL certificates. By default
-            SSL certificates are verified. You can provide the following values:
-            \itemize{
-                \item{False - do not validate SSL certificates. SSL will still be used (unless use_ssl is False),
-                    but SSL certificates will not be verified.
-                }
-                \item{path/to/cert/bundle.pem - A filename of the CA cert bundle to uses. You can specify this
-                    argument if you want to use a different CA cert bundle than the one used by botocore.
-               }
-            }
-         }
-    }
- }}
+\item \strong{boto3.session.Session}
+\itemize{
+\item \strong{botocore_session} (botocore.session.Session): Use this Botocore session instead
+of creating a new default one.
+}
+\item \strong{boto3.client}
+\itemize{
+\item \strong{config} (botocore.client.Config) -- Advanced client configuration options. If region_name
+is specified in the client config, its value will take precedence over environment variables
+and configuration values, but not over a region_name value passed explicitly to the method.
+See \href{https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html}{botocore config documentation}
+for more details.
+\item \strong{api_version} (string) -- The API version to use. By default, botocore will use the latest
+API version when creating a client. You only need to specify this parameter if you want to
+use a previous API version of the client.
+\item \strong{use_ssl} (boolean) -- Whether or not to use SSL. By default, SSL is used. Note that
+not all services support non-ssl connections.
+\item \strong{verify} (boolean/string) -- Whether or not to verify SSL certificates. By default
+SSL certificates are verified. You can provide the following values:
+\itemize{
+\item False - do not validate SSL certificates. SSL will still be used (unless use_ssl is False),
+but SSL certificates will not be verified.
+\item path/to/cert/bundle.pem - A filename of the CA cert bundle to uses. You can specify this
+argument if you want to use a different CA cert bundle than the one used by botocore.
+}
+}
+}}
 }
 \value{
 \code{dbConnect()} returns a s4 class. This object is used to communicate with AWS Athena.
 }
 \description{
 It is never advised to hard-code credentials when making a connection to Athena (even though the option is there). Instead it is advised to use
-\code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}), 
-\href{https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html}{Amazon Resource Name roles} or environmental variables. Here is a list
+\code{profile_name} (set up by \href{https://aws.amazon.com/cli/}{AWS Command Line Interface}),
+\href{https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html}{Amazon Resource Name roles} or environmental variables. Here is a list
 of supported environment variables:
 \itemize{
-\item{\strong{AWS_ACCESS_KEY_ID:} is equivalent to the \code{dbConnect} parameter - \code{aws_access_key_id}}
-\item{\strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the \code{dbConnect} parameter - \code{aws_secret_access_key}}
-\item{\strong{AWS_SESSION_TOKEN:} is equivalent to the \code{dbConnect} parameter - \code{aws_session_token}}
-\item{\strong{AWS_EXPIRATION:} is equivalent to the \code{dbConnect} parameter - \code{duration_seconds}}
-\item{\strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the \code{dbConnect} parameter - \code{s3_staging_dir}}
-\item{\strong{AWS_ATHENA_WORK_GROUP:} is equivalent to \code{dbConnect} parameter - \code{work_group}}
-\item{\strong{AWS_REGION:} is equivalent to \code{dbConnect} parameter - \code{region_name}}
+\item \strong{AWS_ACCESS_KEY_ID:} is equivalent to the \code{dbConnect} parameter - \code{aws_access_key_id}
+\item \strong{AWS_SECRET_ACCESS_KEY:} is equivalent to the \code{dbConnect} parameter - \code{aws_secret_access_key}
+\item \strong{AWS_SESSION_TOKEN:} is equivalent to the \code{dbConnect} parameter - \code{aws_session_token}
+\item \strong{AWS_EXPIRATION:} is equivalent to the \code{dbConnect} parameter - \code{duration_seconds}
+\item \strong{AWS_ATHENA_S3_STAGING_DIR:} is equivalent to the \code{dbConnect} parameter - \code{s3_staging_dir}
+\item \strong{AWS_ATHENA_WORK_GROUP:} is equivalent to \code{dbConnect} parameter - \code{work_group}
+\item \strong{AWS_REGION:} is equivalent to \code{dbConnect} parameter - \code{region_name}
 }
 
 \strong{NOTE:} If you have set any environmental variables in \code{.Renviron} please restart your R in order for the changes to take affect.
@@ -164,28 +157,28 @@ of supported environment variables:
 # Connect to Athena using your aws access keys
  library(DBI)
  con <- dbConnect(RAthena::athena(),
-                  aws_access_key_id='YOUR_ACCESS_KEY_ID', # 
+                  aws_access_key_id='YOUR_ACCESS_KEY_ID', #
                   aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
                   s3_staging_dir='s3://path/to/query/bucket/',
                   region_name='us-west-2')
  dbDisconnect(con)
- 
+
 # Connect to Athena using your profile name
 # Profile name can be created by using AWS CLI
  con <- dbConnect(RAthena::athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   s3_staging_dir = 's3://path/to/query/bucket/')
  dbDisconnect(con)
- 
+
 # Connect to Athena using ARN role
  con <- dbConnect(RAthena::athena(),
                   profile_name = "YOUR_PROFILE_NAME",
                   role_arn = "arn:aws:sts::123456789012:assumed-role/role_name/role_session_name",
                   s3_staging_dir = 's3://path/to/query/bucket/')
-                 
+
  dbDisconnect(con)
 }
 }
 \seealso{
-\code{\link[DBI]{dbConnect}}
+\link{dbConnect}
 }

@@ -39,21 +39,42 @@ poll <- function(res) {
     poll_interval <- class_poll %||% rand_poll()
     tryCatch(
       {
-        query_execution <- res@connection@ptr$Athena$get_query_execution(QueryExecutionId = res@info[["QueryExecutionId"]])
+        query_execution <- res@connection@ptr$Athena$get_query_execution(
+          QueryExecutionId = res@info[["QueryExecutionId"]]
+        )
       },
       error = function(e) py_error(e)
     )
-    if (py_to_r(query_execution$QueryExecution$Status$State) %in% c("SUCCEEDED", "FAILED", "CANCELLED")) {
+    if (
+      py_to_r(query_execution$QueryExecution$Status$State) %in%
+        c("SUCCEEDED", "FAILED", "CANCELLED")
+    ) {
       # update info environment
-      res@info[["Status"]] <- py_to_r(query_execution[["QueryExecution"]][["Status"]][["State"]])
-      res@info[["StateChangeReason"]] <- py_to_r(query_execution[["QueryExecution"]][["Status"]][["StateChangeReason"]])
-      res@info[["StatementType"]] <- py_to_r(query_execution[["QueryExecution"]][["StatementType"]])
-      res@info[["WorkGroup"]] <- py_to_r(query_execution[["QueryExecution"]][["WorkGroup"]])
-      res@info[["OutputLocation"]] <- py_to_r(query_execution[["QueryExecution"]][["ResultConfiguration"]][["OutputLocation"]])
-      query_execution[["QueryExecution"]][["Statistics"]][["DataScannedInBytes"]] <- builtins$float(
-        query_execution[["QueryExecution"]][["Statistics"]][["DataScannedInBytes"]]
+      res@info[["Status"]] <- py_to_r(query_execution[["QueryExecution"]][[
+        "Status"
+      ]][["State"]])
+      res@info[["StateChangeReason"]] <- py_to_r(query_execution[[
+        "QueryExecution"
+      ]][["Status"]][["StateChangeReason"]])
+      res@info[["StatementType"]] <- py_to_r(query_execution[[
+        "QueryExecution"
+      ]][["StatementType"]])
+      res@info[["WorkGroup"]] <- py_to_r(query_execution[["QueryExecution"]][[
+        "WorkGroup"
+      ]])
+      res@info[["OutputLocation"]] <- py_to_r(query_execution[[
+        "QueryExecution"
+      ]][["ResultConfiguration"]][["OutputLocation"]])
+      query_execution[["QueryExecution"]][["Statistics"]][[
+        "DataScannedInBytes"
+      ]] <- builtins$float(
+        query_execution[["QueryExecution"]][["Statistics"]][[
+          "DataScannedInBytes"
+        ]]
       )
-      res@info[["Statistics"]] <- py_to_r(query_execution[["QueryExecution"]][["Statistics"]])
+      res@info[["Statistics"]] <- py_to_r(query_execution[["QueryExecution"]][[
+        "Statistics"
+      ]])
       break
     } else {
       Sys.sleep(poll_interval)
@@ -100,19 +121,25 @@ resource_active <- function(dbObj) {
 }
 
 # checks is dbObj is active
+#' @export
 resource_active.AthenaConnection <- function(dbObj) {
-  if (length(dbObj@ptr) != 0 &&
-    !py_is_null_xptr(dbObj@ptr$Athena)) {
+  if (
+    length(dbObj@ptr) != 0 &&
+      !py_is_null_xptr(dbObj@ptr$Athena)
+  ) {
     TRUE
   } else {
     FALSE
   }
 }
 
+#' @export
 resource_active.AthenaResult <- function(dbObj) {
-  if (length(dbObj@info) != 0 &&
-    length(dbObj@connection@ptr) != 0 &&
-    !py_is_null_xptr(dbObj@connection@ptr$Athena)) {
+  if (
+    length(dbObj@info) != 0 &&
+      length(dbObj@connection@ptr) != 0 &&
+      !py_is_null_xptr(dbObj@connection@ptr$Athena)
+  ) {
     TRUE
   } else {
     FALSE
@@ -126,26 +153,36 @@ ResultConfiguration <- function(conn) {
 
   # adding EncryptionConfiguration to ResultConfiguration
   if (!is.null(conn@info$encryption_option)) {
-    EncryptionConfiguration <- list("EncryptionOption" = conn@info$encryption_option)
+    EncryptionConfiguration <- list(
+      "EncryptionOption" = conn@info$encryption_option
+    )
     EncryptionConfiguration["KmsKey"] <- conn@info$kms_key
-    ResultConfiguration["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+    ResultConfiguration["EncryptionConfiguration"] <- list(
+      EncryptionConfiguration
+    )
   }
 
   return(ResultConfiguration)
 }
 
 # set up work group configuration
-work_group_config <- function(conn,
-                              EnforceWorkGroupConfiguration = FALSE,
-                              PublishCloudWatchMetricsEnabled = FALSE,
-                              BytesScannedCutoffPerQuery = 10000000L,
-                              RequesterPaysEnabled = FALSE) {
+work_group_config <- function(
+  conn,
+  EnforceWorkGroupConfiguration = FALSE,
+  PublishCloudWatchMetricsEnabled = FALSE,
+  BytesScannedCutoffPerQuery = 10000000L,
+  RequesterPaysEnabled = FALSE
+) {
   config <- list()
   ResultConfiguration <- list(OutputLocation = conn@info$s3_staging)
   if (!is.null(conn@info$encryption_option)) {
-    EncryptionConfiguration <- list("EncryptionOption" = conn@info$encryption_option)
+    EncryptionConfiguration <- list(
+      "EncryptionOption" = conn@info$encryption_option
+    )
     EncryptionConfiguration["KmsKey"] <- conn@info$kms_key
-    ResultConfiguration["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+    ResultConfiguration["EncryptionConfiguration"] <- list(
+      EncryptionConfiguration
+    )
   }
   config["ResultConfiguration"] <- list(ResultConfiguration)
   config["EnforceWorkGroupConfiguration"] <- EnforceWorkGroupConfiguration
@@ -156,29 +193,51 @@ work_group_config <- function(conn,
 }
 
 # set up work group configuration update
-work_group_config_update <- function(conn,
-                                     RemoveOutputLocation = FALSE,
-                                     EnforceWorkGroupConfiguration = FALSE,
-                                     PublishCloudWatchMetricsEnabled = FALSE,
-                                     BytesScannedCutoffPerQuery = 10000000L,
-                                     RequesterPaysEnabled = FALSE) {
+work_group_config_update <- function(
+  conn,
+  RemoveOutputLocation = FALSE,
+  EnforceWorkGroupConfiguration = FALSE,
+  PublishCloudWatchMetricsEnabled = FALSE,
+  BytesScannedCutoffPerQuery = 10000000L,
+  RequesterPaysEnabled = FALSE,
+  EngineVersion = list()
+) {
   ConfigurationUpdates <- list()
   ResultConfigurationUpdates <- list(
     OutputLocation = conn@info$s3_staging,
     RemoveOutputLocation = RemoveOutputLocation
   )
   if (!is.null(conn@info$encryption_option)) {
-    EncryptionConfiguration <- list("EncryptionOption" = conn@info$encryption_option)
+    EncryptionConfiguration <- list(
+      "EncryptionOption" = conn@info$encryption_option
+    )
     EncryptionConfiguration["KmsKey"] <- conn@info$kms_key
-    ResultConfigurationUpdates["EncryptionConfiguration"] <- list(EncryptionConfiguration)
+    ResultConfigurationUpdates["EncryptionConfiguration"] <- list(
+      EncryptionConfiguration
+    )
   }
 
-  ConfigurationUpdates["EnforceWorkGroupConfiguration"] <- EnforceWorkGroupConfiguration
-  ConfigurationUpdates["ResultConfigurationUpdates"] <- list(ResultConfigurationUpdates)
-  ConfigurationUpdates["PublishCloudWatchMetricsEnabled"] <- PublishCloudWatchMetricsEnabled
-  ConfigurationUpdates["BytesScannedCutoffPerQuery"] <- BytesScannedCutoffPerQuery
+  ConfigurationUpdates[
+    "EnforceWorkGroupConfiguration"
+  ] <- EnforceWorkGroupConfiguration
+  ConfigurationUpdates["ResultConfigurationUpdates"] <- list(
+    ResultConfigurationUpdates
+  )
+  ConfigurationUpdates[
+    "PublishCloudWatchMetricsEnabled"
+  ] <- PublishCloudWatchMetricsEnabled
+  ConfigurationUpdates[
+    "BytesScannedCutoffPerQuery"
+  ] <- BytesScannedCutoffPerQuery
   ConfigurationUpdates["RequesterPaysEnabled"] <- RequesterPaysEnabled
-
+  if (
+    any(
+      names(EngineVersion) %in%
+        c("SelectedEngineVersion", "EffectiveEngineVersion")
+    )
+  ) {
+    ConfigurationUpdates["EngineVersion"] <- EngineVersion
+  }
   ConfigurationUpdates
 }
 
@@ -201,10 +260,12 @@ get_aws_env <- function(x) {
   }
 }
 
-`%||%` <- function(x, y) if (is.null(x)) {
-  return(y)
-} else {
-  return(x)
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    return(y)
+  } else {
+    return(x)
+  }
 }
 
 # time check warning when connection will expire soon
@@ -214,7 +275,11 @@ time_check <- function(x) {
   s <- round(x %% 60, 0)
   if (m < 15) {
     warning(
-      "Athena Connection will expire in ", time_format(m), ":", time_format(s), " (mm:ss)",
+      "Athena Connection will expire in ",
+      time_format(m),
+      ":",
+      time_format(s),
+      " (mm:ss)",
       call. = F
     )
   }
@@ -227,7 +292,11 @@ time_format <- function(x) {
 # get parent pkg function and method
 pkg_method <- function(fun, pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(fun, " requires the ", pkg, " package, please install it first and try again",
+    stop(
+      fun,
+      " requires the ",
+      pkg,
+      " package, please install it first and try again",
       call. = F
     )
   }
@@ -239,9 +308,15 @@ pkg_method <- function(fun, pkg) {
 data_scanned <- function(x) {
   base <- 1024
   units_map <- c("B", "KB", "MB", "GB", "TB", "PB")
-  power <- if (x <= 0) 0L else min(as.integer(log(x, base = base)), length(units_map) - 1L)
+  power <- if (x <= 0) {
+    0L
+  } else {
+    min(as.integer(log(x, base = base)), length(units_map) - 1L)
+  }
   unit <- units_map[power + 1L]
-  if (power == 0) unit <- "Bytes"
+  if (power == 0) {
+    unit <- "Bytes"
+  }
   paste(round(x / base^power, digits = 2), unit)
 }
 
@@ -257,7 +332,11 @@ cache_query <- function(res) {
       "WorkGroup" = res@info[["WorkGroup"]],
       "UnloadDir" = res@info[["UnloadDir"]] %||% character(1)
     )
-    new_query <- fsetdiff(cache_append, athena_option_env[["cache_dt"]], all = TRUE)
+    new_query <- fsetdiff(
+      cache_append,
+      athena_option_env[["cache_dt"]],
+      all = TRUE
+    )
     athena_option_env$cache_dt <- head(
       rbind(new_query, athena_option_env[["cache_dt"]]),
       athena_option_env[["cache_size"]]
@@ -292,15 +371,15 @@ retry_error <- function(e) {
 retry_api_call <- function(expr) {
   # if number of retries is equal to 0 then retry is skipped
   if (athena_option_env$retry == 0) {
-    resp <- tryCatch(eval.parent(substitute(expr)),
-      error = function(e) retry_error(e)
-    )
+    resp <- tryCatch(eval.parent(substitute(expr)), error = function(e) {
+      retry_error(e)
+    })
   }
 
   for (i in seq_len(athena_option_env$retry)) {
-    resp <- tryCatch(eval.parent(substitute(expr)),
-      error = function(e) retry_error(e)
-    )
+    resp <- tryCatch(eval.parent(substitute(expr)), error = function(e) {
+      retry_error(e)
+    })
 
     if (inherits(resp, "error")) {
       # stop retry if statement is an invalid request
@@ -311,7 +390,12 @@ retry_api_call <- function(expr) {
       backoff_len <- runif(n = 1, min = 0, max = (2^i - 1))
 
       if (!athena_option_env$retry_quiet) {
-        info_msg(resp[1], "Request failed. Retrying in ", round(backoff_len, 1), " seconds...")
+        info_msg(
+          resp[1],
+          "Request failed. Retrying in ",
+          round(backoff_len, 1),
+          " seconds..."
+        )
       }
 
       Sys.sleep(backoff_len)
@@ -320,15 +404,23 @@ retry_api_call <- function(expr) {
     }
   }
 
-  if (inherits(resp, "error")) stop(resp[1])
+  if (inherits(resp, "error")) {
+    stop(resp[1])
+  }
 
   return(resp)
 }
 
 # Create table With parameters
-ctas_sql_with <- function(partition = NULL, s3.location = NULL, file.type = "NULL", compress = TRUE) {
+ctas_sql_with <- function(
+  partition = NULL,
+  s3.location = NULL,
+  file.type = "NULL",
+  compress = TRUE
+) {
   if (file.type != "NULL" || !is.null(s3.location) || !is.null(partition)) {
-    FILE <- switch(file.type,
+    FILE <- switch(
+      file.type,
       "csv" = "format = 'TEXTFILE',\nfield_delimiter = ','",
       "tsv" = "format = 'TEXTFILE',\nfield_delimiter = '\t'",
       "parquet" = "format = 'PARQUET'",
@@ -345,7 +437,8 @@ ctas_sql_with <- function(partition = NULL, s3.location = NULL, file.type = "NUL
           call. = FALSE
         )
       }
-      COMPRESSION <- switch(file.type,
+      COMPRESSION <- switch(
+        file.type,
         "parquet" = ",\nparquet_compression = 'SNAPPY'",
         "orc" = ",\norc_compression = 'SNAPPY'",
         ""
@@ -382,48 +475,59 @@ ctas_sql_with <- function(partition = NULL, s3.location = NULL, file.type = "NUL
 jsonlite_check <- function(method) {
   if (method == "auto") {
     if (!nzchar(system.file(package = "jsonlite"))) {
-      info_msg("`jsonlite` has not been detected, AWS Athena `json` data types will be returned as `character`.")
+      info_msg(
+        "`jsonlite` has not been detected, AWS Athena `json` data types will be returned as `character`."
+      )
       method <- "character"
     }
   }
   return(method)
 }
 
-# get database list from glue catalog
-get_databases <- function(glue) {
+# list catalog
+list_catalogs <- function(client) {
   token <- character(1)
   data_list <- list()
   i <- 1
   while (!is.null(token)) {
-    retry_api_call(response <- py_to_r(glue$get_databases(NextToken = token)))
-    data_list[[i]] <- vapply(
-      response[["DatabaseList"]], function(x) x[["Name"]],
-      FUN.VALUE = character(1)
+    response <- py_to_r(
+      if (i == 1) {
+        client$list_data_catalogs()
+      } else {
+        client$list_data_catalogs(NextToken = token)
+      }
     )
+    data_list[[i]] <- response[["DataCatalogsSummary"]]
     token <- response[["NextToken"]]
     i <- i + 1
   }
-  return(unlist(data_list, recursive = FALSE, use.names = FALSE))
+  return(as.character(do.call(rbind, unlist(data_list, recursive = F))[,
+    "CatalogName"
+  ]))
 }
 
-# get list of tables from glue catalog
-get_table_list <- function(glue, schema) {
+# get database list from glue catalog
+list_schemas <- function(client, catalog) {
   token <- character(1)
-  table_list <- list()
+  data_list <- list()
   i <- 1
   while (!is.null(token)) {
-    retry_api_call(response <- py_to_r(glue$get_tables(DatabaseName = schema, NextToken = token)))
-    table_list[[i]] <- lapply(response[["TableList"]], function(x) {
-      list(
-        DatabaseName = x[["DatabaseName"]],
-        Name = x[["Name"]],
-        TableType = x[["TableType"]]
+    retry_api_call(
+      response <- py_to_r(
+        if (i == 1) {
+          client$list_databases(CatalogName = catalog)
+        } else {
+          client$list_databases(CatalogName = catalog, NextToken = token)
+        }
       )
-    })
+    )
+    data_list[[i]] <- response[["DatabaseList"]]
     token <- response[["NextToken"]]
-    i <- 1 + 1
+    i <- i + 1
   }
-  return(unlist(table_list, recursive = FALSE, use.names = FALSE))
+  return(as.character(do.call(rbind, unlist(data_list, recursive = F))[,
+    "Name"
+  ]))
 }
 
 # wrapper to return connection error when disconnected
@@ -435,15 +539,15 @@ con_error_msg <- function(obj, msg = "Connection already closed.") {
 
 # wrapper to detect database for paws api calls.
 db_detect <- function(conn, name) {
-  ll <- list()
-  if (grepl("\\.", name)) {
-    ll[["dbms.name"]] <- gsub("\\..*", "", name)
-    ll[["table"]] <- gsub(".*\\.", "", name)
-  } else {
-    ll[["dbms.name"]] <- conn@info[["dbms.name"]]
-    ll[["table"]] <- name
-  }
-  return(ll)
+  parts <- strsplit(name, ".", fixed = T)[[1]]
+  db_components <- switch(
+    length(parts),
+    list(conn@info[["db.catalog"]], conn@info[["dbms.name"]], parts),
+    as.list(c(conn@info[["db.catalog"]], parts)),
+    as.list(parts)
+  )
+  names(db_components) <- c("db.catalog", "dbms.name", "table")
+  return(db_components)
 }
 
 athena_unload <- function() {
@@ -469,9 +573,14 @@ set_endpoints <- function(endpoint_override) {
   }
   if (is.list(endpoint_override)) {
     if (length(names(endpoint_override)) == 0) {
-      stop("endpoint_override needed to be a named list or character", call. = F)
+      stop(
+        "endpoint_override needed to be a named list or character",
+        call. = F
+      )
     }
-    if (any(!(tolower(names(endpoint_override)) %in% c("athena", "s3", "glue")))) {
+    if (
+      any(!(tolower(names(endpoint_override)) %in% c("athena", "s3", "glue")))
+    ) {
       stop(
         "The named list can only have the following names ['athena', 's3', glue']",
         call. = F
@@ -502,4 +611,25 @@ set_endpoints <- function(endpoint_override) {
 
 str_count <- function(str, pattern) {
   return(lengths(regmatches(str, gregexpr(pattern, str))))
+}
+
+db_quote_identifier <- function(x, ...) {
+  if (is(x, "SQL")) {
+    return(x)
+  }
+  if (is(x, "Id")) {
+    return(SQL(paste0(x@name, collapse = ".")))
+  }
+  if (!is.character(x)) {
+    stop("x must be character or SQL", call. = FALSE)
+  }
+  if (any(is.na(x))) {
+    stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
+  }
+  x <- gsub("\"", "\"\"", enc2utf8(x))
+  if (length(x) == 0L) {
+    SQL(character(), names = names(x))
+  } else {
+    SQL(paste("\"", x, "\"", sep = ""), names = names(x))
+  }
 }

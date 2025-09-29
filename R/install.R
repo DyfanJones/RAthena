@@ -11,31 +11,33 @@
 #' @param envname Name of Python environment to install within, by default environment name RAthena.
 #'
 #' @param conda_python_version the python version installed in the created conda
-#'   environment. Python 3.7 is installed by default.
+#'   environment. Python 3.13 is installed by default.
 #'
 #' @param ... other arguments passed to [reticulate::conda_install()] or
 #'   [reticulate::virtualenv_install()].
-#'   
+#'
 #' @note [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
 #' @return Returns \code{NULL} after installing \code{Python} \code{Boto3}.
 #' @export
 
-install_boto <- function(method = c("auto", "virtualenv", "conda"),
-                         conda = "auto",
-                         envname = "RAthena",
-                         conda_python_version = "3.7",
-                         ...) {
+install_boto <- function(
+  method = c("auto", "virtualenv", "conda"),
+  conda = "auto",
+  envname = "RAthena",
+  conda_python_version = "3.13",
+  ...
+) {
   method <- match.arg(method)
   stopifnot(is.character(envname))
-  
+
   # added numpy to help reticulate bind to environment: https://github.com/rstudio/reticulate/issues/216
   reticulate::py_install(
-    packages       = c("cython","boto3","numpy"),
-    envname        = envname,
-    method         = method,
-    conda          = conda,
+    packages = c("cython", "boto3>=1.14.0", "numpy"),
+    envname = envname,
+    method = method,
+    conda = conda,
     python_version = conda_python_version,
-    pip            = TRUE,
+    pip = TRUE,
     ...
   )
   cat("\nInstallation complete. Please restart R.\n\n")

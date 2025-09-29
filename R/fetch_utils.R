@@ -4,9 +4,13 @@
   # assign token from AthenaResult class
   token <- res@info[["NextToken"]]
 
-  if (length(token) == 0) n <- as.integer(n + 1)
+  if (length(token) == 0) {
+    n <- as.integer(n + 1)
+  }
   chunk <- as.integer(n)
-  if (n > 1000L) chunk <- 1000L
+  if (n > 1000L) {
+    chunk <- 1000L
+  }
 
   iterate <- 1:ceiling(n / chunk)
 
@@ -15,27 +19,30 @@
   length(dt_list) <- max(iterate)
 
   for (i in iterate) {
-    if (i == max(iterate)) chunk <- as.integer(n - (i - 1) * chunk)
+    if (i == max(iterate)) {
+      chunk <- as.integer(n - (i - 1) * chunk)
+    }
 
     # get chunk with retry api call if call fails
     if (length(token) == 0) {
-      retry_api_call(result <- py_to_r(res@connection@ptr$Athena$get_query_results(
-        QueryExecutionId = res@info[["QueryExecutionId"]],
-        MaxResults = chunk
-      )))
+      retry_api_call(
+        result <- py_to_r(res@connection@ptr$Athena$get_query_results(
+          QueryExecutionId = res@info[["QueryExecutionId"]],
+          MaxResults = chunk
+        ))
+      )
     } else {
-      retry_api_call(result <- py_to_r(res@connection@ptr$Athena$get_query_results(
-        QueryExecutionId = res@info[["QueryExecutionId"]],
-        NextToken = token,
-        MaxResults = chunk
-      )))
+      retry_api_call(
+        result <- py_to_r(res@connection@ptr$Athena$get_query_results(
+          QueryExecutionId = res@info[["QueryExecutionId"]],
+          NextToken = token,
+          MaxResults = chunk
+        ))
+      )
     }
 
     # process returned list
-    output <- lapply(
-      result[["ResultSet"]][["Rows"]],
-      function(x) (sapply(x$Data, function(x) if (length(x) == 0) NA else x))
-    )
+    output <- do.call(rbind, result[["ResultSet"]][["Rows"]])
     suppressWarnings(staging_dt <- rbindlist(output, use.names = FALSE))
 
     # remove colnames from first row
@@ -50,9 +57,11 @@
     dt_list[[i]] <- staging_dt
 
     # if token hasn't changed or if no more tokens are available then break loop
-    if ((length(token) != 0 &&
-      token == result[["NextToken"]]) ||
-      length(result[["NextToken"]]) == 0) {
+    if (
+      (length(token) != 0 &&
+        token == result[["NextToken"]]) ||
+        length(result[["NextToken"]]) == 0
+    ) {
       break
     } else {
       token <- result[["NextToken"]]
@@ -65,7 +74,7 @@
   res@info[["NextToken"]] <- result[["NextToken"]]
 
   # replace names with actual names
-  Names <- sapply(result_class, function(x) x$Name)
+  Names <- as.character(do.call(rbind, result_class)[, "Name"])
   colnames(dt) <- Names
 
   # convert data.table to tibble if using vroom as backend
@@ -79,12 +88,18 @@
 
 .fetch_unload <- function(res) {
   result_info <- split_s3_uri(res@connection@info[["s3_staging"]])
-  result_info[["key"]] <- file.path(gsub("/$", "", result_info[["key"]]), res@info[["UnloadDir"]])
+  result_info[["key"]] <- file.path(
+    gsub("/$", "", result_info[["key"]]),
+    res@info[["UnloadDir"]]
+  )
 
   all_keys <- list()
   # Get all s3 objects linked to table
   i <- 1
-  kwargs <- list(Bucket = result_info[["bucket"]], Prefix = result_info[["key"]])
+  kwargs <- list(
+    Bucket = result_info[["bucket"]],
+    Prefix = result_info[["key"]]
+  )
   token <- ""
   while (!is.null(token)) {
     kwargs[["ContinuationToken"]] <- (if (!nzchar(token)) NULL else token)
@@ -96,7 +111,8 @@
   all_keys <- unlist(all_keys, recursive = FALSE, use.names = FALSE)
 
   if (!requireNamespace("arrow", quietly = TRUE)) {
-    stop("unload methods requires the `arrow` package, please install it first and try again",
+    stop(
+      "unload methods requires the `arrow` package, please install it first and try again",
       call. = F
     )
   }
@@ -117,7 +133,10 @@
   # convert data.table to tibble if using vroom as backend
   if (inherits(athena_option_env[["file_parser"]], "athena_vroom")) {
     if (!requireNamespace("dplyr", quietly = TRUE)) {
-      stop("`dplyr` package is required, please install it first and try again", call. = F)
+      stop(
+        "`dplyr` package is required, please install it first and try again",
+        call. = F
+      )
     }
     combine <- function(x) dplyr::bind_rows(x)
   } else {

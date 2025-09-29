@@ -1,3 +1,18 @@
+# RAthena 2.6.3
+## Bug Fix:
+* Unload option returns null results when s3_staging_dir is a bucket only (#214) thanks to @dfsnow for implementing solution
+* Add support for describe ([noctua # 218](https://github.com/DyfanJones/noctua/issues/218)) thanks to @tyner for raising issue
+* Add support for `EXPLAIN (TYPE validate)` ([noctua # 225](https://github.com/DyfanJones/noctua/issues/225)) thanks to @tyner for raising issue
+* Fix link for document `dbSendQuery` ([noctua # 223](https://github.com/DyfanJones/noctua/issues/223)) thanks to @tyner for raising issue
+* Return athena option environment from `RAthena_options` ([noctua # 226](https://github.com/DyfanJones/noctua/issues/226)) thanks to @tyner for raising issue
+* Support `SelectedEngineVersion` in `update_work_group` ([noctua # 224](https://github.com/DyfanJones/noctua/issues/224)) thanks to @tyner for raising issue
+
+# RAthena 2.6.2
+## Feature:
+* Add catalog support (#194)
+* fix `dbExistsTable` to catch update AWS error message.
+* add support to `dbplyr 2.3.3.9000+`
+
 # RAthena 2.6.1
 ## Bug Fix:
 * Prevent assuming role from `AWS_ROLE_ARN`. This caused confusing when connecting through web identity (#177)

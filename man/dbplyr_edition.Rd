@@ -11,7 +11,7 @@ dbplyr_edition.AthenaConnection(con)
 \item{con}{A \code{\link{dbConnect}} object, as returned by \code{dbConnect()}}
 }
 \value{
-Integer for which version of `dbplyr` is going to be used.
+Integer for which version of \code{dbplyr} is going to be used.
 }
 \description{
 Declare which version of dbplyr API is being called.

@@ -6,8 +6,11 @@
 \alias{RAthena-package}
 \title{RAthena: a DBI interface into Athena using Boto3 SDK}
 \description{
-RAthena provides a seamless DBI interface into Athena using the python package 
+RAthena provides a seamless DBI interface into Athena using the python package
 \href{https://boto3.amazonaws.com/v1/documentation/api/latest/index.html}{Boto3}.
+}
+\note{
+Boto3 version 1.14.0 + is required
 }
 \section{Goal of Package}{
 
@@ -32,6 +35,7 @@ without needing hard code any credentials.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://dyfanjones.github.io/RAthena/}
   \item \url{https://github.com/DyfanJones/RAthena}
   \item Report bugs at \url{https://github.com/DyfanJones/RAthena/issues}
 }
