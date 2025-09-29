@@ -38,25 +38,9 @@ jobs:
             any::rcmdcheck
             any::covr
             
-      - name: Install Miniconda
-        run: |
-          reticulate::install_miniconda()
-        shell: Rscript {0}
-
-      - name: Configure Miniconda on MacOS
-        if: runner.os == 'macOS'
-        run: echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
-
       - name: Install python-boto3
         run: |
-          reticulate::py_install(
-            packages       = c("cython","boto3","numpy"),
-            envname        = 'r-reticulate',
-            method         = "conda",
-            conda          = "auto",
-            python_version = "3.13",
-            pip            = TRUE
-          )
+          reticulate::py_require(packages = c("boto3","numpy"))
           print(reticulate::py_config())
         shell: Rscript {0}
       
