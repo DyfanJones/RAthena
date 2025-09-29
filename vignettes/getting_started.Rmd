@@ -16,7 +16,7 @@ The `RAthena` package aims to make it easier to work with data stored in [`AWS A
 
 # Installing `RAthena`:
 
-As `RAthena` utilising the python AWS SDK `boto3`, Python 3+ is required. Please install Python 3+ either by [Python](https://www.python.org/downloads/) or [Python Anaconda](https://www.anaconda.com/products/distribution). To install `RAthena`:
+As `RAthena` utilising the python AWS SDK `boto3`, Python 3+ is required. Please install Python 3+ either by [Python](https://www.python.org/downloads/) or [Python Anaconda](https://www.anaconda.com/download). To install `RAthena`:
 
 ```r
 # cran version
@@ -57,7 +57,7 @@ con <- dbConnect(RAthena::athena())
 
 ## Docker Example:
 
-To help with users wishing to run `RAthena` in a [docker](https://hub.docker.com/), a simple docker file has been created [here](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile). To set up the docker please refer to [link](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-temporary-credentials-docker/). For demo purposes we will use the [example docker](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile) and run it locally:
+To help with users wishing to run `RAthena` in a [docker](https://hub.docker.com/), a simple docker file has been created [here](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile). To set up the docker please refer to [link](https://repost.aws/knowledge-center/codebuild-temporary-credentials-docker). For demo purposes we will use the [example docker](https://github.com/DyfanJones/RAthena/blob/master/docker/Dockerfile) and run it locally:
 
 ```console
 # build docker image

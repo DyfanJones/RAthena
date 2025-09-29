@@ -26,7 +26,7 @@
 #' @param requester_pays If set to \code{TRUE}, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 #'           If set to \code{FALSE}, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data
 #'           from Requester Pays buckets cause an error. The default is false. For more information about Requester Pays buckets,
-#'           see \href{https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html}{Requester Pays Buckets} in the Amazon Simple Storage Service Developer Guide.
+#'           see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html}{Requester Pays Buckets} in the Amazon Simple Storage Service Developer Guide.
 #' @param description The workgroup description.
 #' @param tags A tag that you can add to a resource. A tag is a label that you assign to an AWS Athena resource (a workgroup).
 #'           Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize workgroups in Athena, for example,

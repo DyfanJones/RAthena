@@ -58,7 +58,7 @@ If set to \code{FALSE}, client-side settings are used. For more information, see
 \item{requester_pays}{If set to \code{TRUE}, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 If set to \code{FALSE}, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data
 from Requester Pays buckets cause an error. The default is false. For more information about Requester Pays buckets,
-see \href{https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html}{Requester Pays Buckets} in the Amazon Simple Storage Service Developer Guide.}
+see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html}{Requester Pays Buckets} in the Amazon Simple Storage Service Developer Guide.}
 
 \item{description}{The workgroup description.}
 
