@@ -54,7 +54,7 @@ jobs:
             envname        = 'r-reticulate',
             method         = "conda",
             conda          = "auto",
-            python_version = "3.7",
+            python_version = "3.13",
             pip            = TRUE
           )
         shell: Rscript {0}

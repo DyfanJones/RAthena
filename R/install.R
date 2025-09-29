@@ -15,27 +15,29 @@
 #'
 #' @param ... other arguments passed to [reticulate::conda_install()] or
 #'   [reticulate::virtualenv_install()].
-#'   
+#'
 #' @note [reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
 #' @return Returns \code{NULL} after installing \code{Python} \code{Boto3}.
 #' @export
 
-install_boto <- function(method = c("auto", "virtualenv", "conda"),
-                         conda = "auto",
-                         envname = "RAthena",
-                         conda_python_version = "3.9",
-                         ...) {
+install_boto <- function(
+  method = c("auto", "virtualenv", "conda"),
+  conda = "auto",
+  envname = "RAthena",
+  conda_python_version = "3.13",
+  ...
+) {
   method <- match.arg(method)
   stopifnot(is.character(envname))
-  
+
   # added numpy to help reticulate bind to environment: https://github.com/rstudio/reticulate/issues/216
   reticulate::py_install(
-    packages       = c("cython","boto3>=1.14.0","numpy"),
-    envname        = envname,
-    method         = method,
-    conda          = conda,
+    packages = c("cython", "boto3>=1.14.0", "numpy"),
+    envname = envname,
+    method = method,
+    conda = conda,
     python_version = conda_python_version,
-    pip            = TRUE,
+    pip = TRUE,
     ...
   )
   cat("\nInstallation complete. Please restart R.\n\n")
