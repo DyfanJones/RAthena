@@ -57,6 +57,7 @@ jobs:
             python_version = "3.13",
             pip            = TRUE
           )
+          print(reticulate::py_config())
         shell: Rscript {0}
       
       - uses: r-lib/actions/check-r-package@v2
