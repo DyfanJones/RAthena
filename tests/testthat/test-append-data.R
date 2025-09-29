@@ -8,23 +8,39 @@ context("Append to Existing")
 test_that("Testing if data is appended correctly", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  # Test connection is using AWS CLI to set profile_name 
-  con <- dbConnect(athena(),
-                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
-  
+
+  # Test connection is using AWS CLI to set profile_name
+  con <- dbConnect(athena(), s3_staging_dir = Sys.getenv("rathena_s3_query"))
+
   DATE <- Sys.Date()
-  dbWriteTable(con, "mtcars", mtcars, overwrite = T, compress = T,
-               partition = c("timesTamp" = format(DATE, "%Y%m%d")))
-  
+  dbWriteTable(
+    con,
+    "mtcars",
+    mtcars,
+    overwrite = T,
+    compress = T,
+    partition = c("timesTamp" = format(DATE, "%Y%m%d"))
+  )
+
   # don't specify to send data compressed
-  expect_warning(dbWriteTable(con, "mtcars", mtcars, append = T, file.type = "parquet",
-                              partition = c("timesTamp" = format(DATE+1, "%Y%m%d"))))
-  
-  dt <- dbGetQuery(con, "select timestamp, cast(count(*) as integer) as n from mtcars group by 1 order by 1")
-  
-  exp_dt <- data.table(timestamp = c(format(DATE, "%Y%m%d"), format(DATE+1, "%Y%m%d")),
-                       n = as.integer(c(32,32)))
-  
+  expect_warning(dbWriteTable(
+    con,
+    "mtcars",
+    mtcars,
+    append = T,
+    file.type = "parquet",
+    partition = c("timesTamp" = format(DATE + 1, "%Y%m%d"))
+  ))
+
+  dt <- dbGetQuery(
+    con,
+    "select timestamp, cast(count(*) as integer) as n from mtcars group by 1 order by 1"
+  )
+
+  exp_dt <- data.table(
+    timestamp = c(format(DATE, "%Y%m%d"), format(DATE + 1, "%Y%m%d")),
+    n = as.integer(c(32, 32))
+  )
+
   expect_equal(dt, exp_dt)
-}) 
+})

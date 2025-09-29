@@ -8,7 +8,7 @@ install_boto(
   method = c("auto", "virtualenv", "conda"),
   conda = "auto",
   envname = "RAthena",
-  conda_python_version = "3.7",
+  conda_python_version = "3.9",
   ...
 )
 }
@@ -28,8 +28,8 @@ See \strong{Finding Conda} and \code{\link[reticulate:conda_binary]{conda_binary
 \item{conda_python_version}{the python version installed in the created conda
 environment. Python 3.7 is installed by default.}
 
-\item{...}{other arguments passed to [reticulate::conda_install()] or
-[reticulate::virtualenv_install()].}
+\item{...}{other arguments passed to \code{\link[reticulate:conda-tools]{reticulate::conda_install()}} or
+\code{\link[reticulate:virtualenv-tools]{reticulate::virtualenv_install()}}.}
 }
 \value{
 Returns \code{NULL} after installing \code{Python} \code{Boto3}.
@@ -38,5 +38,5 @@ Returns \code{NULL} after installing \code{Python} \code{Boto3}.
 Install Amazon SDK boto3 for Athena connection
 }
 \note{
-[reticulate::use_python] or [reticulate::use_condaenv] might be required before connecting to Athena.
+\link[reticulate:use_python]{reticulate::use_python} or \link[reticulate:use_python]{reticulate::use_condaenv} might be required before connecting to Athena.
 }

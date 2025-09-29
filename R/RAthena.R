@@ -17,6 +17,9 @@
 #' This allows AWS profile names to be set up so that RAthena can connect to different accounts from the same machine,
 #' without needing hard code any credentials.
 #' 
+#' @note
+#' Boto3 version 1.14.0 + is required
+#' 
 #' @import reticulate
 #' @importFrom utils packageVersion head
 #' @importFrom stats runif

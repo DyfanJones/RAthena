@@ -5,31 +5,39 @@ context("dplyr compute")
 # Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
 # Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
-test_that("Check RAthena s3 dplyr compute method",{
+test_that("Check RAthena s3 dplyr compute method", {
   skip_if_no_boto()
   skip_if_no_env()
   skip_if_package_not_avialable("dplyr")
-  
+
   library(dplyr)
-  # Test connection is using AWS CLI to set profile_name 
-  con <- dbConnect(athena(),
-                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
-  
+  # Test connection is using AWS CLI to set profile_name
+  con <- dbConnect(athena(), s3_staging_dir = Sys.getenv("rathena_s3_query"))
+
+  # remove test tables if exist
+  if (dbExistsTable(con, "compute_tbl1")) {
+    dbRemoveTable(con, "compute_tbl1", confirm = TRUE)
+  }
+  if (dbExistsTable(con, "compute_tbl2")) {
+    dbRemoveTable(con, "compute_tbl2", confirm = TRUE)
+  }
+
   athena_tbl <- tbl(con, sql("SELECT * FROM INFORMATION_SCHEMA.TABLES"))
-  athena_tbl %>% compute("compute_tbl1", s3_location = paste0(Sys.getenv("rathena_s3_tbl"),"compute_tbl/"))
-  athena_tbl %>% compute("compute_tbl2")
-  
+  s3_uri <- file.path(Sys.getenv("rathena_s3_tbl"), "compute_tbl/", fsep = "/")
+  athena_tbl %>% compute("compute_tbl1", s3_location = s3_uri, temporary = F)
+  athena_tbl %>% compute("compute_tbl2", temporary = F)
+
   RAthena_options(unload = T)
   expect_error(athena_tbl %>% compute("compute_tbl2"))
   RAthena_options()
-  
+
   result1 <- dbExistsTable(con, "compute_tbl1")
   result2 <- dbExistsTable(con, "compute_tbl2")
-  
+
   # clean up athena
-  dbRemoveTable(con, "compute_tbl1",confirm = T)
+  dbRemoveTable(con, "compute_tbl1", confirm = T)
   dbRemoveTable(con, "compute_tbl2", confirm = T)
-  
+
   expect_equal(result1, TRUE)
   expect_equal(result2, TRUE)
 })

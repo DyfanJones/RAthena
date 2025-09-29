@@ -5,175 +5,212 @@ context("rstudio viewer")
 # Sys.getenv("RAthena_s3_query"): "s3://path/to/query/bucket/"
 # Sys.getenv("RAthena_s3_tbl"): "s3://path/to/bucket/"
 
-test_that("Check if Athena list object types is formatted correctly",{
+test_that("Check if Athena list object types is formatted correctly", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output <- RAthena:::AthenaListObjectTypes.default(con)
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output <- AthenaListObjectTypes.default(con)
+
   expect_equal(
-    output, 
-    list(database = list(
-      contains = list(
-        table = list(contains = "data"),
-        view = list(contains = "data"))
+    output,
+    list(
+      catalog = list(
+        contains = list(
+          schema = list(
+            contains = list(
+              table = list(contains = "data"),
+              view = list(contains = "data")
+            )
+          )
+        )
       )
     )
   )
 })
 
-test_that("Check if Athena list object is formatted correctly",{
+test_that("Check if Athena list object is formatted correctly", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaListObjects.default(con)
-  output2 <- RAthena:::AthenaListObjects.default(con, database = "default")
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaListObjects.AthenaConnection(con)
+  output2 <- AthenaListObjects.AthenaConnection(
+    con,
+    schema = "default"
+  )
+
   expect_true(inherits(output1, "data.frame"))
   expect_equal(names(output1), c("name", "type"))
-  
+
   expect_true(inherits(output2, "data.frame"))
   expect_equal(names(output2), c("name", "type"))
 })
 
-test_that("Check computer host name output type",{
+test_that("Check computer host name output type", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  out <- RAthena:::computeHostName(con)
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+  out <- computeHostName(con)
   expect_true(is.character(out))
 })
 
-test_that("Check computer display name output type",{
+test_that("Check computer display name output type", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  out <- RAthena:::computeDisplayName(con)
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  out <- computeDisplayName(con)
   expect_true(is.character(out))
 })
 
-test_that("Check if Athena list column formatting",{
+test_that("Check if Athena list column formatting", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaListColumns.default(con, table = "iris", database = "default")
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaListColumns.AthenaConnection(
+    con,
+    table = "iris",
+    catalog = "AwsDataCatalog",
+    schema = "default"
+  )
+
   dbDisconnect(con)
-  
+
   expect_true(inherits(output1, "data.frame"))
   expect_equal(names(output1), c("name", "type"))
-  
-  expect_null(RAthena:::AthenaListColumns.default(con, table = "iris", database = "default"))
+
+  expect_null(AthenaListColumns.AthenaConnection(
+    con,
+    table = "iris",
+    catalog = "AwsDataCatalog",
+    schema = "default"
+  ))
 })
 
-test_that("Check if Athena list column formatting",{
+test_that("Check if Athena list column formatting", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaTableTypes(con)
-  output2 <- RAthena:::AthenaTableTypes(con, database = "default")
-  output3 <- RAthena:::AthenaTableTypes(con, database = "default", name="iris")
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaTableTypes(con)
+  output2 <- AthenaTableTypes(con, schema = "default")
+  output3 <- AthenaTableTypes(con, schema = "default", name = "iris")
+
+  dbDisconnect(con)
+
   expect_true(inherits(output1, "character"))
   expect_true(inherits(output2, "character"))
   expect_true(inherits(output3, "character"))
 })
 
-test_that("Check if AthenaDatabase formatting is correct",{
+test_that("Check if AthenaDatabase formatting is correct", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaDatabase(con)
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaDatabase(con, "AwsDataCatalog")
+
   expect_true(inherits(output1, "character"))
 })
 
-test_that("Check if AthenaDatabase formatting is correct",{
+test_that("Check if AthenaDatabase formatting is correct", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaPreviewObject(con, 10, table = "iris")
-  output2 <- RAthena:::AthenaPreviewObject(con, 10, table = "iris", database = "default")
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaPreviewObject.AthenaConnection(
+    con,
+    10,
+    table = "iris"
+  )
+  output2 <- AthenaPreviewObject.AthenaConnection(
+    con,
+    10,
+    table = "iris",
+    schema = "default"
+  )
+
   expect_true(inherits(output1, "data.frame"))
   expect_true(inherits(output2, "data.frame"))
 })
 
-test_that("Check if AthenaPreviewObject formatting is correct",{
+test_that("Check if AthenaPreviewObject formatting is correct", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaPreviewObject(con, 10, table = "iris")
-  output2 <- RAthena:::AthenaPreviewObject(con, 10, table = "iris", database = "default")
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaPreviewObject.AthenaConnection(
+    con,
+    10,
+    table = "iris"
+  )
+  output2 <- AthenaPreviewObject.AthenaConnection(
+    con,
+    10,
+    table = "iris",
+    schema = "default"
+  )
+
   expect_true(inherits(output1, "data.frame"))
   expect_true(inherits(output2, "data.frame"))
 })
 
-test_that("Check if AthenaConnectionIcon outputs correct path",{
+test_that("Check if AthenaConnectionIcon outputs correct path", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaConnectionIcon(con)
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaConnectionIcon(con)
+
   expect_true(file.exists(output1))
 })
 
-test_that("Check if AthenaConnectionActions output format is correct",{
+test_that("Check if AthenaConnectionActions output format is correct", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
-  output1 <- RAthena:::AthenaConnectionActions(con)
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
+  output1 <- AthenaConnectionActions(con)
+
   expect_true(is.list(output1))
 })
 
-test_that("Check if on_connection_opened runs correctly",{
+test_that("Check if on_connection_opened runs correctly", {
   skip_if_no_env()
   skip_if_no_boto()
-  
-  con <- dbConnect(athena())
-  
+
+  con <- dbConnect(athena(), rstudio_conn_tab = FALSE)
+
   output1 <- on_connection_opened(con)
-  
+
   expect_null(output1)
 })
 
-test_that("Check if on_connection_opened runs correctly",{
-  x1 <- list(TableType = "dummy",
-             Name = "dummy")
-  x2 <- list(Type = "dummy",
-             Name = "dummy")
+test_that("Check if on_connection_opened runs correctly", {
+  x1 <- list(TableType = "dummy", Name = "dummy")
+  x2 <- list(Type = "dummy", Name = "dummy")
   x3 <- list(Name = "dummy")
-  
+
   exp1 <- "dummy"
   names(exp1) <- "dummy"
   exp2 <- ""
   names(exp2) <- "dummy"
-  
-  expect_equal(RAthena:::TblMeta(x1), exp1)
-  expect_equal(RAthena:::ColMeta(x2), exp1)
-  expect_equal(RAthena:::TblMeta(x3), exp2)
-  expect_equal(RAthena:::ColMeta(x3), exp2)
+
+  expect_equal(TblMeta(x1), exp1)
+  expect_equal(ColMeta(x2), exp1)
+  expect_equal(TblMeta(x3), exp2)
+  expect_equal(ColMeta(x3), exp2)
 })

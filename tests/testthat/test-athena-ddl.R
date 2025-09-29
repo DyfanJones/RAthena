@@ -5,32 +5,84 @@ context("Athena DDL")
 # Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
 # Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
-s3.location <- paste0(Sys.getenv("rathena_s3_tbl"),"test_df/")
+s3.location <- paste0(Sys.getenv("rathena_s3_tbl"), "test_df/")
 df <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = F)
 
-test_that("Check if Athena DDL's are created correctly",{
+test_that("Check if Athena DDL's are created correctly", {
   skip_if_no_boto()
   skip_if_no_env()
-  # Test connection is using AWS CLI to set profile_name 
-  con <- dbConnect(athena(),
-                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
-  
+  # Test connection is using AWS CLI to set profile_name
+  con <- dbConnect(athena(), s3_staging_dir = Sys.getenv("rathena_s3_query"))
+
   # CSV DDL
-  expect_ddl1 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "csv")
-  expect_ddl2 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "csv", compress = T)
-  
+  expect_ddl1 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "csv"
+  )
+  expect_ddl2 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "csv",
+    compress = T
+  )
+
   # TSV DDL
-  expect_ddl3 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "tsv")
-  expect_ddl4 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "tsv", compress = T)
-  
+  expect_ddl3 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "tsv"
+  )
+  expect_ddl4 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "tsv",
+    compress = T
+  )
+
   # Parquet DDL
-  expect_ddl5 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "parquet")
-  expect_ddl6 <- sqlCreateTable(con, "test_df", df, partition = "timestamp", s3.location = s3.location, file.type = "parquet", compress = T)
-  
+  expect_ddl5 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "parquet"
+  )
+  expect_ddl6 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    partition = "timestamp",
+    s3.location = s3.location,
+    file.type = "parquet",
+    compress = T
+  )
+
   # JSON DDL
-  expect_ddl7 <- sqlCreateTable(con, "test_df", df, s3.location = s3.location, file.type = "json")
-  expect_ddl8 <- sqlCreateTable(con, "test_df", df, partition = "timestamp", s3.location = s3.location, file.type = "json", compress = T)
-  
+  expect_ddl7 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    s3.location = s3.location,
+    file.type = "json"
+  )
+  expect_ddl8 <- sqlCreateTable(
+    con,
+    "test_df",
+    df,
+    partition = "timestamp",
+    s3.location = s3.location,
+    file.type = "json",
+    compress = T
+  )
 
   expect_equal(expect_ddl1, tbl_ddl$tbl1)
   expect_equal(expect_ddl2, tbl_ddl$tbl2)
@@ -40,4 +92,4 @@ test_that("Check if Athena DDL's are created correctly",{
   expect_equal(expect_ddl6, tbl_ddl$tbl6)
   expect_equal(expect_ddl7, tbl_ddl$tbl7)
   expect_equal(expect_ddl8, tbl_ddl$tbl8)
-  })
+})

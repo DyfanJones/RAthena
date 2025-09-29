@@ -56,7 +56,7 @@
 )
 }
 \arguments{
-\item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by [DBI::dbConnect()]}
+\item{conn}{An \code{\linkS4class{AthenaConnection}} object, produced by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{name}{A character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
@@ -67,9 +67,9 @@ just any valid bare table name.}
 \item{overwrite}{Allows overwriting the destination table. Cannot be \code{TRUE} if \code{append} is also \code{TRUE}.}
 
 \item{append}{Allow appending to the destination table. Cannot be \code{TRUE} if \code{overwrite} is also \code{TRUE}. Existing Athena DDL file type will be retained
-              and used when uploading data to AWS Athena. If parameter \code{file.type} doesn't match AWS Athena DDL file type a warning message will be created 
-              notifying user and \code{RAthena} will use the file type for the Athena DDL. When appending to an Athena DDL that has been created outside of \code{RAthena}.
-              \code{RAthena} can support the following SerDes and Data Formats.
+and used when uploading data to AWS Athena. If parameter \code{file.type} doesn't match AWS Athena DDL file type a warning message will be created
+notifying user and \code{RAthena} will use the file type for the Athena DDL. When appending to an Athena DDL that has been created outside of \code{RAthena}.
+\code{RAthena} can support the following SerDes and Data Formats.
 \itemize{
 \item{\strong{csv/tsv:} \href{https://docs.aws.amazon.com/athena/latest/ug/lazy-simple-serde.html}{LazySimpleSerDe}}
 \item{\strong{parquet:} \href{https://docs.aws.amazon.com/athena/latest/ug/parquet.html}{Parquet SerDe}}
@@ -91,45 +91,45 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
 \item{partition}{Partition Athena table (needs to be a named list or vector) for example: \code{c(var1 = "2019-20-13")}}
 
-\item{s3.location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/"). 
+\item{s3.location}{s3 bucket to store Athena table, must be set as a s3 uri for example ("s3://mybucket/data/").
 By default, the s3.location is set to s3 staging directory from \code{\linkS4class{AthenaConnection}} object. \strong{Note:}
-When creating a table for the first time \code{s3.location} will be formatted from \code{"s3://mybucket/data/"} to the following 
-syntax \code{"s3://{mybucket/data}/{schema}/{table}/{parition}/"} this is to support tables with the same name but existing in different 
+When creating a table for the first time \code{s3.location} will be formatted from \code{"s3://mybucket/data/"} to the following
+syntax \code{"s3://{mybucket/data}/{schema}/{table}/{parition}/"} this is to support tables with the same name but existing in different
 schemas. If schema isn't specified in \code{name} parameter then the schema from \code{dbConnect} is used instead.}
 
-\item{file.type}{What file type to store data.frame on s3, RAthena currently supports ["tsv", "csv", "parquet", "json"]. Default delimited file type is "tsv", in previous versions
-of \code{RAthena (=< 1.6.0)} file type "csv" was used as default. The reason for the change is that columns containing \code{Array/JSON} format cannot be written to 
-Athena due to the separating value ",". This would cause issues with AWS Athena.                  
+\item{file.type}{What file type to store data.frame on s3, RAthena currently supports \code{c("tsv", "csv", "parquet", "json")}. Default delimited file type is "tsv", in previous versions
+of \code{RAthena (=< 1.6.0)} file type "csv" was used as default. The reason for the change is that columns containing \code{Array/JSON} format cannot be written to
+Athena due to the separating value ",". This would cause issues with AWS Athena.
 \strong{Note:} "parquet" format is supported by the \code{arrow} package and it will need to be installed to utilise the "parquet" format.
 "json" format is supported by \code{jsonlite} package and it will need to be installed to utilise the "json" format.}
 
-\item{compress}{\code{FALSE | TRUE} To determine if to compress file.type. If file type is ["csv", "tsv"] then "gzip" compression is used, for file type "parquet" 
+\item{compress}{\code{FALSE | TRUE} To determine if to compress file.type. If file type is \code{c("csv", "tsv")} then "gzip" compression is used, for file type "parquet"
 "snappy" compression is used. Currently \code{RAthena} doesn't support compression for "json" file type.}
 
 \item{max.batch}{Split the data frame by max number of rows i.e. 100,000 so that multiple files can be uploaded into AWS S3. By default when compression
-is set to \code{TRUE} and file.type is "csv" or "tsv" max.batch will split data.frame into 20 batches. This is to help the 
-performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame 
+is set to \code{TRUE} and file.type is "csv" or "tsv" max.batch will split data.frame into 20 batches. This is to help the
+performance of AWS Athena when working with files compressed in "gzip" format. \code{max.batch} will not split the data.frame
 when loading file in parquet format. For more information please go to \href{https://github.com/DyfanJones/RAthena/issues/36}{link}}
 
 \item{...}{Other arguments used by individual methods.}
 }
 \value{
 \code{dbWriteTable()} returns \code{TRUE}, invisibly. If the table exists, and both append and overwrite
-        arguments are unset, or append = TRUE and the data frame with the new data has different column names,
-        an error is raised; the remote table remains unchanged.
+arguments are unset, or append = TRUE and the data frame with the new data has different column names,
+an error is raised; the remote table remains unchanged.
 }
 \description{
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
 \dontrun{
-# Note: 
+# Note:
 # - Require AWS Account to run below example.
 # - Different connection methods can be used please see `RAthena::dbConnect` documnentation
 
 library(DBI)
 
-# Demo connection to Athena using profile name 
+# Demo connection to Athena using profile name
 con <- dbConnect(RAthena::athena())
 
 # List existing tables in Athena
@@ -139,7 +139,7 @@ dbListTables(con)
 dbWriteTable(con, "mtcars", mtcars,
              partition=c("TIMESTAMP" = format(Sys.Date(), "\%Y\%m\%d")),
              s3.location = "s3://mybucket/data/")
-             
+
 # Read entire table from Athena
 dbReadTable(con, "mtcars")
 

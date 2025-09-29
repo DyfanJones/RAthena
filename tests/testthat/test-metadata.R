@@ -5,12 +5,16 @@ context("Athena Metadata")
 # Sys.getenv("rathena_s3_query"): "s3://path/to/query/bucket/"
 # Sys.getenv("rathena_s3_tbl"): "s3://path/to/bucket/"
 
-df_col_info <- data.frame(field_name = c("w","x","y", "z", "timestamp"),
-                          type = c("timestamp", "integer", "varchar", "boolean", "varchar"), stringsAsFactors = F)
+df_col_info <- data.frame(
+  field_name = c("w", "x", "y", "z", "timestamp"),
+  type = c("timestamp", "integer", "varchar", "boolean", "varchar"),
+  stringsAsFactors = F
+)
 
 con_info = c(
   "profile_name",
   "s3_staging",
+  "db.catalog",
   "dbms.name",
   "work_group",
   "poll_interval",
@@ -24,15 +28,17 @@ con_info = c(
   "timezone",
   "endpoint_override"
 )
-col_info_exp = c("w","x","y", "z", "timestamp")
+col_info_exp = c("w", "x", "y", "z", "timestamp")
 
-test_that("Returning meta data",{
+test_that("Returning meta data", {
   skip_if_no_boto()
   skip_if_no_env()
-  # Test connection is using AWS CLI to set profile_name 
-  con <- dbConnect(RAthena::athena(),
-                   s3_staging_dir = Sys.getenv("rathena_s3_query"))
-  
+  # Test connection is using AWS CLI to set profile_name
+  con <- dbConnect(
+    RAthena::athena(),
+    s3_staging_dir = Sys.getenv("rathena_s3_query")
+  )
+
   res1 = dbExecute(con, "select * from test_df")
   res2 = dbSendStatement(con, "select * from test_df")
   res_out2 = dbHasCompleted(res2)
@@ -42,28 +48,39 @@ test_that("Returning meta data",{
   column_info1 = dbColumnInfo(res1)
   column_info2 = dbListFields(con, "test_df")
   con_info_exp = names(dbGetInfo(con))
-  list_tbl1 = any(grepl("test_df", dbListTables(con, "default")))
-  list_tbl2 = nrow(dbGetTables(con, "default")[TableName == "test_df"]) == 1
-  list_tbl3 = nrow(dbGetTables(con)[Schema == "default" & TableName == "test_df"]) == 1
+  list_tbl1 = any(grepl("test_df", dbListTables(con, schema = "default")))
+  list_tbl2 = nrow(dbGetTables(con, schema = "default")[
+    TableName == "test_df"
+  ]) ==
+    1
+  list_tbl3 = nrow(dbGetTables(con)[
+    Schema == "default" & TableName == "test_df"
+  ]) ==
+    1
   list_tbl4 = any(grepl("test_df", dbListTables(con)))
   partition1 = grepl("timestamp", dbGetPartition(con, "test_df")[[1]])
-  
+
   partition2 = names(dbGetPartition(con, "test_df", .format = T)) == "timestamp"
   RAthena_options("vroom")
   partition3 = names(dbGetPartition(con, "test_df", .format = T)) == "timestamp"
-  
+
   RAthena_options()
-  db_show_ddl = gsub(", \n  'transient_lastDdlTime'.*",")", dbShow(con, "test_df"))
+  db_show_ddl = gsub(
+    ", \n  'transient_lastDdlTime'.*",
+    ")",
+    dbShow(con, "test_df")
+  )
   db_info = dbGetInfo(con)
-  
+
   name1 <- db_detect(con, "table1")
   name2 <- db_detect(con, "mydatabase.table1")
-  
+  name3 <- db_detect(con, "mycatalog.mydatabase.table1")
+
   expect_equal(dbGetStatement(res2), "select * from test_df")
-  
+
   dbClearResult(res1)
   dbDisconnect(con)
-  
+
   expect_equal(column_info1, df_col_info)
   expect_equal(column_info2, col_info_exp)
   expect_equal(con_info[order(con_info)], con_info_exp[order(con_info_exp)])
@@ -83,38 +100,73 @@ test_that("Returning meta data",{
   expect_true(res_out1)
   expect_true(inherits(res_out2, "logical"))
   expect_equal(
-    sort(names(res_info)), 
-    c("OutputLocation", "Query", "QueryExecutionId", "StateChangeReason", "StatementType",
-      "Statistics", "Status", "UnloadDir", "WorkGroup"))
+    sort(names(res_info)),
+    c(
+      "OutputLocation",
+      "Query",
+      "QueryExecutionId",
+      "StateChangeReason",
+      "StatementType",
+      "Statistics",
+      "Status",
+      "UnloadDir",
+      "WorkGroup"
+    )
+  )
   expect_true(is.list(res_stat))
   expect_error(con_error_msg(res1, "dummy message"), "dummy message")
-  expect_equal(name1, list("dbms.name" = "default", "table" = "table1"))
-  expect_equal(name2, list("dbms.name" = "mydatabase", "table" = "table1"))
+  expect_equal(
+    name1,
+    list(
+      "db.catalog" = "AwsDataCatalog",
+      "dbms.name" = "default",
+      "table" = "table1"
+    )
+  )
+  expect_equal(
+    name2,
+    list(
+      "db.catalog" = "AwsDataCatalog",
+      "dbms.name" = "mydatabase",
+      "table" = "table1"
+    )
+  )
+  expect_equal(
+    name3,
+    list(
+      "db.catalog" = "mycatalog",
+      "dbms.name" = "mydatabase",
+      "table" = "table1"
+    )
+  )
 })
 
 test_that("test connection when timezone is NULL", {
   skip_if_no_boto()
   skip_if_no_env()
-  
+
   con <- dbConnect(athena(), timezone = NULL)
-  
+
   expect_equal(con@info$timezone, "UTC")
 })
 
 test_that("test endpoints", {
   skip_if_no_boto()
   skip_if_no_env()
-  
-  con1 = dbConnect(athena(), endpoint_override = "https://athena.eu-west-2.amazonaws.com/")
+
+  con1 = dbConnect(
+    athena(),
+    endpoint_override = "https://athena.eu-west-2.amazonaws.com/"
+  )
   con2 = dbConnect(
     athena(),
     region_name = "us-east-2",
-    
+
     # Change default endpoints:
     # athena: "https://athena.us-east-2.amazonaws.com"
     # s3: "https://s3.us-east-2.amazonaws.com"
     # glue: "https://glue.us-east-2.amazonaws.com"
-    
+
     endpoint_override = list(
       athena = "https://athena-fips.us-east-2.amazonaws.com/",
       s3 = "https://s3-fips.us-east-2.amazonaws.com/",
@@ -122,8 +174,20 @@ test_that("test endpoints", {
     )
   )
 
-  expect_equal(as.character(con1@ptr$Athena$meta$endpoint_url), "https://athena.eu-west-2.amazonaws.com/")
-  expect_equal(as.character(con2@ptr$Athena$meta$endpoint_url), "https://athena-fips.us-east-2.amazonaws.com/")
-  expect_equal(as.character(con2@ptr$S3$meta$endpoint_url), "https://s3-fips.us-east-2.amazonaws.com/")
-  expect_equal(as.character(con2@ptr$glue$meta$endpoint_url), "https://glue-fips.us-east-2.amazonaws.com/")
+  expect_equal(
+    as.character(con1@ptr$Athena$meta$endpoint_url),
+    "https://athena.eu-west-2.amazonaws.com/"
+  )
+  expect_equal(
+    as.character(con2@ptr$Athena$meta$endpoint_url),
+    "https://athena-fips.us-east-2.amazonaws.com/"
+  )
+  expect_equal(
+    as.character(con2@ptr$S3$meta$endpoint_url),
+    "https://s3-fips.us-east-2.amazonaws.com/"
+  )
+  expect_equal(
+    as.character(con2@ptr$glue$meta$endpoint_url),
+    "https://glue-fips.us-east-2.amazonaws.com/"
+  )
 })
